@@ -1,0 +1,12 @@
+
+import(MASS)
+import(lme4)
+import(msm)
+
+# Imported functions
+importFrom("nlme", lme)
+
+
+exportPattern("^[[:alpha:]]+")
+
+

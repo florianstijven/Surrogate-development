@@ -1,0 +1,14 @@
+BifixedContCont         Bivariate fixed-effects model to assess surrogacy 
+			in meta-anal framework (cont-cont setting)
+BimixedContCont         Bivariate mixed-effects model to assess surrogacy 
+			in meta-anal framework (cont-cont setting)
+FixedContContIT         Fixed-effect approach to assess surrogacy in info-
+			theoretic framework (cont-cont setting)
+MICA.ContCont   	Compute MICA, causal-inf framework (cont-cont setting)
+MixedContContIT		Mixed-effect approach to assess surrogacy in info-
+			theoretic framework (cont-cont setting)
+ICA.ContCont   		Compute ICA, causal-inf framework (cont-cont setting)
+UnifixedContCont        Univariate fixed-effects model to assess surrogacy 
+			in meta-anal framework (cont-cont setting)
+UnimixedContCont        Univariate mixed-effects model to assess surrogacy 
+			in meta-anal framework (cont-cont setting) 
