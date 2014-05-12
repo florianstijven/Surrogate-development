@@ -26,7 +26,7 @@ Weighted=TRUE, Min.Trial.Size=2, Alpha=.05, Number.Bootstraps=500,
 \item{\dots}{Other arguments to be passed to the function \code{lmer} (of the R package \code{lme4}) that is used to fit the geralized linear mixed-effect models in the function \code{BimixedContCont}. For details, see \href{http://cran.r-project.org/web/packages/lme4/lme4.pdf}{the lme4 manual}. }
 }
 \details{
-When the full bivariate mixed-effects model is fitted to assess surrogacy in the meta-analytic framework (for details, Buyse & Molenberghs, 2000), computational issues often occur (e.g., the Newton Raphson algorithm may not converge). In that situation, the use of simplified model-fitting strategies may be warranted (for details, see Burzykowski et al., 2005; Tibaldi et al., 2003).   
+When the full bivariate mixed-effects model is fitted to assess surrogacy in the meta-analytic framework (for details, Buyse & Molenberghs, 2000), computational issues often occur. In that situation, the use of simplified model-fitting strategies may be warranted (for details, see Burzykowski et al., 2005; Tibaldi et al., 2003).   
 
 The function \code{UnimixedContCont} implements one such strategy, i.e., it uses a two-stage univariate mixed-effects modelling approach to assess surrogacy. In the first stage of the analysis, two univariate mixed-effects models are fitted to the data. When a full or semi-reduced model is requested (by using the argument \code{Model=c("Full")} or \code{Model=c("SemiReduced")} in the function call), the following univariate models are fitted:
 

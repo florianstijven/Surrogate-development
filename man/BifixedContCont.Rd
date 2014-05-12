@@ -22,7 +22,7 @@ Weighted=TRUE, Min.Trial.Size=2, Alpha=.05)
   \item{Alpha}{The \eqn{\alpha}-level that is used to determine the confidence intervals around \eqn{R^2_{trial}}, \eqn{R_{trial}}, \eqn{R^2_{indiv}} and \eqn{R_{indiv}}. Default \eqn{0.05}.}
 }
 \details{
-When the full bivariate mixed-effects model is fitted to assess surrogacy in the meta-analytic framework (for details, Buyse & Molenberghs, 2000), computational issues often occur (e.g., the Newton Raphson algorithm may not converge). In that situation, the use of simplified model-fitting strategies may be warranted (for details, see Burzykowski et al., 2005; Tibaldi et al., 2003).   
+When the full bivariate mixed-effects model is fitted to assess surrogacy in the meta-analytic framework (for details, Buyse & Molenberghs, 2000), computational issues often occur. In that situation, the use of simplified model-fitting strategies may be warranted (for details, see Burzykowski et al., 2005; Tibaldi et al., 2003).   
 
 The function \code{BifixedContCont} implements one such strategy, i.e., it uses a two-stage bivariate fixed-effects modelling approach to assess surrogacy. 
 In the first stage of the analysis, a bivariate linear regression model is fitted. When a full or semi-reduced model is requested (by using the argument \code{Model=c("Full")} or \code{Model=c("SemiReduced")} in the function call), the following bivariate model is fitted:

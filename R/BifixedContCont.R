@@ -116,10 +116,6 @@ BifixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model=
   rownames(Indiv.R2) <- c(" ")
   Min.Eigen.VarCovarResid <- min(eigen(VarCovarResid)$values)    # lowest eigenvalue
   if (Min.Eigen.VarCovarResid <= 0) warning(paste("The R-square Individual estimate may be invalid, because its calculation is based on a non-positive definite covariance matrix. "))
-  Singular <- svd(VarCovarResid)$d
-  Cond.Number.VarCovarResid <- max(Singular)/min(Singular)
-  if (Cond.Number.VarCovarResid > 100) warning(paste("The R-square Individual estimate may not be thrustworthy, as its conditioning number is high and equals",
-                                                     deparse(Cond.Number.VarCovarResid)))
   
   # Rind
   Rind <- sqrt((VarCovarResid[2,1]**2)/(VarCovarResid[1,1]*VarCovarResid[2,2]))

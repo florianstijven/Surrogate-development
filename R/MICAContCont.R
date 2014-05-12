@@ -1,4 +1,4 @@
-MICA.ContCont <- function(Trial.R, D.aa, D.bb, T0S0, T1S1, T0T0=1, T1T1=1, S0S0=1, S1S1=1, T0T1=seq(0, 1, by=.1), T0S1=seq(0, 1, by=.1), T1S0=seq(0, 1, by=.1), S0S1=seq(0, 1, by=.1)) { 
+MICA.ContCont <- function(Trial.R, D.aa, D.bb, T0S0, T1S1, T0T0=1, T1T1=1, S0S0=1, S1S1=1, T0T1=seq(-1, 1, by=.1), T0S1=seq(-1, 1, by=.1), T1S0=seq(-1, 1, by=.1), S0S1=seq(-1, 1, by=.1)) { 
   
   Results <- na.exclude(matrix(NA, 1, 8))
   colnames(Results) <- c("T0T1", "T0S0", "T0S1", "T1S0", "T1S1", "S0S1", "ICA", "MICA")
@@ -152,6 +152,14 @@ plot.MICA.ContCont <- function(x, ICA=TRUE, MICA=TRUE, Type="Percent", Labels=FA
 
 summary.MICA.ContCont <- function(object, ..., Object){
   if (missing(Object)){Object <- object} 
+
+  mode <- function(data) {
+    x <- data
+    z <- density(x)
+    mode_val <- z$x[which.max(z$y)]
+    fit <- list(mode_val= mode_val)
+  }
+  
   cat("\nFunction call:\n\n")
   print(Object$Call)
   cat("\n\n# Total number of matrices that can be formed by the specified vectors and/or scalars")
@@ -165,6 +173,7 @@ summary.MICA.ContCont <- function(object, ..., Object){
   cat("\n#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n")  
   cat("Mean (SD) MICA: ", format(round(mean(Object$MICA), 4), nsmall = 4), " (", format(round(sd(Object$MICA), 4), nsmall = 4), ")", 
       "  [min: ", format(round(min(Object$MICA), 4), nsmall = 4), "; max: ",  format(round(max(Object$MICA), 4), nsmall = 4), "]", sep="")
+  cat("\nMode MICA: ", format(round(mode(Object$MICA)$mode_val, 4), nsmall = 4))
   cat("\n\nQuantiles of the MICA distribution: \n\n")
   quant <- quantile(Object$MICA, probs = c(.05, .10, .20, .50, .80, .90, .95))
   print(quant)

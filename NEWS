@@ -1,0 +1,6 @@
+Changes in version: Surrogate_0.1-1
+
+  o The function CausalDiagramContCont has been added 
+
+  o corrected some typos in .Rd files.
+

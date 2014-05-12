@@ -23,6 +23,15 @@ summary.Single.Trial.RE.AA <- function(object, ..., Object){
   cat("\n\nCorrelations between the true and surrogate endpoints in the control (r_T0S0)")
   cat("\nand the experimental treatment groups (r_T1S1):\n\n")
   print(round(Object$Cor.Endpoints, 4), nsmall = 4)
+  
+  cat("\n\n\n# Expected causal effects")
+  cat("\n#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+  cat("\n\nAlpha:\n\n")
+  print(format(round(Object$Alpha, 4), nsmall = 4))
+  cat("\nBeta:\n\n")
+  print(format(round(Object$Beta, 4), nsmall = 4))
+  
+  
   cat("\n\n\n# Relative effect")
   cat("\n#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
   cat("\n\nDelta method-based confidence interval:\n\n")

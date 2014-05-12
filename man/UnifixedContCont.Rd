@@ -24,7 +24,7 @@ Weighted=TRUE, Min.Trial.Size=2, Alpha=.05, Number.Bootstraps=500)
 \item{Number.Bootstraps}{The standard errors and confidence intervals for \eqn{R^2_{indiv}} and \eqn{R_{indiv}} are determined as based on a bootstrap procedure. \code{Number.Bootstraps} specifies the number of bootstrap samples that are used. Default \eqn{500}.}
 }
 \details{
-When the full bivariate mixed-effects model is fitted to assess surrogacy in the meta-analytic framework (for details, Buyse & Molenberghs, 2000), computational issues often occur (e.g., the Newton Raphson algorithm may not converge). In that situation, the use of simplified model-fitting strategies may be warranted (for details, see see Burzykowski et al., 2005; Tibaldi et al., 2003). 
+When the full bivariate mixed-effects model is fitted to assess surrogacy in the meta-analytic framework (for details, Buyse & Molenberghs, 2000), computational issues often occur. In that situation, the use of simplified model-fitting strategies may be warranted (for details, see see Burzykowski et al., 2005; Tibaldi et al., 2003). 
 
 The function \code{UnifixedContCont} implements one such strategy, i.e., it uses a two-stage univariate fixed-effects modelling approach to assess surrogacy. In the first stage of the analysis, two univariate linear regression models are fitted to the data of each of the \eqn{i} trials. When a full or semi-reduced model is requested (by using the argument \code{Model=c("Full")} or \code{Model=c("SemiReduced")} in the function call), the following univariate models are fitted:
 

@@ -3,8 +3,8 @@
 \title{Assess surrogacy in the causal-inference single-trial setting (Individual Causal Association, ICA) in the Continuous-continuous case}
 \description{
 The function \code{ICA.ContCont} quantifies surrogacy in the single-trial causal-inference framework. See \bold{Details} below.}
-\usage{ICA.ContCont(T0S0, T1S1, T0T0=1, T1T1=1, S0S0=1, S1S1=1, T0T1=seq(0, 1, by=.1), 
-T0S1=seq(0, 1, by=.1), T1S0=seq(0, 1, by=.1), S0S1=seq(0, 1, by=.1))}
+\usage{ICA.ContCont(T0S0, T1S1, T0T0=1, T1T1=1, S0S0=1, S1S1=1, T0T1=seq(-1, 1, by=.1), 
+T0S1=seq(-1, 1, by=.1), T1S0=seq(-1, 1, by=.1), S0S1=seq(-1, 1, by=.1))}
 \arguments{
   \item{T0S0}{A scalar or vector that specifies the correlation(s) between the surrogate and the true endpoint in the control treatment condition that should be considered in the computation of \eqn{\rho_{\Delta}}.}
   \item{T1S1}{A scalar or vector that specifies the correlation(s) between the surrogate and the true endpoint in the experimental treatment condition that should be considered in the computation of \eqn{\rho_{\Delta}}.}
@@ -12,10 +12,10 @@ T0S1=seq(0, 1, by=.1), T1S0=seq(0, 1, by=.1), S0S1=seq(0, 1, by=.1))}
   \item{T1T1}{A scalar that specifies the variance of the true endpoint in the experimental treatment condition that should be considered in the computation of \eqn{\rho_{\Delta}}. Default 1.}
   \item{S0S0}{A scalar that specifies the variance of the surrogate endpoint in the control treatment condition that should be considered in the computation of \eqn{\rho_{\Delta}}. Default 1.}
   \item{S1S1}{A scalar that specifies the variance of the surrogate endpoint in the experimental treatment condition that should be considered in the computation of \eqn{\rho_{\Delta}}. Default 1.}
-\item{T0T1}{A scalar or vector that contains the correlation(s) between the counterfactuals T0 and T1 that should be considered in the computation of \eqn{\rho_{\Delta}}. Default \code{seq(0, 1, by=.1)}, i.e., the values \eqn{0}, \eqn{0.10}, \eqn{0.20}, \dots, \eqn{1}.}
-  \item{T0S1}{A scalar or vector that contains the correlation(s) between the counterfactuals T0 and S1 that should be considered in the computation of \eqn{\rho_{\Delta}}. Default \code{seq(0, 1, by=.1)}.}
-  \item{T1S0}{A scalar or vector that contains the correlation(s) between the counterfactuals T1 and S0 that should be considered in the computation of \eqn{\rho_{\Delta}}. Default \code{seq(0, 1, by=.1)}.}
-  \item{S0S1}{A scalar or vector that contains the correlation(s) between the counterfactuals S0 and S1 that should be considered in the computation of \eqn{\rho_{\Delta}}. Default \code{seq(0, 1, by=.1)}.}
+\item{T0T1}{A scalar or vector that contains the correlation(s) between the counterfactuals T0 and T1 that should be considered in the computation of \eqn{\rho_{\Delta}}. Default \code{seq(-1, 1, by=.1)}, i.e., the values \eqn{-1}, \eqn{-0.9}, \eqn{-0.8}, \dots, \eqn{1}.}
+  \item{T0S1}{A scalar or vector that contains the correlation(s) between the counterfactuals T0 and S1 that should be considered in the computation of \eqn{\rho_{\Delta}}. Default \code{seq(-1, 1, by=.1)}.}
+  \item{T1S0}{A scalar or vector that contains the correlation(s) between the counterfactuals T1 and S0 that should be considered in the computation of \eqn{\rho_{\Delta}}. Default \code{seq(-1, 1, by=.1)}.}
+  \item{S0S1}{A scalar or vector that contains the correlation(s) between the counterfactuals S0 and S1 that should be considered in the computation of \eqn{\rho_{\Delta}}. Default \code{seq(-1, 1, by=.1)}.}
 }
 \details{
 Based on the causal-inference framework, it is assumed that each subject \emph{j} has four counterfactuals (or potential outcomes), i.e., \eqn{T_{0j}}, \eqn{T_{1j}}, \eqn{S_{0j}}, and \eqn{S_{1j}}. Let \eqn{T_{0j}} and \eqn{T_{1j}} denote the counterfactuals for the true endpoint (\eqn{T}) under the control (\eqn{Z=0}) and the experimental (\eqn{Z=1}) treatments of subject \emph{j}, respectively. Similarly, \eqn{S_{0j}} and \eqn{S_{1j}} denote the corresponding counterfactuals for the surrogate endpoint (\eqn{S}) under the control and experimental treatments, respectively. The individual causal effects of \eqn{Z} on \eqn{T} and \eqn{S} for a given subject \emph{j} are then defined as \eqn{\Delta_{T_{j}}=T_{1j}-T_{0j}} and \eqn{\Delta_{S_{j}}=S_{1j}-S_{0j}}, respectively.
@@ -55,11 +55,11 @@ Wim Van der Elst, Ariel Alonso, & Geert Molenberghs
 \dontrun{
 # Generate the vector of ICA.ContCont values when rho_T0S0=rho_T1S1=.95, 
 # sigma_T0T0=90, sigma_T1T1=100,sigma_ S0S0=10, sigma_S1S1=15, and  
-# the grid of values {0, .1, ..., 1} is considered for the correlations
+# the grid of values {-1, -.9, ..., 1} is considered for the correlations
 # between the counterfactuals:
 SurICA <- ICA.ContCont(T0S0=.95, T1S1=.95, T0T0=90, T1T1=100, S0S0=10, S1S1=15,
-T0T1=seq(0, 1, by=.1), T0S1=seq(0, 1, by=.1), T1S0=seq(0, 1, by=.1), 
-S0S1=seq(0, 1, by=.1))
+T0T1=seq(-1, 1, by=.1), T0S1=seq(-1, 1, by=.1), T1S0=seq(-1, 1, by=.1), 
+S0S1=seq(-1, 1, by=.1))
 
 # Examine and plot the vector of generated ICA values:
 summary(SurICA)

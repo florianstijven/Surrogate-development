@@ -4,22 +4,22 @@
 \description{
 The function \code{MICA.ContCont} quantifies surrogacy in the multiple-trial causal-inference framework. See \bold{Details} below.}
 \usage{MICA.ContCont(Trial.R, D.aa, D.bb, T0S0, T1S1, T0T0=1, T1T1=1, S0S0=1, S1S1=1, 
-T0T1=seq(0,1, by=.1), T0S1=seq(0, 1, by=.1), T1S0=seq(0, 1, by=.1), 
-S0S1=seq(0, 1, by=.1))}
+T0T1=seq(-1, 1, by=.1), T0S1=seq(-1, 1, by=.1), T1S0=seq(-1, 1, by=.1), 
+S0S1=seq(-1, 1, by=.1))}
 \arguments{
 \item{Trial.R}{A scalar that specifies the trial-level correlation coefficient (i.e., \eqn{R_{trial}}) that should be used in the computation of \eqn{\rho_{M}}.}
 \item{D.aa}{A scalar that specifies the between-trial variance of the treatment effects on the surrogate endpoint (i.e., \eqn{d_{aa}}) that should be used in the computation of \eqn{\rho_{M}}.}
 \item{D.bb}{A scalar that specifies the between-trial variance of the treatment effects on the true endpoint (i.e., \eqn{d_{bb}}) that should be used in the computation of \eqn{\rho_{M}}.}
 \item{T0S0}{A scalar or vector that specifies the correlation(s) between the surrogate and the true endpoint in the control treatment condition that should be considered in the computation of \eqn{\rho_{M}}.}
   \item{T1S1}{A scalar or vector that specifies the correlation(s) between the surrogate and the true endpoint in the experimental treatment condition that should be considered in the computation of \eqn{\rho_{M}}.}
-  \item{T0T0}{A scalar that specifies the variance of the true endpoint in the control treatment condition that should be considered in the computation of \eqn{\rho_{\Delta}}. Default 1.}
-  \item{T1T1}{A scalar that specifies the variance of the true endpoint in the experimental treatment condition that should be considered in the computation of \eqn{\rho_{\Delta}}. Default 1.}
-  \item{S0S0}{A scalar that specifies the variance of the surrogate endpoint in the control treatment condition that should be considered in the computation of \eqn{\rho_{\Delta}}. Default 1.}
-  \item{S1S1}{A scalar that specifies the variance of the surrogate endpoint in the experimental treatment condition that should be considered in the computation of \eqn{\rho_{\Delta}}. Default 1.}
-\item{T0T1}{A scalar or vector that contains the correlation(s) between the counterfactuals T0 and T1 that should be considered in the computation of \eqn{\rho_{M}}. Default \code{seq(0, 1, by=.1)}, i.e., the values \eqn{0}, \eqn{0.10}, \eqn{0.20}, \dots, \eqn{1}.}
-  \item{T0S1}{A scalar or vector that contains the correlation(s) between the counterfactuals T0 and S1 that should be considered in the computation of \eqn{\rho_{M}}. Default \code{seq(0, 1, by=.1)}.}
-  \item{T1S0}{A scalar or vector that contains the correlation(s) between the counterfactuals T1 and S0 that should be considered in the computation of \eqn{\rho_{M}}. Default \code{seq(0, 1, by=.1)}.}
-  \item{S0S1}{A scalar or vector that contains the correlation(s) between the counterfactuals S0 and S1 that should be considered in the computation of \eqn{\rho_{M}}. Default \code{seq(0, 1, by=.1)}.}
+  \item{T0T0}{A scalar that specifies the variance of the true endpoint in the control treatment condition that should be considered in the computation of \eqn{\rho_{M}}. Default 1.}
+  \item{T1T1}{A scalar that specifies the variance of the true endpoint in the experimental treatment condition that should be considered in the computation of \eqn{\rho_{M}}. Default 1.}
+  \item{S0S0}{A scalar that specifies the variance of the surrogate endpoint in the control treatment condition that should be considered in the computation of \eqn{\rho_{M}}. Default 1.}
+  \item{S1S1}{A scalar that specifies the variance of the surrogate endpoint in the experimental treatment condition that should be considered in the computation of \eqn{\rho_{M}}. Default 1.}
+\item{T0T1}{A scalar or vector that contains the correlation(s) between the counterfactuals T0 and T1 that should be considered in the computation of \eqn{\rho_{M}}. Default \code{seq(-1, 1, by=.1)}, i.e., the values \eqn{-1}, \eqn{-0.9}, \eqn{-0.8}, \dots, \eqn{1}.}
+  \item{T0S1}{A scalar or vector that contains the correlation(s) between the counterfactuals T0 and S1 that should be considered in the computation of \eqn{\rho_{M}}. Default \code{seq(-1, 1, by=.1)}.}
+  \item{T1S0}{A scalar or vector that contains the correlation(s) between the counterfactuals T1 and S0 that should be considered in the computation of \eqn{\rho_{M}}. Default \code{seq(-1, 1, by=.1)}.}
+  \item{S0S1}{A scalar or vector that contains the correlation(s) between the counterfactuals S0 and S1 that should be considered in the computation of \eqn{\rho_{M}}. Default \code{seq(-1, 1, by=.1)}.}
 }
 \details{
 Based on the causal-inference framework, it is assumed that each subject \emph{j} in trial \emph{i} has four counterfactuals (or potential outcomes), i.e., \eqn{T_{0ij}}, \eqn{T_{1ij}}, \eqn{S_{0ij}}, and \eqn{S_{1ij}}. Let \eqn{T_{0ij}} and \eqn{T_{1ij}} denote the counterfactuals for the true endpoint (\eqn{T}) under the control (\eqn{Z=0}) and the experimental (\eqn{Z=1}) treatments of subject \emph{j} in trial \emph{i}, respectively. Similarly, \eqn{S_{0ij}} and \eqn{S_{1ij}} denote the corresponding counterfactuals for the surrogate endpoint (\eqn{S}) under the control and experimental treatments of subject \emph{j} in trial \emph{i}, respectively. The individual causal effects of \eqn{Z} on \eqn{T} and \eqn{S} for a given subject \emph{j} in trial \emph{i} are then defined as \eqn{\Delta_{T_{ij}}=T_{1ij}-T_{0ij}} and \eqn{\Delta_{S_{ij}}=S_{1ij}-S_{0ij}}, respectively.
@@ -66,11 +66,11 @@ Wim Van der Elst, Ariel Alonso, & Geert Molenberghs
 \dontrun{
 # Generate the vector of MICA values when R_trial=.8, rho_T0S0=rho_T1S1=.8,
 # sigma_T0T0=90, sigma_T1T1=100,sigma_ S0S0=10, sigma_S1S1=15, D.aa=5, D.bb=10,  
-# and when the grid of values {0, .1, ..., 1} is considered for the 
+# and when the grid of values {-1, -0.9, ..., 1} is considered for the 
 # correlations between the counterfactuals:
 SurMICA <- MICA.ContCont(Trial.R=.80, D.aa=5, D.bb=10, T0S0=.8, T1S1=.8,
-T0T0=90, T1T1=100, S0S0=10, S1S1=15, T0T1=seq(0, 1, by=.1), 
-T0S1=seq(0, 1, by=.1), T1S0=seq(0, 1, by=.1), S0S1=seq(0, 1, by=.1))
+T0T0=90, T1T1=100, S0S0=10, S1S1=15, T0T1=seq(-1, 1, by=.1), 
+T0S1=seq(-1, 1, by=.1), T1S0=seq(-1, 1, by=.1), S0S1=seq(-1, 1, by=.1))
 
 # Examine and plot the vector of the generated MICA values:
 summary(SurMICA)
@@ -79,8 +79,8 @@ plot(SurMICA)
 
 # Same analysis, but now assume that D.aa=.5 and D.bb=.1:
 SurMICA <- MICA.ContCont(Trial.R=.80, D.aa=.5, D.bb=.1, T0S0=.8, T1S1=.8,
-T0T0=90, T1T1=100, S0S0=10, S1S1=15, T0T1=seq(0, 1, by=.1), 
-T0S1=seq(0, 1, by=.1), T1S0=seq(0, 1, by=.1), S0S1=seq(0, 1, by=.1))
+T0T0=90, T1T1=100, S0S0=10, S1S1=15, T0T1=seq(-1, 1, by=.1), 
+T0S1=seq(-1, 1, by=.1), T1S0=seq(-1, 1, by=.1), S0S1=seq(-1, 1, by=.1))
 
 # Examine and plot the vector of the generated MICA values:
 summary(SurMICA)
