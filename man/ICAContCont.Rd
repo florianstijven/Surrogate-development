@@ -26,7 +26,7 @@ In the single-trial causal-inference framework, surrogacy can be quantified as t
 
 where the correlations \eqn{\rho_{S_{0}T_{1}}}, \eqn{\rho_{S_{1}T_{0}}}, \eqn{\rho_{T_{0}T_{1}}}, and \eqn{\rho_{S_{0}S_{1}}} are not estimable. It is thus warranted to conduct a sensitivity analysis (by considering vectors of possible values for the correlations between the counterfactuals -- rather than point estimates). 
 
-When the user specifies a vector of values that should be considered for one or more of the counterfactual correlations in the above expression, the function \code{ICA.ContCont} constructs all possible matrices that can be formed as based on these values, identifies the matrices that are positive definite (i.e., valid correlation matrices), and computes \eqn{\rho_{\Delta}} for each of these matrices. The obtained vector of \eqn{\rho_{\Delta}} values can subsequently be used to examine (i) the impact of different assumptions regarding the correlations between the counterfactuals on the results (see also \code{\link{plot Causal-Inference}}), and (ii) the extent to which proponents of the causal-inference and meta-analytic frameworks will reach the same conclusion with respect to the appropriateness of the candidate surrogate at hand.   
+When the user specifies a vector of values that should be considered for one or more of the counterfactual correlations in the above expression, the function \code{ICA.ContCont} constructs all possible matrices that can be formed as based on these values, identifies the matrices that are positive definite (i.e., valid correlation matrices), and computes \eqn{\rho_{\Delta}} for each of these matrices. The obtained vector of \eqn{\rho_{\Delta}} values can subsequently be used to examine (i) the impact of different assumptions regarding the correlations between the counterfactuals on the results (see also \code{\link{plot Causal-Inference ContCont}}), and (ii) the extent to which proponents of the causal-inference and meta-analytic frameworks will reach the same conclusion with respect to the appropriateness of the candidate surrogate at hand.   
 
 The function \code{ICA} also generates output that is useful to examine the plausibility of finding a good surrogate endpoint (see \code{GoodSurr} in the \bold{Value} section below). For details, see Alonso et al. (submitted).
 
@@ -49,7 +49,7 @@ Alonso, A., Van der Elst, W., Molenberghs, G., Buyse, M., & Burzykowski, T. (sub
 Wim Van der Elst, Ariel Alonso, & Geert Molenberghs
 }
 \seealso{
-\code{\link{MICA.ContCont}}, \code{\link{Single.Trial.RE.AA}}, \code{\link{plot Causal-Inference}}
+\code{\link{MICA.ContCont}}, \code{\link{Single.Trial.RE.AA}}, \code{\link{plot Causal-Inference ContCont}}
 }
 \examples{
 \dontrun{
@@ -74,4 +74,5 @@ SurICA$Pos.Def}
 \keyword{Counterfactuals}
 \keyword{Single-trial setting}
 \keyword{Sensitivity}
+\keyword{ICA}
 

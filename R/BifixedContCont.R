@@ -102,7 +102,8 @@ BifixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model=
   
   cors <- corMatrix(Model.For.R2indiv$modelStruct$corStruct)[[1]]
   varStruct <- capture.output(Model.For.R2indiv$modelStruct$varStruct)[3]
-  varStruct <- cbind (as.numeric(unique(strsplit(varStruct, " ")[[1]])[1]), as.numeric(unique(strsplit(varStruct, " ")[[1]])[2]))
+  pos <- length(as.numeric(unique(strsplit(varStruct, " ")[[1]])))
+  varStruct <- cbind(as.numeric(unique(strsplit(varStruct, " ")[[1]])[pos-1]), as.numeric(unique(strsplit(varStruct, " ")[[1]])[pos]))
   vars <- as.numeric((varStruct**2) * (summary(Model.For.R2indiv)$sigma)**2)
   covs <- outer(vars, vars, function(x,y) sqrt(x)*sqrt(y))
   VarCovarResid <- cors * covs

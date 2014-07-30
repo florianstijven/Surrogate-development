@@ -4,8 +4,9 @@
 \description{
 The function \code{Sim.Data.Counterfactuals} simulates a dataset that contains four (continuous) counterfactuals (i.e., potential outcomes) and a (binary) treatment indicator. The counterfactuals \eqn{T_0} and \eqn{T_1} denote the true endpoints of a patient under the control and the experimental treatments, respectively, and the counterfactuals \eqn{S_0} and \eqn{S_1} denote the surrogate endpoints of the patient under the control and the experimental treatments, respectively. The user can specify the number of patients, the desired mean values for the counterfactuals (i.e., \eqn{\bold{\mu}_c}), and the desired correlations between the counterfactuals (i.e., the off-diagonal values in the standardized \eqn{\bold{\Sigma}_c} matrix). For details, see the papers of Alonso et al. (submitted) and Van der Elst et al. (submitted).
 }  
-\usage{Sim.Data.Counterfactuals(N.Total=2000, mu_c=c(0, 0, 0, 0), T0S0=0, T1S1=0, 
-T0T1=0, T0S1=0, T1S0=0, S0S1=0, Seed=sample(1:1000, size=1))
+\usage{Sim.Data.Counterfactuals(N.Total=2000, 
+mu_c=c(0, 0, 0, 0), T0S0=0, T1S1=0, T0T1=0, T0S1=0, 
+T1S0=0, S0S1=0, Seed=sample(1:1000, size=1))
 }
 \arguments{
   \item{N.Total}{The total number of patients in the simulated dataset. Default \eqn{2000}.}
