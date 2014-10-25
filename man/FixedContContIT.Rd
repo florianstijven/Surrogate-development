@@ -7,7 +7,7 @@ The function \code{FixedContContIT} uses the information-theoretic approach (Alo
 \usage{
 FixedContContIT(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, 
 Model=c("Full"), Weighted=TRUE, Min.Trial.Size=2, 
-Alpha=.05, Number.Bootstraps=500, Seed=sample(1:1000, size=1))
+Alpha=.05, Number.Bootstraps=500)
 }
 \arguments{
   \item{Dataset}{A \code{data.frame} that should consist of one line per patient. Each line contains (at least) a surrogate value, a true endpoint value, a treatment indicator, a patient ID, and a trial ID.}
@@ -21,7 +21,6 @@ Alpha=.05, Number.Bootstraps=500, Seed=sample(1:1000, size=1))
 \item{Min.Trial.Size}{The minimum number of patients that a trial should contain to be included in the analysis. If the number of patients in a trial is smaller than the value specified by \code{Min.Trial.Size}, the data of the trial are excluded from the analysis. Default \eqn{2}.}
   \item{Alpha}{The \eqn{\alpha}-level that is used to determine the confidence intervals around \eqn{R^2_{h}} and \eqn{R^2_{ht}}. Default \eqn{0.05}.}
 \item{Number.Bootstraps}{The standard error and confidence interval for \eqn{R^2_{h}} is determined based on a bootstrap procedure. \code{Number.Bootstraps} specifies the number of bootstrap samples that are used. Default \eqn{500}.}
-\item{Seed}{The seed to be used in the bootstrap procedure. Default \eqn{sample(1:1000, size=1)}.}
 }
 \details{
 

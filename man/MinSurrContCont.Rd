@@ -29,7 +29,7 @@ Wim Van der Elst, Ariel Alonso, & Geert Molenberghs
 }
 
 \seealso{
-\code{\link{ICA.ContCont}}, \code{\link{plot Causal-Inference ContCont}, \link{plot MinSurrContCont}}
+\code{\link{ICA.ContCont}}, \code{\link{plot Causal-Inference}, \link{plot MinSurrContCont}}
 }
 
 \examples{

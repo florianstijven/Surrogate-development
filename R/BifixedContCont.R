@@ -92,18 +92,17 @@ BifixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model=
   
   # Individual-Level Surrogacy and CI
   if (Model==c("Full") | Model==c("SemiReduced")) {
-    Model.For.R2indiv <- gls(outcome ~ -1 + as.factor(Trial.ID):Treat:as.factor(endpoint) + as.factor(Trial.ID):as.factor(endpoint),
-                             correlation = corSymm(form=~1|as.factor(Trial.ID)/as.factor(Pat.ID)), 
-                             weights=varIdent(form=~1|endpoint), data=Data.analyze) }
+    Model.For.R2indiv <- nlme::gls(outcome ~ -1 + as.factor(Trial.ID):Treat:as.factor(endpoint) + as.factor(Trial.ID):as.factor(endpoint),
+                             correlation = nlme::corSymm(form=~1|as.factor(Trial.ID)/as.factor(Pat.ID)), 
+                             weights=nlme::varIdent(form=~1|endpoint), data=Data.analyze) }
   if (Model==c("Reduced")){
-    Model.For.R2indiv <- gls(outcome ~ -1 + as.factor(Trial.ID):Treat:as.factor(endpoint) + as.factor(endpoint), 
-                             correlation = corSymm(form=~1|as.factor(Trial.ID)/as.factor(Pat.ID)), 
-                             weights=varIdent(form=~1|endpoint), data=Data.analyze) }
+    Model.For.R2indiv <- nlme::gls(outcome ~ -1 + as.factor(Trial.ID):Treat:as.factor(endpoint) + as.factor(endpoint), 
+                             correlation = nlme::corSymm(form=~1|as.factor(Trial.ID)/as.factor(Pat.ID)), 
+                             weights=nlme::varIdent(form=~1|endpoint), data=Data.analyze) }
   
-  cors <- corMatrix(Model.For.R2indiv$modelStruct$corStruct)[[1]]
+  cors <- nlme::corMatrix(Model.For.R2indiv$modelStruct$corStruct)[[1]]
   varStruct <- capture.output(Model.For.R2indiv$modelStruct$varStruct)[3]
-  pos <- length(as.numeric(unique(strsplit(varStruct, " ")[[1]])))
-  varStruct <- cbind(as.numeric(unique(strsplit(varStruct, " ")[[1]])[pos-1]), as.numeric(unique(strsplit(varStruct, " ")[[1]])[pos]))
+  varStruct <- cbind (as.numeric(unique(strsplit(varStruct, " ")[[1]])[1]), as.numeric(unique(strsplit(varStruct, " ")[[1]])[2]))
   vars <- as.numeric((varStruct**2) * (summary(Model.For.R2indiv)$sigma)**2)
   covs <- outer(vars, vars, function(x,y) sqrt(x)*sqrt(y))
   VarCovarResid <- cors * covs

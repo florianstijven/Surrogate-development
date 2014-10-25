@@ -1,14 +1,60 @@
-BifixedContCont         Bivariate fixed-effects model to assess surrogacy 
-			in meta-anal framework (cont-cont setting)
-BimixedContCont         Bivariate mixed-effects model to assess surrogacy 
-			in meta-anal framework (cont-cont setting)
-FixedContContIT         Fixed-effect approach to assess surrogacy in info-
-			theoretic framework (cont-cont setting)
-MICA.ContCont   	Compute MICA, causal-inf framework (cont-cont setting)
-MixedContContIT		Mixed-effect approach to assess surrogacy in info-
-			theoretic framework (cont-cont setting)
-ICA.ContCont   		Compute ICA, causal-inf framework (cont-cont setting)
-UnifixedContCont        Univariate fixed-effects model to assess surrogacy 
-			in meta-anal framework (cont-cont setting)
-UnimixedContCont        Univariate mixed-effects model to assess surrogacy 
-			in meta-anal framework (cont-cont setting) 
+ARMD                    Data of the Age-Related Macular Degeneration
+                        Study
+BifixedContCont         Fits a bivariate fixed-effects model to assess
+                        surrogacy in the meta-analytic multiple-trial
+                        setting (Continuous-continuous case)
+BimixedContCont         Fits a bivariate mixed-effects model to assess
+                        surrogacy in the meta-analytic multiple-trial
+                        setting (Continuous-continuous case)
+CausalDiagramContCont   Draws a causal diagram depicting the median
+                        correlations between the counterfactuals for a
+                        specified range of values of ICA or MICA
+FixedContContIT         Fits (univariate) fixed-effect models to assess
+                        surrogacy in the continuous-continuous case
+                        based on the Information-Theoretic framework
+ICA.ContCont            Assess surrogacy in the causal-inference
+                        single-trial setting (Individual Causal
+                        Association, ICA) in the Continuous-continuous
+                        case
+LongToWide              Reshapes a dataset from the 'long' format
+                        (i.e., multiple lines per patient) into the
+                        'wide' format (i.e., one line per patient)
+MICA.ContCont           Assess surrogacy in the causal-inference
+                        multiple-trial setting (Meta-analytic
+                        Individual Causal Association; MICA) in the
+                        continuous-continuous case
+MinSurrContCont         Examine the plausibility of finding a good
+                        surrogate endpoint in the Continuous-continuous
+                        case
+MixedContContIT         Fits (univariate) mixed-effect models to assess
+                        surrogacy in the continuous-continuous case
+                        based on the Information-Theoretic framework
+Pos.Def.Matrices        Generate 4 by 4 correlation matrices and flag
+                        the positive definite ones
+Schizo                  Data of five clinical trials in schizophrenia
+Sim.Data.Counterfactuals
+                        Simulate a dataset that contains
+                        counterfactuals
+Sim.Data.MTS            Simulates a dataset that can be used to assess
+                        surrogacy in the multiple-trial setting
+Sim.Data.STS            Simulates a dataset that can be used to assess
+                        surrogacy in the single-trial setting
+Single.Trial.RE.AA      Conducts a surrogacy analysis based on the
+                        single-trial meta-analytic framework
+UnifixedContCont        Fits univariate fixed-effect models to assess
+                        surrogacy in the meta-analytic multiple-trial
+                        setting (continuous-continuous case)
+UnimixedContCont        Fits univariate mixed-effect models to assess
+                        surrogacy in the meta-analytic multiple-trial
+                        setting (continuous-continuous case)
+plot Causal-Inference   Plots the (Meta-Analytic) Individual Causal
+                        Association
+plot Information-Theoretic
+                        Provides plots of trial- and individual-level
+                        surrogacy in the Information-Theoretic
+                        framework
+plot Meta-Analytic      Provides plots of trial- and individual-level
+                        surrogacy in the meta-analytic framework
+plot MinSurrContCont    Graphically illustrates the theoretical
+                        plausibility of finding a good surrogate
+                        endpoint in the continuous-continuous case

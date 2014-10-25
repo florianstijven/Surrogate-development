@@ -6,7 +6,8 @@ The function \code{MixedContContIT} uses the information-theoretic approach (Alo
 }
 \usage{
 MixedContContIT(Dataset, Surr, True, Treat, Trial.ID, Pat.ID,
-Model=c("Full"), Weighted=TRUE, Min.Trial.Size=2, Alpha=.05, ...)
+Model=c("Full"), Weighted=TRUE, Min.Trial.Size=2, 
+Alpha=.05, Number.Bootstraps=500, ...)
 }
 \arguments{
   \item{Dataset}{A \code{data.frame} that should consist of one line per patient. Each line contains (at least) a surrogate value, a true endpoint value, a treatment indicator, a patient ID, and a trial ID.}
@@ -19,6 +20,7 @@ Model=c("Full"), Weighted=TRUE, Min.Trial.Size=2, Alpha=.05, ...)
 \item{Weighted}{Logical. In practice it is often the case that different trials (or other clustering units) have different sample sizes. Univariate models are used to assess surrogacy in the information-theoretic approach, so it can be useful to adjust for heterogeneity in information content between the trial-specific contributions (particularly when trial-level surrogacy measures are of primary interest and when the heterogeneity in sample sizes is large). If \code{Weighted=TRUE}, weighted regression models are fitted. If \code{Weighted=FALSE}, unweighted regression analyses are conducted. See the \bold{Details} section below. Default \code{TRUE}.}
 \item{Min.Trial.Size}{The minimum number of patients that a trial should contain to be included in the analysis. If the number of patients in a trial is smaller than the value specified by \code{Min.Trial.Size}, the data of the trial are excluded from the analysis. Default \eqn{2}.}
   \item{Alpha}{The \eqn{\alpha}-level that is used to determine the confidence intervals around \eqn{R^2_{h}} and \eqn{R^2_{ht}}. Default \eqn{0.05}.}
+\item{Number.Bootstraps}{The standard error and confidence interval for \eqn{R^2_{h}} is determined based on a bootstrap procedure. \code{Number.Bootstraps} specifies the number of bootstrap samples that are used. Default \eqn{500}.}
   \item{\dots}{Other arguments to be passed to the function \code{lmer} (of the R package \code{lme4}) that is used to fit the geralized linear mixed-effect models in the function \code{BimixedContCont}. For details, see \href{http://cran.r-project.org/web/packages/lme4/lme4.pdf}{the lme4 manual}. }
 }
 

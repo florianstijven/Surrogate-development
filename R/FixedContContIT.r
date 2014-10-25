@@ -1,6 +1,5 @@
 FixedContContIT <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, 
-                    Model=c("Full"), Weighted=TRUE, Min.Trial.Size=2, Alpha=.05, Number.Bootstraps=500, 
-                    Seed=sample(1:1000, size=1)){
+                    Model=c("Full"), Weighted=TRUE, Min.Trial.Size=2, Alpha=.05, Number.Bootstraps=500){
 
   if ((Model==c("Full") | Model==c("Reduced") | Model==c("SemiReduced"))==FALSE) {stop ("The specification of the Model=c(\"...\") argument of the call is incorrect. Use either Model=c(\"Full\"), Model=c(\"Reduced\"), or Model=c(\"SemiReduced\").")}     
   
@@ -163,10 +162,8 @@ for (i in 1:N.trial) {
     Boot.CI <-rep(0, k)
     for (j in 1:k){
     obs <- c(1:N.total)
-    set.seed(Seed)
     Indicator <- sample(obs, N.total, replace=TRUE)  #sample with replacement from 1...Ntotal
     Sample.Boot <- data.frame(wide[Indicator,])  
-    Seed <- Seed + 1
     sum.tot <- count <- c(0)    
  
     for (i in 1:N.trial) {

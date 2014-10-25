@@ -37,7 +37,7 @@ where
 
 The correlations between the counterfactuals (i.e., \eqn{\rho_{S_{0}T_{1}}}, \eqn{\rho_{S_{1}T_{0}}}, \eqn{\rho_{T_{0}T_{1}}}, and \eqn{\rho_{S_{0}S_{1}}}) are not identifiable from the data. It is thus warranted to conduct a sensitivity analysis (by considering vectors of possible values for the correlations between the counterfactuals -- rather than point estimates). 
 
-When the user specifies a vector of values that should be considered for one or more of the correlations that are involved in the computation of \eqn{\rho_{M}}, the function \code{MICA.ContCont} constructs all possible matrices that can be formed as based on the specified values, identifies the matrices that are positive definite (i.e., valid correlation matrices), and computes \eqn{\rho_{M}} for each of these matrices. An examination of the vector of the obtained \eqn{\rho_{M}} values allows for a straightforward examination of the impact of different assumptions regarding the correlations between the counterfactuals on the results (see also \code{\link{plot Causal-Inference ContCont}}), and the extent to which proponents of the causal-inference and meta-analytic frameworks will reach the same conclusion with respect to the appropriateness of the candidate surrogate at hand.   
+When the user specifies a vector of values that should be considered for one or more of the correlations that are involved in the computation of \eqn{\rho_{M}}, the function \code{MICA.ContCont} constructs all possible matrices that can be formed as based on the specified values, identifies the matrices that are positive definite (i.e., valid correlation matrices), and computes \eqn{\rho_{M}} for each of these matrices. An examination of the vector of the obtained \eqn{\rho_{M}} values allows for a straightforward examination of the impact of different assumptions regarding the correlations between the counterfactuals on the results (see also \code{\link{plot Causal-Inference}}), and the extent to which proponents of the causal-inference and meta-analytic frameworks will reach the same conclusion with respect to the appropriateness of the candidate surrogate at hand.   
 
 \bold{Notes}{
 
@@ -60,7 +60,7 @@ Wim Van der Elst, Ariel Alonso, & Geert Molenberghs
 }
 \section{Warning}{The theory that relates the causal-inference and the meta-analytic frameworks in the multiple-trial setting (as developped in Alonso et al., submitted) assumes that a reduced or semi-reduced modelling approach is used in the meta-analytic framework. Thus \eqn{R_{trial}},  \eqn{d_{aa}} and \eqn{d_{bb}} should be estimated based on a reduced model (i.e., using the \code{Model=c("Reduced")} argument in the functions \code{\link{UnifixedContCont}}, \code{\link{UnimixedContCont}}, \code{\link{BifixedContCont}}, or \code{\link{BimixedContCont}}) or based on a semi-reduced model (i.e., using the \code{Model=c("SemiReduced")} argument in the functions \code{\link{UnifixedContCont}}, \code{\link{UnimixedContCont}}, or \code{\link{BifixedContCont}}). } 
 \seealso{
-\code{\link{ICA.ContCont}}, \code{\link{plot Causal-Inference ContCont}}, \code{\link{UnifixedContCont}}, \code{\link{UnimixedContCont}}, \code{\link{BifixedContCont}}, \code{\link{BimixedContCont}}
+\code{\link{ICA.ContCont}}, \code{\link{plot Causal-Inference}}, \code{\link{UnifixedContCont}}, \code{\link{UnimixedContCont}}, \code{\link{BifixedContCont}}, \code{\link{BimixedContCont}}
 }
 \examples{
 \dontrun{
@@ -90,5 +90,3 @@ plot(SurMICA)}
 \keyword{Counterfactuals}
 \keyword{Multiple-trial setting}
 \keyword{Sensitivity}
-\keyword{ICA}
-\keyword{MICA}

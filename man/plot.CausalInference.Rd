@@ -1,9 +1,9 @@
-\name{plot Causal-Inference ContCont}
-\alias{plot Causal-Inference ContCont}
+\name{plot Causal-Inference}
+\alias{plot Causal-Inference}
 \alias{plot.ICA.ContCont}
 \alias{plot.MICA.ContCont}
 \title{
-Plots the (Meta-Analytic) Individual Causal Association when S and T are continuous outcomes
+Plots the (Meta-Analytic) Individual Causal Association
 }
 \description{
 This function provides a plot that displays the frequencies, percentages, or cumulative percentages of the individual causal association (ICA; \eqn{\rho_{\Delta}}) and/or the meta-analytic individual causal association (MICA; \eqn{\rho_{M}}) values. These figures are useful to examine the sensitivity of the obtained results with respect to the assumptions regarding the correlations between the counterfactuals (for details, see Alonso et al., submitted; Van der Elst et al., submitted). Optionally, it is also possible to obtain plots that are useful in the examination of the plausibility of finding a good surrogate endpoint when an object of class \code{ICA.ContCont} is considered.}

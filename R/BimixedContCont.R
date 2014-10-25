@@ -139,19 +139,19 @@ BimixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model=
     rm(Model.S.and.T)
     Model.S.and.T <- lme(outcome~ -1 + as.factor(endpoint):Treat + as.factor(endpoint), 
                      random=~ -1 + as.factor(endpoint) + as.factor(endpoint):Treat|as.factor(Trial.ID),
-                     correlation = corSymm(form=~1|as.factor(Trial.ID)/as.factor(Pat.ID)), data=Data.analyze,
-                     weights=varIdent(form=~1|endpoint), control = list(msVerbose = FALSE, optimizer = "nlm", niterEM = 25, msMaxIter=500))  
+                     correlation = nlme::corSymm(form=~1|as.factor(Trial.ID)/as.factor(Pat.ID)), data=Data.analyze,
+                     weights=nlme::varIdent(form=~1|endpoint), control = list(msVerbose = FALSE, optimizer = "nlm", niterEM = 25, msMaxIter=500))  
    }
   
   if (Model==c("Reduced")){
     rm(Model.S.and.T)
     Model.S.and.T <- lme(outcome~ -1 + as.factor(endpoint):Treat + as.factor(endpoint), 
                          random=~ -1 + as.factor(endpoint):Treat|as.factor(Trial.ID),
-                         correlation = corSymm(form=~1|as.factor(Trial.ID)/as.factor(Pat.ID)), data=Data.analyze,
-                         weights=varIdent(form=~1|endpoint), control = list(msVerbose = FALSE, optimizer = "nlm", niterEM = 25, msMaxIter=500))  
+                         correlation = nlme::corSymm(form=~1|as.factor(Trial.ID)/as.factor(Pat.ID)), data=Data.analyze,
+                         weights=nlme::varIdent(form=~1|endpoint), control = list(msVerbose = FALSE, optimizer = "nlm", niterEM = 25, msMaxIter=500))  
    }
   
-  cors <- corMatrix(Model.S.and.T$modelStruct$corStruct)[[1]]
+  cors <- nlme::corMatrix(Model.S.and.T$modelStruct$corStruct)[[1]]
   varStruct <- capture.output(Model.S.and.T$modelStruct$varStruct)[3]
   varStruct <- cbind(as.numeric(unique(strsplit(varStruct, " ")[[1]])[1]), as.numeric(unique(strsplit(varStruct, " ")[[1]])[2]))
   vars <- as.numeric((varStruct**2) * (summary(Model.S.and.T)$sigma)**2)
