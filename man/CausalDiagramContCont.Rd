@@ -1,7 +1,7 @@
 \name{CausalDiagramContCont}
 \alias{CausalDiagramContCont}
 \title{
-Draws a causal diagram depicting the median correlations between the counterfactuals for a specified range of values of ICA or MICA
+Draws a causal diagram depicting the median correlations between the counterfactuals for a specified range of values of ICA or MICA in the continuous-continuous setting
 }
 \description{
 This function provides a diagram that depicts the medians of the correlations between the counterfactuals for a specified range of values of the individual causal association (ICA; \eqn{\rho_{\Delta}}) or the meta-analytic individual causal association (MICA; \eqn{\rho_{M}}). 

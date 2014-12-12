@@ -1,11 +1,16 @@
+Changes in version: Surrogate_0.1-4
+
+  o The functions CausalDiagramBinBin, Restrictions.BinBin, ICA.BinBin.Grid.Full, and ICA.BinBin.Grid.Sample have been added
+
+
 Changes in version: Surrogate_0.1-3
 
-  o Bugfixes
+  o Corrected typos
 
 
 Changes in version: Surrogate_0.1-2
 
-  o The functions ICA.BinBin, MarginalProbs, MinSurrBinBin, RandVec, Sim.Data.CounterfactualsBinBin, and Sim.Data.CounterfactualsBinBin have been added 
+  o The functions ICA.BinBin, MarginalProbs, RandVec, Sim.Data.CounterfactualsBinBin, and Sim.Data.CounterfactualsBinBin have been added 
 
 
 Changes in version: Surrogate_0.1-1
@@ -13,3 +18,4 @@ Changes in version: Surrogate_0.1-1
   o The function CausalDiagramContCont has been added 
 
   o corrected some typos in .Rd files.
+
