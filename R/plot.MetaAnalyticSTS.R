@@ -1,5 +1,6 @@
 plot.Single.Trial.RE.AA <- function(x, Trial.Level=TRUE, Indiv.Level=TRUE, Xlab.Indiv, Ylab.Indiv, Xlab.Trial, Ylab.Trial, 
                                     Main.Trial, Main.Indiv, Par=par(oma=c(0, 0, 0, 0), mar=c(5.1, 4.1, 4.1, 2.1)), ...){
+  
   Object <- x  
  
   if (Trial.Level==TRUE){ 

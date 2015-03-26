@@ -2,14 +2,88 @@ plot.ICA.BinBin <- function(x, R2_H=TRUE, R_H=FALSE, Theta_T=FALSE, Theta_S=FALS
                             Type="Percent", Labels=FALSE, Xlab.R2_H, Main.R2_H, Xlab.R_H, Main.R_H,
                             Xlab.Theta_S, Main.Theta_S, Xlab.Theta_T, Main.Theta_T, Cex.Legend=1, Cex.Position="topright", All.Densities=FALSE,
                             col, Par=par(oma=c(0, 0, 0, 0), mar=c(5.1, 4.1, 4.1, 2.1)), ...){
+  
   Object <- x 
+  
+#  if (C3==TRUE){
+#    dev.new()
+#    par=Par 
+#    if (missing(Xlab.C3)) {Xlab.C3 <- expression(C[3])}
+#    if (missing(col)) {col <- c(8)}
+#    if (missing(Main.C3)) {Main.C3=" "}  
+    
+#    if (Type=="Density"){
+#      plot(density(x$C3, na.rm = T), xlab=Xlab.C3, ylab="Density", main=Main.C3, lwd=2)
+#    }
+    
+#    if (Type=="All.Densities"){
+#      resul <- cbind(x$Pi.Vectors, x$C3, x$R2_H, x$Theta_T, x$Theta_S, x$H_Delta_T)
+#      colnames(resul) <-  
+#        c("Pi_0000", "Pi_0100", "Pi_0010", "Pi_0001", "Pi_0101", "Pi_1000", "Pi_1010", "Pi_1001", "Pi_1110", "Pi_1101", "Pi_1011", 
+#          "Pi_1111", "Pi_0110", "Pi_0011", "Pi_0111", "Pi_1100", "Sum.Pi.f", "Monotonicity", "C3", "R2_H", 
+#          "Theta_T", "Theta_S", "H_Delta_T")
+#      C3_General <- resul$C3
+#      C3_No <- resul$C3[resul$Monotonicity=="No"]
+#      C3_Surr <- resul$C3[resul$Monotonicity=="Surr"]
+#      C3_True <- resul$C3[resul$Monotonicity=="True"]
+#      C3_SurrTrue <- resul$C3[resul$Monotonicity=="SurrTrue"]
+#      max_val <- max(max(density(C3_No, na.rm = T)$y),  max(density(C3_Surr, na.rm = T)$y), 
+#                     max(density(C3_True, na.rm = T)$y),  max(density(C3_SurrTrue, na.rm = T)$y))   
+#      plot(density(x$C3, na.rm = T), xlab=Xlab.C3, ylab="Density", main=Main.C3, lwd=2, ylim = c(0, max_val), col=0)
+#      try(lines(density((C3_No), na.rm = T), lty=1, col=1, lwd=3), silent=TRUE) 
+#      try(lines(density((C3_Surr), na.rm = T), lty=2, col=2, lwd=3), silent=TRUE)
+#      try(lines(density((C3_True), na.rm = T), lty=3, col=3, lwd=3), silent=TRUE)
+#      try(lines(density((C3_SurrTrue), na.rm = T), lty=4, col=4, lwd=2), silent=TRUE)
+    
+#      legend(Cex.Position, lwd=c(3, 3, 3, 3), col=c(1, 2, 3, 4), lty=c(1, 2, 3, 4), cex = Cex.Legend,
+#             legend=c("No monotonicity", "Monotonicity S", "Monotonicity T", "Monotonicity S and T"))
+      
+#    }
+    
+    
+#    if (Type=="Freq"){
+#      h <- hist(Object$C3, ...)
+#      h$density <- h$counts/sum(h$counts)
+#      cumulMidPoint <- ecdf(x=Object$C3)(h$mids)
+#      labs <- paste(round((1-cumulMidPoint), digits=4)*100, "%", sep="")
+      
+#      if (Labels==FALSE){
+#        plot(h,freq=T, xlab=Xlab.C3, ylab="Frequency", col=col, main=Main.C3)
+#      }
+#      if (Labels==TRUE){
+#        plot(h,freq=T, xlab=Xlab.C3, ylab="Frequency", col=col, main=Main.C3, labels=labs)
+#      }
+#    }
+    
+#    if (Type=="Percent"){
+#      h <- hist(Object$C3, ...)
+#      h$density <- h$counts/sum(h$counts)
+#      cumulMidPoint <- ecdf(x=Object$C3)(h$mids)
+#      labs <- paste(round((1-cumulMidPoint), digits=4)*100, "%", sep="")
+      
+#      if (Labels==FALSE){
+#        plot(h,freq=F, xlab=Xlab.C3, ylab="Percentage", col=col, main=Main.C3)
+#      }
+#      if (Labels==TRUE){
+#        plot(h,freq=F, xlab=Xlab.C3, ylab="Percentage", col=col, main=Main.C3, labels=labs)
+#      }
+#    }
+    
+#    if (Type=="CumPerc"){
+#      h <- hist(Object$C3, breaks=length(Object$C3), ...)
+#      h$density <- h$counts/sum(h$counts)
+#      cumulative <- cumsum(h$density)
+#      plot(x=h$mids, y=cumulative, xlab=Xlab.C3, ylab="Cumulative percentage", col=0, main=Main.C3)
+#      lines(x=h$mids, y=cumulative)
+#    }    
+#  }
   
   if (R2_H==TRUE){
     dev.new()
     par=Par 
     if (missing(Xlab.R2_H)) {Xlab.R2_H <- expression(R[H]^2)}
     if (missing(col)) {col <- c(8)}
-    if (missing(Main.R2_H)) {Main.R2_H <- expression(R[H]^2)}  
+    if (missing(Main.R2_H)) {Main.R2_H <- " "}  
     
     
     if (Type=="Density"){
@@ -34,10 +108,10 @@ plot.ICA.BinBin <- function(x, R2_H=TRUE, R_H=FALSE, Theta_T=FALSE, Theta_S=FALS
       try(lines(density((R2_H_Surr), na.rm = T), lty=2, col=2, lwd=3), silent=TRUE)
       try(lines(density((R2_H_True), na.rm = T), lty=3, col=3, lwd=3), silent=TRUE)
       try(lines(density((R2_H_SurrTrue), na.rm = T), lty=4, col=4, lwd=2), silent=TRUE)
-      try(lines(density((R2_H_General), na.rm = T), lty=5, col=6, lwd=2), silent=TRUE)
+      #try(lines(density((R2_H_General), na.rm = T), lty=5, col=6, lwd=2), silent=TRUE)
       
-      legend(Cex.Position, lwd=c(3, 3, 3, 3, 3), col=c(1, 2, 3, 4, 6), lty=c(1, 2, 3, 4, 5), cex = Cex.Legend,
-             legend=c("No monotonicity", "Monotonicity S", "Monotonicity T", "Monotonicity S and T", "General analysis"))
+      legend(Cex.Position, lwd=c(3, 3, 3, 3), col=c(1, 2, 3, 4), lty=c(1, 2, 3, 4), cex = Cex.Legend,
+             legend=c("No monotonicity", "Monotonicity S", "Monotonicity T", "Monotonicity S and T"))
     }
     
     
@@ -93,7 +167,7 @@ plot.ICA.BinBin <- function(x, R2_H=TRUE, R_H=FALSE, Theta_T=FALSE, Theta_S=FALS
     }
     
     if (Type=="All.Densities"){
-      resul <- cbind(x$Pi.Vectors, x$R2_H, x$Theta_T, x$Theta_S, x$H_Delta_T)
+      resul <- cbind(x$Pi.Vectors,x$R2_H, x$Theta_T, x$Theta_S, x$H_Delta_T)
       colnames(resul) <-  
         c("Pi_0000", "Pi_0100", "Pi_0010", "Pi_0001", "Pi_0101", "Pi_1000", "Pi_1010", "Pi_1001", "Pi_1110", "Pi_1101", "Pi_1011", 
           "Pi_1111", "Pi_0110", "Pi_0011", "Pi_0111", "Pi_1100", "Sum.Pi.f", "Monotonicity", "R2_H", 
@@ -111,10 +185,10 @@ plot.ICA.BinBin <- function(x, R2_H=TRUE, R_H=FALSE, Theta_T=FALSE, Theta_S=FALS
       try(lines(density(sqrt(R2_H_Surr), na.rm = T), lty=2, col=2, lwd=3), silent=TRUE)
       try(lines(density(sqrt(R2_H_True), na.rm = T), lty=3, col=3, lwd=3), silent=TRUE)
       try(lines(density(sqrt(R2_H_SurrTrue), na.rm = T), lty=4, col=4, lwd=2), silent=TRUE)
-      try(lines(density(sqrt(R2_H_General), na.rm = T), lty=5, col=6, lwd=2), silent=TRUE)
+      #try(lines(density(sqrt(R2_H_General), na.rm = T), lty=5, col=6, lwd=2), silent=TRUE)
       
-      legend(Cex.Position, lwd=c(3, 3, 3, 3, 3), col=c(1, 2, 3, 4, 6), lty=c(1, 2, 3, 4, 5), cex = Cex.Legend,
-             legend=c("No monotonicity", "Monotonicity S", "Monotonicity T", "Monotonicity S and T", "General analysis"))
+      legend(Cex.Position, lwd=c(3, 3, 3, 3), col=c(1, 2, 3, 4), lty=c(1, 2, 3, 4), cex = Cex.Legend,
+             legend=c("No monotonicity", "Monotonicity S", "Monotonicity T", "Monotonicity S and T"))
     }
     
     
@@ -161,7 +235,7 @@ plot.ICA.BinBin <- function(x, R2_H=TRUE, R_H=FALSE, Theta_T=FALSE, Theta_S=FALS
     par=Par 
     if (missing(Xlab.Theta_S)) {Xlab.Theta_S <- expression(theta[S])}
     if (missing(col)) {col <- c(8)}
-    if (missing(Main.Theta_S)) {Main.Theta_S  <- expression(theta[S])}  
+    if (missing(Main.Theta_S)) {Main.Theta_S  <- " "}  
     
     if (Type=="Freq"){
       h <- hist(Object$Theta_S, ...)
@@ -205,7 +279,7 @@ plot.ICA.BinBin <- function(x, R2_H=TRUE, R_H=FALSE, Theta_T=FALSE, Theta_S=FALS
     par=Par 
     if (missing(Xlab.Theta_T)) {Xlab.Theta_T <- expression(theta[T])}
     if (missing(col)) {col <- c(8)}
-    if (missing(Main.Theta_T)) {Main.Theta_T  <- expression(theta[T])}  
+    if (missing(Main.Theta_T)) {Main.Theta_T  <- " "}  
     
     if (Type=="Freq"){
       h <- hist(Object$Theta_T, ...)

@@ -1,5 +1,5 @@
 
-RandVec <- function(a=0, b=1, s=1, n=9, m=1,  Seed=sample(1:1000, size=1)) {    #, Seed=sample(1:1000, size=1)
+RandVec <- function(a=0, b=1, s=1, n=9, m=1,  Seed=sample(1:1000, size=1)) {    
   
   # This function is an R adaptation of a matlab program written by Roger Stafford 
   # For details on the original Matlab algorithm, see: 

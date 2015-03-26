@@ -174,7 +174,14 @@ Sim.Data.STSBinBin <- function(Monotonicity=c("No"), N.Total=2000, Seed=sample(1
   Delta_c_mat <-
     matrix(data=c(mat1, mat2, mat3, mat4, mat5, mat6, mat7, mat8, mat9), nrow=3)
   
-  C3 <- 1
+  #C3
+#  pi_a <- mat1+mat5+mat9
+#  pi_e <- ((mat1+mat4+mat7)*(mat1+mat2+mat3))+((mat2+mat5+mat8)*(mat4+mat5+mat6))+((mat3+mat6+mat9)*(mat7+mat8+mat9))
+#  kappa <- (pi_a - pi_e)/(1-pi_e)
+#  pi_max <- 
+#    min(mat1+mat4+mat7, mat1+mat2+mat3) + min(mat2+mat5+mat8, mat4+mat5+mat6) + min(mat3+mat6+mat9, mat7+mat8+mat9)
+#  k_max <- (pi_max - pi_e)/(1-pi_e)
+#  C3 <- kappa/k_max
   
   #R2_H
   sum_S_min1 <- mat1+mat2+mat3
@@ -263,7 +270,8 @@ Sim.Data.STSBinBin <- function(Monotonicity=c("No"), N.Total=2000, Seed=sample(1
   theta_T <- (pi_T_00 * pi_T_11)/(pi_T_10 * pi_T_01)
   theta_S <- (pi_S_00 * pi_S_11)/(pi_S_10 * pi_S_01)
   
-  fit <- list(Data.STSBinBin.Obs=mat_obs, Data.STSBinBin.Counter=mat, Vector_Pi=Pi_s_all, Pi_Marginals=Pi_Marginals, True.R2_H=R2_H, True.Theta_T=theta_T, True.Theta_S=theta_S)
+  fit <- list(Data.STSBinBin.Obs=mat_obs, Data.STSBinBin.Counter=mat, Vector_Pi=Pi_s_all, Pi_Marginals=Pi_Marginals, 
+              True.R2_H=R2_H, True.Theta_T=theta_T, True.Theta_S=theta_S)
   
   class(fit) <- "Sim.Data.STSBinBin"
   fit

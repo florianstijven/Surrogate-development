@@ -40,6 +40,7 @@ summary.UnifixedContCont <- summary.UnimixedContCont <- function(object, ..., Ob
 }
 
 summary.BifixedContCont <- function(object, ..., Object){
+  
   if (missing(Object)){Object <- object} 
   cat("\nFunction call:\n\n")
   print(Object$Call)
@@ -80,6 +81,7 @@ summary.BifixedContCont <- function(object, ..., Object){
 
 
 summary.BimixedContCont <- function(object, ..., Object){
+
   if (missing(Object)){Object <- object} 
   cat("\nFunction call:\n\n")
   print(Object$Call)

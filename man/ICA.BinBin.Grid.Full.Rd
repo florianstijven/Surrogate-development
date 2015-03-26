@@ -19,7 +19,7 @@ Seed=sample(1:100000, size=1))
   \item{pi_1_0}{A scalar that contains \eqn{P(T=1,S=0|Z=1)}.}
   \item{pi0_1_}{A scalar that contains \eqn{P(T=0,S=1|Z=0)}.}
   \item{pi_0_1}{A scalar that contains \eqn{P(T=0,S=1|Z=1)}.}
-  \item{Monotonicity}{Specifies which assumptions regarding monotonicity should be made: \code{Monotonicity=c("General")}, \code{Monotonicity=c("No")}, \code{Monotonicity=c("True.Endp")}, \code{Monotonicity=c("Surr.Endp")}, or \code{Monotonicity=c("Surr.True.Endp")}. See \bold{Details} below. Default \code{Monotonicity=c("General")}.}
+  \item{Monotonicity}{Specifies which assumptions regarding monotonicity should be made: \code{Monotonicity=c("General")}, \code{Monotonicity=c("No")}, \code{Monotonicity=c("True.Endp")}, \code{Monotonicity=c("Surr.Endp")}, or \code{Monotonicity=c("Surr.True.Endp")}. When a general analysis is requested (using \code{Monotonicity=c("General")} in the function call), the results of the different settings where other assumptions regarding monotonicity are made are combined (no monotonicity, monotonicity for \eqn{S} alone, for \eqn{T} alone, and for both for \eqn{S} and \eqn{T}. Default \code{Monotonicity=c("General")}.}
   \item{pi_1001}{A vector that specifies the grid of values that should be considered for \eqn{\pi_{pi_1001}}. Default \code{pi_1001=seq(0, 1, by=.02)}.}
   \item{pi_1110}{A vector that specifies the grid of values that should be considered for \eqn{\pi_{pi_1110}}. Default \code{pi_1110=seq(0, 1, by=.02)}.}
   \item{pi_1101}{A vector that specifies the grid of values that should be considered for \eqn{\pi_{pi_1101}}. Default \code{pi_1101=seq(0, 1, by=.02)}.}
@@ -55,7 +55,7 @@ Alonso, A., Van der Elst, W., & Molenberghs, G. (2014). Validation of surrogate 
 Buyse, M., Burzykowski, T., Aloso, A., & Molenberghs, G. (2014). Direct estimation of joint counterfactual probabilities, with application to surrogate marker validation.
 }
 \author{
-Wim Van der Elst, Ariel Alonso, & Geert Molenberghs
+Wim Van der Elst, Ariel Alonso, Marc Buyse, & Geert Molenberghs
 }
 \seealso{
 \code{\link{ICA.ContCont}}, \code{\link{MICA.ContCont}}, \code{\link{ICA.BinBin}}, \code{\link{ICA.BinBin.Grid.Sample}}

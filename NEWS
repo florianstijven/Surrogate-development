@@ -1,3 +1,8 @@
+Changes in version: Surrogate_0.1-5
+
+  o The functions SPP.BinBin, ICA.Sample.ContCont, and ICA.BinBin.CounterAssum have been added
+
+
 Changes in version: Surrogate_0.1-4
 
   o The functions CausalDiagramBinBin, Restrictions.BinBin, ICA.BinBin.Grid.Full, and ICA.BinBin.Grid.Sample have been added

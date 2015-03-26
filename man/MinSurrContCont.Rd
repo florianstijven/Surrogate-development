@@ -35,9 +35,10 @@ Wim Van der Elst, Ariel Alonso, & Geert Molenberghs
 \examples{
 # Assess the plausibility of finding a good surrogate when
 # sigma_T0T0 = sigma_T1T1 = 8 and Delta = 1
+\dontrun{
 MinSurr <- MinSurrContCont(T0T0 = 8, T1T1 = 8, Delta = 1)
 summary(MinSurr)
-\dontrun{plot(MinSurr)}
+plot(MinSurr)}
 }
 \keyword{Plausibility of a good surrogate}
 

@@ -12,10 +12,10 @@ RandVec(a=0, b=1, s=1, n=9, m=1, Seed=sample(1:1000, size = 1))
 }
 \arguments{
   \item{a}{The function \code{RandVec} generates an \code{n} by \code{m} matrix x. Each of the \code{m} columns contain \code{n} random values lying in the interval [a,b]. The argument \code{a} specifies the lower limit of the interval. Default \code{0}.}
-  \item{b}{The argument \code{b} specifies the upper limit of the interval. Default \code{0}.}
+  \item{b}{The argument \code{b} specifies the upper limit of the interval. Default \code{1}.}
   \item{s}{The argument \code{s} specifies the value to which each of the \code{m} generated columns should sum to. Default \code{1}.}
   \item{n}{The number of requested elements per column. Default \code{9}.}
-  \item{m}{The number of requested columns. Default \code{9}.}
+  \item{m}{The number of requested columns. Default \code{1}.}
   \item{Seed}{The seed that is used. Default \code{sample(1:1000, size = 1)}.}
 }
 \value{An object of class \code{RandVec} with components,

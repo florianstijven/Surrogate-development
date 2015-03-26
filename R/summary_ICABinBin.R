@@ -18,6 +18,7 @@ summary.ICA.BinBin <- function(object, ..., Object){
   cat("\n# Total number of valid Pi vectors")
   cat("\n#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n")
   cat(dim(Object$Pi.Vectors)[1])
+  
   cat("\n\n\n# R2_H results summary")
   cat("\n#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n")  
   cat("Mean (SD) R2_H: ", format(round(mean(Object$R2_H), 4), nsmall = 4), " (", format(round(sd(Object$R2_H), 4), nsmall = 4), ")", 
@@ -38,6 +39,15 @@ summary.ICA.BinBin <- function(object, ..., Object){
   print(quant)
   
   
+#  cat("\n\n# C3 results summary")
+#  cat("\n#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n")  
+#  cat("Mean (SD) C3: ", format(round(mean(Object$C3), 4), nsmall = 4), " (", format(round(sd(Object$C3), 4), nsmall = 4), ")", 
+#      "  [min: ", format(round(min(Object$C3), 4), nsmall = 4), "; max: ",  format(round(max(Object$C3), 4), nsmall = 4), "]", sep="")
+#  cat("\nMode C3: ", format(round(mode(Object$C3)$mode_val, 4), nsmall = 4))
+#  cat("\n\nQuantiles of the C3 distribution: \n\n")
+#  quant <- quantile(Object$C3, probs = c(.05, .10, .20, .50, .80, .90, .95))
+#  print(quant)
+  
   cat("\n\n# Theta_T results summary")
   cat("\n#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n")  
   cat("Mean (SD) Theta_T: ", format(round(mean(Object$Theta_T), 4), nsmall = 4), " (", format(round(sd(Object$Theta_T), 4), nsmall = 4), ")", 
@@ -57,5 +67,6 @@ summary.ICA.BinBin <- function(object, ..., Object){
   cat("\n\nQuantiles of the Theta_S distribution: \n\n")
   quant <- quantile(Object$Theta_S, probs = c(.05, .10, .20, .50, .80, .90, .95))
   print(quant)
+  }
   
-}
+

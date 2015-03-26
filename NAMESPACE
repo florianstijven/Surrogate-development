@@ -2,11 +2,46 @@
 import(MASS)
 import(lme4)
 import(msm)
+import(lattice, latticeExtra)
+import(rgl)
 
 # Imported functions
 importFrom("nlme", lme)
 
 
 exportPattern("^[[:alpha:]]+")
+export(plot.UnifixedContCont, plot.UnimixedContCont, plot.BifixedContCont, plot.BimixedContCont, 
+plot.FixedContContIT, plot.ICA.ContCont, plot.MICA.ContCont, plot.MinSurrContCont, plot.SPF.BinBin,
+plot.Single.Trial.RE.AA, plot.MixedContContIT, plot.ICA.BinBin, summary.UnifixedContCont,
+summary.UnimixedContCont, summary.BifixedContCont, summary.BimixedContCont,
+summary.FixedContContIT, summary.FixedContContIT, summary.ICA.BinBin, summary.ICA.ContCont, 
+summary.MICA.ContCont, summary.MinSurrContCont, summary.SPF.BinBin, summary.Single.Trial.RE.AA)
+
+S3method(plot, UnifixedContCont)
+S3method(plot, UnimixedContCont)
+S3method(plot, BifixedContCont)
+S3method(plot, BimixedContCont)
+S3method(plot, FixedContContIT)
+S3method(plot, ICA.ContCont)
+S3method(plot, MICA.ContCont)
+S3method(plot, MinSurrContCont)
+S3method(plot, SPF.BinBin)
+S3method(plot, Single.Trial.RE.AA)
+S3method(plot, MixedContContIT)
+S3method(plot, ICA.BinBin)
+
+S3method(summary, UnifixedContCont)
+S3method(summary, UnimixedContCont)
+S3method(summary, BifixedContCont)
+S3method(summary, BimixedContCont)
+S3method(summary, FixedContContIT)
+S3method(summary, MixedContContIT)
+S3method(summary, ICA.BinBin)
+S3method(summary, ICA.ContCont)
+S3method(summary, MICA.ContCont)
+S3method(summary, MinSurrContCont)
+S3method(summary, SPF.BinBin)
+S3method(summary, Single.Trial.RE.AA)
+
 
 

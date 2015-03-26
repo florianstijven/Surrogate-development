@@ -60,8 +60,8 @@ Wim Van der Elst, Ariel Alonso, & Geert Molenberghs
 data(ARMD)
 
 ## Conduct a surrogacy analysis, using a weighted reduced univariate fixed effect model:
-Sur <- UnifixedContCont(Dataset=ARMD, Surr=Diff24, True=Diff52, Treat=Treat, Trial.ID=Center, 
-Pat.ID=Id, Number.Bootstraps=100, Model=c("Reduced"), Weighted=TRUE)
+\dontrun{Sur <- UnifixedContCont(Dataset=ARMD, Surr=Diff24, True=Diff52, Treat=Treat, Trial.ID=Center, 
+Pat.ID=Id, Number.Bootstraps=100, Model=c("Reduced"), Weighted=TRUE)}
 
 ## Request both trial- and individual-level surrogacy plots. In the trial-level plot,
 ## make the size of the circles proportional to the number of patients in a trial:
@@ -86,8 +86,8 @@ text(x=-7, y=11, cex=1.4, labels=(bquote(paste("R"[trial]^{2}, "="~.(R2trial))))
 
 ## Same plot as before, but now with smaller squares, a y-axis with range [-40; 40], 
 ## and the estimated R2_indiv value in the title of the plot:
-R2ind <- format(round(as.numeric(Sur$Indiv.R2[1]), 3))
-\dontrun{plot(Sur, pch=15, col="red", Indiv.Level=TRUE, Trial.Level=FALSE, cex=.5, 
+\dontrun{R2ind <- format(round(as.numeric(Sur$Indiv.R2[1]), 3))
+plot(Sur, pch=15, col="red", Indiv.Level=TRUE, Trial.Level=FALSE, cex=.5, 
 ylim=c(-40, 40), Main.Indiv=bquote(paste("R"[indiv]^{2}, "="~.(R2ind))))}
 
 

@@ -15,40 +15,75 @@ ICA.BinBin.Grid.Full <- function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1,
   
   if (Monotonicity=="General"){
     
-    T_No <- ICA.BinBin.Grid.Full(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1, Seed=Seed.orig, Monotonicity=c("No"))
+    try(T_No <- ICA.BinBin.Grid.Full(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1, pi_1001=pi_1001, pi_1110=pi_1110, 
+                                     pi_1101=pi_1101, pi_1011=pi_1011, pi_1111=pi_1111, pi_0110=pi_0110, pi_0011=pi_0011, 
+                                     pi_0111=pi_0111, pi_1100=pi_1100, Seed=Seed.orig, Monotonicity=c("No")), silent=TRUE)
     Pi.Vectors <- pi_f_all <- pi_r_all <- C3_all <- R2_H_all <- theta_T_all <- theta_S_all <- H_Delta_T_all <- pi_all <- NULL
-    T_True <- ICA.BinBin.Grid.Full(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1, Seed=Seed.orig, Monotonicity=c("True.Endp"))
+    try(T_True <- ICA.BinBin.Grid.Full(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1, pi_1001=pi_1001, pi_1110=pi_1110, 
+                                       pi_1101=pi_1101, pi_1011=pi_1011, pi_1111=pi_1111, pi_0110=pi_0110, pi_0011=pi_0011, pi_0111=pi_0111,
+                                       pi_1100=pi_1100, Seed=Seed.orig, Monotonicity=c("True.Endp")), silent=TRUE)
     Pi.Vectors <- pi_f_all <- pi_r_all <- C3_all <- R2_H_all <- theta_T_all <- theta_S_all <- H_Delta_T_all <- pi_all <- NULL
-    T_Surr <- ICA.BinBin.Grid.Full(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1, Seed=Seed.orig, Monotonicity=c("Surr.Endp"))
+    try(T_Surr <- ICA.BinBin.Grid.Full(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1, pi_1001=pi_1001, pi_1110=pi_1110, pi_1101=pi_1101, 
+                                       pi_1011=pi_1011, pi_1111=pi_1111, pi_0110=pi_0110, pi_0011=pi_0011, pi_0111=pi_0111, pi_1100=pi_1100,
+                                       Seed=Seed.orig, Monotonicity=c("Surr.Endp")), silent=TRUE)
     Pi.Vectors <- pi_f_all <- pi_r_all <- C3_all <- R2_H_all <- theta_T_all <- theta_S_all <- H_Delta_T_all <- pi_all <- NULL
-    T_SurrTrue <- ICA.BinBin.Grid.Full(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1, Seed=Seed.orig, Monotonicity=c("Surr.True.Endp"))
+    try(T_SurrTrue <- ICA.BinBin.Grid.Full(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1, pi_1001=pi_1001, pi_1110=pi_1110, 
+                                           pi_1101=pi_1101, pi_1011=pi_1011, pi_1111=pi_1111, pi_0110=pi_0110, pi_0011=pi_0011, 
+                                           pi_0111=pi_0111, pi_1100=pi_1100, Seed=Seed.orig, Monotonicity=c("Surr.True.Endp")), silent=TRUE)
     Pi.Vectors <- pi_f_all <- pi_r_all <- C3_all <- R2_H_all <- theta_T_all <- theta_S_all <- H_Delta_T_all <- pi_all <- NULL
     
-    try(Pi.Vectors.No <- cbind(T_No$Pi.Vectors, "No"), silent=TRUE)
-    try(Pi.Vectors.T <- cbind(T_True$Pi.Vectors[,1:5], 0, 0, 0, T_True$Pi.Vectors[,6:7], 0, T_True$Pi.Vectors[,8:13], "True"), silent=TRUE)
-    try(Pi.Vectors.S <- cbind(T_Surr$Pi.Vectors[,1:2], 0, T_Surr$Pi.Vectors[,3:5], 0, T_Surr$Pi.Vectors[,8], 0, T_Surr$Pi.Vectors[,9],
+    if (exists("T_No")==TRUE){
+      if (!is.null(T_No)){Pi.Vectors.No <- cbind(T_No$Pi.Vectors, "No")}  } 
+        
+    if (exists("T_True")==TRUE){ 
+      if (!is.null(T_True)){Pi.Vectors.T <- cbind(T_True$Pi.Vectors[,1:5], 0, 0, 0, T_True$Pi.Vectors[,6:7], 0, T_True$Pi.Vectors[,8:13], "True")}
+    }
+      
+    if (exists("T_Surr")==TRUE){ 
+      if (!is.null(T_Surr)){Pi.Vectors.S <- cbind(T_Surr$Pi.Vectors[,1:2], 0, T_Surr$Pi.Vectors[,3:5], 0, T_Surr$Pi.Vectors[,8], 0, T_Surr$Pi.Vectors[,9],
                               T_Surr$Pi.Vectors[,6], T_Surr$Pi.Vectors[,10], 0, T_Surr$Pi.Vectors[,7], 
-                              T_Surr$Pi.Vectors[,11:13], "Surr"), silent=TRUE)
-    try(Pi.Vectors.ST <- cbind(T_SurrTrue$Pi.Vectors[,1:2], 0, T_SurrTrue$Pi.Vectors[,3:4], 0, 0, 0, 0, T_SurrTrue$Pi.Vectors[,5], 0,
-                               T_SurrTrue$Pi.Vectors[,6], 0, T_SurrTrue$Pi.Vectors[,7:10], "SurrTrue"), silent=TRUE)
+                              T_Surr$Pi.Vectors[,11:13], "Surr")}  }
+    
+    if (exists("T_SurrTrue")==TRUE){
+      if (!is.null(T_SurrTrue)){Pi.Vectors.ST <- cbind(T_SurrTrue$Pi.Vectors[,1:2], 0, T_SurrTrue$Pi.Vectors[,3:4], 0, 0, 0, 0, T_SurrTrue$Pi.Vectors[,5], 0,
+                               T_SurrTrue$Pi.Vectors[,6], 0, T_SurrTrue$Pi.Vectors[,7:10], "SurrTrue")}   }
+    
+    if (exists("Pi.Vectors.No")==FALSE) {Pi.Vectors.No <-  matrix(rep(NA, times=18), nrow = 1)} 
+    if (dim(Pi.Vectors.No)[2]<18) {Pi.Vectors.No <-  matrix(rep(NA, times=18), nrow = 1)} 
+    if (exists("Pi.Vectors.S")==FALSE) {Pi.Vectors.S <-  matrix(rep(NA, times=18), nrow = 1)} 
+    if (dim(Pi.Vectors.S)[2]<18) {Pi.Vectors.S <-  matrix(rep(NA, times=18), nrow = 1)} 
+    if (exists("Pi.Vectors.T")==FALSE) {Pi.Vectors.T <-  matrix(rep(NA, times=18), nrow = 1)} 
+    if (dim(Pi.Vectors.T)[2]<18) {Pi.Vectors.T <-  matrix(rep(NA, times=18), nrow = 1)} 
+    if (exists("Pi.Vectors.ST")==FALSE) {Pi.Vectors.ST <-  matrix(rep(NA, times=18), nrow = 1)} 
+    if (dim(Pi.Vectors.ST)[2]<18) {Pi.Vectors.ST <-  matrix(rep(NA, times=18), nrow = 1)} 
     
     try(colnames(Pi.Vectors.No) <- colnames(Pi.Vectors.T) <-  colnames(Pi.Vectors.S) <- colnames(Pi.Vectors.ST) <- 
           c("Pi_0000", "Pi_0100", "Pi_0010", "Pi_0001", "Pi_0101", "Pi_1000", "Pi_1010", "Pi_1001", "Pi_1110", "Pi_1101", "Pi_1011", 
             "Pi_1111", "Pi_0110", "Pi_0011", "Pi_0111", "Pi_1100", "Sum.Pi.f", "Monotonicity"), silent=TRUE) 
     
-    if (exists("Pi.Vectors.No")==FALSE){Pi.Vectors.No <- NULL}
-    if (exists("Pi.Vectors.T")==FALSE){Pi.Vectors.T <- NULL}
-    if (exists("Pi.Vectors.S")==FALSE){Pi.Vectors.S <- NULL}
-    if (exists("Pi.Vectors.ST")==FALSE){Pi.Vectors.ST <- NULL}
+    try(Pi.Vectors <- na.exclude(rbind(Pi.Vectors.No, Pi.Vectors.T, Pi.Vectors.S, Pi.Vectors.ST)), silent=TRUE)
     
-    try(Pi.Vectors <- rbind(Pi.Vectors.No, Pi.Vectors.T, Pi.Vectors.S, Pi.Vectors.ST), silent=TRUE)
-    C3_all <- c(T_No$C3, T_True$C3, T_Surr$C3, T_SurrTrue$C3)
-    R2_H_all  <- c(T_No$R2_H, T_True$R2_H, T_Surr$R2_H, T_SurrTrue$R2_H)
-    theta_T_all <- c(T_No$Theta_T, T_True$Theta_T, T_Surr$Theta_T, T_SurrTrue$Theta_T)
-    theta_S_all <- c(T_No$Theta_S, T_True$Theta_S, T_Surr$Theta_S, T_SurrTrue$Theta_S)
-    H_Delta_T_all <- c(T_No$H_Delta_T, T_True$H_Delta_T, T_Surr$H_Delta_T, T_SurrTrue$H_Delta_T)  
+    if ((exists("T_No"))==FALSE){T_No = NULL
+                                 T_No$C3 <- T_No$R2_H <- T_No$Theta_T <- T_No$Theta_S <-  T_No$H_Delta_T <- NA}
     
+    if ((exists("T_True"))==FALSE){T_True = NULL
+                                   T_True$C3 <- T_True$R2_H <- T_True$Theta_T <- T_True$Theta_S <-  T_True$H_Delta_T <- NA}
+    
+    if ((exists("T_Surr"))==FALSE){T_Surr = NULL
+                                   T_Surr$C3 <- T_Surr$R2_H <- T_Surr$Theta_T <- T_Surr$Theta_S <-  T_Surr$H_Delta_T <- NA}
+    
+    if ((exists("T_SurrTrue"))==FALSE){T_SurrTrue = NULL
+                                       T_SurrTrue$C3 <- T_SurrTrue$R2_H <- T_SurrTrue$Theta_T <- T_SurrTrue$Theta_S <-  T_SurrTrue$H_Delta_T <- NA}
+    
+    
+    C3_all <- as.numeric(na.exclude(c(T_No$C3, T_True$C3, T_Surr$C3, T_SurrTrue$C3)))
+    R2_H_all  <- as.numeric(na.exclude(c(T_No$R2_H, T_True$R2_H, T_Surr$R2_H, T_SurrTrue$R2_H)))
+    theta_T_all <- as.numeric(na.exclude(c(T_No$Theta_T, T_True$Theta_T, T_Surr$Theta_T, T_SurrTrue$Theta_T)))
+    theta_S_all <- as.numeric(na.exclude(c(T_No$Theta_S, T_True$Theta_S, T_Surr$Theta_S, T_SurrTrue$Theta_S)))
+    H_Delta_T_all <- as.numeric(na.exclude(c(T_No$H_Delta_T, T_True$H_Delta_T, T_Surr$H_Delta_T, T_SurrTrue$H_Delta_T))) 
   }
+  
+  
   
   if (Monotonicity=="No"){
     
@@ -93,7 +128,7 @@ ICA.BinBin.Grid.Full <- function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1,
     pi_9 <- seq(0, min_pi_1100, by=(max(pi_1100)-min(pi_1100))/(length(pi_1100)-1)) 
       
     tot_combn <- length(pi_1)*length(pi_2)*length(pi_3)*length(pi_4)*length(pi_5)*length(pi_6)*length(pi_7)*length(pi_8)*length(pi_9)
-    Seed <- round(runif(min=(1+tot_combn), max=2147483647, n=1), digits=0)
+ #   Seed <- round(runif(min=(1+tot_combn), max=2147483647, n=1), digits=0)
     
     if (tot_combn > 1000000){
     cat("\nNote. A total of ", tot_combn, " combinations between the freely varying parameters can be made", sep="")
@@ -106,7 +141,7 @@ ICA.BinBin.Grid.Full <- function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1,
     
   for (k in 1: tot_combn){
     
-        Seed <- Seed-1   
+        Seed <- Seed+1   
         set.seed(Seed)
         
         pi_f <- matrix(cbind(combins[k,1], combins[k,2], combins[k,3], combins[k,4], combins[k,5], combins[k,6],
@@ -114,7 +149,7 @@ ICA.BinBin.Grid.Full <- function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1,
         
         pi_r <- solve(A_r) %*% (vector_b - (A_f %*% pi_f))
         
-        if ((sum(pi_r >= -0.00000001 & pi_r <= 1.00000001) == 7)==TRUE) {
+        if ((sum(pi_r >= 0 & pi_r <= 1) == 7)==TRUE) {
           
           for (l in 1: length(pi_r)){
             if (pi_r[l] < 0) {pi_r[l] <- c(0)}
@@ -136,7 +171,14 @@ ICA.BinBin.Grid.Full <- function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1,
           Delta_c_mat <-
             matrix(data=c(mat1, mat2, mat3, mat4, mat5, mat6, mat7, mat8, mat9), nrow=3)
           
-          C3 <- 1
+          #C3
+          pi_a <- mat1+mat5+mat9
+          pi_e <- ((mat1+mat4+mat7)*(mat1+mat2+mat3))+((mat2+mat5+mat8)*(mat4+mat5+mat6))+((mat3+mat6+mat9)*(mat7+mat8+mat9))
+          kappa <- (pi_a - pi_e)/(1-pi_e)
+          pi_max <- 
+            min(mat1+mat4+mat7, mat1+mat2+mat3) + min(mat2+mat5+mat8, mat4+mat5+mat6) + min(mat3+mat6+mat9, mat7+mat8+mat9)
+          k_max <- (pi_max - pi_e)/(1-pi_e)
+          C3 <- (pi_a - pi_e) / (pi_max - pi_e)
           C3_all <- cbind(C3_all, C3)
           
           #R2_H
@@ -198,6 +240,7 @@ ICA.BinBin.Grid.Full <- function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1,
     colnames(Pi.Vectors) <- c("Pi_0000", "Pi_0100", "Pi_0010", "Pi_0001", "Pi_0101", "Pi_1000", "Pi_1010", 
                               "Pi_1001", "Pi_1110", "Pi_1101", "Pi_1011", "Pi_1111", "Pi_0110", "Pi_0011", "Pi_0111", "Pi_1100", "Sum.Pi.f") 
     
+  
   } # end no mono
   
    
@@ -233,7 +276,7 @@ ICA.BinBin.Grid.Full <- function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1,
     pi_5 <- seq(0, min_pi_1100, by=(max(pi_1100)-min(pi_1100))/(length(pi_1100)-1)) 
     
     tot_combn <- length(pi_1)*length(pi_2)*length(pi_3)*length(pi_4)*length(pi_5)
-    Seed <- round(runif(min=(1+tot_combn), max=2147483647, n=1), digits=0)
+ #   Seed <- round(runif(min=(1+tot_combn), max=2147483647, n=1), digits=0)
     
     if (tot_combn > 1000000){
       cat("\nNote. A total of ", tot_combn, " combinations between the freely varying parameters can be made", sep="")
@@ -246,7 +289,7 @@ ICA.BinBin.Grid.Full <- function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1,
     
     for (k in 1: tot_combn){
       
-      Seed <- Seed-1   
+      Seed <- Seed+1   
       set.seed(Seed)
       
       pi_f <- matrix(cbind(combins[k,1], combins[k,2], combins[k,3], combins[k,4], combins[k,5]))
@@ -254,7 +297,7 @@ ICA.BinBin.Grid.Full <- function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1,
       pi_r <-   
           solve(A_star_r) %*% (vector_b - (A_star_f %*% pi_f))
         
-        if ((sum(pi_r >= -0.00000001 & pi_r <= 1.00000001) == 7)==TRUE) {
+        if ((sum(pi_r >= 0 & pi_r <= 1) == 7)==TRUE) {
           
           for (l in 1: length(pi_r)){
             if (pi_r[l] < 0) {pi_r[l] <- c(0)}
@@ -276,7 +319,14 @@ ICA.BinBin.Grid.Full <- function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1,
           Delta_c_mat <-
             matrix(data=c(mat1, mat2, mat3, mat4, mat5, mat6, mat7, mat8, mat9), nrow=3)
           
-          C3 <- 1
+          #C3
+          pi_a <- mat1+mat5+mat9
+          pi_e <- ((mat1+mat4+mat7)*(mat1+mat2+mat3))+((mat2+mat5+mat8)*(mat4+mat5+mat6))+((mat3+mat6+mat9)*(mat7+mat8+mat9))
+          kappa <- (pi_a - pi_e)/(1-pi_e)
+          pi_max <- 
+            min(mat1+mat4+mat7, mat1+mat2+mat3) + min(mat2+mat5+mat8, mat4+mat5+mat6) + min(mat3+mat6+mat9, mat7+mat8+mat9)
+          k_max <- (pi_max - pi_e)/(1-pi_e)
+          C3 <- (pi_a - pi_e) / (pi_max - pi_e)
           C3_all <- cbind(C3_all, C3)
           
           #R2_H
@@ -371,7 +421,7 @@ ICA.BinBin.Grid.Full <- function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1,
     pi_5 <- seq(0, min_pi_1100, by=(max(pi_1100)-min(pi_1100))/(length(pi_1100)-1)) 
     
     tot_combn <- length(pi_1)*length(pi_2)*length(pi_3)*length(pi_4)*length(pi_5)
-    Seed <- round(runif(min=(1+tot_combn), max=2147483647, n=1), digits=0)
+ #   Seed <- round(runif(min=(1+tot_combn), max=2147483647, n=1), digits=0)
     
     if (tot_combn > 1000000){
       cat("\nNote. A total of ", tot_combn, " combinations between the freely varying parameters can be made", sep="")
@@ -384,7 +434,7 @@ ICA.BinBin.Grid.Full <- function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1,
     
     for (k in 1: tot_combn){
       
-      Seed <- Seed-1   
+      Seed <- Seed+1   
       set.seed(Seed)
       
       pi_f <- matrix(cbind(combins[k,1], combins[k,2], combins[k,3], combins[k,4], combins[k,5]))
@@ -392,7 +442,7 @@ ICA.BinBin.Grid.Full <- function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1,
       
         pi_r <- solve(A_star_r) %*% (vector_b - (A_star_f %*% pi_f))
         
-        if ((sum(pi_r >= -0.00000001 & pi_r <= 1.00000001) == 7)==TRUE) {
+        if ((sum(pi_r >= 0 & pi_r <= 1) == 7)==TRUE) {
           
           for (l in 1: length(pi_r)){
             if (pi_r[l] < 0) {pi_r[l] <- c(0)}
@@ -415,7 +465,14 @@ ICA.BinBin.Grid.Full <- function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1,
           Delta_c_mat <-
             matrix(data=c(mat1, mat2, mat3, mat4, mat5, mat6, mat7, mat8, mat9), nrow=3)
           
-          C3 <- 1
+          #C3
+          pi_a <- mat1+mat5+mat9
+          pi_e <- ((mat1+mat4+mat7)*(mat1+mat2+mat3))+((mat2+mat5+mat8)*(mat4+mat5+mat6))+((mat3+mat6+mat9)*(mat7+mat8+mat9))
+          kappa <- (pi_a - pi_e)/(1-pi_e)
+          pi_max <- 
+            min(mat1+mat4+mat7, mat1+mat2+mat3) + min(mat2+mat5+mat8, mat4+mat5+mat6) + min(mat3+mat6+mat9, mat7+mat8+mat9)
+          k_max <- (pi_max - pi_e)/(1-pi_e)
+          C3 <- (pi_a - pi_e) / (pi_max - pi_e)
           C3_all <- cbind(C3_all, C3)
           
           #R2_H
@@ -500,7 +557,7 @@ ICA.BinBin.Grid.Full <- function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1,
     pi_2 <- seq(0, min_pi_1100, by=(max(pi_1100)-min(pi_1100))/(length(pi_1100)-1)) 
     
     tot_combn <- length(pi_1)*length(pi_2)
-    Seed <- round(runif(min=(1+tot_combn), max=2147483647, n=1), digits=0)
+ #   Seed <- round(runif(min=(1+tot_combn), max=2147483647, n=1), digits=0)
     
     if (tot_combn > 1000000){
       cat("\nNote. A total of ", tot_combn, " combinations between the freely varying parameters can be made", sep="")
@@ -513,7 +570,7 @@ ICA.BinBin.Grid.Full <- function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1,
     
     for (k in 1: tot_combn){
       
-      Seed <- Seed-1   
+      Seed <- Seed+1   
       set.seed(Seed)
       
       pi_f <- matrix(cbind(combins[k,1], combins[k,2]))
@@ -522,7 +579,7 @@ ICA.BinBin.Grid.Full <- function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1,
         pi_r <-   
           solve(A_star_r) %*% (vector_b - (A_star_f %*% pi_f))
         
-        if ((sum(pi_r >= -0.00000001 & pi_r <= 1.00000001) == 7)==TRUE) {
+        if ((sum(pi_r >= 0 & pi_r <= 1) == 7)==TRUE) {
           
           for (l in 1: length(pi_r)){
             if (pi_r[l] < 0) {pi_r[l] <- c(0)}
@@ -544,7 +601,14 @@ ICA.BinBin.Grid.Full <- function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1,
           Delta_c_mat <-
             matrix(data=c(mat1, mat2, mat3, mat4, mat5, mat6, mat7, mat8, mat9), nrow=3)
           
-          C3 <- 1
+          #C3
+          pi_a <- mat1+mat5+mat9
+          pi_e <- ((mat1+mat4+mat7)*(mat1+mat2+mat3))+((mat2+mat5+mat8)*(mat4+mat5+mat6))+((mat3+mat6+mat9)*(mat7+mat8+mat9))
+          kappa <- (pi_a - pi_e)/(1-pi_e)
+          pi_max <- 
+            min(mat1+mat4+mat7, mat1+mat2+mat3) + min(mat2+mat5+mat8, mat4+mat5+mat6) + min(mat3+mat6+mat9, mat7+mat8+mat9)
+          k_max <- (pi_max - pi_e)/(1-pi_e)
+          C3 <- (pi_a - pi_e) / (pi_max - pi_e)
           C3_all <- cbind(C3_all, C3)
           
           #R2_H

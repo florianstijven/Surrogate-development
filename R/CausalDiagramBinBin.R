@@ -1,4 +1,5 @@
-CausalDiagramBinBin <- function(x, Values="Corrs", Theta_T0S0, Theta_T1S1, Min=0, Max=1, Cex.Letters=3, Cex.Corrs=2, 
+CausalDiagramBinBin <- function(x, Values="Corrs", Theta_T0S0, Theta_T1S1, Min=0, Max=1, Cex.Letters=3, 
+                                Cex.Corrs=2, 
                                 Lines.Rel.Width=TRUE, Col.Pos.Neg=TRUE,
                                 Monotonicity="General") {
   
@@ -8,7 +9,7 @@ CausalDiagramBinBin <- function(x, Values="Corrs", Theta_T0S0, Theta_T1S1, Min=0
   if (missing(Theta_T1S1)) {Theta_T1S1 <- 1} 
   
   dat <- data.frame(cbind(x$Pi.Vectors, x$R2_H, x$Theta_T, x$Theta_S))
-  sub <- sub_t <- dat[dat$x.R2_H >= Min & dat$x.R2_H <= Max,] 
+  sub <- dat[dat$x.R2_H >= Min & dat$x.R2_H <= Max,] 
   
   if ((Monotonicity=="No" | Monotonicity=="True.Endp" | Monotonicity=="Surr.Endp" | Monotonicity=="Surr.True.Endp" | Monotonicity=="General")==FALSE){
     stop("The Monotonicity=... argument is not correctly specified \n")
@@ -78,28 +79,28 @@ CausalDiagramBinBin <- function(x, Values="Corrs", Theta_T0S0, Theta_T1S1, Min=0
   
   R2_H_S0S1 <- matrix(NA, ncol = length(sub$Monotonicity)) 
   for (i in 1: length(sub$Monotonicity)){
-  if (sub$Monotonicity[i]=="No" | sub$Monotonicity[i]=="True"){
-  I <- (cell_00[i] * log2(cell_00[i]/(sum0_[i] * sum_0[i])))+
-       (cell_10[i] * log2(cell_10[i]/(sum1_[i] * sum_0[i])))+  #
-       (cell_01[i] * log2(cell_01[i]/(sum0_[i] * sum_1[i])))+
-       (cell_11[i] * log2(cell_11[i]/(sum1_[i] * sum_1[i])))
-  H_S <- - ((sum_0[i] * log2(sum_0[i])) + (sum_1[i] * log2(sum_1[i])))
-  H_T <- - ((sum0_[i] * log2(sum0_[i])) + (sum1_[i] * log2(sum1_[i]))) 
-  R2_H_S0S1[i] <- 
-    as.numeric(I/(min(H_S, H_T))) 
+    if (sub$Monotonicity[i]=="No" | sub$Monotonicity[i]=="True"){
+      I <- (cell_00[i] * log2(cell_00[i]/(sum0_[i] * sum_0[i])))+
+        (cell_10[i] * log2(cell_10[i]/(sum1_[i] * sum_0[i])))+  #
+        (cell_01[i] * log2(cell_01[i]/(sum0_[i] * sum_1[i])))+
+        (cell_11[i] * log2(cell_11[i]/(sum1_[i] * sum_1[i])))
+      H_S <- - ((sum_0[i] * log2(sum_0[i])) + (sum_1[i] * log2(sum_1[i])))
+      H_T <- - ((sum0_[i] * log2(sum0_[i])) + (sum1_[i] * log2(sum1_[i]))) 
+      R2_H_S0S1[i] <- 
+        as.numeric(I/(min(H_S, H_T))) 
     }
+    
+    if (sub$Monotonicity[i]=="Surr" | sub$Monotonicity[i]=="SurrTrue"){
+      I <- (cell_00[i] * log2(cell_00[i]/(sum0_[i] * sum_0[i])))+
+        (cell_01[i] * log2(cell_01[i]/(sum0_[i] * sum_1[i])))+
+        (cell_11[i] * log2(cell_11[i]/(sum1_[i] * sum_1[i])))
+      H_S <- - ((sum_0[i] * log2(sum_0[i])) + (sum_1[i] * log2(sum_1[i])))
+      H_T <- - ((sum0_[i] * log2(sum0_[i])) + (sum1_[i] * log2(sum1_[i]))) 
+      R2_H_S0S1[i] <- 
+        as.numeric(I/(min(H_S, H_T))) 
+    }
+  }  
   
-  if (sub$Monotonicity[i]=="Surr" | sub$Monotonicity[i]=="SurrTrue"){
-    I <- (cell_00[i] * log2(cell_00[i]/(sum0_[i] * sum_0[i])))+
-      (cell_01[i] * log2(cell_01[i]/(sum0_[i] * sum_1[i])))+
-      (cell_11[i] * log2(cell_11[i]/(sum1_[i] * sum_1[i])))
-    H_S <- - ((sum_0[i] * log2(sum_0[i])) + (sum_1[i] * log2(sum_1[i])))
-    H_T <- - ((sum0_[i] * log2(sum0_[i])) + (sum1_[i] * log2(sum1_[i]))) 
-    R2_H_S0S1[i] <- 
-      as.numeric(I/(min(H_S, H_T))) 
-  }
-}  
-
   #T0 T1
   cell_00 <- sub$Pi_0000 + sub$Pi_0010 + sub$Pi_0001 + sub$Pi_0011          
   cell_10 <- sub$Pi_1000 + sub$Pi_1010 + sub$Pi_1001 + sub$Pi_1011     
@@ -110,35 +111,35 @@ CausalDiagramBinBin <- function(x, Values="Corrs", Theta_T0S0, Theta_T1S1, Min=0
   sum0_ <- cell_00 + cell_01 
   sum1_ <- cell_10 + cell_11
   
-R2_H_T0T1 <- matrix(NA, ncol = length(sub$Monotonicity))  
-
-for (i in 1: length(sub$Monotonicity)){
+  R2_H_T0T1 <- matrix(NA, ncol = length(sub$Monotonicity))  
   
-  if (sub$Monotonicity[i]=="No" | sub$Monotonicity[i]=="Surr"){
+  for (i in 1: length(sub$Monotonicity)){
     
-    I <- (cell_00[i] * log2(cell_00[i]/(sum0_[i] * sum_0[i])))+
-      (cell_10[i] * log2(cell_10[i]/(sum1_[i] * sum_0[i])))+
-      (cell_01[i] * log2(cell_01[i]/(sum0_[i] * sum_1[i])))+
-      (cell_11[i] * log2(cell_11[i]/(sum1_[i] * sum_1[i])))  
-    H_S <- - ((sum_0[i] * log2(sum_0[i])) + (sum_1[i] * log2(sum_1[i])))
-    H_T <- - ((sum0_[i] * log2(sum0_[i])) + (sum1_[i] * log2(sum1_[i]))) 
-    R2_H_T0T1[i] <- 
-      I/(min(H_S, H_T)) 
+    if (sub$Monotonicity[i]=="No" | sub$Monotonicity[i]=="Surr"){
+      
+      I <- (cell_00[i] * log2(cell_00[i]/(sum0_[i] * sum_0[i])))+
+        (cell_10[i] * log2(cell_10[i]/(sum1_[i] * sum_0[i])))+
+        (cell_01[i] * log2(cell_01[i]/(sum0_[i] * sum_1[i])))+
+        (cell_11[i] * log2(cell_11[i]/(sum1_[i] * sum_1[i])))  
+      H_S <- - ((sum_0[i] * log2(sum_0[i])) + (sum_1[i] * log2(sum_1[i])))
+      H_T <- - ((sum0_[i] * log2(sum0_[i])) + (sum1_[i] * log2(sum1_[i]))) 
+      R2_H_T0T1[i] <- 
+        I/(min(H_S, H_T)) 
+    }
+    
+    if (sub$Monotonicity[i]=="True" | sub$Monotonicity[i]=="SurrTrue"){
+      
+      I <- (cell_00[i] * log2(cell_00[i]/(sum0_[i] * sum_0[i])))+
+        (cell_01[i] * log2(cell_01[i]/(sum0_[i] * sum_1[i])))+
+        (cell_11[i] * log2(cell_11[i]/(sum1_[i] * sum_1[i])))  
+      H_S <- - ((sum_0[i] * log2(sum_0[i])) + (sum_1[i] * log2(sum_1[i])))
+      H_T <- - ((sum0_[i] * log2(sum0_[i])) + (sum1_[i] * log2(sum1_[i]))) 
+      R2_H_T0T1[i] <- 
+        I/(min(H_S, H_T)) 
+    }
+    
   }
   
-  if (sub$Monotonicity[i]=="True" | sub$Monotonicity[i]=="SurrTrue"){
-    
-    I <- (cell_00[i] * log2(cell_00[i]/(sum0_[i] * sum_0[i])))+
-      (cell_01[i] * log2(cell_01[i]/(sum0_[i] * sum_1[i])))+
-      (cell_11[i] * log2(cell_11[i]/(sum1_[i] * sum_1[i])))  
-    H_S <- - ((sum_0[i] * log2(sum_0[i])) + (sum_1[i] * log2(sum_1[i])))
-    H_T <- - ((sum0_[i] * log2(sum0_[i])) + (sum1_[i] * log2(sum1_[i]))) 
-    R2_H_T0T1[i] <- 
-      I/(min(H_S, H_T)) 
-      }
-  
-}
-
   
   #S0 T1
   cell_00 <- sub$Pi_0000 + sub$Pi_0001 + sub$Pi_1000 + sub$Pi_1001         
@@ -178,7 +179,6 @@ for (i in 1: length(sub$Monotonicity)){
   H_T <- - ((sum0_ * log2(sum0_)) + (sum1_ * log2(sum1_))) 
   R2_H_S1T0 <- 
     I/(min(H_S, H_T)) 
-  
   
   med_T0T1 <- round(median(R2_H_T0T1, na.rm = T), digits=2) 
   med_T0S0 <- round(median(R2_H_S0T0), digits=2)

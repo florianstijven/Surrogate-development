@@ -1,7 +1,7 @@
 FixedContContIT <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, 
                     Model=c("Full"), Weighted=TRUE, Min.Trial.Size=2, Alpha=.05, Number.Bootstraps=500, 
                     Seed=sample(1:1000, size=1)){
-
+  
   if ((Model==c("Full") | Model==c("Reduced") | Model==c("SemiReduced"))==FALSE) {stop ("The specification of the Model=c(\"...\") argument of the call is incorrect. Use either Model=c(\"Full\"), Model=c(\"Reduced\"), or Model=c(\"SemiReduced\").")}     
   
   distribution.S <- gaussian

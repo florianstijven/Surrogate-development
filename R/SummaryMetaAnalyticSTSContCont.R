@@ -1,4 +1,5 @@
 summary.Single.Trial.RE.AA <- function(object, ..., Object){
+
   if (missing(Object)){Object <- object} 
   cat("\nFunction call:\n\n")
   print(Object$Call)

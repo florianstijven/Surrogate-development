@@ -10,7 +10,7 @@
 \alias{summary.MinSurrContCont}
 \alias{summary.MixedContContIT}
 \alias{summary.Single.Trial.RE.AA}
-%\alias{summary.MinSurrBinBin}
+\alias{summary.SPF.BinBin}
 \alias{summary.ICA.BinBin}
 \title{Summary}
 \description{summary}
@@ -25,7 +25,7 @@
 \method{summary}{MinSurrContCont}(object, ..., Object)
 \method{summary}{MixedContContIT}(object, ..., Object)
 \method{summary}{Single.Trial.RE.AA}(object, ..., Object)
-%\method{summary}{MinSurrBinBin}(object, ..., Object)
+\method{summary}{SPF.BinBin}(object, ..., Object)
 \method{summary}{ICA.BinBin}(object, ..., Object)
 }
 \keyword{internal}

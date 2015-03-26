@@ -1,16 +1,24 @@
-ICA.ContCont <- function(T0S0, T1S1, T0T0=1, T1T1=1, S0S0=1, S1S1=1, T0T1=seq(-1, 1, by=.1), T0S1=seq(-1, 1, by=.1), T1S0=seq(-1, 1, by=.1), S0S1=seq(-1, 1, by=.1)) { 
+ICA.Sample.ContCont <- function(T0S0, T1S1, T0T0=1, T1T1=1, S0S0=1, S1S1=1, 
+                                T0T1=seq(-1, 1, by=.001), T0S1=seq(-1, 1, by=.001), T1S0=seq(-1, 1, by=.001),
+                                S0S1=seq(-1, 1, by=.001), M=50000) { 
+  
+  T0S0_val <- T0S0
+  T1S1_val <- T1S1 
+  T0T1_val <- T0T1
+  T0S1_val <- T0S1
+  T1S0_val <- T1S0
+  S0S1_val <- S0S1
   
   Results <- na.exclude(matrix(NA, 1, 9))  
   colnames(Results) <- c("T0T1", "T0S0", "T0S1", "T1S0", "T1S1", "S0S1", "ICA", "Sigma.Delta.T", "delta") 
-  combins <- expand.grid(T0T1, T0S0, T0S1, T1S0, T1S1, S0S1)
   
-  for (i in 1: nrow(combins)) {   
-    T0T1 <- combins[i, 1]  
-    T0S0 <- combins[i, 2] 
-    T0S1 <- combins[i, 3]  
-    T1S0 <- combins[i, 4]  
-    T1S1 <- combins[i, 5]  
-    S0S1 <- combins[i, 6] 
+  for (i in 1: M) {   
+    T0T1 <- runif(n = 1, min = min(T0T1_val), max = max(T0T1_val))
+    T0S0 <- runif(n = 1, min = min(T0S0_val), max = max(T0S0_val)) 
+    T0S1 <- runif(n = 1, min = min(T0S1_val), max = max(T0S1_val))  
+    T1S0 <- runif(n = 1, min = min(T1S0_val), max = max(T1S0_val))  
+    T1S1 <- runif(n = 1, min = min(T1S1_val), max = max(T1S1_val))  
+    S0S1 <- runif(n = 1, min = min(S0S1_val), max = max(S0S1_val)) 
     Sigma_c <- diag(4)         
     Sigma_c[2,1] <- Sigma_c[1,2] <- T0T1 * (sqrt(T0T0)*sqrt(T1T1))
     Sigma_c[3,1] <- Sigma_c[1,3] <- T0S0 * (sqrt(T0T0)*sqrt(S0S0))
@@ -37,7 +45,7 @@ ICA.ContCont <- function(T0S0, T1S1, T0T0=1, T1T1=1, S0S0=1, S1S1=1, T0T1=seq(-1
   }
   Results <- data.frame(Results)
   rownames(Results) <- NULL
-  Total.Num.Matrices <- nrow(combins)
+  Total.Num.Matrices <- dim(Results)[1]
   
   fit <- 
     list(Total.Num.Matrices=Total.Num.Matrices, Pos.Def=Results[,1:6], ICA=Results$ICA, GoodSurr=Results[,7:9], Call=match.call())
@@ -50,8 +58,6 @@ ICA.ContCont <- function(T0S0, T1S1, T0T0=1, T1T1=1, S0S0=1, S1S1=1, T0T1=seq(-1
 
 plot.ICA.ContCont <- function(x, Xlab.ICA, Main.ICA, Type="Percent", Labels=FALSE, ICA=TRUE, Good.Surr=FALSE, Main.Good.Surr, 
                               Par=par(oma=c(0, 0, 0, 0), mar=c(5.1, 4.1, 4.1, 2.1)), col, ...){   
-
- 
     Object <- x 
     if (missing(Xlab.ICA)) {Xlab.ICA <- expression(rho[Delta])}
     if (missing(Main.ICA)) {Main.ICA="ICA"} 
@@ -145,8 +151,6 @@ plot.ICA.ContCont <- function(x, Xlab.ICA, Main.ICA, Type="Percent", Labels=FALS
 }
 
 summary.ICA.ContCont <- function(object, ..., Object){
-  
-  
   if (missing(Object)){Object <- object} 
   
   mode <- function(data) {

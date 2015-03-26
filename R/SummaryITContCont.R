@@ -1,4 +1,5 @@
 summary.FixedContContIT <- function(object, ..., Object){
+
   if (missing(Object)){Object <- object} 
   cat("\nFunction call:\n\n")
   print(Object$Call)
@@ -39,6 +40,7 @@ summary.FixedContContIT <- function(object, ..., Object){
 
 
 summary.MixedContContIT <- function(object, ..., Object){
+  
   if (missing(Object)){Object <- object} 
   cat("\nFunction call:\n\n")
   print(Object$Call)
