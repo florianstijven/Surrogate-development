@@ -48,32 +48,30 @@ Pat.ID=Id, Model=c("Full"))
 
 ## Request both trial- and individual-level surrogacy plots. In the trial-level plot,
 ## make the size of the circles proportional to the number of patients in a trial:
-\dontrun{plot(Sur, Trial.Level=TRUE, Weighted=TRUE, Indiv.Level=TRUE)}
+plot(Sur, Trial.Level=TRUE, Weighted=TRUE, Indiv.Level=TRUE)
 
 ## Make a trial-level surrogacy plot using filled blue circles that 
 ## are transparent (to make sure that the results of overlapping trials remain
 ## visible), and modify the title and the axes labels of the plot: 
-\dontrun{plot(Sur, pch=16, col=rgb(.3, .2, 1, 0.3), Indiv.Level=FALSE, Trial.Level=TRUE, 
+plot(Sur, pch=16, col=rgb(.3, .2, 1, 0.3), Indiv.Level=FALSE, Trial.Level=TRUE, 
 Weighted=TRUE, Main.Trial=c("Trial-level surrogacy (ARMD dataset)"), 
 Xlab.Trial=c("Difference in vision after 6 months (Surrogate)"),
-Ylab.Trial=c("Difference in vision after 12 months (True enpoint)"))}
+Ylab.Trial=c("Difference in vision after 12 months (True enpoint)"))
 
 ## Add the estimated R2_ht value in the previous plot at position (X=-2.2, Y=0)  
 ## (the previous plot should not have been closed):
-\dontrun{R2ht <- format(round(as.numeric(Sur$R2ht[1]), 3))
-text(x=-2.2, y=0, cex=1.4, labels=(bquote(paste("R"[ht]^{2}, "="~.(R2ht)))))}
+R2ht <- format(round(as.numeric(Sur$R2ht[1]), 3))
+text(x=-2.2, y=0, cex=1.4, labels=(bquote(paste("R"[ht]^{2}, "="~.(R2ht)))))
 
 ## Make an Individual-level surrogacy plot with red squares to depict individuals
 ## (rather than black circles):
-\dontrun{plot(Sur, pch=15, col="red", Indiv.Level=TRUE, Trial.Level=FALSE)}
+plot(Sur, pch=15, col="red", Indiv.Level=TRUE, Trial.Level=FALSE)
 
 ## Same plot as before, but now with smaller squares, a y-axis with range [-40; 40], 
 ## and the estimated R2_h value in the title of the plot:
 R2h <- format(round(as.numeric(Sur$R2h[1]), 3))
-\dontrun{plot(Sur, pch=15, col="red", Indiv.Level=TRUE, Trial.Level=FALSE, cex=.5, 
-ylim=c(-40, 40), Main.Indiv=bquote(paste("R"[h]^{2}, "="~.(R2h))))}
-
-
+plot(Sur, pch=15, col="red", Indiv.Level=TRUE, Trial.Level=FALSE, cex=.5, 
+ylim=c(-40, 40), Main.Indiv=bquote(paste("R"[h]^{2}, "="~.(R2h))))
 }
 
 \keyword{Plot surrogacy}

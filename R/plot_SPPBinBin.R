@@ -1,8 +1,6 @@
 plot.SPF.BinBin <- function(x, Type="All.Histograms", Specific.Pi="r_0_0", Col="grey", 
                             Box.Plot.Outliers=FALSE, Legend.Pos="topleft", Legend.Cex=1, ...){
                             
-  UseMethod("plot")
-  
   Object <- x 
 
   if (missing(Col)) {Col = "grey"}

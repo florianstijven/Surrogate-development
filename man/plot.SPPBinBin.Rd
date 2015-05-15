@@ -29,11 +29,10 @@ Wim Van der Elst, Ariel Alonso, & Geert Molenberghs
 }
 \seealso{\link{SPF.BinBin}}
 \examples{
-\dontrun{
 # Generate plausible values for Pi  
 ICA <- ICA.BinBin.Grid.Sample(pi1_1_=0.341, pi0_1_=0.119,
 pi1_0_=0.254, pi_1_1=0.686, pi_1_0=0.088, pi_0_1=0.078, Seed=1,
-Monotonicity=c("General"), M=5000)
+Monotonicity=c("General"), M=2500)
            
 # Compute the surrogate predictive function (SPF)
 SPF <- SPF.BinBin(ICA)
@@ -48,14 +47,10 @@ plot(SPF, Type="Histogram", Specific.Pi="r_0_0")
 plot(SPF, Type="Box.Plot", Legend.Pos="topleft", Legend.Cex=.7)
 plot(SPF, Type="Lines.Mean")
 plot(SPF, Type="Lines.Median")
-plot(SPF, Type="Lines.Mode")
 plot(SPF, Type="3D.Mean")
 plot(SPF, Type="3D.Median")
-plot(SPF, Type="3D.Mode")
 plot(SPF, Type="3D.Spinning.Mean")
 plot(SPF, Type="3D.Spinning.Median")
-plot(SPF, Type="3D.Spinning.Mode")
-} 
 }
 \keyword{Plot SPF}
 \keyword{Causal-Inference framework}

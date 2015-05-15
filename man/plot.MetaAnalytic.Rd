@@ -60,35 +60,35 @@ Wim Van der Elst, Ariel Alonso, & Geert Molenberghs
 data(ARMD)
 
 ## Conduct a surrogacy analysis, using a weighted reduced univariate fixed effect model:
-\dontrun{Sur <- UnifixedContCont(Dataset=ARMD, Surr=Diff24, True=Diff52, Treat=Treat, Trial.ID=Center, 
-Pat.ID=Id, Number.Bootstraps=100, Model=c("Reduced"), Weighted=TRUE)}
+Sur <- UnifixedContCont(Dataset=ARMD, Surr=Diff24, True=Diff52, Treat=Treat, Trial.ID=Center, 
+Pat.ID=Id, Number.Bootstraps=100, Model=c("Reduced"), Weighted=TRUE)
 
 ## Request both trial- and individual-level surrogacy plots. In the trial-level plot,
 ## make the size of the circles proportional to the number of patients in a trial:
-\dontrun{plot(Sur, Trial.Level=TRUE, Weighted=TRUE, Indiv.Level=TRUE)}
+plot(Sur, Trial.Level=TRUE, Weighted=TRUE, Indiv.Level=TRUE)
 
 ## Make a trial-level surrogacy plot using filled blue circles that 
 ## are transparent (to make sure that the results of overlapping trials remain
 ## visible), and modify the title and the axes labels of the plot: 
-\dontrun{plot(Sur, pch=16, col=rgb(.3, .2, 1, 0.3), Indiv.Level=FALSE, Trial.Level=TRUE, 
+plot(Sur, pch=16, col=rgb(.3, .2, 1, 0.3), Indiv.Level=FALSE, Trial.Level=TRUE, 
 Weighted=TRUE, Main.Trial=c("Trial-level surrogacy (ARMD dataset)"), 
 Xlab.Trial=c("Difference in vision after 6 months (Surrogate)"),
-Ylab.Trial=c("Difference in vision after 12 months (True enpoint)"))}
+Ylab.Trial=c("Difference in vision after 12 months (True enpoint)"))
 
 ## Add the estimated R2_trial value in the previous plot at position (X=-7, Y=11)  
 ## (the previous plot should not have been closed):
-\dontrun{R2trial <- format(round(as.numeric(Sur$Trial.R2[1]), 3))
-text(x=-7, y=11, cex=1.4, labels=(bquote(paste("R"[trial]^{2}, "="~.(R2trial)))))}
+R2trial <- format(round(as.numeric(Sur$Trial.R2[1]), 3))
+text(x=-7, y=11, cex=1.4, labels=(bquote(paste("R"[trial]^{2}, "="~.(R2trial)))))
 
 ## Make an Individual-level surrogacy plot with red squares to depict individuals
 ## (rather than black circles):
-\dontrun{plot(Sur, pch=15, col="red", Indiv.Level=TRUE, Trial.Level=FALSE)}
+plot(Sur, pch=15, col="red", Indiv.Level=TRUE, Trial.Level=FALSE)
 
 ## Same plot as before, but now with smaller squares, a y-axis with range [-40; 40], 
 ## and the estimated R2_indiv value in the title of the plot:
-\dontrun{R2ind <- format(round(as.numeric(Sur$Indiv.R2[1]), 3))
+R2ind <- format(round(as.numeric(Sur$Indiv.R2[1]), 3))
 plot(Sur, pch=15, col="red", Indiv.Level=TRUE, Trial.Level=FALSE, cex=.5, 
-ylim=c(-40, 40), Main.Indiv=bquote(paste("R"[indiv]^{2}, "="~.(R2ind))))}
+ylim=c(-40, 40), Main.Indiv=bquote(paste("R"[indiv]^{2}, "="~.(R2ind))))
 
 
 ##### Single-trial setting
@@ -98,7 +98,7 @@ SurSTS <- Single.Trial.RE.AA(Dataset=ARMD, Surr=Diff24, True=Diff52, Treat=Treat
 
 # Request a plot of individual-level surrogacy and a plot that depicts the Relative effect 
 # and the constant RE assumption:
-\dontrun{plot(SurSTS, Trial.Level=TRUE, Indiv.Level=TRUE)}
+plot(SurSTS, Trial.Level=TRUE, Indiv.Level=TRUE)
 }
 
 \keyword{Plot surrogacy}

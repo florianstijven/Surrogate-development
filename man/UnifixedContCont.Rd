@@ -82,7 +82,7 @@ Wim Van der Elst, Ariel Alonso, & Geert Molenberghs
 \code{\link{UnimixedContCont}}, \code{\link{BifixedContCont}}, \code{\link{BimixedContCont}}, \code{\link{plot Meta-Analytic}}
 }
 \examples{
-\dontrun{
+\dontrun{ #Time consuming (>5 sec) code parts
 # Example 1, based on the ARMD data
 data(ARMD)
 

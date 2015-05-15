@@ -9,7 +9,7 @@ This function provides a diagram that depicts the medians of the informational c
 \usage{
 CausalDiagramBinBin(x, Values="Corrs", Theta_T0S0, Theta_T1S1, 
 Min=0, Max=1, Cex.Letters=3, Cex.Corrs=2, Lines.Rel.Width=TRUE, 
-Col.Pos.Neg=TRUE, Monotonicity="General")
+Col.Pos.Neg=TRUE, Monotonicity)
 }
 \arguments{
   \item{x}{An object of class \code{ICA.BinBin}. See \code{\link{ICA.BinBin}}.}
@@ -22,7 +22,7 @@ Col.Pos.Neg=TRUE, Monotonicity="General")
   \item{Cex.Corrs}{The size of the text depicting the median odds ratios between the counterfactuals. Default=\eqn{2}.}
   \item{Lines.Rel.Width}{Logical. When \code{Lines.Rel.Width=TRUE}, the widths of the lines that represent the odds ratios between the counterfactuals are relative to the size of the odds ratios (i.e., a smaller/thicker line is used for smaller/higher odds ratios. When \code{Lines.Rel.Width=FALSE}, the width of all lines representing the odds ratios between the counterfactuals is identical. Default=\code{TRUE}.  Only considered when \code{Values="ORs"}.}
   \item{Col.Pos.Neg}{Logical. When \code{Col.Pos.Neg=TRUE}, the color of the lines that represent the odds ratios between the counterfactuals is red for odds ratios below \eqn{1} and black for the ones above \eqn{1}. When \code{Col.Pos.Neg=FALSE}, all lines are in black. Default=\code{TRUE}. Only considered when \code{Values="ORs"}.}
-\item{Monotonicity}{Specifies whether the medians of the odds ratios should depict all results in the fitted object \code{ICA.BinBin} (i.e., \code{Monotonicity=c("General")}), or a subset of the results arising under specific assumptions (i.e., \code{Monotonicity=c("No")}, \code{Monotonicity=c("True.Endp")}, \code{Monotonicity=c("Surr.Endp")}, or \code{Monotonicity=c("Surr.True.Endp")}). Default \code{Monotonicity=c("General")}.}
+\item{Monotonicity}{Specifies the monotonicity scenario that should be considered (i.e., \code{Monotonicity=c("No")}, \code{Monotonicity=c("True.Endp")}, \code{Monotonicity=c("Surr.Endp")}, or \code{Monotonicity=c("Surr.True.Endp")}).}
 }
 
 \references{
@@ -36,28 +36,24 @@ Wim Van der Elst, Ariel Alonso, & Geert Molenberghs
 
 \seealso{\link{ICA.BinBin}}
 \examples{
-\dontrun{
-# Compute R2_H given the marginals specified as the pi's, making no 
-# assumptions regarding monotonicity (general case)
-ICA <- ICA.BinBin(pi1_1_=0.2619048, pi1_0_=0.2857143, pi_1_1=0.6372549, 
-pi_1_0=0.07843137, pi0_1_=0.1349206, pi_0_1=0.127451, Seed=1, 
-Monotonicity=c("General"), Sum_Pi_f = seq(from=0.01, to=.99, by=.01), M=1000)
+# Compute R2_H given the marginals specified as the pi's
+ICA <- ICA.BinBin.Grid.Sample(pi1_1_=0.2619048, pi1_0_=0.2857143, 
+pi_1_1=0.6372549, pi_1_0=0.07843137, pi0_1_=0.1349206, pi_0_1=0.127451,
+Seed=1, Monotonicity=c("General"), M=1000)
 
 # Obtain a causal diagram that provides the medians of the 
-# odds ratios between the counterfactuals for the range
-# of R2_H values between 0 and 1 in the general setting
-# (making no assumptions regarding monotonicity). 
-# Assume that Theta_T0S0=2.156 and Theta_T1S1=10 
-# (these quantities are estimable based on the observed data, 
-# using e.g., the MarginalProbs function)
-CausalDiagramBinBin(x=ICA, Values="ORs", Theta_T0S0=2.156, Theta_T1S1=10, 
-Min=0, Max=1,  Monotonicity="General") 
+# correlations between the counterfactuals for the range
+# of R2_H values between 0.1 and 1
+   # Assume no monotonicty 
+CausalDiagramBinBin(x=ICA, Min=0.1, Max=1, Monotonicity="No") 
+
+   # Assume monotonicty for S 
+CausalDiagramBinBin(x=ICA, Min=0.1, Max=1, Monotonicity="Surr.Endp") 
 
 # Now only consider the results that were obtained when 
 # monotonicity was assumed for the true endpoint
 CausalDiagramBinBin(x=ICA, Values="ORs", Theta_T0S0=2.156, Theta_T1S1=10, 
 Min=0, Max=1,  Monotonicity="True.Endp") 
-}
 }
 \keyword{Plot surrogacy}
 \keyword{Causal-Inference framework}

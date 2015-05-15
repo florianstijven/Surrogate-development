@@ -101,8 +101,6 @@ Wim Van der Elst, Ariel Alonso, & Geert Molenberghs
 \code{\link{MixedContContIT}}, \code{\link{plot Information-Theoretic}}
 }
 \examples{
-
-\dontrun{
 # Example 1
 # Based on the ARMD data
 
@@ -114,6 +112,7 @@ Pat.ID=Id, Model="Full", Number.Bootstraps=50)
 # Obtain a summary of the results:
 summary(Sur)
 
+\dontrun{ #time consuming code
 # Example 2
 # Conduct an analysis based on a simulated dataset with 2000 patients, 100 trials,
 # and Rindiv=Rtrial=.8

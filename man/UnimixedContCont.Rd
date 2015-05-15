@@ -89,7 +89,7 @@ Wim Van der Elst, Ariel Alonso, & Geert Molenberghs
 }
 \examples{
 
-\dontrun{
+\dontrun{ #Time consuming code part
 # Conduct an analysis based on a simulated dataset with 2000 patients, 100 trials, 
 # and Rindiv=Rtrial=.8
 # Simulate the data:

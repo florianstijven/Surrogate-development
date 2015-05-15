@@ -52,27 +52,25 @@ Wim Van der Elst, Ariel Alonso, & Geert Molenberghs
 \code{\link{MICA.ContCont}}, \code{\link{ICA.Sample.ContCont}}, \code{\link{Single.Trial.RE.AA}}, \code{\link{plot Causal-Inference ContCont}}
 }
 \examples{
-\dontrun{
 # Generate the vector of ICA.ContCont values when rho_T0S0=rho_T1S1=.95, 
 # sigma_T0T0=90, sigma_T1T1=100,sigma_ S0S0=10, sigma_S1S1=15, and  
-# the grid of values {-1, -.9, ..., 1} is considered for the correlations
+# the grid of values {0, .2, ..., 1} is considered for the correlations
 # between the counterfactuals:
 SurICA <- ICA.ContCont(T0S0=.95, T1S1=.95, T0T0=90, T1T1=100, S0S0=10, S1S1=15,
-T0T1=seq(-1, 1, by=.1), T0S1=seq(-1, 1, by=.1), T1S0=seq(-1, 1, by=.1), 
-S0S1=seq(-1, 1, by=.1))
+T0T1=seq(0, 1, by=.2), T0S1=seq(0, 1, by=.2), T1S0=seq(0, 1, by=.2), 
+S0S1=seq(0, 1, by=.2))
 
 # Examine and plot the vector of generated ICA values:
 summary(SurICA)
-\dontrun{plot(SurICA)}
+plot(SurICA)
 
 # Obtain the positive definite matrices than can be formed as based on the 
 # specified (vectors) of the correlations (these matrices are used to 
 # compute the ICA values)
-SurICA$Pos.Def}
+SurICA$Pos.Def
 }
 \keyword{Causal-Inference framework}
 \keyword{Counterfactuals}
 \keyword{Single-trial setting}
 \keyword{Sensitivity}
 \keyword{ICA}
-

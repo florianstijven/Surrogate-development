@@ -40,7 +40,7 @@ The matrix \eqn{\bold{A}} has rank \eqn{7} and can be partitioned as \eqn{\bold{
 
 The following algorithm is used to generate plausible distributions for \eqn{\bold{Y}}. First, select a value of the specified grid of values (specified using \code{Sum_Pi_f} in the function call).  For \eqn{k=1} to \eqn{M} (specified using \code{M} in the function call), generate a vector \eqn{\pi_f} that contains \eqn{9} components that are uniformly sampled from hyperplane subject to the restriction that the sum of the generated components equals \code{Sum_Pi_f} (the function \code{\link{RandVec}}, which uses the \code{randfixedsum} algorithm written by Roger Stafford, is used  to obtain these components). Next, \eqn{\bold{\pi_r=A_r^{-1}(b - A_f \pi_f)}} is computed and the \eqn{\pi_r} vectors where all components are in the \eqn{[0;\:1]} range are retained. This procedure is repeated for each of the \code{Sum_Pi_f} values.  Based on these results, \eqn{R_H^2} is estimated. The obtained values can be used to conduct a sensitivity analysis during the validation exercise.
 
-The previous developments hold when no monotonicity is assumed. When monotonicity for \eqn{S}, \eqn{T}, or for \eqn{S} and \eqn{T} is assumed, some of the probabilities of \eqn{\pi} are zero. For example, when montonicity is assumed for \eqn{T}, then \eqn{P(T_0 <= T_1)=1}, or equivantly, \eqn{\pi_{1000}=\pi_{1010}=\pi_{1001}=\pi_{1011}=0}. When monotonicity is assumed, the procedure described above is modified accordingly (for details, see Alonso et al., 2014). When a general analysis is requested (using \code{Monotonicity=c("General")} in the function call), the results of the different settings where other assumptions regarding monotonicity are made are combined (no monotonicity, monotonicity for \eqn{S} alone, for \eqn{T} alone, and for both for \eqn{S} and \eqn{T}.)
+The previous developments hold when no monotonicity is assumed. When monotonicity for \eqn{S}, \eqn{T}, or for \eqn{S} and \eqn{T} is assumed, some of the probabilities of \eqn{\pi} are zero. For example, when montonicity is assumed for \eqn{T}, then \eqn{P(T_0 <= T_1)=1}, or equivantly, \eqn{\pi_{1000}=\pi_{1010}=\pi_{1001}=\pi_{1011}=0}. When monotonicity is assumed, the procedure described above is modified accordingly (for details, see Alonso et al., 2014). When a general analysis is requested (using \code{Monotonicity=c("General")} in the function call), all settings are considered (no monotonicity, monotonicity for \eqn{S} alone, for \eqn{T} alone, and for both for \eqn{S} and \eqn{T}.)
 }
 
 \value{An object of class \code{ICA.BinBin} with components,
@@ -56,9 +56,7 @@ The previous developments hold when no monotonicity is assumed. When monotonicit
 \item{Volume.ST}{The 'volume' of the parameter space when monotonicity for \eqn{S} and \eqn{T} is assumed. Is only provided when the argument \eqn{Volume.Perc} is used.}
 }
 \references{
-Alonso, A., Van der Elst, W., & Molenberghs, G. (2014). Validation of surrogate endpoints: the binary-binary setting from a causal inference perspective.
-
-Buyse, M., Burzykowski, T., Aloso, A., & Molenberghs, G. (2014). Direct estimation of joint counterfactual probabilities, with application to surrogate marker validation.
+Alonso, A., Van der Elst, W., & Molenberghs, G. (2015). Validation of surrogate endpoints: the binary-binary setting from a causal inference perspective.
 }
 \author{
 Wim Van der Elst, Ariel Alonso, Marc Buyse, & Geert Molenberghs
@@ -67,7 +65,7 @@ Wim Van der Elst, Ariel Alonso, Marc Buyse, & Geert Molenberghs
 \code{\link{ICA.ContCont}}, \code{\link{MICA.ContCont}}
 }
 \examples{
-\dontrun{
+\dontrun{# Time consuming code part
 # Compute R2_H given the marginals specified as the pi's, making no 
 # assumptions regarding monotonicity (general case)
 ICA <- ICA.BinBin(pi1_1_=0.2619048, pi1_0_=0.2857143, pi_1_1=0.6372549, 

@@ -78,7 +78,6 @@ Wim Van der Elst, Ariel Alonso, & Geert Molenberghs
 \code{\link{UnifixedContCont}}, \code{\link{BifixedContCont}}, \code{\link{UnimixedContCont}}, \code{\link{BimixedContCont}}, \code{\link{ICA.ContCont}} 
 }
 \examples{
-\dontrun{
 # Example 1, based on the ARMD data:
 data(ARMD)
 
@@ -102,7 +101,7 @@ Pat.ID=Pat.ID)
 
 # Show a summary and plots of results
 summary(Sur2)
-plot(Sur2)}
+plot(Sur2)
 }
 \keyword{Single-trial setting}
 \keyword{Meta-analytic framework}

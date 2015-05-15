@@ -1,3 +1,9 @@
+Changes in version: Surrogate_0.1-6
+
+  o The function Test.Mono has been added
+  o Changes in plot and summary functions of ICA.BinBin, ICA.BinBin.Grid.Full, and ICA.BinBin.Grid.Sample
+
+
 Changes in version: Surrogate_0.1-5
 
   o The functions SPP.BinBin, ICA.Sample.ContCont, and ICA.BinBin.CounterAssum have been added

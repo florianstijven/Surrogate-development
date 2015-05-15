@@ -1,5 +1,5 @@
-ICA.BinBin.CounterAssum <- function(x, r_h_S0S1_min, r_h_S0S1_max, r_h_S0T1_min, r_h_S0T1_max, 
-                                    r_h_T0T1_min, r_h_T0T1_max, r_h_T0S1_min, r_h_T0S1_max, Monotonicity="General",
+ICA.BinBin.CounterAssum <- function(x, r2_h_S0S1_min, r2_h_S0S1_max, r2_h_S0T1_min, r2_h_S0T1_max, 
+                                    r2_h_T0T1_min, r2_h_T0T1_max, r2_h_T0S1_min, r2_h_T0S1_max, Monotonicity="General",
                                     Type="Freq", MainPlot=" ", Cex.Legend=1, Cex.Position="topright", ...) {
   
   if (class(x)!="ICA.BinBin") {stop("The function R2HBinBinCounterAssumpt should be applied to an object of 
@@ -142,14 +142,14 @@ ICA.BinBin.CounterAssum <- function(x, r_h_S0S1_min, r_h_S0S1_max, r_h_S0T1_min,
   results <-
      data.frame(compA, compB, compC, compD, compE, as.character(compF))
   
-  colnames(results) <- c("R2_H", "r_h_S0S1", "r_h_T0T1", "r_h_S0T1", "r_h_S1T0", "Monotonicity")
+  colnames(results) <- c("R2_H", "r2_h_S0S1", "r2_h_T0T1", "r2_h_S0T1", "r2_h_S1T0", "Monotonicity")
   
   subset <- results <- data.frame(results)
   
-  subset <- subset[subset$r_h_S0S1 > r_h_S0S1_min & subset$r_h_S0S1 < r_h_S0S1_max,]
-  subset <- subset[subset$r_h_T0T1 > r_h_T0T1_min & subset$r_h_T0T1 < r_h_T0T1_max,]
-  subset <- subset[subset$r_h_S0T1 > r_h_S0T1_min & subset$r_h_S0T1 < r_h_S0T1_max,]
-  subset <- subset[subset$r_h_S1T0 > r_h_T0S1_min & subset$r_h_S1T0 < r_h_T0S1_max,]
+  subset <- subset[subset$r2_h_S0S1 > r2_h_S0S1_min & subset$r2_h_S0S1 < r2_h_S0S1_max,]
+  subset <- subset[subset$r2_h_T0T1 > r2_h_T0T1_min & subset$r2_h_T0T1 < r2_h_T0T1_max,]
+  subset <- subset[subset$r2_h_S0T1 > r2_h_S0T1_min & subset$r2_h_S0T1 < r2_h_S0T1_max,]
+  subset <- subset[subset$r2_h_S1T0 > r2_h_T0S1_min & subset$r2_h_S1T0 < r2_h_T0S1_max,]
   
   if (dim(subset)[1]==0){stop ("No valid observations for the specified ranges of values.")}
   

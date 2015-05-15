@@ -12,9 +12,12 @@ MarginalProbs <- function(Dataset=Dataset, Surr=Surr, True=True, Treat=Treat) {
   cont <- table(Dataset$Surr[Dataset$Treat==-1], Dataset$True[Dataset$Treat==-1])
   exp <- table(Dataset$Surr[Dataset$Treat==1], Dataset$True[Dataset$Treat==1])
   
-  Theta_T0S0 <- (cont[1,1]*cont[2,2])/(cont[2,1]*cont[1,2])
-  Theta_T1S1 <- (exp[1,1]*exp[2,2])/(exp[2,1]*exp[1,2])  
+  try(Theta_T0S0 <- (cont[1,1]*cont[2,2])/(cont[2,1]*cont[1,2]), silent=TRUE)
+  try(Theta_T1S1 <- (exp[1,1]*exp[2,2])/(exp[2,1]*exp[1,2]), silent=TRUE)  
   
+  if (exists("Theta_T0S0")==FALSE){Theta_T0S0="NA"}
+  if (exists("Theta_T1S1")==FALSE){Theta_T1S1="NA"}
+    
   pi1_1_ <- (dim(subset(x=Dataset, subset=(Dataset$True==1 & Dataset$Surr==1 & Dataset$Treat==-1)))[1])/dim(Dataset[Dataset$Treat==-1,])[1] 
   pi0_1_ <- (dim(subset(x=Dataset, subset=(Dataset$True==0 & Dataset$Surr==1 & Dataset$Treat==-1)))[1])/dim(Dataset[Dataset$Treat==-1,])[1]
   pi1_0_ <- (dim(subset(x=Dataset, subset=(Dataset$True==1 & Dataset$Surr==0 & Dataset$Treat==-1)))[1])/dim(Dataset[Dataset$Treat==-1,])[1]

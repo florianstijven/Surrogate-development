@@ -30,7 +30,7 @@ Wim Van der Elst, Ariel Alonso, & Geert Molenberghs
 
 \seealso{\link{ICA.ContCont}, \link{MICA.ContCont}}
 \examples{
-\dontrun{
+\dontrun{ #Time consuming (>5 sec) code parts
 # Generate the vector of ICA values when rho_T0S0=.91, rho_T1S1=.91, and when the
 # grid of values {0, .1, ..., 1} is considered for the correlations
 # between the counterfactuals:
@@ -47,8 +47,7 @@ T1S0=seq(0, 1, by=.1), S0S1=seq(0, 1, by=.1))
 CausalDiagramContCont(SurICA, Min=.9, Max=1)
 
 # Same, for low values of ICA
-CausalDiagramContCont(SurICA, Min=0, Max=.5)
-}
+CausalDiagramContCont(SurICA, Min=0, Max=.5)}
 }
 \keyword{Plot surrogacy}
 \keyword{Causal-Inference framework}

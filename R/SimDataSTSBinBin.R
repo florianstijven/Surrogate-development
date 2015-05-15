@@ -1,9 +1,11 @@
-Sim.Data.STSBinBin <- function(Monotonicity=c("No"), N.Total=2000, Seed=sample(1:1000, size=1)){
+Sim.Data.STSBinBin <- function(Monotonicity=c("No"), 
+                               N.Total=2000, Seed=sample(1:1000, size=1)){
   
   
   if (Monotonicity=="No"){
     set.seed(seed=Seed)
-    Pi_s <- RandVec(a=0, b=1, s=1, n=16, m=1)  
+    Pi_s <- 
+      RandVec(a=0, b=1, s=1, n=16, m=1)  
     Pi_0000 <- Pi_s$RandVecOutput[1]  
     Pi_0100 <- Pi_s$RandVecOutput[2]  
     Pi_0010 <- Pi_s$RandVecOutput[3]  

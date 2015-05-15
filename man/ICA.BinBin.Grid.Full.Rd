@@ -19,7 +19,7 @@ Seed=sample(1:100000, size=1))
   \item{pi_1_0}{A scalar that contains \eqn{P(T=1,S=0|Z=1)}.}
   \item{pi0_1_}{A scalar that contains \eqn{P(T=0,S=1|Z=0)}.}
   \item{pi_0_1}{A scalar that contains \eqn{P(T=0,S=1|Z=1)}.}
-  \item{Monotonicity}{Specifies which assumptions regarding monotonicity should be made: \code{Monotonicity=c("General")}, \code{Monotonicity=c("No")}, \code{Monotonicity=c("True.Endp")}, \code{Monotonicity=c("Surr.Endp")}, or \code{Monotonicity=c("Surr.True.Endp")}. When a general analysis is requested (using \code{Monotonicity=c("General")} in the function call), the results of the different settings where other assumptions regarding monotonicity are made are combined (no monotonicity, monotonicity for \eqn{S} alone, for \eqn{T} alone, and for both for \eqn{S} and \eqn{T}. Default \code{Monotonicity=c("General")}.}
+  \item{Monotonicity}{Specifies which assumptions regarding monotonicity should be made: \code{Monotonicity=c("General")}, \code{Monotonicity=c("No")}, \code{Monotonicity=c("True.Endp")}, \code{Monotonicity=c("Surr.Endp")}, or \code{Monotonicity=c("Surr.True.Endp")}. When a general analysis is requested (using \code{Monotonicity=c("General")} in the function call), all settings are considered (no monotonicity, monotonicity for \eqn{S} alone, for \eqn{T} alone, and for both for \eqn{S} and \eqn{T}. Default \code{Monotonicity=c("General")}.}
   \item{pi_1001}{A vector that specifies the grid of values that should be considered for \eqn{\pi_{pi_1001}}. Default \code{pi_1001=seq(0, 1, by=.02)}.}
   \item{pi_1110}{A vector that specifies the grid of values that should be considered for \eqn{\pi_{pi_1110}}. Default \code{pi_1110=seq(0, 1, by=.02)}.}
   \item{pi_1101}{A vector that specifies the grid of values that should be considered for \eqn{\pi_{pi_1101}}. Default \code{pi_1101=seq(0, 1, by=.02)}.}
@@ -61,14 +61,14 @@ Wim Van der Elst, Ariel Alonso, Marc Buyse, & Geert Molenberghs
 \code{\link{ICA.ContCont}}, \code{\link{MICA.ContCont}}, \code{\link{ICA.BinBin}}, \code{\link{ICA.BinBin.Grid.Sample}}
 }
 \examples{
-\dontrun{
+\dontrun{ # time consuming code part
 # Compute R2_H given the marginals, 
 # assuming monotonicity for S and T and grids
 # pi_0111=seq(0, 1, by=.001) and 
 # pi_1100=seq(0, 1, by=.001)
 ICA <- ICA.BinBin.Grid.Full(pi1_1_=0.2619048, pi1_0_=0.2857143, pi_1_1=0.6372549, 
 pi_1_0=0.07843137, pi0_1_=0.1349206, pi_0_1=0.127451,  
-pi_0111=seq(0, 1, by=.001), pi_1100=seq(0, 1, by=.001), Seed=1)
+pi_0111=seq(0, 1, by=.01), pi_1100=seq(0, 1, by=.01), Seed=1)
 
 # obtain plot of R2_H
 plot(ICA, R2_H=TRUE)

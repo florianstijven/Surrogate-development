@@ -72,7 +72,7 @@ ICA.BinBin.Grid.Sample <- function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_
                                    T_SurrTrue$C3 <- T_SurrTrue$R2_H <- T_SurrTrue$Theta_T <- T_SurrTrue$Theta_S <-  T_SurrTrue$H_Delta_T <- NA}
     
     
-    C3_all <- as.numeric(na.exclude(c(T_No$C3, T_True$C3, T_Surr$C3, T_SurrTrue$C3)))
+#    try(C3_all <- as.numeric(na.exclude(c(T_No$C3, T_True$C3, T_Surr$C3, T_SurrTrue$C3))), silent=TRUE)
     R2_H_all  <- as.numeric(na.exclude(c(T_No$R2_H, T_True$R2_H, T_Surr$R2_H, T_SurrTrue$R2_H)))
     theta_T_all <- as.numeric(na.exclude(c(T_No$Theta_T, T_True$Theta_T, T_Surr$Theta_T, T_SurrTrue$Theta_T)))
     theta_S_all <- as.numeric(na.exclude(c(T_No$Theta_S, T_True$Theta_S, T_Surr$Theta_S, T_SurrTrue$Theta_S)))

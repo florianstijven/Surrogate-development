@@ -103,10 +103,10 @@ Wim Van der Elst, Ariel Alonso, & Geert Molenberghs
 \seealso{\code{\link{UnifixedContCont}}, \code{\link{BifixedContCont}}, \code{\link{UnimixedContCont}}, \code{\link{plot Meta-Analytic}}
 }
 \examples{
-\dontrun{
-# Example 1, based on the Schizo dataset (clinial trial in schizophrenic patients)
+# Open the Schizo dataset (clinial trial in schizophrenic patients)
 data(Schizo)
 
+\dontrun{ #Time consuming (>5 sec) code part
 # When a reduced bivariate mixed-effect model is used to assess surrogacy, 
 # the conditioning number for the D matrix is very high: 
 Sur <- BimixedContCont(Dataset=Schizo, Surr=BPRS, True=PANSS, Treat=Treat, Model="Reduced", 
@@ -119,21 +119,7 @@ Trial.ID=InvestId, Pat.ID=Id)
 # As an alternative approach to assess surrogacy, consider using the functions
 # BifixedContCont, UnifixedContCont or UnimixedContCont in the meta-analytic framework,
 # or use the information-theoretic approach
-
-
-# Example 2
-# Conduct a surrogacy analysis based on a simulated dataset with 2000 patients, 50 trials, 
-# and Rindiv=Rtrial=.8
-# Simulate the data:
-Sim.Data.MTS(N.Total=2000, N.Trial=50, R.Trial.Target=.8, R.Indiv.Target=.8, Seed=123)
-
-# Fit a full bivariate mixed-effects model to assess surrogacy: 
-Sur2 <- BimixedContCont(Dataset=Data.Observed.MTS, Surr=Surr, True=True, Treat=Treat, 
-Trial.ID=Trial.ID, Pat.ID=Pat.ID, Model="Full")
-
-# Show a summary and plots of results:
-summary(Sur2)
-plot(Sur2, Weighted=FALSE)}
+}
 }
 
 \keyword{Multiple-trial setting}

@@ -1,7 +1,7 @@
 CausalDiagramBinBin <- function(x, Values="Corrs", Theta_T0S0, Theta_T1S1, Min=0, Max=1, Cex.Letters=3, 
                                 Cex.Corrs=2, 
                                 Lines.Rel.Width=TRUE, Col.Pos.Neg=TRUE,
-                                Monotonicity="General") {
+                                Monotonicity) {
   
   if (class(x)!="ICA.BinBin") {stop("The function CausalDiagramBinBin should be applied to an object of class ICA.BinBin.")}
   
@@ -11,7 +11,7 @@ CausalDiagramBinBin <- function(x, Values="Corrs", Theta_T0S0, Theta_T1S1, Min=0
   dat <- data.frame(cbind(x$Pi.Vectors, x$R2_H, x$Theta_T, x$Theta_S))
   sub <- dat[dat$x.R2_H >= Min & dat$x.R2_H <= Max,] 
   
-  if ((Monotonicity=="No" | Monotonicity=="True.Endp" | Monotonicity=="Surr.Endp" | Monotonicity=="Surr.True.Endp" | Monotonicity=="General")==FALSE){
+  if ((Monotonicity=="No" | Monotonicity=="True.Endp" | Monotonicity=="Surr.Endp" | Monotonicity=="Surr.True.Endp")==FALSE){
     stop("The Monotonicity=... argument is not correctly specified \n")
   }
   

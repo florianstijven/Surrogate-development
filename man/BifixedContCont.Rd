@@ -88,7 +88,6 @@ Wim Van der Elst, Ariel Alonso, & Geert Molenberghs
 \seealso{\code{\link{UnifixedContCont}}, \code{\link{UnimixedContCont}}, \code{\link{BimixedContCont}}, \code{\link{plot Meta-Analytic}}
 }
 \examples{
-\dontrun{
 # Example 1, based on the ARMD data
 data(ARMD)
 
@@ -113,6 +112,7 @@ Seed=123, Model="Reduced")
 
 # Fit a reduced bivariate fixed-effects model with no weighting according to the 
 # number of patients in stage 2 of the two stage approach to assess surrogacy:
+\dontrun{ #time-consuming code parts
 Sur2 <- BifixedContCont(Dataset=Data.Observed.MTS, Surr=Surr, True=True, Treat=Treat, 
 Trial.ID=Trial.ID, Pat.ID=Pat.ID, , Model="Reduced", Weighted=FALSE)
 
