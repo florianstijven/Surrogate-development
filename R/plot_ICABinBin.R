@@ -2,8 +2,10 @@ plot.ICA.BinBin <- function(x, R2_H=TRUE, R_H=FALSE, Theta_T=FALSE, Theta_S=FALS
                             Type="Density", Labels=FALSE, Xlab.R2_H, Main.R2_H, Xlab.R_H, Main.R_H,
                             Xlab.Theta_S, Main.Theta_S, Xlab.Theta_T, Main.Theta_T, Cex.Legend=1, 
                             Cex.Position="topright", 
-                            col, Par=par(oma=c(0, 0, 0, 0), mar=c(5.1, 4.1, 4.1, 2.1)), ...){
+                            col, Par=par(oma=c(0, 0, 0, 0), mar=c(5.1, 4.1, 4.1, 2.1)), ylim, ...){
   
+  if (missing(ylim)==TRUE) {Eigen.Y.Lim = 0}
+  if (missing(ylim)==FALSE) {Eigen.Y.Lim = 1}
   Object <- x 
   
 #  if (C3==TRUE){
@@ -118,7 +120,12 @@ plot.ICA.BinBin <- function(x, R2_H=TRUE, R_H=FALSE, Theta_T=FALSE, Theta_S=FALS
       
       if (exists("max_val")==FALSE){max_val <- max(density(R2_H_General)$y)}
       
+      if (Eigen.Y.Lim == 0){
       plot(density(x$R2_H, na.rm = T), xlab=Xlab.R2_H, ylab="Density", main=Main.R2_H, lwd=2, ylim = c(0, max_val), col=0)
+      }
+      if (Eigen.Y.Lim == 1){
+        plot(density(x$R2_H, na.rm = T), xlab=Xlab.R2_H, ylab="Density", main=Main.R2_H, lwd=2, ylim = ylim, col=0)
+      }
       try(lines(density((R2_H_No), na.rm = T), lty=1, col=1, lwd=3), silent=TRUE) 
       try(lines(density((R2_H_Surr), na.rm = T), lty=2, col=2, lwd=3), silent=TRUE)
       try(lines(density((R2_H_True), na.rm = T), lty=3, col=3, lwd=3), silent=TRUE)

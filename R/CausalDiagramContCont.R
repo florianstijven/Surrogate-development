@@ -14,10 +14,10 @@ if (class(x)=="MICA.ContCont"){
 }  
 
   med_T0T1 <- round(median(sub$T0T1), digits=2)
-  med_T0S0 <- unique(round(sub$T0S0, digits=2))
+  med_T0S0 <- unique(round(mean(sub$T0S0, na.rm=TRUE), digits=2))
   med_T0S1 <- round(median(sub$T0S1), digits=2)
   med_T1S0 <- round(median(sub$T1S0), digits=2)
-  med_T1S1 <- unique(round(sub$T1S1, digits=2))
+  med_T1S1 <- unique(round(mean(sub$T1S1, na.rm=TRUE), digits=2))
   med_S0S1 <- round(median(sub$S0S1), digits=2)
   
   par(mar = c(0.1, 0.1, 0.1, 0.1))

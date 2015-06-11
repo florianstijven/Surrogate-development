@@ -84,6 +84,16 @@ T0S1=seq(0, 1, by=.2), T1S0=seq(0, 1, by=.2), S0S1=seq(0, 1, by=.2))
 # Examine and plot the vector of the generated MICA values:
 summary(SurMICA)
 plot(SurMICA)
+
+
+# Same as first analysis, but specify vectors for rho_T0S0 and rho_T1S1: 
+# Sample from normal with mean .8 and SD=.1 (to account for uncertainty 
+# in estimation) 
+SurMICA <- MICA.ContCont(Trial.R=.80, D.aa=5, D.bb=10, 
+T0S0=rnorm(n=10000000, mean=.8, sd=.1), 
+T1S1=rnorm(n=10000000, mean=.8, sd=.1),
+T0T0=90, T1T1=100, S0S0=10, S1S1=15, T0T1=seq(0, 1, by=.2), 
+T0S1=seq(0, 1, by=.2), T1S0=seq(0, 1, by=.2), S0S1=seq(0, 1, by=.2))
 }
 \keyword{Causal-Inference framework}
 \keyword{Counterfactuals}

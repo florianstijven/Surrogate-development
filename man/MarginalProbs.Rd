@@ -8,8 +8,8 @@ MarginalProbs(Dataset=Dataset, Surr=Surr, True=True, Treat=Treat)
 }
 \arguments{
     \item{Dataset}{A \code{data.frame} that should consist of one line per patient. Each line contains (at least) a binary surrogate value, a binary true endpoint value, and a treatment indicator. }
-  \item{Surr}{The name of the variable in \code{Dataset} that contains the binary surrogate endpoint values.}
-  \item{True}{The name of the variable in \code{Dataset} that contains the binary true endpoint values.}
+  \item{Surr}{The name of the variable in \code{Dataset} that contains the binary surrogate endpoint values. Should be coded as \eqn{0} and \eqn{1}.}
+  \item{True}{The name of the variable in \code{Dataset} that contains the binary true endpoint values. Should be coded as \eqn{0} and \eqn{1}.}
   \item{Treat}{The name of the variable in \code{Dataset} that contains the treatment indicators. The treatment indicator should be coded as \eqn{1} for the experimental group and \eqn{-1} for the control group. }
 }
 \value{   

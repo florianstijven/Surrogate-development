@@ -1,8 +1,26 @@
-ICA.ContCont <- function(T0S0, T1S1, T0T0=1, T1T1=1, S0S0=1, S1S1=1, T0T1=seq(-1, 1, by=.1), T0S1=seq(-1, 1, by=.1), T1S0=seq(-1, 1, by=.1), S0S1=seq(-1, 1, by=.1)) { 
+ICA.ContCont <- function(T0S0, T1S1, T0T0=1, T1T1=1, S0S0=1, S1S1=1, 
+                         T0T1=seq(-1, 1, by=.1), T0S1=seq(-1, 1, by=.1), T1S0=seq(-1, 1, by=.1), 
+                         S0S1=seq(-1, 1, by=.1)) { 
+  
+  T0S0_hier <- T0S0[1]
+  T1S1_hier <- T1S1[1]
   
   Results <- na.exclude(matrix(NA, 1, 9))  
   colnames(Results) <- c("T0T1", "T0S0", "T0S1", "T1S0", "T1S1", "S0S1", "ICA", "Sigma.Delta.T", "delta") 
-  combins <- expand.grid(T0T1, T0S0, T0S1, T1S0, T1S1, S0S1)
+  combins <- expand.grid(T0T1, T0S0_hier, T0S1, T1S0, T1S1_hier, S0S1)
+  lengte <- dim(combins)[1]
+  
+  if (length(T0S0)>1){
+    if (length(T0S0)<lengte){stop("The specified vector for T0S0 should be larger than ", lengte) }
+    T0S0_vector <- T0S0[1:lengte] # sample
+    combins[,2] <- T0S0_vector
+  }
+  if (length(T1S1)>1){
+    if (length(T1S1)<lengte){stop("The specified vector for T1S1 should be larger than ", lengte) }
+        T1S1_vector <- T1S1[1:lengte] # sample
+    combins[,5] <- T1S1_vector
+  }
+  
   
   for (i in 1: nrow(combins)) {   
     T0T1 <- combins[i, 1]  

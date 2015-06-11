@@ -6,7 +6,7 @@ The function \code{ICA.ContCont} quantifies surrogacy in the single-trial causal
 \usage{ICA.ContCont(T0S0, T1S1, T0T0=1, T1T1=1, S0S0=1, S1S1=1, T0T1=seq(-1, 1, by=.1), 
 T0S1=seq(-1, 1, by=.1), T1S0=seq(-1, 1, by=.1), S0S1=seq(-1, 1, by=.1))}
 \arguments{
-  \item{T0S0}{A scalar or vector that specifies the correlation(s) between the surrogate and the true endpoint in the control treatment condition that should be considered in the computation of \eqn{\rho_{\Delta}}.}
+  \item{T0S0}{A scalar or vector that specifies the correlation(s) between the surrogate and the true endpoint in the control treatment condition that should be considered in the computation of \eqn{\rho_{\Delta}}. }
   \item{T1S1}{A scalar or vector that specifies the correlation(s) between the surrogate and the true endpoint in the experimental treatment condition that should be considered in the computation of \eqn{\rho_{\Delta}}.}
   \item{T0T0}{A scalar that specifies the variance of the true endpoint in the control treatment condition that should be considered in the computation of \eqn{\rho_{\Delta}}. Default 1.}
   \item{T1T1}{A scalar that specifies the variance of the true endpoint in the experimental treatment condition that should be considered in the computation of \eqn{\rho_{\Delta}}. Default 1.}
@@ -68,6 +68,19 @@ plot(SurICA)
 # specified (vectors) of the correlations (these matrices are used to 
 # compute the ICA values)
 SurICA$Pos.Def
+
+# Same, but specify vectors for rho_T0S0 and rho_T1S1: Sample from
+# normal with mean .95 and SD=.05 (to account for uncertainty 
+# in estimation) 
+SurICA2 <- ICA.ContCont(T0S0=rnorm(n=10000000, mean=.95, sd=.05), 
+T1S1=rnorm(n=10000000, mean=.95, sd=.05), 
+T0T0=90, T1T1=100, S0S0=10, S1S1=15,
+T0T1=seq(0, 1, by=.2), T0S1=seq(0, 1, by=.2), T1S0=seq(0, 1, by=.2), 
+S0S1=seq(0, 1, by=.2))
+
+# Examine results
+summary(SurICA2)
+plot(SurICA2)
 }
 \keyword{Causal-Inference framework}
 \keyword{Counterfactuals}

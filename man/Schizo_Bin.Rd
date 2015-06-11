@@ -2,19 +2,19 @@
 \alias{Schizo_Bin}
 \docType{data}
 \title{
-Data of five clinical trials in Schizophrenia (with binary outcomes).
+Data of a clinical trial in Schizophrenia (with binary outcomes).
 }
 \description{
-These are the data of five clinical trials in Schizophrenia. A total of \eqn{2128} patients were treated by \eqn{198} investiagators (psychiatrists). Patients' Schizophrenia symptoms at baseline and at the end of the study were measured using the PANSS and BPRS. 
+These are the data of a clinical trial in Schizophrenia (a subset of the dataset \code{Schizo_Bin}, study \eqn{1} where the patients were administered \eqn{10} mg. of haloperidol or \eqn{8} mg. of risperidone). A total of \eqn{454} patients were treated by \eqn{117} investigators (psychiatrists). Patients' schizophrenia symptoms at baseline and at the end of the study (after \eqn{8} weeks) were measured using the PANSS and BPRS. 
 The variables BPRS_Bin and PANSS_Bin are binary outcomes that indicate whether clinically meaningful change had occurred (1 = a reduction of \eqn{20}\% or higher in the PANSS/BPRS scores at the last measurement compared to baseline; 0 = no such reduction; Leucht et al., 2005; Kay et al., 1988).
 }
 \usage{data(Schizo_Bin)}
 \format{
-A \code{data.frame} with \eqn{2128} observations on \eqn{5} variables.
+A \code{data.frame} with \eqn{454} observations on \eqn{5} variables.
   \describe{
     \item{\code{Id}}{The patient ID.}
-    \item{\code{InvestID}}{The ID of the investigator (psychiatrist) who treated the patient.}
-    \item{\code{Treat}}{The treatment indicator, coded as \eqn{-1} = control and \eqn{1} = Risperidone.}
+    \item{\code{InvestI}}{The ID of the investigator (psychiatrist) who treated the patient.}
+    \item{\code{Treat}}{The treatment indicator, coded as \eqn{-1} = control treatment (10 mg. haloperidol) and \eqn{1} = experimental treatment (8 mg. risperidone).}
     \item{\code{PANSS_Bin}}{The dichotomized change in the PANSS score (1 = a
 reduction of \eqn{20}\% or more in the PANSS score, 0=otherwise)}
     \item{\code{BPRS_Bin}}{The dichotomized change in the BPRS score (1 = a
