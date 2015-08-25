@@ -58,8 +58,8 @@ MixedContContIT <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID,
   }
   
   # residuals
-  Residuals.Model.S <- resid(Model.S) 
-  Residuals.Model.T <- resid(Model.T)
+  Residuals.Model.S <- residuals(Model.S) 
+  Residuals.Model.T <- residuals(Model.T)
   Residuals <- data.frame(Residuals.Model.T, Residuals.Model.S) 
   rownames(Residuals) <- NULL
   Residuals <- cbind(wide$Pat.ID, Residuals)

@@ -15,7 +15,7 @@ Weighted=TRUE, Min.Trial.Size=2, Alpha=.05, Number.Bootstraps=500,
   \item{Dataset}{A \code{data.frame} that should consist of one line per patient. Each line contains (at least) a surrogate value, a true endpoint value, a treatment indicator, a patient ID, and a trial ID.}
   \item{Surr}{The name of the variable in \code{Dataset} that contains the surrogate endpoint values.}
   \item{True}{The name of the variable in \code{Dataset} that contains the true endpoint values.}
-  \item{Treat}{The name of the variable in \code{Dataset} that contains the treatment indicators. The treatment indicator should either be coded as \eqn{1} for the experimental group and \eqn{-1} for the control group, or as \eqn{1} for the experimental group and \eqn{0} for the control group. The \eqn{-1/1} coding is recommended. }
+  \item{Treat}{The name of the variable in \code{Dataset} that contains the treatment indicators. The treatment indicator should either be coded as \eqn{1} for the experimental group and \eqn{-1} for the control group, or as \eqn{1} for the experimental group and \eqn{0} for the control group. }
   \item{Trial.ID}{The name of the variable in \code{Dataset} that contains the trial ID to which the patient belongs.}
   \item{Pat.ID}{The name of the variable in \code{Dataset} that contains the patient's ID.}
   \item{Model}{The type of model that should be fitted, i.e., \code{Model=c("Full")}, \code{Model=c("Reduced")}, or \code{Model=c("SemiReduced")}. See the \bold{Details} section below. Default \code{Model=c("Full")}. }

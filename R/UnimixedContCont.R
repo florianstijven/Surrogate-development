@@ -27,10 +27,10 @@ UnimixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model
     Model.S <- lmer(outcome ~ Treat+(1+Treat|Trial.ID), data=dataS, ...)  
     Model.T <- lmer(outcome ~ Treat+(1+Treat|Trial.ID), data=dataT, ...)
     
-    Intercept.S <- coefficients(Model.S)$Trial.ID[,1]
-    Treatment.S <- coefficients(Model.S)$Trial.ID[,2]
-    Intercept.T <- coefficients(Model.T)$Trial.ID[,1]
-    Treatment.T <- coefficients(Model.T)$Trial.ID[,2]
+    Intercept.S <- coef(Model.S)$Trial.ID[,1] #coefficients
+    Treatment.S <- coef(Model.S)$Trial.ID[,2]
+    Intercept.T <- coef(Model.T)$Trial.ID[,1]
+    Treatment.T <- coef(Model.T)$Trial.ID[,2]
     Results.Stage.1 <- data.frame(Obs.per.trial$Trial, Obs.per.trial$Obs.per.trial, Intercept.S, Intercept.T, Treatment.S, Treatment.T)         
     colnames(Results.Stage.1) <- c(NULL, "Trial", "Obs.per.trial", "Intercept.S", "Intercept.T", "Treatment.S", "Treatment.T")
     rownames(Results.Stage.1) <- NULL
@@ -41,8 +41,8 @@ UnimixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model
     colnames(Residuals.Stage.1) <- c("Pat.ID", "Residuals.Model.S", "Residuals.Model.T") 
     rownames(Residuals.Stage.1) <- NULL
     
-    Fixed.effect.pars.S <- matrix(summary(Model.S)$coefficients[1:2], nrow=2)  # intercept S en treat S
-    Fixed.effect.pars.T <- matrix(summary(Model.T)$coefficients[1:2], nrow=2) 
+    Fixed.effect.pars.S <- matrix(summary(Model.S)$coef[1:2], nrow=2)  # intercept S en treat S
+    Fixed.effect.pars.T <- matrix(summary(Model.T)$coef[1:2], nrow=2) 
     rownames(Fixed.effect.pars.S) <- c("Intercept.S" , "Treatment.S")  
     rownames(Fixed.effect.pars.T) <- c("Intercept.T" , "Treatment.T")
     Fixed.Effect.Pars <- data.frame(rbind(Fixed.effect.pars.S, Fixed.effect.pars.T))
@@ -61,9 +61,9 @@ UnimixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model
     Model.S <- lmer(outcome ~ Treat+(-1+Treat|Trial.ID), data=dataS, ...)  
     Model.T <- lmer(outcome ~ Treat+(-1+Treat|Trial.ID), data=dataT, ...)
     
-    Treatment.S <- coefficients(Model.S)$Trial.ID[,2]
+    Treatment.S <- coef(Model.S)$Trial.ID[,2]
     names(Treatment.S)<-"Treatment.S"
-    Treatment.T <- coefficients(Model.T)$Trial.ID[,2]
+    Treatment.T <- coef(Model.T)$Trial.ID[,2]
     names(Treatment.T)<-"Treatment.T"
     Results.Stage.1 <- data.frame(Obs.per.trial$Trial, Obs.per.trial$Obs.per.trial, Treatment.S, Treatment.T)         
     colnames(Results.Stage.1) <- c(NULL, "Trial", "Obs.per.trial", "Treatment.S", "Treatment.T")
@@ -76,9 +76,9 @@ UnimixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model
     colnames(Residuals.Stage.1) <- c("Pat.ID", "Residuals.Model.S", "Residuals.Model.T") 
     rownames(Residuals.Stage.1) <- NULL
     
-    Fixed.effect.pars.S <- matrix(summary(Model.S)$coefficients[1:2], nrow=2) 
+    Fixed.effect.pars.S <- matrix(summary(Model.S)$coef[1:2], nrow=2) 
     rownames(Fixed.effect.pars.S)[1:2]<-c("Intercept.S", "Treatment.S")
-    Fixed.effect.pars.T <- matrix(summary(Model.T)$coefficients[1:2], nrow=2) 
+    Fixed.effect.pars.T <- matrix(summary(Model.T)$coef[1:2], nrow=2) 
     rownames(Fixed.effect.pars.T)[1:2]<-c("Intercept.T", "Treatment.T")
     Fixed.Effect.Pars <- data.frame(rbind(Fixed.effect.pars.S, Fixed.effect.pars.T))
     colnames(Fixed.Effect.Pars) <- c(" ")

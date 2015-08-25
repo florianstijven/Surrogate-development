@@ -1,3 +1,7 @@
+Changes in version 0.1-61
+  o Corrected typos, updated namespace, functions TrialLevelContCont and TwoStageSurvSurv added
+
+
 Changes in version: Surrogate_0.1-6
 
   o The function Test.Mono has been added

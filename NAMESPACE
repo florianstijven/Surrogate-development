@@ -1,21 +1,57 @@
+import(rgl)
+import(lattice)
+import(latticeExtra)
+
+
+import(survival)
 
 import(MASS)
-import(lme4)
+#import(lme4)
 import(msm)
-import(lattice, latticeExtra)
-import(rgl)
+import(graphics)
+import(grDevices)
 
 # Imported functions
 importFrom("nlme", lme)
+importFrom("lme4", lmer)
+importFrom("lme4", ranef)
+importFrom("lme4", fixef)
+importFrom("stats", na.exclude)
+importFrom("stats", reshape)
+importFrom("stats", var)
+importFrom("stats", lm)
+importFrom("stats", residuals)
+importFrom("stats", qnorm)
+importFrom("stats", cor)
+importFrom("stats", coef)
+importFrom("stats", median)
+importFrom("stats", gaussian)
+importFrom("stats", logLik)
+importFrom("stats", qchisq)
+importFrom("stats", runif)
+importFrom("stats", density)
+importFrom("stats", sd)
+importFrom("stats", cov2cor)
+importFrom("stats", glm)
+importFrom("stats", rbinom)
+importFrom("stats", qt)
+importFrom("stats", vcov)
+importFrom("stats", ecdf)
+importFrom("stats", quantile)
+#importFrom("survival", Surv)
+#importFrom("survival", coxph)
+
+importFrom("utils", capture.output)
 
 
 exportPattern("^[[:alpha:]]+")
 export(plot.UnifixedContCont, plot.UnimixedContCont, plot.BifixedContCont, plot.BimixedContCont, 
 plot.FixedContContIT, plot.ICA.ContCont, plot.MICA.ContCont, plot.MinSurrContCont, plot.SPF.BinBin,
-plot.Single.Trial.RE.AA, plot.MixedContContIT, plot.ICA.BinBin, summary.UnifixedContCont,
+plot.Single.Trial.RE.AA, plot.MixedContContIT, plot.ICA.BinBin, plot.TrialLevelContCont, summary.UnifixedContCont, 
 summary.UnimixedContCont, summary.BifixedContCont, summary.BimixedContCont,
 summary.FixedContContIT, summary.FixedContContIT, summary.ICA.BinBin, summary.ICA.ContCont, 
-summary.MICA.ContCont, summary.MinSurrContCont, summary.SPF.BinBin, summary.Single.Trial.RE.AA)
+summary.MICA.ContCont, summary.MinSurrContCont, summary.SPF.BinBin, summary.Single.Trial.RE.AA, 
+summary.TrialLevelContCont, summary.TwoStageSurvSurv)
 
 S3method(plot, UnifixedContCont)
 S3method(plot, UnimixedContCont)
@@ -29,6 +65,8 @@ S3method(plot, SPF.BinBin)
 S3method(plot, Single.Trial.RE.AA)
 S3method(plot, MixedContContIT)
 S3method(plot, ICA.BinBin)
+S3method(plot, TrialLevelContCont)
+S3method(plot, TwoStageSurvSurv)
 
 S3method(summary, UnifixedContCont)
 S3method(summary, UnimixedContCont)
@@ -42,6 +80,5 @@ S3method(summary, MICA.ContCont)
 S3method(summary, MinSurrContCont)
 S3method(summary, SPF.BinBin)
 S3method(summary, Single.Trial.RE.AA)
-
-
-
+S3method(summary, TrialLevelContCont)
+S3method(summary, TwoStageSurvSurv)
