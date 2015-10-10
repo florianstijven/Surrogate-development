@@ -12,8 +12,15 @@
 \alias{summary.Single.Trial.RE.AA}
 \alias{summary.SPF.BinBin}
 \alias{summary.ICA.BinBin}
-\alias{summary.TrialLevelContCont}
+\alias{summary.TrialLevelMA}
 \alias{summary.TwoStageSurvSurv}
+\alias{summary.Prentice}
+\alias{summary.PredTrialTContCont}
+\alias{summary.FixedBinBinIT}
+\alias{summary.FixedBinContIT}
+\alias{summary.FixedContBinIT}
+\alias{summary.SurvSurv}
+\alias{summary.TrialLevelIT}
 \title{Summary}
 \description{summary}
 \usage{
@@ -29,7 +36,14 @@
 \method{summary}{Single.Trial.RE.AA}(object, ..., Object)
 \method{summary}{SPF.BinBin}(object, ..., Object)
 \method{summary}{ICA.BinBin}(object, ..., Object)
-\method{summary}{TrialLevelContCont}(object, ..., Object)
+\method{summary}{TrialLevelMA}(object, ..., Object)
 \method{summary}{TwoStageSurvSurv}(object, ..., Object)
+\method{summary}{Prentice}(object, ..., Object)
+\method{summary}{PredTrialTContCont}(object, ..., Object)
+\method{summary}{FixedBinBinIT}(object, ..., Object)
+\method{summary}{FixedBinContIT}(object, ..., Object)
+\method{summary}{FixedContBinIT}(object, ..., Object)
+\method{summary}{SurvSurv}(object, ..., Object)
+\method{summary}{TrialLevelIT}(object, ..., Object)
 }
 \keyword{internal}

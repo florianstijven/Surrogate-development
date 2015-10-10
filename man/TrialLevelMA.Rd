@@ -1,12 +1,11 @@
-\name{TrialLevelContCont}
-\alias{TrialLevelContCont}
-\title{Estimates trial-level surrogacy based on treatment effects on S and T (continuous-continuous case)
-}
+\name{TrialLevelMA}
+\alias{TrialLevelMA}
+\title{Estimates trial-level surrogacy in the meta-analytic framework}
 \description{
-The function \code{TrialLevelContCont} estimates trial-level surrogacy based on the vectors of treatment effects on \eqn{S} (i.e., \eqn{\alpha_{i}}) and \eqn{T} (i.e., \eqn{\beta_{i}}) in the different trials. In particular, \eqn{\beta_{i}} is regressed on \eqn{\alpha_{i}} and the classical coefficient of determination of the fitted model provides an estimate of \eqn{R^2_{trial}}. In addition, the standard error and CI are provided.   
+The function \code{TrialLevelMA} estimates trial-level surrogacy based on the vectors of treatment effects on \eqn{S} (i.e., \eqn{\alpha_{i}}) and \eqn{T} (i.e., \eqn{\beta_{i}}) in the different trials. In particular, \eqn{\beta_{i}} is regressed on \eqn{\alpha_{i}} and the classical coefficient of determination of the fitted model provides an estimate of \eqn{R^2_{trial}}. In addition, the standard error and CI are provided.   
 }
 \usage{
-TrialLevelContCont(Alpha.Vector, Beta.Vector, 
+TrialLevelMA(Alpha.Vector, Beta.Vector, 
 N.Vector, Weighted=TRUE, Alpha=.05)
 }
 \arguments{
@@ -16,7 +15,7 @@ N.Vector, Weighted=TRUE, Alpha=.05)
 \item{Weighted}{Logical. If \code{TRUE}, then a weighted regression analysis is conducted. If \code{FALSE}, then an unweighted regression analysis is conducted. Default \code{TRUE}.}
   \item{Alpha}{The \eqn{\alpha}-level that is used to determine the confidence intervals around \eqn{R^2_{trial}} and \eqn{R_{trial}}. Default \eqn{0.05}.}
 }
-\value{An object of class \code{TrialLevelContCont} with components,
+\value{An object of class \code{TrialLevelMA} with components,
 \item{Alpha.Vector}{The vector of treatment effects on \eqn{S} in the different trials.}
 \item{Beta.Vector}{The vector of treatment effects on \eqn{T} in the different trials.}
 \item{N.Vector}{The vector of trial sizes \eqn{N_{i}}.}
@@ -45,14 +44,13 @@ Beta.Vector <- (Alpha.Vector * 3) + runif(min = -5, max = 5, n = 51)
 N.Vector <- rep(10, times=51)
 
 # Apply the function to estimate R^2_{trial}
-Fit <- TrialLevelContCont(Alpha.Vector=Alpha.Vector,
+Fit <- TrialLevelMA(Alpha.Vector=Alpha.Vector,
 Beta.Vector=Beta.Vector, N.Vector=N.Vector)
 
 # Plot the results and obtain summary
 plot(Fit)
 summary(Fit)
 }
-
 \keyword{Multiple-trial setting}
 \keyword{Meta-analytic framework}
 \keyword{Trial-level surrogacy}

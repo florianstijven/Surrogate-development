@@ -7,8 +7,8 @@ The function \code{UnifixedContCont} uses the univariate fixed-effects approach 
 }
 \usage{
 UnifixedContCont(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model=c("Full"), 
-Weighted=TRUE, Min.Trial.Size=2, Alpha=.05, Number.Bootstraps=500)
-}
+Weighted=TRUE, Min.Trial.Size=2, Alpha=.05, Number.Bootstraps=500, 
+Seed=sample(1:1000, size=1))}
 \arguments{
   \item{Dataset}{A \code{data.frame} that should consist of one line per patient. Each line contains (at least) a surrogate value, a true endpoint value, a treatment indicator, a patient ID, and a trial ID.}
   \item{Surr}{The name of the variable in \code{Dataset} that contains the surrogate endpoint values.}
@@ -22,6 +22,7 @@ Weighted=TRUE, Min.Trial.Size=2, Alpha=.05, Number.Bootstraps=500)
 \item{Min.Trial.Size}{The minimum number of patients that a trial should contain to be included in the analysis. If the number of patients in a trial is smaller than the value specified by \code{Min.Trial.Size}, the data of the trial are excluded from the analysis. Default \eqn{2}.}
   \item{Alpha}{The \eqn{\alpha}-level that is used to determine the confidence intervals around \eqn{R^2_{trial}}, \eqn{R_{trial}}, \eqn{R^2_{indiv}}, and \eqn{R_{indiv}}. Default \eqn{0.05}.}
 \item{Number.Bootstraps}{The standard errors and confidence intervals for \eqn{R^2_{indiv}} and \eqn{R_{indiv}} are determined as based on a bootstrap procedure. \code{Number.Bootstraps} specifies the number of bootstrap samples that are used. Default \eqn{500}.}
+\item{Seed}{The seed to be used in the bootstrap procedure. Default \eqn{sample(1:1000, size=1)}.}
 }
 \details{
 When the full bivariate mixed-effects model is fitted to assess surrogacy in the meta-analytic framework (for details, Buyse & Molenberghs, 2000), computational issues often occur. In that situation, the use of simplified model-fitting strategies may be warranted (for details, see see Burzykowski et al., 2005; Tibaldi et al., 2003). 

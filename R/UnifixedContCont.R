@@ -1,5 +1,5 @@
 UnifixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model=c("Full"), Weighted=TRUE, Min.Trial.Size=2, 
-                     Alpha=.05, Number.Bootstraps=500){
+                     Alpha=.05, Number.Bootstraps=500, Seed=sample(1:1000, size=1)){
   
   if ((Model==c("Full") | Model==c("Reduced") | Model==c("SemiReduced"))==FALSE) {stop ("The specification of the Model=c(\"...\") argument of the call is incorrect. Use either Model=c(\"Full\"), Model=c(\"Reduced\"), or Model=c(\"SemiReduced\").")}     
   Surr <- Dataset[,paste(substitute(Surr))]
@@ -97,7 +97,9 @@ UnifixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model
   Boot.r <-rep(0, Number.Bootstraps)
   for (j in 1:Number.Bootstraps){
     obs <- c(1:N.total)
+    set.seed(Seed)
     Indicator <- sample(obs, N.total, replace=TRUE)  
+    Seed <- Seed + 1
     Sample.boot.S <- data.frame(dataS[Indicator,])
     Sample.boot.T <- data.frame(dataT[Indicator,])
     Sample.boot.S <- na.exclude(Sample.boot.S[order(Sample.boot.S$Pat.ID),])   

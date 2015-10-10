@@ -1,5 +1,4 @@
-
-summary.TwoStageSurvSurv <- function(object, ..., Object){
+summary.SurvSurv <- function(object, ..., Object){
   
   if (missing(Object)){Object <- object} 
   cat("\nFunction call:\n\n")
@@ -16,6 +15,10 @@ summary.TwoStageSurvSurv <- function(object, ..., Object){
   cat("\n\n")
   print(format(round(Object$R2.ht, 4), nsmall = 4))
   cat("\n")
-  print(format(round(Object$R.ht, 4), nsmall = 4))
+  
+  cat("\n\n\n# R^2_{h.ind} results")
+  cat("\n#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+  cat("\n\n")
+  print(format(round(Object$R2.hInd, 4), nsmall = 4))
   cat("\n")
   }

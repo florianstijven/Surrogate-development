@@ -1,6 +1,6 @@
 \name{TwoStageSurvSurv}
 \alias{TwoStageSurvSurv}
-\title{Assess trial-level surrogacy for two survival endpoints}
+\title{Assess trial-level surrogacy for two survival endpoints using a two-stage approach}
 \description{
 The function \code{TwoStageSurvSurv} uses a two-stage approach to estimate \eqn{R^2_{trial}}. In stage 1, trial-specific Cox proportional hazard models are fitted and in stage 2 the trial-specific estimated treatment effects on \eqn{T} are regressed on the trial-specific estimated treatment effects on \eqn{S} (measured on the log hazard ratio scale). The user can specify whether a weighted or unweighted model should be fitted at stage 2. See the \bold{Details} section below.   
 }
@@ -39,7 +39,7 @@ The classical coefficient of determination of the fitted stage 2 model provides 
 }
 
 \value{An object of class \code{TwoStageSurvSurv} with components,
-  \item{Data.Analyze}{Prior to conducting the surrogacy analysis, data of trials that do not have at least three patients per treatment arm are excluded due to extimation constraints (Burzykowski et al., 2001). \code{Data.Analyze} is the dataset on which the surrogacy analysis was conducted.}
+  \item{Data.Analyze}{Prior to conducting the surrogacy analysis, data of trials that do not have at least three patients per treatment arm are excluded due to estimation constraints (Burzykowski et al., 2001). \code{Data.Analyze} is the dataset on which the surrogacy analysis was conducted.}
   \item{Results.Stage.1}{The results of stage 1 of the two-stage model fitting approach: a \code{data.frame} that contains the trial-specific log hazard ratio estimates of the treatment effects for the surrogate and the true endpoints.}
   \item{Results.Stage.2}{An object of class \code{lm} (linear model) that contains the parameter estimates of the regression model that is fitted in stage 2 of the analysis.}
   \item{Trial.R2}{A \code{data.frame} that contains the trial-level coefficient of determination (\eqn{R^2_{trial}}), its standard error and confidence interval.}
@@ -71,7 +71,7 @@ plot(Results)
 }
 
 \keyword{Multiple-trial setting}
-\keyword{Meta-analytic framework}
+\keyword{Information-theoretic framework}
 \keyword{Trial-level surrogacy}
 \keyword{Cox proportional hazards model}
 \keyword{Survival endpoints}

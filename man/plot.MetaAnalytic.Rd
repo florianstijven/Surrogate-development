@@ -107,3 +107,4 @@ plot(SurSTS, Trial.Level=TRUE, Indiv.Level=TRUE)
 \keyword{Individual-level surrogacy}
 \keyword{Multiple-trial setting}
 \keyword{Single-trial setting}
+\keyword{Continuous endpoint}

@@ -25,11 +25,17 @@ Wim Van der Elst, Ariel Alonso, & Geert Molenberghs
 \seealso{\link{TwoStageSurvSurv}
 }
 \examples{
-# @@
+# Open Ovarian dataset
+data(Ovarian)
+# Conduct analysis
+Results <- TwoStageSurvSurv(Dataset = Ovarian, Surr = Pfs, SurrCens = PfsInd,
+True = Surv, TrueCens = SurvInd, Treat = Treat, Trial.ID = Center)
+# Examine results of analysis
+summary(Results)
+plot(Results)
 }
-
 \keyword{Plot surrogacy}
-\keyword{Meta-analytic framework}
+\keyword{Information-theoretic framework}
 \keyword{Trial-level surrogacy}
 \keyword{Multiple-trial setting}
 \keyword{Single-trial setting}

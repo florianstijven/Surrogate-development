@@ -103,7 +103,7 @@ rownames(R2ht) <- c(" ")
 
   # Individual-level surrogacy   
 Model.0 <- glm(True ~ -1 + as.factor(Trial.ID) + as.factor(Trial.ID):Treat, family=distribution.T(link=link.choice.T), data=wide)      
-Model.1 <- glm(True ~ as.factor(Trial.ID) + as.factor(Trial.ID):Treat + as.factor(Trial.ID):Surr,  # LS!
+Model.1 <- glm(True ~ -1 + as.factor(Trial.ID) + as.factor(Trial.ID):Treat + as.factor(Trial.ID):Surr,  # LS!
                family=distribution.T(link=link.choice.T), data=wide)
 L0 <- -2 * logLik(Model.0)[1]    
 L1 <- -2 * logLik(Model.1)[1]    
@@ -153,7 +153,7 @@ for (i in 1:N.trial) {
      sum.tot.part <- exp(-G.i/n.i)    # G_i niet ^2
      sum.tot <- sum.tot + sum.tot.part
        }
-     R2h.single.c.b <<- 1-(1/count)*(sum.tot) 
+     R2h.ind.c.b.val <- 1-(1/count)*(sum.tot) 
             } }}
      }
    
@@ -184,14 +184,13 @@ for (i in 1:N.trial) {
      n.i <- nrow(Data.temp)
 
      if (abs(L1.temp) != Inf | abs(L2.temp) != Inf){   
-     G.i <- -(L2.temp-L1.temp)
-      count <- count + 1    
-      sum.tot.part <- exp(-((G.i) / n.i))    
-      sum.tot <- sum.tot + sum.tot.part           
-     }
-     }} }
-     R2h.single.c.b <- 1-(1/count)*(sum.tot)
-     Boot.CI[j] <- R2h.single.c.b
+       if (G.i != 0){
+         count <- count + 1    
+         sum.tot.part <- exp(-((G.i) / n.i))    
+         sum.tot <- sum.tot + sum.tot.part}
+     }}}}
+    R2h.ind.c.b <- 1-(1/count)*(sum.tot)
+     Boot.CI[j] <- R2h.ind.c.b
        }
      }
      
@@ -199,9 +198,9 @@ for (i in 1:N.trial) {
      Mean.Boot.CI <- mean(Boot.CI)
      Var.Boot.CI <- var(Boot.CI)
      Sort.CI <- sort(Boot.CI)
-     Boot.CI.R2.lb <- R2h.single.c.b + qnorm(Alpha/2)*sqrt(Var.Boot.CI)    
-     Boot.CI.R2.ub <- R2h.single.c.b - qnorm(Alpha/2)*sqrt(Var.Boot.CI)
-     R2h.cluster.based <- data.frame(cbind(R2h.single.c.b, sqrt(Var.Boot.CI), Boot.CI.R2.lb, Boot.CI.R2.ub))
+     Boot.CI.R2.lb <- max(0, R2h.ind.c.b.val + qnorm(Alpha/2)*sqrt(Var.Boot.CI))    
+     Boot.CI.R2.ub <- min(1, R2h.ind.c.b.val - qnorm(Alpha/2)*sqrt(Var.Boot.CI))
+     R2h.cluster.based <- data.frame(cbind(R2h.ind.c.b.val, sqrt(Var.Boot.CI), Boot.CI.R2.lb, Boot.CI.R2.ub))
      colnames(R2h.cluster.based) <- c("R2h", "Standard Error", "CI lower limit", "CI upper limit")
      rownames(R2h.cluster.based) <- c(" ")
   
@@ -231,7 +230,7 @@ for (i in 1:N.trial) {
   
   fit <- 
     list(Data.Analyze=wide, Obs.Per.Trial=Obs.per.trial, Trial.Spec.Results=Trial.Spec.Results,  
-         R2ht=R2ht, R2h=R2h.cluster.based, R2h.Single=R2h.single, Boot.CI=Boot.CI, Cor.Endpoints=Cor.Endpoints, Residuals=Residuals, Call=match.call())   
+         R2ht=R2ht, R2h.Ind=R2h.cluster.based, R2h.Ind.Single=R2h.single, Boot.CI=Boot.CI, Cor.Endpoints=Cor.Endpoints, Residuals=Residuals, Call=match.call())   
   
   class(fit) <- "FixedContContIT"
   fit  

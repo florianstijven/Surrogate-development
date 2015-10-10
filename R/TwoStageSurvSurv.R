@@ -17,11 +17,11 @@ TwoStageSurvSurv <- function(Dataset, Surr, SurrCens, True, TrueCens, Treat,
     Trial.Size <- dim(Data_hier)[1]
     Trial.Name <- unique(Trial.ID)[i]
     
-    if (min(table(Data_hier$Treat))<3){
-     cat("\nNote. The trial with ID# ", unique(Trial.ID)[i], " did not have >=3 observations in each treatment arm and \nwas excluded from the analyses due to estimability constraints. \n", sep="")
-     }    
+    Data_hier$Treat[Data_hier$Treat==-1] <- 0
+    if ((dim(Data_hier[Data_hier$Treat==0,])[1]<3) & ((dim(Data_hier[Data_hier$Treat==1,])[1])<3)){
+      cat("\nNote. The trial with ID ", unique(Trial.ID)[i], " did not have >=3 observations in each treatment arm and \nwas excluded from the trial-level analyses (estimation of R2_ht) due to estimability constraints. \n", sep="")}    
     
-    if (min(table(Data_hier$Treat))>=3){
+    if ((dim(Data_hier[Data_hier$Treat==0,])[1]>=3) & ((dim(Data_hier[Data_hier$Treat==1,])[1])>=3)){
       surv_data_Surr <- Surv(time=Data_hier$Surr, time2=Data_hier$SurrCens)
       LogHazard_Surr <- as.numeric(coxph(surv_data_Surr~Data_hier$Treat, ties = "breslow")[1])
       surv_data_True <- Surv(time=Data_hier$True, time2=Data_hier$TrueCens)
@@ -49,7 +49,7 @@ Trial.R2.value <- as.numeric(summary(Results.Stage.2)[c("r.squared")])
   Trial.R2.lb <- max(0, Trial.R2.value + qnorm(Alpha/2) *(Trial.R2.sd))
   Trial.R2.ub <- min(1, Trial.R2.value + qnorm(1-Alpha/2)*(Trial.R2.sd))
   Trial.R2 <- data.frame(cbind(Trial.R2.value, Trial.R2.sd, Trial.R2.lb, Trial.R2.ub))
-  colnames(Trial.R2) <- c("R2 Trial", "Standard Error", "CI lower limit", "CI upper limit")
+  colnames(Trial.R2) <- c("R2.ht", "Standard Error", "CI lower limit", "CI upper limit")
   rownames(Trial.R2) <- c(" ") 
   
   # Trial R
@@ -59,13 +59,13 @@ Trial.R2.value <- as.numeric(summary(Results.Stage.2)[c("r.squared")])
   Trial.R.ub <- min(1, (exp(2*(Z+(qnorm(1-Alpha/2)*sqrt(1/(N.trial-3)))))-1)/(exp(2*(Z+(qnorm(1-Alpha/2)*sqrt(1/(N.trial-3)))))+1))
   Trial.R.sd <- sqrt((1-Trial.R.value**2)/(N.trial-2))
   Trial.R <- data.frame(cbind(Trial.R.value, Trial.R.sd , Trial.R.lb, Trial.R.ub))
-  colnames(Trial.R) <- c("R Trial", "Standard Error", "CI lower limit", "CI upper limit")
+  colnames(Trial.R) <- c("R.ht", "Standard Error", "CI lower limit", "CI upper limit")
   row.names(Trial.R) <- c(" ") 
   
 
   fit <- 
     list(Data.Analyze=Data.Analyze, Results.Stage.1=Results.Stage.1, 
-         Results.Stage.2=Results.Stage.2, Trial.R2=Trial.R2, Trial.R=Trial.R, Call=match.call())
+         Results.Stage.2=Results.Stage.2, R2.ht=Trial.R2, R.ht=Trial.R, Call=match.call())
   
   class(fit) <- "TwoStageSurvSurv"
   fit

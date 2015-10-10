@@ -1,5 +1,6 @@
 UnimixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model=c("Full"), 
-                     Weighted=TRUE, Min.Trial.Size=2, Alpha=.05, Number.Bootstraps=500, ...){
+                     Weighted=TRUE, Min.Trial.Size=2, Alpha=.05, Number.Bootstraps=500, 
+                     Seed=sample(1:1000, size=1), ...){
   
   if ((Model==c("Full") | Model==c("Reduced") | Model==c("SemiReduced"))==FALSE) {stop ("The specification of the Model=c(\"...\") argument of the call is incorrect. Use either Model=c(\"Full\"), Model=c(\"Reduced\"), or Model=c(\"SemiReduced\").")}     
   Surr <- Dataset[,paste(substitute(Surr))]
@@ -122,10 +123,13 @@ UnimixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model
   rownames(Trial.R) <- c(" ")
   
   # Individual Level Surrogacy
+  options(warn = -1)
   Boot.r <- rep(0, Number.Bootstraps) 
   for (j in 1:Number.Bootstraps){
     obs <- c(1:N.total)
+    set.seed(Seed)
     Indicator <- sample(obs, N.total, replace=TRUE)
+    Seed <- Seed + 1
     Sample.boot.S <- data.frame(dataS[Indicator,])
     Sample.boot.T <- data.frame(dataT[Indicator,])
     
@@ -142,6 +146,7 @@ UnimixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model
     Boot.r[j] <- (cor(Res.Boot.model.S,Res.Boot.model.T))
   }
   Boot.r2 <- Boot.r**2
+  options(warn=0)
   
   # R2 ind
   R2ind <- (cor(Residuals.Model.T, Residuals.Model.S))**2

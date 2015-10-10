@@ -1,4 +1,4 @@
-plot.TrialLevelContCont <- 
+plot.TrialLevelMA <-  
   function(x, Weighted=TRUE, Xlab.Trial, Ylab.Trial, Main.Trial, 
   Par=par(oma=c(0, 0, 0, 0), mar=c(5.1, 4.1, 4.1, 2.1)),...) {
  

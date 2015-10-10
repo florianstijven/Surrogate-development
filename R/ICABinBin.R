@@ -1,3 +1,4 @@
+
 ICA.BinBin <- function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1, Monotonicity=c("General"), 
                        Sum_Pi_f = seq(from=0.01, to=0.99, by=.01), M=10000, Volume.Perc=0, Seed=sample(1:100000, size=1)) {   
 
@@ -7,14 +8,14 @@ ICA.BinBin <- function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1, Monotonic
   Seed <- round(runif(min=(1+aantal), max=2147483647, n=1), digits=0)
   Seed.generalCase <- Seed   #for gen case LS
   
-  if(pi1_1_==0){cat("\nTo avoid problems in the computation of ICA, the specified pi1_1_=0 was replaced by pi1_1_=1e-20 \n"); pi1_1_ <- 1e-20}
-  if(pi1_0_==0){cat("\nTo avoid problems in the computation of ICA, the specified pi1_0_=0 was replaced by pi1_0_=1e-20 \n"); pi1_0_ <- 1e-20}
-  if(pi_1_1==0){cat("\nTo avoid problems in the computation of ICA, the specified pi_1_1=0 was replaced by pi_1_1=1e-20 \n"); pi_1_1 <- 1e-20}
-  if(pi_1_0==0){cat("\nTo avoid problems in the computation of ICA, the specified pi_1_0=0 was replaced by pi_1_0=1e-20 \n"); pi_1_0 <- 1e-20}
-  if(pi0_1_==0){cat("\nTo avoid problems in the computation of ICA, the specified pi0_1_=0 was replaced by pi0_1_=1e-20 \n"); pi0_1_ <- 1e-20}
-  if(pi_0_1==0){cat("\nTo avoid problems in the computation of ICA, the specified pi_0_1=0 was replaced by pi_0_1=1e-20 \n"); pi_0_1 <- 1e-20}
-    
-  vector_b <- matrix(data=c(1, pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1), ncol=1)  
+  pi1_1_[pi1_1_==0] <- 1e-20
+  pi1_0_[pi1_0_==0] <- 1e-20
+  pi_1_1[pi_1_1==0] <- 1e-20
+  pi_1_0[pi_1_0==0] <- 1e-20
+  pi0_1_[pi0_1_==0] <- 1e-20
+  pi_0_1[pi_0_1==0] <- 1e-20
+  
+  #vector_b <- matrix(data=c(1, pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1), ncol=1)  
   
   sum_pi_f <- Pi.Vectors <- pi_f_all <- pi_r_all <- C3_all <- R2_H_all <- theta_T_all <- theta_S_all <- H_Delta_T_all <- pi_all <- NULL
   
@@ -107,25 +108,25 @@ ICA.BinBin <- function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1, Monotonic
     A <- cbind(A_r, A_f)
     
     #restrictions
-    min_pi_1001 <- min(pi1_0_, pi_0_1)
-    min_pi_1110 <- min(pi1_1_, pi_1_0)
-    min_pi_1101 <- min(pi1_0_, pi_1_1)
-    min_pi_1011 <- min(pi1_1_, pi_0_1)
-    min_pi_1111 <- min(pi1_1_, pi_1_1)
-    min_pi_0110 <- min(pi0_1_, pi_1_0)
-    min_pi_0011 <- min(pi0_1_, pi_0_1)
-    min_pi_0111 <- min(pi0_1_, pi_1_1)
-    min_pi_1100 <- min(pi1_0_, pi_1_0)
+    #min_pi_1001 <- min(pi1_0_, pi_0_1)
+    #min_pi_1110 <- min(pi1_1_, pi_1_0)
+    #min_pi_1101 <- min(pi1_0_, pi_1_1)
+    #min_pi_1011 <- min(pi1_1_, pi_0_1)
+    #min_pi_1111 <- min(pi1_1_, pi_1_1)
+    #min_pi_0110 <- min(pi0_1_, pi_1_0)
+    #min_pi_0011 <- min(pi0_1_, pi_0_1)
+    #min_pi_0111 <- min(pi0_1_, pi_1_1)
+    #min_pi_1100 <- min(pi1_0_, pi_1_0)
     
-    pi_1 <- seq(0, min_pi_1001, by=.01)
-    pi_2 <- seq(0, min_pi_1110, by=.01) 
-    pi_3 <- seq(0, min_pi_1101, by=.01) 
-    pi_4 <- seq(0, min_pi_1011, by=.01) 
-    pi_5 <- seq(0, min_pi_1111, by=.01) 
-    pi_6 <- seq(0, min_pi_0110, by=.01) 
-    pi_7 <- seq(0, min_pi_0011, by=.01) 
-    pi_8 <- seq(0, min_pi_0111, by=.01) 
-    pi_9 <- seq(0, min_pi_1100, by=.01) 
+    pi_1 <- seq(0, 1, by=.01)
+    pi_2 <- seq(0, 1, by=.01) 
+    pi_3 <- seq(0, 1, by=.01) 
+    pi_4 <- seq(0, 1, by=.01) 
+    pi_5 <- seq(0, 1, by=.01) 
+    pi_6 <- seq(0, 1, by=.01) 
+    pi_7 <- seq(0, 1, by=.01) 
+    pi_8 <- seq(0, 1, by=.01) 
+    pi_9 <- seq(0, 1, by=.01) 
     
       tot_combn_No <- 
         as.numeric(length(pi_1))*as.numeric(length(pi_2))*as.numeric(length(pi_3))*as.numeric(length(pi_4))*
@@ -142,8 +143,7 @@ ICA.BinBin <- function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1, Monotonic
       cat("Consider using a lower Volume.Perc value or use the M= argument instead of Volume.Perc.\n")
     }
     
-    max_val <- min((min_pi_1001 + min_pi_1110 + min_pi_1101 + min_pi_1011 + min_pi_1111 + 
-      min_pi_0110 + min_pi_0011 + min_pi_0111 + min_pi_1100), 1)
+    max_val <- 1
     min_val <- min(Sum_Pi_f)
     by_val = (max(Sum_Pi_f)-min(Sum_Pi_f))/(length(Sum_Pi_f)-1)
         Sum_Pi_f <- seq(min_val, max_val, by=by_val)
@@ -163,6 +163,11 @@ ICA.BinBin <- function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1, Monotonic
         
         
         pi_f <- (RandVec(a=0, b=Sum_Pi_f[k], s=Sum_Pi_f[k], n=9, 1, Seed=Seed))$RandVecOutput  
+        
+        set.seed(Seed)
+        vector_b <- 
+          matrix(data=c(1, sample(size = 1, pi1_1_), sample(size = 1, pi1_0_), sample(size = 1, pi_1_1), 
+                        sample(size = 1, pi_1_0), sample(size = 1, pi0_1_), sample(size = 1, pi_0_1)), ncol=1)  
         
         pi_r <- solve(A_r) %*% (vector_b - (A_f %*% pi_f))
         
@@ -280,18 +285,12 @@ ICA.BinBin <- function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1, Monotonic
     
     pi_f_all <- pi_r_all <- C3_all <- R2_H_all <- theta_T_all <- theta_S_all <- H_Delta_T_all <- NULL
     
-    #restrictions
-    min_pi_1111 <- min(pi1_1_, pi_1_1)
-    min_pi_0110 <- min(pi0_1_, pi_1_0)
-    min_pi_0011 <- min(pi0_1_, pi_0_1)
-    min_pi_0111 <- min(pi0_1_, pi_1_1)
-    min_pi_1100 <- min(pi1_0_, pi_1_0)
     
-    pi_1 <- seq(0, min_pi_1111, by=.01) 
-    pi_2 <- seq(0, min_pi_0110, by=.01) 
-    pi_3 <- seq(0, min_pi_0011, by=.01) 
-    pi_4 <- seq(0, min_pi_0111, by=.01) 
-    pi_5 <- seq(0, min_pi_1100, by=.01) 
+    pi_1 <- seq(0, 1, by=.01) 
+    pi_2 <- seq(0, 1, by=.01) 
+    pi_3 <- seq(0, 1, by=.01) 
+    pi_4 <- seq(0, 1, by=.01) 
+    pi_5 <- seq(0, 1, by=.01) 
     
       tot_combn_T <- 
         as.numeric(length(pi_1))*as.numeric(length(pi_2))*as.numeric(length(pi_3))*as.numeric(length(pi_4))*
@@ -306,7 +305,7 @@ ICA.BinBin <- function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1, Monotonic
       cat("Consider using a lower Volume.Perc value or use the M= argument instead of Volume.Perc.\n")
     }
     
-    max_val <- min((min_pi_1111 + min_pi_0110 + min_pi_0011 + min_pi_0111 + min_pi_1100), 1)
+    max_val <- 1
     min_val <- min(Sum_Pi_f)
     by_val = (max(Sum_Pi_f)-min(Sum_Pi_f))/(length(Sum_Pi_f)-1)
     Sum_Pi_f <- seq(min_val, max_val, by=by_val)
@@ -326,6 +325,11 @@ ICA.BinBin <- function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1, Monotonic
         
         
         pi_f <- (RandVec(a=0, b=Sum_Pi_f[k], s=Sum_Pi_f[k], n=5, 1, Seed=Seed))$RandVecOutput  
+        
+        set.seed(Seed)
+        vector_b <- 
+          matrix(data=c(1, sample(size = 1, pi1_1_), sample(size = 1, pi1_0_), sample(size = 1, pi_1_1), 
+                        sample(size = 1, pi_1_0), sample(size = 1, pi0_1_), sample(size = 1, pi_0_1)), ncol=1)  
         
         pi_r <-   
           solve(A_star_r) %*% (vector_b - (A_star_f %*% pi_f))
@@ -440,24 +444,15 @@ ICA.BinBin <- function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1, Monotonic
                               1, 0, 1, 0, 1, 0, 0), ncol=5)
     A_star <- cbind(A_star_r, A_star_f)
     
-    #restrictions
-    min_pi_1001 <- min(pi1_0_, pi_0_1)
-    min_pi_1101 <- min(pi1_0_, pi_1_1)
-    min_pi_1111 <- min(pi1_1_, pi_1_1)
-    min_pi_0111 <- min(pi0_1_, pi_1_1)
-    min_pi_1100 <- min(pi1_0_, pi_1_0)
-    
-    pi_1 <- seq(0, min_pi_1001, by=.01)
-    pi_2 <- seq(0, min_pi_1101, by=.01) 
-    pi_3 <- seq(0, min_pi_1111, by=.01) 
-    pi_4 <- seq(0, min_pi_0111, by=.01) 
-    pi_5 <- seq(0, min_pi_1100, by=.01) 
+    pi_1 <- seq(0, 1, by=.01)
+    pi_2 <- seq(0, 1, by=.01) 
+    pi_3 <- seq(0, 1, by=.01) 
+    pi_4 <- seq(0, 1, by=.01) 
+    pi_5 <- seq(0, 1, by=.01) 
     
       tot_combn_S <- 
         as.numeric(length(pi_1))*as.numeric(length(pi_2))*as.numeric(length(pi_3))*as.numeric(length(pi_4))*
         as.numeric(length(pi_5))
-    #if (Volume.Perc==0){
-    #Seed <- round(runif(min=(1+tot_combn_S), max=2147483647, n=1), digits=0)}
     
     if (Volume.Perc != 0){M <- tot_combn_S * Volume.Perc}
     
@@ -466,7 +461,7 @@ ICA.BinBin <- function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1, Monotonic
       cat("Consider using a lower Volume.Perc value or use the M= argument instead of Volume.Perc.\n")
     }
     
-    max_val <- min((min_pi_1001 + min_pi_1101 + min_pi_1111 + min_pi_0111 + min_pi_1100), 1)
+    max_val <- 1
     min_val <- min(Sum_Pi_f)
     by_val = (max(Sum_Pi_f)-min(Sum_Pi_f))/(length(Sum_Pi_f)-1)
     Sum_Pi_f <- seq(min_val, max_val, by=by_val)
@@ -478,14 +473,16 @@ ICA.BinBin <- function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1, Monotonic
       
       for (i in 1: M){
         
-#        if (Volume.Perc==0){Seed <- Seed-1}
-#        if (Volume.Perc!=0){Seed <- Seed+1}
-#        set.seed(Seed)
- 
         Seed <- Seed-1  
         set.seed(Seed)
         
         pi_f <- (RandVec(a=0, b=Sum_Pi_f[k], s=Sum_Pi_f[k], n=5, 1, Seed=Seed))$RandVecOutput  
+        
+        set.seed(Seed)
+        vector_b <- 
+          matrix(data=c(1, sample(size = 1, pi1_1_), sample(size = 1, pi1_0_), sample(size = 1, pi_1_1), 
+                        sample(size = 1, pi_1_0), sample(size = 1, pi0_1_), sample(size = 1, pi_0_1)), ncol=1)  
+        
         
         pi_r <- solve(A_star_r) %*% (vector_b - (A_star_f %*% pi_f))
         
@@ -599,21 +596,15 @@ ICA.BinBin <- function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1, Monotonic
     A_star <- cbind(A_star_r, A_star_f)
     
     
-    #restrictions
-    min_pi_0111 <- min(pi0_1_, pi_1_1)
-    min_pi_1100 <- min(pi1_0_, pi_1_0)
-    
-    pi_1 <- seq(0, min_pi_0111, by=.01) 
-    pi_2 <- seq(0, min_pi_1100, by=.01) 
+    pi_1 <- seq(0, 1, by=.01) 
+    pi_2 <- seq(0, 1, by=.01) 
     
       tot_combn_ST <- 
         as.numeric(length(pi_1))*as.numeric(length(pi_2))
       
-    #if (Volume.Perc==0){Seed <- round(runif(min=(1+tot_combn_ST), max=2147483647, n=1), digits=0)}
-
     if (Volume.Perc != 0){M <- tot_combn_ST * Volume.Perc}
     
-    max_val <- min((min_pi_0111 + min_pi_1100), 1)
+    max_val <- 1
     min_val <- min(Sum_Pi_f)
     by_val = (max(Sum_Pi_f)-min(Sum_Pi_f))/(length(Sum_Pi_f)-1)
     Sum_Pi_f <- seq(min_val, max_val, by=by_val)
@@ -623,16 +614,17 @@ ICA.BinBin <- function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1, Monotonic
     for (k in 1: Sum_Pi_f_number){
       
       for (i in 1: M){
-        
-#        if (Volume.Perc==0){Seed <- Seed-1}
-#        if (Volume.Perc!=0){Seed <- Seed+1}
-#        set.seed(Seed)
-
+    
         Seed <- Seed-1  
         set.seed(Seed)
         
         
         pi_f <- (RandVec(a=0, b=Sum_Pi_f[k], s=Sum_Pi_f[k], n=2, 1, Seed=Seed))$RandVecOutput  
+        
+        set.seed(Seed)
+        vector_b <- 
+          matrix(data=c(1, sample(size = 1, pi1_1_), sample(size = 1, pi1_0_), sample(size = 1, pi_1_1), 
+                        sample(size = 1, pi_1_0), sample(size = 1, pi0_1_), sample(size = 1, pi_0_1)), ncol=1)  
         
         pi_r <-   
           solve(A_star_r) %*% (vector_b - (A_star_f %*% pi_f))

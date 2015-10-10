@@ -1,4 +1,4 @@
-TrialLevelContCont <- function(Alpha.Vector, Beta.Vector, N.Vector, Weighted=TRUE,  
+TrialLevelMA <- function(Alpha.Vector, Beta.Vector, N.Vector, Weighted=TRUE,  
                              Alpha=.05){
     
   # stage 2
@@ -34,7 +34,7 @@ TrialLevelContCont <- function(Alpha.Vector, Beta.Vector, N.Vector, Weighted=TRU
     list(Alpha.Vector=Alpha.Vector, Beta.Vector=Beta.Vector, N.Vector=N.Vector, Trial.R2=Trial.R2, 
          Trial.R=Trial.R, Call=match.call())
   
-  class(fit) <- "TrialLevelContCont"
+  class(fit) <- "TrialLevelMA"
   fit
   
 }

@@ -1,13 +1,13 @@
-\name{FixedContContIT}
-\alias{FixedContContIT}
-\title{Fits (univariate) fixed-effect models to assess surrogacy in the continuous-continuous case based on the Information-Theoretic framework}
+\name{FixedContBinIT}
+\alias{FixedContBinIT}
+\title{Fits (univariate) fixed-effect models to assess surrogacy in the case where the true endpoint is continuous and the surrogate endpoint is binary (based on the Information-Theoretic framework)}
 \description{
-The function \code{FixedContContIT} uses the information-theoretic approach (Alonso & Molenberghs, 2007) to estimate trial- and individual-level surrogacy based on fixed-effect models when both S and T are continuous variables. The user can specify whether a (weighted or unweighted) full, semi-reduced, or reduced model should be fitted. See the \bold{Details} section below.   
+The function \code{FixedContBinIT} uses the information-theoretic approach (Alonso & Molenberghs, 2007) to estimate trial- and individual-level surrogacy based on fixed-effect models when T is continuous normally distributed and S is binary. The user can specify whether a (weighted or unweighted) full, semi-reduced, or reduced model should be fitted. See the \bold{Details} section below.   
 }
 \usage{
-FixedContContIT(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, 
-Model=c("Full"), Weighted=TRUE, Min.Trial.Size=2, 
-Alpha=.05, Number.Bootstraps=500, Seed=sample(1:1000, size=1))
+FixedContBinIT(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, 
+Model=c("Full"), Weighted=TRUE, Min.Trial.Size=2, Alpha=.05, 
+Number.Bootstraps=500,Seed=sample(1:1000, size=1))
 }
 \arguments{
   \item{Dataset}{A \code{data.frame} that should consist of one line per patient. Each line contains (at least) a surrogate value, a true endpoint value, a treatment indicator, a patient ID, and a trial ID.}
@@ -20,7 +20,7 @@ Alpha=.05, Number.Bootstraps=500, Seed=sample(1:1000, size=1))
 \item{Weighted}{Logical. In practice it is often the case that different trials (or other clustering units) have different sample sizes. Univariate models are used to assess surrogacy in the information-theoretic approach, so it can be useful to adjust for heterogeneity in information content between the trial-specific contributions (particularly when trial-level surrogacy measures are of primary interest and when the heterogeneity in sample sizes is large). If \code{Weighted=TRUE}, weighted regression models are fitted. If \code{Weighted=FALSE}, unweighted regression analyses are conducted. See the \bold{Details} section below. Default \code{TRUE}.}
 \item{Min.Trial.Size}{The minimum number of patients that a trial should contain to be included in the analysis. If the number of patients in a trial is smaller than the value specified by \code{Min.Trial.Size}, the data of the trial are excluded from the analysis. Default \eqn{2}.}
   \item{Alpha}{The \eqn{\alpha}-level that is used to determine the confidence intervals around \eqn{R^2_{h}} and \eqn{R^2_{ht}}. Default \eqn{0.05}.}
-\item{Number.Bootstraps}{The standard error and confidence interval for \eqn{R^2_{h}} is determined based on a bootstrap procedure. \code{Number.Bootstraps} specifies the number of bootstrap samples that are used. Default \eqn{500}.}
+\item{Number.Bootstraps}{The standard error and confidence interval for \eqn{R^2_{h.ind}} is determined based on a bootstrap procedure. \code{Number.Bootstraps} specifies the number of bootstrap samples that are used. Default \eqn{500}.}
 \item{Seed}{The seed to be used in the bootstrap procedure. Default \eqn{sample(1:1000, size=1)}.}
 }
 \details{
@@ -32,11 +32,11 @@ The following univariate generalised linear models are fitted:
 \deqn{g_{T}(E(T_{ij}))=\mu_{Ti}+\beta_{i}Z_{ij},}
 \deqn{g_{T}(E(T_{ij}|S_{ij}))=\gamma_{0i}+\gamma_{1i}Z_{ij}+\gamma_{2i}S_{ij},}
 
-where \eqn{i} and \eqn{j} are the trial and subject indicators, \eqn{g_{T}} is an appropriate link function (i.e., an identity link when a continuous true endpoint is considered), \eqn{S_{ij}} and \eqn{T_{ij}} are the surrogate and true endpoint values of subject \eqn{j} in trial \eqn{i}, and \eqn{Z_{ij}} is the treatment indicator for subject \eqn{j} in trial \eqn{i}. \eqn{\mu_{Ti}} and \eqn{\beta_{i}} are the trial-specific intercepts and treatment-effects on the true endpoint in trial \eqn{i}. \eqn{\gamma_{0i}} and \eqn{\gamma_{1i}} are the trial-specific intercepts and treatment-effects on the true endpoint in trial \eqn{i} after accounting for the effect of the surrogate endpoint. 
+where \eqn{i} and \eqn{j} are the trial and subject indicators, \eqn{g_{T}} is an appropriate link function (i.e., a logit link for binary endpoints and an identity link for normally distributed continuous endpoints), \eqn{S_{ij}} and \eqn{T_{ij}} are the surrogate and true endpoint values of subject \eqn{j} in trial \eqn{i}, and \eqn{Z_{ij}} is the treatment indicator for subject \eqn{j} in trial \eqn{i}. \eqn{\mu_{Ti}} and \eqn{\beta_{i}} are the trial-specific intercepts and treatment-effects on the true endpoint in trial \eqn{i}. \eqn{\gamma_{0i}} and \eqn{\gamma_{1i}} are the trial-specific intercepts and treatment-effects on the true endpoint in trial \eqn{i} after accounting for the effect of the surrogate endpoint. 
 
 The \eqn{-2} log likelihood values of the previous models in each of the \eqn{i} trials (i.e., \eqn{L_{1i}} and \eqn{L_{2i}}, respectively) are subsequently used to compute individual-level surrogacy based on the  so-called Variance Reduction Factor (VFR; for details, see Alonso & Molenberghs, 2007):
 
-\deqn{R^2_{h.ind}= 1 - \frac{1}{N} \sum_{i} exp \left(-\frac{L_{2i}-L_{1i}}{n_{i}} \right),}
+\deqn{R^2_{h}= 1 - \frac{1}{N} \sum_{i} exp \left(-\frac{L_{2i}-L_{1i}}{n_{i}} \right),}
 
 where \eqn{N} is the number of trials and \eqn{n_{i}} is the number of patients within trial \eqn{i}.
 
@@ -44,6 +44,11 @@ When it can be assumed (i) that the treatment-corrected association between the 
 
 \deqn{R^2_{h.ind}= 1 - exp \left(-\frac{L_{2}-L_{1}}{N} \right).}
 
+%The upper bound does not reach to 1 when \eqn{T} is binary, i.e., its maximum is 0.75. Kent (1983) claims that 0.75 is a reasonable upper bound and thus \eqn{R^2_{h.ind}} can usually be interpreted without paying special consideration to the discreteness of \eqn{T}. Alternatively, to address the upper bound problem, a scaled version of the mutual information can be used when both \eqn{S} and \eqn{T} are binary (Joe, 1989):
+
+%\deqn{R^2_{b.ind}= \frac{I(T,S)}{min[H(T), H(S)]},}
+
+%where the entropy of \eqn{T} and \eqn{S} in the previous expression can be estimated using the log likelihood functions of the GLMs shown above. %%%
 
 \emph{Trial-level surrogacy}
 
@@ -66,7 +71,7 @@ When the user requested a full model approach (by using the argument \code{Model
 \deqn{\widehat{\beta}_{i}=\lambda_{0}+\lambda_{1}\widehat{\mu_{Si}}+\lambda_{2}\widehat{\alpha}_{i}+\varepsilon_{i},   (3)}
 
 where the parameter estimates for \eqn{\beta_i}, \eqn{\mu_{Si}}, and \eqn{\alpha_i} are based on models (1) (see above).  When a weighted model is requested (using the argument \code{Weighted=TRUE} in the function call), model (3) is a weighted regression model (with weights based on the number of observations in trial \eqn{i}). The \eqn{-2} log likelihood value of the (weighted or unweighted) model (3) (\eqn{L_1}) is subsequently compared to the \eqn{-2} log likelihood value of an intercept-only model (\eqn{\widehat{\beta}_{i}=\lambda_{3}}; \eqn{L_0}), and \eqn{R^2_{ht}} is computed based based on the Variance Reduction Factor (for details, see Alonso & Molenberghs, 2007):
-
+ 
 \deqn{R^2_{ht}= 1 - exp \left(-\frac{L_1-L_0}{N} \right),}
 
 where \eqn{N} is the number of trials. 
@@ -79,60 +84,57 @@ where the parameter estimates for \eqn{\beta_i} and \eqn{\alpha_i} are based on 
  
 }
 
-\value{An object of class \code{FixedContContIT} with components,
+\value{An object of class \code{FixedContBinIT} with components,
   \item{Data.Analyze}{Prior to conducting the surrogacy analysis, data of patients who have a missing value for the surrogate and/or the true endpoint are excluded. In addition, the data of trials (i) in which only one type of the treatment was administered, and (ii) in which either the surrogate or the true endpoint was a constant (i.e., all patients within a trial had the same surrogate and/or true endpoint value) are excluded. In addition, the user can specify the minimum number of patients that a trial should contain in order to include the trial in the analysis. If the number of patients in a trial is smaller than the value specified by \code{Min.Trial.Size}, the data of the trial are excluded. \code{Data.Analyze} is the dataset on which the surrogacy analysis was conducted.}
   \item{Obs.Per.Trial}{A \code{data.frame} that contains the total number of patients per trial and the number of patients who were administered the control treatment and the experimental treatment in each of the trials (in \code{Data.Analyze}).}
   \item{Trial.Spec.Results}{A \code{data.frame} that contains the trial-specific intercepts and treatment effects for the surrogate and the true endpoints (when a full or semi-reduced model is requested), or the trial-specific treatment effects for the surrogate and the true endpoints (when a reduced model is requested).}
   \item{R2ht}{A \code{data.frame} that contains the trial-level surrogacy estimate and its confidence interval.}
-  \item{R2h.Ind}{A \code{data.frame} that contains the individual-level surrogacy estimate and its confidence interval.}
-  \item{R2h.Ind.Single}{A \code{data.frame} that contains the individual-level surrogacy estimate and its confidence interval under the assumption that the treatment-corrected association between the surrogate and the true endpoints is constant across trials or when all data come from a single clinical trial.}
-  \item{Boot.CI}{A \code{data.frame} that contains the bootstrapped \code{R2h.Single} values.}
-  \item{Cor.Endpoints}{A \code{data.frame} that contains the correlations between the surrogate and the true endpoint in the control treatment group (i.e., \eqn{\rho_{T0S0}}) and in the experimental treatment group (i.e., \eqn{\rho_{T1S1}}), their standard errors and their confidence intervals.}
-
-\item{Residuals}{A \code{data.frame} that contains the residuals for the surrogate and true endpoints (\eqn{\varepsilon_{Sij}} and \eqn{\varepsilon_{Tij}}) that are obtained when models (1) or models (2) are fitted (see the \bold{Details} section above).}
+ % \item{R2b.ind}{A \code{data.frame} that contains the individual-level surrogacy estimate \eqn{R^2_{b.ind}} (upper bound-corrected) and its confidence interval.}
+  \item{R2h}{A \code{data.frame} that contains the individual-level surrogacy estimate \eqn{R^2_{h}} (cluster-based estimate) and its confidence interval.}
+  \item{R2h.ind}{A \code{data.frame} that contains the individual-level surrogacy estimate \eqn{R^2_{h.ind}} (single-trial based estimate) and its confidence interval based on a bootstrap. The \eqn{R^2_{h.ind}} shown is the mean of the bootstrapped values.}
+  \item{R2h.Ind.By.Trial}{A \code{data.frame} that contains individual-level surrogacy estimates \eqn{R^2_{h}} (cluster-based estimate) and their confidence interval for each of the trials seperately.}
 }
 \references{
 Alonso, A, & Molenberghs, G. (2007). Surrogate marker evaluation from an information theory perspective. \emph{Biometrics, 63,} 180-186.
+
+%Joe, H. (1989). Relative entropy measures of multivariate dependence. \emph{Journal of the American Statistical Association, 84,} 157-164.
+
+%Kent, T. J. (1983). Information gain as a general measure of correlation. \emph{Biometrica, 70,} 163-173.
 }
 \author{
 Wim Van der Elst, Ariel Alonso, & Geert Molenberghs
 }
 \seealso{
-\code{\link{MixedContContIT}}, \code{\link{FixedContBinIT}},  \code{\link{FixedBinContIT}},
- \code{\link{FixedBinBinIT}}, \code{\link{plot Information-Theoretic}}
+\code{\link{FixedBinBinIT}}, \link{FixedBinContIT}, \code{\link{plot Information-Theoretic BinCombn}}
 }
 \examples{
-# Example 1
-# Based on the ARMD data
+\dontrun{ # Time consuming (>5sec) code part
+# Generate data with continuous Surr and True
+Sim.Data.MTS(N.Total=2000, N.Trial=100, R.Trial.Target=.8, 
+R.Indiv.Target=.8, Seed=123, Model="Full")
 
-data(ARMD)
-# Assess surrogacy based on a full fixed-effect model
-# in the information-theoretic framework:
-Sur <- FixedContContIT(Dataset=ARMD, Surr=Diff24, True=Diff52, Treat=Treat, Trial.ID=Center,
-Pat.ID=Id, Model="Full", Number.Bootstraps=50)
-# Obtain a summary of the results:
-summary(Sur)
+# Make S binary
+Data.Observed.MTS$Surr_Bin <- Data.Observed.MTS$Surr
+Data.Observed.MTS$Surr_Bin[Data.Observed.MTS$Surr>=0] <- 1
+Data.Observed.MTS$Surr_Bin[Data.Observed.MTS$Surr<0] <- 0
 
-\dontrun{ #time consuming code
-# Example 2
-# Conduct an analysis based on a simulated dataset with 2000 patients, 100 trials,
-# and Rindiv=Rtrial=.8
+# Analyze data
+Fit <- FixedContBinIT(Dataset = Data.Observed.MTS, Surr = Surr_Bin, 
+True = True, Treat = Treat, Trial.ID = Trial.ID, Pat.ID = Pat.ID, 
+Model = "Full", Number.Bootstraps=500)
 
-# Simulate the data:
-Sim.Data.MTS(N.Total=2000, N.Trial=100, R.Trial.Target=.8, R.Indiv.Target=.8,
-             Seed=123, Model="Full")
-# Assess surrogacy based on a full fixed-effect model
-# in the information-theoretic framework:
-Sur2 <- FixedContContIT(Dataset=Data.Observed.MTS, Surr=Surr, True=True, Treat=Treat,
-Trial.ID=Trial.ID, Pat.ID=Pat.ID, Model="Full", Number.Bootstraps=50)
-
-# Show a summary of the results:
-summary(Sur2)}
+# Examine results
+summary(Fit)
+plot(Fit, Trial.Level = FALSE, Indiv.Level.By.Trial=TRUE)
+plot(Fit, Trial.Level = TRUE, Indiv.Level.By.Trial=FALSE)
 }
-
+}
+\keyword{plot Information-Theoretic ContBin}
 \keyword{Multiple-trial setting}
 \keyword{Information-theoretic framework}
 \keyword{Trial-level surrogacy}
 \keyword{Individual-level surrogacy}
 \keyword{Likelihood Reduction Factor (LRF)}
 \keyword{Fixed-effect models}
+\keyword{Binary endpoint}
+\keyword{Continuous endpoint}
