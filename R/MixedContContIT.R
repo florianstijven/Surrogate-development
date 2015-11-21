@@ -100,15 +100,8 @@ MixedContContIT <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID,
   # R2h.single (single-cluster based) and CI            
   command.Model.1 <- c("True ~ Treat")          
   command.Model.2 <- c("True ~ Treat + Surr")
-  
-  if (Model==c("Full")|Model==c("SemiReduced")){
-    command.Model.1 <- paste(command.Model.1, " + (1+Treat|Trial.ID)", sep="") 
-    command.Model.2 <- paste(command.Model.2, " + (1+Treat+Surr|Trial.ID)", sep="")
-  }
-  if (Model==c("Reduced")){
-    command.Model.1 <- paste(command.Model.1, " + (-1+Treat|Trial.ID)", sep="") 
-    command.Model.2 <- paste(command.Model.2, " + (-1+Treat+Surr|Trial.ID)", sep="")
-  }
+  command.Model.1 <- paste(command.Model.1, " + (1+Treat|Trial.ID)", sep="") 
+  command.Model.2 <- paste(command.Model.2, " + (1+Treat+Surr|Trial.ID)", sep="")
   
   Model.1 <- lmer(eval(parse(text=command.Model.1)), data=wide, ...)         
   Model.2 <- lmer(eval(parse(text=command.Model.2)), data=wide, ...)         
@@ -125,7 +118,7 @@ MixedContContIT <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID,
   R2h.single.lb <- max(0, 1-exp(-k1/N.total)) 
   R2h.single.ub <- min(1, 1-exp(-d1/N.total))
   R2h.single <- data.frame(cbind(R2h.single.value, R2h.single.lb, R2h.single.ub))   # OUT
-  colnames(R2h.single) <- c("R2h.single", "CI lower limit", "CI upper limit")
+  colnames(R2h.single) <- c("R2h.ind", "CI lower limit", "CI upper limit")
   rownames(R2h.single) <- c(" ")
   
   # R2h.single.max and CI
@@ -164,7 +157,7 @@ MixedContContIT <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID,
   
   fit <-  
     list(Data.Analyze=wide, Obs.Per.Trial=Obs.per.trial, Trial.Spec.Results=Trial.Spec.Results,  
-         R2ht=R2ht, R2h=R2h.single, Cor.Endpoints=Cor.Endpoints, Residuals=Residuals, 
+         R2ht=R2ht, R2h.ind=R2h.single, Cor.Endpoints=Cor.Endpoints, Residuals=Residuals, 
          Call=match.call())   
   
   class(fit) <- "MixedContContIT"

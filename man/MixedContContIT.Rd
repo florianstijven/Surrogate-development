@@ -35,7 +35,7 @@ where \eqn{i} and \eqn{j} are the trial and subject indicators, \eqn{g_{T}} is a
 
 The \eqn{-2} log likelihood values of the previous models (i.e., \eqn{L_{1}} and \eqn{L_{2}}, respectively) are subsequently used to compute individual-level surrogacy (based on the so-called Variance Reduction Factor, VFR; for details, see Alonso & Molenberghs, 2007):
 
-\deqn{R^2_{h}= 1 - exp \left(-\frac{L_{2}-L_{1}}{N} \right),}
+\deqn{R^2_{hind}= 1 - exp \left(-\frac{L_{2}-L_{1}}{N} \right),}
 
 where \eqn{N} is the number of trials.
 
@@ -80,7 +80,7 @@ where the parameter estimates for \eqn{\beta_i} and \eqn{\alpha_i} are based on 
   \item{Obs.Per.Trial}{A \code{data.frame} that contains the total number of patients per trial and the number of patients who were administered the control treatment and the experimental treatment in each of the trials (in \code{Data.Analyze}).}
   \item{Trial.Spec.Results}{A \code{data.frame} that contains the trial-specific intercepts and treatment effects for the surrogate and the true endpoints (when a full or semi-reduced model is requested), or the trial-specific treatment effects for the surrogate and the true endpoints (when a reduced model is requested).}
   \item{R2ht}{A \code{data.frame} that contains the trial-level surrogacy estimate and its confidence interval.}
-  \item{R2h}{A \code{data.frame} that contains the individual-level surrogacy estimate and its confidence interval.}
+  \item{R2h.ind}{A \code{data.frame} that contains the individual-level surrogacy estimate and its confidence interval.}
   \item{Cor.Endpoints}{A \code{data.frame} that contains the correlations between the surrogate and the true endpoint in the control treatment group (i.e., \eqn{\rho_{T0S0}}) and in the experimental treatment group (i.e., \eqn{\rho_{T1S1}}), their standard errors and their confidence intervals.}
   \item{Residuals}{A \code{data.frame} that contains the residuals for the surrogate and true endpoints (\eqn{\varepsilon_{Sij}} and \eqn{\varepsilon_{Tij}}) that are obtained when models (1) or models (2) are fitted (see the \bold{Details} section above).}
 }

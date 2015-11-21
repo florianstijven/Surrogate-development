@@ -21,6 +21,7 @@ N.Vector, Weighted=TRUE, Alpha=.05)
 \item{N.Vector}{The vector of trial sizes \eqn{N_{i}}.}
 \item{Trial.R2}{A \code{data.frame} that contains the trial-level coefficient of determination (\eqn{R^2_{trial}}), its standard error and confidence interval.}
 \item{Trial.R}{A \code{data.frame} that contains the trial-level correlation coefficient (\eqn{R_{trial}}), its standard error and confidence interval.}
+\item{Model.2.Fit}{The fitted stage \eqn{2} model.}
 }
 \references{
 Burzykowski, T., Molenberghs, G., & Buyse, M. (2005). \emph{The evaluation of surrogate endpoints}. New York: Springer-Verlag.

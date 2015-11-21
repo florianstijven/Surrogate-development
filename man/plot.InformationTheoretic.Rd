@@ -66,12 +66,6 @@ text(x=-2.2, y=0, cex=1.4, labels=(bquote(paste("R"[ht]^{2}, "="~.(R2ht)))))
 ## Make an Individual-level surrogacy plot with red squares to depict individuals
 ## (rather than black circles):
 plot(Sur, pch=15, col="red", Indiv.Level=TRUE, Trial.Level=FALSE)
-
-## Same plot as before, but now with smaller squares, a y-axis with range [-40; 40], 
-## and the estimated R2_h value in the title of the plot:
-R2h <- format(round(as.numeric(Sur$R2h[1]), 3))
-plot(Sur, pch=15, col="red", Indiv.Level=TRUE, Trial.Level=FALSE, cex=.5, 
-ylim=c(-40, 40), Main.Indiv=bquote(paste("R"[h]^{2}, "="~.(R2h))))
 }
 
 \keyword{Plot surrogacy}

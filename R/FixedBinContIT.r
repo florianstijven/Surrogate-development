@@ -1,5 +1,5 @@
 FixedBinContIT <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, 
-                    Model=c("Full"), Weighted=TRUE, Min.Trial.Size=2, Alpha=.05, Number.Bootstraps=500, 
+                    Model=c("Full"), Weighted=TRUE, Min.Trial.Size=2, Alpha=.05, Number.Bootstraps=50, 
                     Seed=sample(1:1000, size=1)){
   
   if ((Model==c("Full") | Model==c("Reduced") | Model==c("SemiReduced"))==FALSE) {stop ("The specification of the Model=c(\"...\") argument of the call is incorrect. Use either Model=c(\"Full\"), Model=c(\"Reduced\"), or Model=c(\"SemiReduced\").")}     
@@ -326,9 +326,9 @@ summary.FixedBinBinIT <- summary.FixedBinContIT <- function(object, ..., Object)
   cat("\n\n")
   cat("Trial-level surrogacy (R2_ht): \n")
   print(format(round(Object$R2ht, 4), nsmall = 4))
-  cat("\nIndividual-level surrogacy (R2_h): \n")
-  print(format(round(Object$R2h, 4), nsmall = 4))
-  cat("\nIndividual-level surrogacy assuming N=1 (R2_h.ind): \n")
+#  cat("\nIndividual-level surrogacy (R2_h): \n")
+#  print(format(round(Object$R2h, 4), nsmall = 4))
+  cat("\nIndividual-level surrogacy (R2_h.ind): \n")
   print(format(round(Object$R2h.ind, 4), nsmall = 4))
   cat("\nIndividual-level surrogacy taking max. bound into account (R2_b.ind): \n")
   print(format(round(Object$R2b.ind, 4), nsmall = 4))

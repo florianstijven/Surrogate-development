@@ -1,6 +1,6 @@
 SurvSurv <- function(Dataset, Surr, SurrCens, True, TrueCens, Treat, 
-Trial.ID, Weighted=TRUE, Alpha=.05, Number.Bootstraps=500, 
-Seed=sample(1:1000, size=1)){
+Trial.ID, Weighted=TRUE, Alpha=.05){ #, Number.Bootstraps=500, Seed=sample(1:1000, size=1)
+
   
   Surr <- Dataset[,paste(substitute(Surr))]
   SurrCens <- Dataset[,paste(substitute(SurrCens))] 
@@ -33,15 +33,27 @@ Seed=sample(1:1000, size=1)){
   
   # R2h.ind (single-cluster based) and CI
   g2 <- -(L1-L0)
+  R2h.ind.value <- 1 - exp(-g2/length(All_data$Treat))
+  options(warn=0)
+  k1 <- qchisq(Alpha, 1, g2)
+  d1 <- qchisq((1-Alpha), 1, g2)
+  R2h.ind.lb <- max(0, 1-exp(-k1/length(All_data$Treat))) 
+  R2h.ind.ub <- min(1, 1-exp(-d1/length(All_data$Treat)))
+  R2h.ind <- data.frame(cbind(R2h.ind.value, R2h.ind.lb, R2h.ind.ub))   # OUT
+  colnames(R2h.ind) <- c("R2h.ind", "CI lower limit", "CI upper limit")
+  rownames(R2h.ind) <- c(" ") 
+  
+  # R2h.ind (single-cluster based) and CI
+  g2 <- -(L1-L0)
   R2h.ind.value <- 1 - exp(-g2/Num.Events)
   options(warn=0)
   k1 <- qchisq(Alpha, 1, g2)
   d1 <- qchisq((1-Alpha), 1, g2)
   R2h.ind.lb <- max(0, 1-exp(-k1/Num.Events)) 
   R2h.ind.ub <- min(1, 1-exp(-d1/Num.Events))
-  R2h.ind <- data.frame(cbind(R2h.ind.value, R2h.ind.lb, R2h.ind.ub))   # OUT
-  colnames(R2h.ind) <- c("R2h.ind", "CI lower limit", "CI upper limit")
-  rownames(R2h.ind) <- c(" ") 
+  R2h.ind.QF <- data.frame(cbind(R2h.ind.value, R2h.ind.lb, R2h.ind.ub))   # OUT
+  colnames(R2h.ind.QF) <- c("R2h.ind.QF", "CI lower limit", "CI upper limit")
+  rownames(R2h.ind.QF) <- c(" ") 
   
   
   # R2_h indiv per trial
@@ -89,11 +101,11 @@ Seed=sample(1:1000, size=1)){
           }}}}}
   options(warn=0)
   
-  R2h.By.Trial <- cbind(t(R2h.per.trial.Name.vec), t(R2h.per.trial.hier.vec), t(R2h.per.trial.lb.vec), 
+  R2h.By.Trial.QF <- cbind(t(R2h.per.trial.Name.vec), t(R2h.per.trial.hier.vec), t(R2h.per.trial.lb.vec), 
                         t(R2h.per.trial.ub.vec))
-  colnames(R2h.By.Trial) <- c("TrialID", "R2h.ind", "R2h_low", "R2h_up")
-  rownames(R2h.By.Trial) <- NULL 
-  R2h.By.Trial <- data.frame(na.exclude(R2h.By.Trial))      
+  colnames(R2h.By.Trial.QF) <- c("TrialID", "R2h.ind", "R2h_low", "R2h_up")
+  rownames(R2h.By.Trial.QF) <- NULL 
+  R2h.By.Trial.QF <- data.frame(na.exclude(R2h.By.Trial.QF))      
   
   
   
@@ -194,7 +206,7 @@ Seed=sample(1:1000, size=1)){
   Trial.R2.lb <- max(0, Trial.R2.value + qnorm(Alpha/2) *(Trial.R2.sd))
   Trial.R2.ub <- min(1, Trial.R2.value + qnorm(1-Alpha/2)*(Trial.R2.sd))
   Trial.R2 <- data.frame(cbind(Trial.R2.value, Trial.R2.sd, Trial.R2.lb, Trial.R2.ub))
-  colnames(Trial.R2) <- c("R2_ht", "Standard Error", "CI lower limit", "CI upper limit")
+  colnames(Trial.R2) <- c("R2_trial", "Standard Error", "CI lower limit", "CI upper limit")
   rownames(Trial.R2) <- c(" ") 
   
   # Trial R
@@ -204,13 +216,14 @@ Seed=sample(1:1000, size=1)){
   Trial.R.ub <- min(1, (exp(2*(Z+(qnorm(1-Alpha/2)*sqrt(1/(N.trial-3)))))-1)/(exp(2*(Z+(qnorm(1-Alpha/2)*sqrt(1/(N.trial-3)))))+1))
   Trial.R.sd <- sqrt((1-Trial.R.value**2)/(N.trial-2))
   Trial.R <- data.frame(cbind(Trial.R.value, Trial.R.sd , Trial.R.lb, Trial.R.ub))
-  colnames(Trial.R) <- c("R_ht", "Standard Error", "CI lower limit", "CI upper limit")
+  colnames(Trial.R) <- c("R_trial", "Standard Error", "CI lower limit", "CI upper limit")
   row.names(Trial.R) <- c(" ") 
   
 
   fit <- 
     list(Results.Stage.1=Results.Stage.1, 
-         Results.Stage.2=Results.Stage.2, R2.ht=Trial.R2, R2.hind=R2h.ind, R2.hInd.By.Trial=R2h.By.Trial, 
+         Results.Stage.2=Results.Stage.2, R2.trial=Trial.R2, R2.hind=R2h.ind, 
+         R2h.ind.QF=R2h.ind.QF, R2.hInd.By.Trial.QF=R2h.By.Trial.QF, 
          Call=match.call())
   
   class(fit) <- "SurvSurv"

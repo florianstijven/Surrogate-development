@@ -7,7 +7,7 @@ The function \code{FixedContBinIT} uses the information-theoretic approach (Alon
 \usage{
 FixedContBinIT(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, 
 Model=c("Full"), Weighted=TRUE, Min.Trial.Size=2, Alpha=.05, 
-Number.Bootstraps=500,Seed=sample(1:1000, size=1))
+Number.Bootstraps=50,Seed=sample(1:1000, size=1))
 }
 \arguments{
   \item{Dataset}{A \code{data.frame} that should consist of one line per patient. Each line contains (at least) a surrogate value, a true endpoint value, a treatment indicator, a patient ID, and a trial ID.}
@@ -20,7 +20,7 @@ Number.Bootstraps=500,Seed=sample(1:1000, size=1))
 \item{Weighted}{Logical. In practice it is often the case that different trials (or other clustering units) have different sample sizes. Univariate models are used to assess surrogacy in the information-theoretic approach, so it can be useful to adjust for heterogeneity in information content between the trial-specific contributions (particularly when trial-level surrogacy measures are of primary interest and when the heterogeneity in sample sizes is large). If \code{Weighted=TRUE}, weighted regression models are fitted. If \code{Weighted=FALSE}, unweighted regression analyses are conducted. See the \bold{Details} section below. Default \code{TRUE}.}
 \item{Min.Trial.Size}{The minimum number of patients that a trial should contain to be included in the analysis. If the number of patients in a trial is smaller than the value specified by \code{Min.Trial.Size}, the data of the trial are excluded from the analysis. Default \eqn{2}.}
   \item{Alpha}{The \eqn{\alpha}-level that is used to determine the confidence intervals around \eqn{R^2_{h}} and \eqn{R^2_{ht}}. Default \eqn{0.05}.}
-\item{Number.Bootstraps}{The standard error and confidence interval for \eqn{R^2_{h.ind}} is determined based on a bootstrap procedure. \code{Number.Bootstraps} specifies the number of bootstrap samples that are used. Default \eqn{500}.}
+\item{Number.Bootstraps}{The standard error and confidence interval for \eqn{R^2_{h.ind}} is determined based on a bootstrap procedure. \code{Number.Bootstraps} specifies the number of bootstrap samples that are used. Default \eqn{50}.}
 \item{Seed}{The seed to be used in the bootstrap procedure. Default \eqn{sample(1:1000, size=1)}.}
 }
 \details{
@@ -121,7 +121,7 @@ Data.Observed.MTS$Surr_Bin[Data.Observed.MTS$Surr<0] <- 0
 # Analyze data
 Fit <- FixedContBinIT(Dataset = Data.Observed.MTS, Surr = Surr_Bin, 
 True = True, Treat = Treat, Trial.ID = Trial.ID, Pat.ID = Pat.ID, 
-Model = "Full", Number.Bootstraps=500)
+Model = "Full", Number.Bootstraps=50)
 
 # Examine results
 summary(Fit)

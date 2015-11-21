@@ -32,7 +32,8 @@ TrialLevelMA <- function(Alpha.Vector, Beta.Vector, N.Vector, Weighted=TRUE,
   
   fit <- 
     list(Alpha.Vector=Alpha.Vector, Beta.Vector=Beta.Vector, N.Vector=N.Vector, Trial.R2=Trial.R2, 
-         Trial.R=Trial.R, Call=match.call())
+         Trial.R=Trial.R, 
+         Model.2.Fit=summary(Results.Stage.2), Call=match.call())
   
   class(fit) <- "TrialLevelMA"
   fit

@@ -17,12 +17,12 @@ summary.FixedBinBinIT <- summary.FixedBinContIT <- function(object, ..., Object)
   cat("\n\n")
   cat("Trial-level surrogacy (R2_ht): \n")
   print(format(round(Object$R2ht, 4), nsmall = 4))
-  cat("\nIndividual-level surrogacy (R2_h): \n")
-  print(format(round(Object$R2h, 4), nsmall = 4))
-  cat("\nIndividual-level surrogacy assuming N=1 (R2_h.ind): \n")
+#  cat("\nIndividual-level surrogacy (R2_h): \n")
+#  print(format(round(Object$R2h, 4), nsmall = 4))
+  cat("\nIndividual-level surrogacy (R2_h.ind): \n")
   print(format(round(Object$R2h.ind, 4), nsmall = 4))
-  cat("\nIndividual-level surrogacy taking max. bound into account (R2_b.ind): \n")
-  print(format(round(Object$R2b.ind, 4), nsmall = 4))
+#  cat("\nIndividual-level surrogacy taking max. bound into account (R2_b.ind): \n")
+#  print(format(round(Object$R2b.ind, 4), nsmall = 4))
 }
 
 
@@ -46,8 +46,6 @@ summary.FixedContBinIT <- function(object, ..., Object){
   cat("\n\n")
   cat("Trial-level surrogacy (R2_ht): \n")
   print(format(round(Object$R2ht, 4), nsmall = 4))
-  cat("\nIndividual-level surrogacy (R2_h): \n")
-  print(format(round(Object$R2h, 4), nsmall = 4))
-  cat("\nIndividual-level surrogacy assuming N=1 (R2_h.ind): \n")
+  cat("\nIndividual-level surrogacy (R2_h.ind): \n")
   print(format(round(Object$R2h.ind, 4), nsmall = 4))
 }

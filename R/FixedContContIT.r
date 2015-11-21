@@ -102,7 +102,8 @@ rownames(R2ht) <- c(" ")
   
 
   # Individual-level surrogacy   
-Model.0 <- glm(True ~ -1 + as.factor(Trial.ID) + as.factor(Trial.ID):Treat, family=distribution.T(link=link.choice.T), data=wide)      
+Model.0 <- glm(True ~ -1 + as.factor(Trial.ID) + as.factor(Trial.ID):Treat, 
+               family=distribution.T(link=link.choice.T), data=wide)      
 Model.1 <- glm(True ~ -1 + as.factor(Trial.ID) + as.factor(Trial.ID):Treat + as.factor(Trial.ID):Surr,  # LS!
                family=distribution.T(link=link.choice.T), data=wide)
 L0 <- -2 * logLik(Model.0)[1]    
@@ -116,7 +117,7 @@ d1 <- qchisq((1-Alpha), 1, g2)
 R2h.single.lb <- max(0, 1-exp(-k1/N.total)) 
 R2h.single.ub <- min(1, 1-exp(-d1/N.total))
 R2h.single <- data.frame(cbind(R2h.single.value, R2h.single.lb, R2h.single.ub))   # OUT
-colnames(R2h.single) <- c("R2h.single", "CI lower limit", "CI upper limit")
+colnames(R2h.single) <- c("R2h.ind", "CI lower limit", "CI upper limit")
 rownames(R2h.single) <- c(" ") 
 
 # R2h.single.max (single-cluster based) and CI
@@ -230,7 +231,7 @@ for (i in 1:N.trial) {
   
   fit <- 
     list(Data.Analyze=wide, Obs.Per.Trial=Obs.per.trial, Trial.Spec.Results=Trial.Spec.Results,  
-         R2ht=R2ht, R2h.Ind=R2h.cluster.based, R2h.Ind.Single=R2h.single, Boot.CI=Boot.CI, Cor.Endpoints=Cor.Endpoints, Residuals=Residuals, Call=match.call())   
+         R2ht=R2ht, R2h.ind.clust=R2h.cluster.based, R2h.ind=R2h.single, Boot.CI=Boot.CI, Cor.Endpoints=Cor.Endpoints, Residuals=Residuals, Call=match.call())   
   
   class(fit) <- "FixedContContIT"
   fit  

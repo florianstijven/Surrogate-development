@@ -1,5 +1,5 @@
 FixedBinBinIT <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, 
-                    Model=c("Full"), Weighted=TRUE, Min.Trial.Size=2, Alpha=.05, Number.Bootstraps=500, 
+                    Model=c("Full"), Weighted=TRUE, Min.Trial.Size=2, Alpha=.05, Number.Bootstraps=50, 
                     Seed=sample(1:1000, size=1)){
   
   if ((Model==c("Full") | Model==c("Reduced") | Model==c("SemiReduced"))==FALSE) {stop ("The specification of the Model=c(\"...\") argument of the call is incorrect. Use either Model=c(\"Full\"), Model=c(\"Reduced\"), or Model=c(\"SemiReduced\").")}     
@@ -96,11 +96,14 @@ rownames(R2ht) <- c(" ")
 
 
   # Individual-level surrogacy   
-Model.0 <- glm(True ~ -1 + as.factor(Trial.ID) + as.factor(Trial.ID):Treat, family=distribution.T(link=link.choice.T), data=wide)      
+options(warn=-1)
+Model.0 <- glm(True ~ -1 + as.factor(Trial.ID) + as.factor(Trial.ID):Treat, 
+               family=distribution.T(link=link.choice.T), data=wide)      
 Model.1 <- glm(True ~ -1 + as.factor(Trial.ID) + as.factor(Trial.ID):Treat + as.factor(Trial.ID):Surr,  # LS!
                family=distribution.T(link=link.choice.T), data=wide)
 L0 <- -2 * logLik(Model.0)[1]    
 L1 <- -2 * logLik(Model.1)[1]    
+options(warn=0)
 
   # R2h.ind (single-cluster based) and CI
 g2 <- -(L1-L0)
@@ -113,25 +116,16 @@ R2h.ind <- data.frame(cbind(R2h.ind.value, R2h.ind.lb, R2h.ind.ub))   # OUT
 colnames(R2h.ind) <- c("R2h.ind", "CI lower limit", "CI upper limit")
 rownames(R2h.ind) <- c(" ") 
 
-# R2h.ind.max (single-cluster based) and CI
-#Model.0 <- glm(True ~ 1, family=distribution.T(link=link.choice.T), data=wide)      
-#L.0 <- -2 * logLik(Model.0)[1]    
-#R2h.ind.max.value <- R2h.ind.value/(1-(exp(-L.0/N.total)))   
-#R2h.ind.max.lb <- max(0, (1-exp(-k1/N.total))/(1-(exp(-L.0/N.total))))
-#R2h.ind.max.ub <- min(1, (1-exp(-d1/N.total))/(1-(exp(-L.0/N.total))))
-#R2h.ind.max <- data.frame(cbind(R2h.ind.max.value, R2h.ind.max.lb, R2h.ind.max.ub))  # OUT
-#colnames(R2h.ind.max) <- c("R2h.ind.max", "CI lower limit", "CI upper limit")
-#rownames(R2h.ind.max) <- c(" ")
-  
-
 
 # Alt.
+options(warn=-1)
 Model.0.a <- glm(True ~ -1 + as.factor(Trial.ID) + as.factor(Trial.ID):Treat, 
                  family=distribution.T(link=link.choice.T), data=wide)      
 Model.0.b <- glm(Surr ~ -1 + as.factor(Trial.ID) + as.factor(Trial.ID):Treat, 
                  family=distribution.S(link=link.choice.S), data=wide)    
 L.0.a <- -2 * logLik(Model.0.a)[1] 
 L.0.b <- -2 * logLik(Model.0.b)[1] 
+options(warn=0)
 g2 <- -(L1-L0)
 L.0 <- min(L.0.a, L.0.b)
 R2h.ind.max.value <- g2/L.0
@@ -169,8 +163,8 @@ options(warn=0)
 Mean.Boot.CI.R2h.ind <- mean(R2h.ind.max.value.boot.all)
 Var.Boot.CI.R2h.ind <- var(as.numeric(R2h.ind.max.value.boot.all))
 Sort.CI <- sort(R2h.ind.max.value.boot.all)
-Boot.CI.R2h.ind.lb <- max(0, Mean.Boot.CI.R2h.ind + qnorm(Alpha/2)*sqrt(Var.Boot.CI.R2h.ind))    
-Boot.CI.R2h.ind.ub <- min(1, Mean.Boot.CI.R2h.ind - qnorm(Alpha/2)*sqrt(Var.Boot.CI.R2h.ind))
+Boot.CI.R2h.ind.lb <- max(0, R2h.ind.max.value + (qnorm(Alpha/2)*sqrt(Var.Boot.CI.R2h.ind)))    
+Boot.CI.R2h.ind.ub <- min(1, R2h.ind.max.value - (qnorm(Alpha/2)*sqrt(Var.Boot.CI.R2h.ind)))
 R2h.ind.max <- data.frame(cbind(R2h.ind.max.value, sqrt(Var.Boot.CI.R2h.ind),
                             Boot.CI.R2h.ind.lb, Boot.CI.R2h.ind.ub))
 colnames(R2h.ind.max) <- c("R2b.ind", "Standard Error", "CI lower limit", "CI upper limit")

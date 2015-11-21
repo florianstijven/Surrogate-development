@@ -42,7 +42,7 @@ where \eqn{N} is the number of trials and \eqn{n_{i}} is the number of patients 
 
 When it can be assumed (i) that the treatment-corrected association between the surrogate and the true endpoint is constant across trials, or (ii) when all data come from a single clinical trial (i.e., when \eqn{N=1}), the previous expression simplifies to:
 
-\deqn{R^2_{h.ind}= 1 - exp \left(-\frac{L_{2}-L_{1}}{N} \right).}
+\deqn{R^2_{h.ind.clust}= 1 - exp \left(-\frac{L_{2}-L_{1}}{N} \right).}
 
 
 \emph{Trial-level surrogacy}
@@ -84,8 +84,8 @@ where the parameter estimates for \eqn{\beta_i} and \eqn{\alpha_i} are based on 
   \item{Obs.Per.Trial}{A \code{data.frame} that contains the total number of patients per trial and the number of patients who were administered the control treatment and the experimental treatment in each of the trials (in \code{Data.Analyze}).}
   \item{Trial.Spec.Results}{A \code{data.frame} that contains the trial-specific intercepts and treatment effects for the surrogate and the true endpoints (when a full or semi-reduced model is requested), or the trial-specific treatment effects for the surrogate and the true endpoints (when a reduced model is requested).}
   \item{R2ht}{A \code{data.frame} that contains the trial-level surrogacy estimate and its confidence interval.}
-  \item{R2h.Ind}{A \code{data.frame} that contains the individual-level surrogacy estimate and its confidence interval.}
-  \item{R2h.Ind.Single}{A \code{data.frame} that contains the individual-level surrogacy estimate and its confidence interval under the assumption that the treatment-corrected association between the surrogate and the true endpoints is constant across trials or when all data come from a single clinical trial.}
+  \item{R2h.ind.clust}{A \code{data.frame} that contains the individual-level surrogacy estimate and its confidence interval.}
+  \item{R2h.ind}{A \code{data.frame} that contains the individual-level surrogacy estimate and its confidence interval under the assumption that the treatment-corrected association between the surrogate and the true endpoints is constant across trials or when all data come from a single clinical trial.}
   \item{Boot.CI}{A \code{data.frame} that contains the bootstrapped \code{R2h.Single} values.}
   \item{Cor.Endpoints}{A \code{data.frame} that contains the correlations between the surrogate and the true endpoint in the control treatment group (i.e., \eqn{\rho_{T0S0}}) and in the experimental treatment group (i.e., \eqn{\rho_{T1S1}}), their standard errors and their confidence intervals.}
 

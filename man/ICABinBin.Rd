@@ -42,7 +42,7 @@ The following algorithm is used to generate plausible distributions for \eqn{\bo
 
 The previous developments hold when no monotonicity is assumed. When monotonicity for \eqn{S}, \eqn{T}, or for \eqn{S} and \eqn{T} is assumed, some of the probabilities of \eqn{\pi} are zero. For example, when montonicity is assumed for \eqn{T}, then \eqn{P(T_0 <= T_1)=1}, or equivantly, \eqn{\pi_{1000}=\pi_{1010}=\pi_{1001}=\pi_{1011}=0}. When monotonicity is assumed, the procedure described above is modified accordingly (for details, see Alonso et al., 2014). When a general analysis is requested (using \code{Monotonicity=c("General")} in the function call), all settings are considered (no monotonicity, monotonicity for \eqn{S} alone, for \eqn{T} alone, and for both for \eqn{S} and \eqn{T}.)
 
-To account for the uncertainty in the estimation of the marginal probabilities, a vector of values can be specified from which a random draw is made in each run. 
+To account for the uncertainty in the estimation of the marginal probabilities, a vector of values can be specified from which a random draw is made in each run (see \bold{Examples} below). 
 }
 
 \value{An object of class \code{ICA.BinBin} with components,
@@ -79,7 +79,7 @@ plot(ICA, R2_H=TRUE)
 
 # Example 2 where the uncertainty in the estimation 
 # of the marginals is taken into account
-ICA_BINBIN2 <- ICA.BinBin.Uncert(pi1_1_=runif(10000, 0.2573, 0.4252), 
+ICA_BINBIN2 <- ICA.BinBin(pi1_1_=runif(10000, 0.2573, 0.4252), 
 pi1_0_=runif(10000, 0.1769, 0.3310), 
 pi_1_1=runif(10000, 0.5947, 0.7779), 
 pi_1_0=runif(10000, 0.0322, 0.1442), 

@@ -31,10 +31,10 @@ summary.FixedContContIT <- function(object, ..., Object){
   cat("\n\n")
   cat("Trial-level surrogacy (R2_ht): \n")
   print(format(round(Object$R2ht, 4), nsmall = 4))
-  cat("\nIndividual-level surrogacy (R2_h): \n")
-  print(format(round(Object$R2h.Ind, 4), nsmall = 4))
-  cat("\nIndividual-level surrogacy assuming N=1 (R2_h Single): \n")
-  print(format(round(Object$R2h.Ind.Single, 4), nsmall = 4))
+  cat("\nIndividual-level surrogacy (R2_h.ind.clust): \n")
+  print(format(round(Object$R2h.ind.clust, 4), nsmall = 4))
+  cat("\nIndividual-level surrogacy assuming N=1 (R2_h.ind): \n")
+  print(format(round(Object$R2h.ind, 4), nsmall = 4))
 }
 
 
@@ -72,8 +72,8 @@ summary.MixedContContIT <- function(object, ..., Object){
   cat("\n\n")
   cat("Trial-level surrogacy (R2_ht): \n")
   print(format(round(Object$R2ht, 4), nsmall = 4))
-  cat("\nIndividual-level surrogacy (R2_h): \n")
-  print(format(round(Object$R2h, 4), nsmall = 4))
+  cat("\nIndividual-level surrogacy (R2_hind): \n")
+  print(format(round(Object$R2h.ind, 4), nsmall = 4))
 }
 
 

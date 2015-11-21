@@ -6,8 +6,7 @@ The function \code{SurvSurv} implements the information-theoretic approach to es
 }
 \usage{
 SurvSurv(Dataset, Surr, SurrCens, True, TrueCens, Treat,
-Trial.ID, Weighted=TRUE, Alpha=.05, Number.Bootstraps=500,  
-Seed=sample(1:1000, size=1))
+Trial.ID, Weighted=TRUE, Alpha=.05) %, Number.Bootstraps=500, Seed=sample(1:1000, size=1))
 }
 \arguments{
   \item{Dataset}{A \code{data.frame} that should consist of one line per patient. Each line contains (at least) a surrogate value and censoring indicator, a true endpoint value and censoring indicator, a treatment indicator, and a trial ID.}
@@ -19,8 +18,8 @@ Seed=sample(1:1000, size=1))
   \item{Trial.ID}{The name of the variable in \code{Dataset} that contains the trial ID to which the patient belongs.}
 \item{Weighted}{Logical. If \code{TRUE}, then a weighted regression analysis is conducted at stage 2 of the two-stage approach. If \code{FALSE}, then an unweighted regression analysis is conducted at stage 2 of the two-stage approach. See the \bold{Details} section below. Default \code{TRUE}.}
 \item{Alpha}{The \eqn{\alpha}-level that is used to determine the confidence intervals around \eqn{R^2_{trial}} and \eqn{R_{trial}}. Default \eqn{0.05}.}
-\item{Number.Bootstraps}{The standard error and confidence interval for \eqn{R^2_{h.ind}} is determined based on a bootstrap procedure. \code{Number.Bootstraps} specifies the number of bootstrap samples that are used. Default \eqn{500}.}
-\item{Seed}{The seed to be used in the bootstrap procedure. Default \eqn{sample(1:1000, size=1)}.}
+%\item{Number.Bootstraps}{The standard error and confidence interval for \eqn{R^2_{h.ind}} is determined based on a bootstrap procedure. \code{Number.Bootstraps} specifies the number of bootstrap samples that are used. Default \eqn{500}.}
+%\item{Seed}{The seed to be used in the bootstrap procedure. Default \eqn{sample(1:1000, size=1)}.}
 }
 \details{
 \emph{Individual-level surrogacy}
@@ -47,13 +46,13 @@ A two-stage approach is used to estimate trial-level surrogacy, following a proc
 \deqn{S_{ij}(t)=S_{i0}(t) exp(\alpha_{i}Z_{ij}),}
 \deqn{T_{ij}(t)=T_{i0}(t) exp(\beta_{i}Z_{ij}),} 
 
-where \eqn{S_{i0}(t)} and \eqn{T_{i0}(t)} are the trial-specific baseline hazard functions, \eqn{Z_{ij}} is the treatment indicator for subject \eqn{j} in trial \eqn{i}, \eqn{\mu_{Si}}, and \eqn{\alpha_{i}} and \eqn{\beta_{i}} are the trial-specific treatment effects on S and T, respectively. 
+where \eqn{S_{i0}(t)} and \eqn{T_{i0}(t)} are the trial-specific baseline hazard functions, \eqn{Z_{ij}} is the treatment indicator for subject \eqn{j} in trial \eqn{i}, and \eqn{\alpha_{i}}, \eqn{\beta_{i}} are the trial-specific treatment effects on S and T, respectively. 
 
 Next, the second stage of the analysis is conducted:
 
 \deqn{\widehat{\beta_{i}}=\lambda_{0}+\lambda_{1}\widehat{\alpha_{i}}+\varepsilon_{i},}
 
-where the parameter estimates for \eqn{\beta_i}, \eqn{\mu_{Si}}, and \eqn{\alpha_i} are based on the full model that was fitted in stage 1. 
+where the parameter estimates for \eqn{\beta_i} and \eqn{\alpha_i} are based on the full model that was fitted in stage 1. 
 
 When the argument \code{Weighted=FALSE} is used in the function call, the model that is fitted in stage 2 is an unweighted linear regression model. When a weighted model is requested (using the argument \code{Weighted=TRUE} in the function call), the information that is obtained in stage 1 is weighted according to the number of patients in a trial. 
 
@@ -65,7 +64,8 @@ The classical coefficient of determination of the fitted stage 2 model provides 
   \item{Results.Stage.2}{An object of class \code{lm} (linear model) that contains the parameter estimates of the regression model that is fitted in stage 2 of the analysis.}
   \item{R2.ht}{A \code{data.frame} that contains the trial-level coefficient of determination (\eqn{R^2_{ht}}), its standard error and confidence interval.}
   \item{R2.hind}{A \code{data.frame} that contains the individual-level coefficient of determination (\eqn{R^2_{hind}}), its standard error and confidence interval.}
-\item{R2.hInd.By.Trial}{A \code{data.frame} that contains individual-level surrogacy estimates \eqn{R^2_{hInd}} (cluster-based estimates) and their confidence interval for each of the trials seperately.}
+ \item{R2h.ind.QF}{A \code{data.frame} that contains the individual-level coefficient of determination using the correction proposed by O'Quigley and Flandre (2006), its standard error and confidence interval.} 
+\item{R2.hInd.By.Trial.QF}{A \code{data.frame} that contains individual-level surrogacy estimates using the correction proposed by O'Quigley and Flandre (2006), (cluster-based estimates) and their confidence interval for each of the trials seperately.}
 }
 \references{
 Alonso, A. A., & Molenberghs, G. (2008). Evaluating time-to-cancer recurrence as a surrogate marker for survival from an information theory perspective. \emph{Statistical Methods in Medical Research, 17,} 497-504. 
@@ -87,7 +87,7 @@ data(Ovarian)
 # Conduct analysis
 Fit <- SurvSurv(Dataset = Ovarian, Surr = Pfs, SurrCens = PfsInd,
 True = Surv, TrueCens = SurvInd, Treat = Treat, 
-Trial.ID = Center, Number.Bootstraps=50, Alpha=.05, Seed=1)
+Trial.ID = Center)
 
 # Examine results 
 plot(Fit)

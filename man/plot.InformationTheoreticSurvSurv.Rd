@@ -38,7 +38,7 @@ data(Ovarian)
 # Conduct analysis
 Fit <- SurvSurv(Dataset = Ovarian, Surr = Pfs, SurrCens = PfsInd,
 True = Surv, TrueCens = SurvInd, Treat = Treat, 
-Trial.ID = Center, Number.Bootstraps=50, Alpha=.05, Seed=1)
+Trial.ID = Center, Alpha=.05)
 
 # Examine results 
 summary(Fit)

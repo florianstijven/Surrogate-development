@@ -24,7 +24,7 @@ Par=par(oma=c(0, 0, 0, 0), mar=c(5.1, 4.1, 4.1, 2.1)),...){
   }
  
   if (Indiv.Level.By.Trial==TRUE){ 
-    if (missing(Xlab.Indiv)) {Xlab.Indiv <- expression(paste("R"[h.ind]^{2}))}
+    if (missing(Xlab.Indiv)) {Xlab.Indiv <- expression(paste("LRF"[a]))}
     if (missing(Ylab.Indiv)) {Ylab.Indiv <- "Trial"}
     if (missing(Main.Indiv)) {Main.Indiv <- c("Individual-level surrogacy")}
     dev.new()
