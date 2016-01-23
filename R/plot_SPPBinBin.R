@@ -20,7 +20,6 @@ plot.SPF.BinBin <- function(x, Type="All.Histograms", Specific.Pi="r_0_0", Col="
            xlab=expression(r(-1,-1)), cex.lab=1.3)}
     if (length(unique(Object$r_min1_min1)) <= 1){
       plot(x=0, col=0, axes=F, xlab="", ylab= " ", ...)}
-    
     #mtext(side = 3, expression(paste(Delta, "T = -1")), cex=1.5, padj = -1.6)   
     #mtext(side = 2, expression(paste(Delta, "S = -1")), cex=1.5, padj = -3.6)   
     

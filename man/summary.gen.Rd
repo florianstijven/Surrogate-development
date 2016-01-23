@@ -21,6 +21,8 @@
 \alias{summary.FixedContBinIT}
 \alias{summary.SurvSurv}
 \alias{summary.TrialLevelIT}
+\alias{summary.MaxEntICA.BinBin}
+\alias{summary.MaxEntSPF.BinBin}
 \title{Summary}
 \description{summary}
 \usage{
@@ -45,5 +47,7 @@
 \method{summary}{FixedContBinIT}(object, ..., Object)
 \method{summary}{SurvSurv}(object, ..., Object)
 \method{summary}{TrialLevelIT}(object, ..., Object)
+\method{summary}{MaxEntICA.BinBin}(object, ..., Object)
+\method{summary}{MaxEntSPF.BinBin}(object, ..., Object)
 }
 \keyword{internal}

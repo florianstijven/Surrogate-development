@@ -1,8 +1,21 @@
+Changes in version 0.1-6(
+
+  o The functions MaxEntICABinBin and MaxEntSPFBinBin have been added 
+  o Corrected typos
+
+
+Changes in version 0.1-64
+
+  o Corrected typos, changes in function TrialLevelMA
+
+
 Changes in version 0.1-63
+
   o Corrected typos, functions Prentice, TrialLevelIT, SurvSurvIT, FixedBinBinIT, FixedContBinIT, FixedBinContIT, and PredTrialTContCont added
 
 
 Changes in version 0.1-62
+
   o Corrected typos, updated namespace, functions TrialLevelContCont and TwoStageSurvSurv added
 
 

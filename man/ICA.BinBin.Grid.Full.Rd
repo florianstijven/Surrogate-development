@@ -55,7 +55,7 @@ Alonso, A., Van der Elst, W., & Molenberghs, G. (2014). Validation of surrogate 
 Buyse, M., Burzykowski, T., Aloso, A., & Molenberghs, G. (2014). Direct estimation of joint counterfactual probabilities, with application to surrogate marker validation.
 }
 \author{
-Wim Van der Elst, Ariel Alonso, Marc Buyse, & Geert Molenberghs
+Wim Van der Elst, Paul Meyvisch, Ariel Alonso & Geert Molenberghs
 }
 \seealso{
 \code{\link{ICA.ContCont}}, \code{\link{MICA.ContCont}}, \code{\link{ICA.BinBin}}, \code{\link{ICA.BinBin.Grid.Sample}}

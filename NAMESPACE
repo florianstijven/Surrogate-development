@@ -41,6 +41,7 @@ importFrom("stats", quantile)
 importFrom("stats", "binomial")
 #importFrom("survival", Surv)
 #importFrom("survival", coxph)
+importFrom("stats", "optim")
 
 
 importFrom("utils", capture.output)
@@ -55,7 +56,8 @@ summary.FixedContContIT, summary.FixedContContIT, summary.ICA.BinBin, summary.IC
 summary.MICA.ContCont, summary.MinSurrContCont, summary.SPF.BinBin, summary.Single.Trial.RE.AA, 
 summary.TrialLevelMA, summary.TwoStageSurvSurv, summary.Prentice, summary.PredTrialTContCont, plot.FixedBinBinIT,
 summary.FixedBinContIT, summary.FixedContBinIT, plot.FixedBinContIT, plot.FixedContBinIT, summary.SurvSurv,
-plot.SurvSurv, summary.TrialLevelIT, plot.TrialLevelIT)
+plot.SurvSurv, summary.TrialLevelIT, plot.TrialLevelIT, summary.MaxEntICA.BinBin, plot.MaxEntICA.BinBin, 
+plot.MaxEntSPF.BinBin, summary.MaxEntSPF.BinBin)
 
 S3method(plot, UnifixedContCont)
 S3method(plot, UnimixedContCont)
@@ -77,6 +79,8 @@ S3method(plot, FixedBinContIT)
 S3method(plot, FixedContBinIT)
 S3method(plot, SurvSurv)
 S3method(plot, TrialLevelIT)
+S3method(plot, MaxEntICA.BinBin)
+S3method(plot, MaxEntSPF.BinBin)
 
 S3method(summary, UnifixedContCont)
 S3method(summary, UnimixedContCont)
@@ -99,3 +103,5 @@ S3method(summary, FixedBinContIT)
 S3method(summary, FixedContBinIT)
 S3method(summary, SurvSurv)
 S3method(summary, TrialLevelIT)
+S3method(summary, MaxEntICA.BinBin)
+S3method(summary, MaxEntSPF.BinBin)

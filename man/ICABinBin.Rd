@@ -10,7 +10,7 @@ M=10000, Volume.Perc=0, Seed=sample(1:100000, size=1))
 }
 
 \arguments{
-  \item{pi1_1_}{A scalar or vector that contains values for \eqn{P(T=1,S=1|Z=0)}, i.e., the proability that \eqn{S=T=1} when under treatment \eqn{Z=0}. A vector is specified to account for uncertainty, i.e., rather than keeping \eqn{P(T=1,S=1|Z=0)} fixed at one estimated value, a distribution can be specified (see \bold{examples} below) from which a value is drawn in each run.}
+  \item{pi1_1_}{A scalar or vector that contains values for \eqn{P(T=1,S=1|Z=0)}, i.e., the probability that \eqn{S=T=1} when under treatment \eqn{Z=0}. A vector is specified to account for uncertainty, i.e., rather than keeping \eqn{P(T=1,S=1|Z=0)} fixed at one estimated value, a distribution can be specified (see \bold{examples} below) from which a value is drawn in each run.}
   \item{pi1_0_}{A scalar or vector that contains values for \eqn{P(T=1,S=0|Z=0)}.}
   \item{pi_1_1}{A scalar or vector that contains values for \eqn{P(T=1,S=1|Z=1)}.}
   \item{pi_1_0}{A scalar or vector that contains values for \eqn{P(T=1,S=0|Z=1)}.}
@@ -61,7 +61,7 @@ To account for the uncertainty in the estimation of the marginal probabilities, 
 Alonso, A., Van der Elst, W., & Molenberghs, G. (2015). Validation of surrogate endpoints: the binary-binary setting from a causal inference perspective.
 }
 \author{
-Wim Van der Elst, Ariel Alonso, Marc Buyse, & Geert Molenberghs
+Wim Van der Elst, Paul Meyvisch, Ariel Alonso & Geert Molenberghs
 }
 \seealso{
 \code{\link{ICA.ContCont}}, \code{\link{MICA.ContCont}}
