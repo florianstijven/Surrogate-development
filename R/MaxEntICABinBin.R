@@ -326,9 +326,17 @@ r_0_m1 <- pi_0_m1 / pi_m1_Delta_S
 
      }  #einde MD
 
+#H_max
+h_max_part <- h_max_all <- NULL
+for (z in 1: 16){
+  h_max_part <- as.numeric(p_i_all[z]) * log(as.numeric(p_i_all[z]))
+  h_max_all <- cbind(h_max_all, h_max_part)
+}
+H_max <- -sum(h_max_all)
+
 
 fit <- 
-  list(R2_H=as.numeric(R2_H), Vector_p = p_i_all, Call=match.call()) #,
+  list(R2_H=as.numeric(R2_H), Vector_p = p_i_all, H_max=H_max, Call=match.call()) #,
 #r_1_1=as.numeric(r_1_1), r_min1_1=as.numeric(r_m1_1), r_0_1=as.numeric(r_0_1),
 #r_1_0=as.numeric(r_1_0), r_min1_0=as.numeric(r_m1_0), r_0_0=as.numeric(r_0_0),
 #r_1_min1=as.numeric(r_1_m1), r_min1_min1=as.numeric(r_m1_m1), r_0_min1=as.numeric(r_0_m1))

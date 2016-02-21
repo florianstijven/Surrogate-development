@@ -34,15 +34,7 @@ the components in the vectors \eqn{\pi} and \eqn{\pi} is smallest. The latter 'M
 \value{
 \item{R2_H}{The R2_H value.}
 \item{Vector_p}{The maximum entropy frequency vector \eqn{p^{*}}}
-%\item{r_1_1}{The vector of values for \eqn{r(1, 1)}, i.e., \eqn{P(\Delta T=1|\Delta S=1}).}
-%\item{r_min1_1}{The vector of values for \eqn{r(-1, 1)}.}
-%\item{r_0_1}{The vector of values for \eqn{r(0, 1)}.}
-%\item{r_1_0}{The vector of values for \eqn{r(1, 0)}.}
-%\item{r_min1_0}{The vector of values for \eqn{r(-1, 0)}.}
-%\item{r_0_0}{The vector of values for \eqn{r(0, 0)}.}
-%\item{r_1_min1}{The vector of values for \eqn{r(1, -1)}.}
-%\item{r_min1_min1}{The vector of values for \eqn{r(-1, -1)}.}
-%\item{r_0_min1}{The vector of values for \eqn{r(0, -1)}.}
+\item{H_max}{The entropy of \eqn{p^{*}}}
 }
 \references{
 Alonso, A., & Van der Elst, W. (2015). A maximum-entropy approach for the evluation of surrogate endpoints based on causal inference.

@@ -19,6 +19,7 @@ A \code{data.frame} with \eqn{454} observations on \eqn{5} variables.
 reduction of \eqn{20}\% or more in the PANSS score, 0=otherwise)}
     \item{\code{BPRS_Bin}}{The dichotomized change in the BPRS score (1 = a
 reduction of \eqn{20}\% or more in the BPRS score, 0=otherwise)}
+    \item{\code{CGI_Bin}}{The sichtomized change in the CGI score, coded as \eqn{1} = a change of more than \eqn{3} points on the original scale (score at the end of the treatment relative to score at the beginning of the treatment), \eqn{0} = otherwise.}
 }
 }
 \references{

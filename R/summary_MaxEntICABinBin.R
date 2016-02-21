@@ -9,8 +9,13 @@ summary.MaxEntICA.BinBin <- function(object, ..., Object){
   cat("\n# Maximum entropy distribution of vector of potential outcomes")
   cat("\n#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n")
   print(Object$Vector_p)
+
+  cat("\n\n# H_max (entropy of p*) ")
+  cat("\n#~~~~~~~~~~~~~~~~~~~~~~\n\n")  
+  cat(Object$H_max, "\n")
   
-  cat("\n\n\n# R2_H results")
+    
+  cat("\n\n# R2_H results")
   cat("\n#~~~~~~~~~~~~~\n\n")  
   cat(Object$R2_H, "\n\n")
   }
