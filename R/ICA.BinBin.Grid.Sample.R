@@ -15,13 +15,6 @@ if (length(pi1_1_)==1 & length(pi1_0_)==1 & length(pi_1_1)==1 &
   if (Volume.Perc==0){Seed <- round(runif(min=(1+M), max=2147483647, n=1), digits=0)}
   Seed.generalCase <- Seed   #for gen case LS
   
-#  if(pi1_1_==0){cat("\nTo avoid problems in the computation of ICA, the specified pi1_1_=0 was replaced by pi1_1_=1e-20 \n"); pi1_1_ <- 1e-20}
-#  if(pi1_0_==0){cat("\nTo avoid problems in the computation of ICA, the specified pi1_0_=0 was replaced by pi1_0_=1e-20 \n"); pi1_0_ <- 1e-20}
-#  if(pi_1_1==0){cat("\nTo avoid problems in the computation of ICA, the specified pi_1_1=0 was replaced by pi_1_1=1e-20 \n"); pi_1_1 <- 1e-20}
-#  if(pi_1_0==0){cat("\nTo avoid problems in the computation of ICA, the specified pi_1_0=0 was replaced by pi_1_0=1e-20 \n"); pi_1_0 <- 1e-20}
-#  if(pi0_1_==0){cat("\nTo avoid problems in the computation of ICA, the specified pi0_1_=0 was replaced by pi0_1_=1e-20 \n"); pi0_1_ <- 1e-20}
-#  if(pi_0_1==0){cat("\nTo avoid problems in the computation of ICA, the specified pi_0_1=0 was replaced by pi_0_1=1e-20 \n"); pi_0_1 <- 1e-20}
-  
   vector_b <- matrix(data=c(1, pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1), ncol=1)  
   
   Pi.Vectors <- pi_f_all <- pi_r_all <- C3_all <- R2_H_all <- theta_T_all <- theta_S_all <- H_Delta_T_all <- pi_all <- NULL
@@ -734,7 +727,10 @@ fit <-
 
   class(fit) <- "ICA.BinBin"
   fit
-} else {
+} 
+  
+  
+  else {
   pi_1001=seq(0, 1, by=.01); pi_1110=seq(0, 1, by=.01) 
   pi_1101=seq(0, 1, by=.01); pi_1011=seq(0, 1, by=.01)
   pi_1111=seq(0, 1, by=.01); pi_0110=seq(0, 1, by=.01)
@@ -745,15 +741,6 @@ fit <-
   set.seed(Seed.orig)
   if (Volume.Perc==0){Seed <- round(runif(min=(1+M), max=2147483647, n=1), digits=0)}
   Seed.generalCase <- Seed   #for gen case LS
-  
-  #  if(pi1_1_==0){cat("\nTo avoid problems in the computation of ICA, the specified pi1_1_=0 was replaced by pi1_1_=1e-20 \n"); pi1_1_ <- 1e-20}
-  #  if(pi1_0_==0){cat("\nTo avoid problems in the computation of ICA, the specified pi1_0_=0 was replaced by pi1_0_=1e-20 \n"); pi1_0_ <- 1e-20}
-  #  if(pi_1_1==0){cat("\nTo avoid problems in the computation of ICA, the specified pi_1_1=0 was replaced by pi_1_1=1e-20 \n"); pi_1_1 <- 1e-20}
-  #  if(pi_1_0==0){cat("\nTo avoid problems in the computation of ICA, the specified pi_1_0=0 was replaced by pi_1_0=1e-20 \n"); pi_1_0 <- 1e-20}
-  #  if(pi0_1_==0){cat("\nTo avoid problems in the computation of ICA, the specified pi0_1_=0 was replaced by pi0_1_=1e-20 \n"); pi0_1_ <- 1e-20}
-  #  if(pi_0_1==0){cat("\nTo avoid problems in the computation of ICA, the specified pi_0_1=0 was replaced by pi_0_1=1e-20 \n"); pi_0_1 <- 1e-20}
-  
-  # vector_b <- matrix(data=c(1, pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1), ncol=1)  
   
   Pi.Vectors <- pi_f_all <- pi_r_all <- C3_all <- R2_H_all <- theta_T_all <- theta_S_all <- H_Delta_T_all <- pi_all <- NULL
   
@@ -881,15 +868,15 @@ fit <-
       if (Volume.Perc!=0){Seed <- Seed+1}
       set.seed(Seed)
       
-      pi_1001 <- runif(n=1, min = 0, max=min_pi_1001)
-      pi_1110 <- runif(n=1, min = 0, max=min_pi_1110)
-      pi_1101 <- runif(n=1, min = 0, max=min_pi_1101)
-      pi_1011 <- runif(n=1, min = 0, max=min_pi_1011)
-      pi_1111 <- runif(n=1, min = 0, max=min_pi_1111)
-      pi_0110 <- runif(n=1, min = 0, max=min_pi_0110)
-      pi_0011 <- runif(n=1, min = 0, max=min_pi_0011)
-      pi_0111 <- runif(n=1, min = 0, max=min_pi_0111)
-      pi_1100 <- runif(n=1, min = 0, max=min_pi_1100)
+      set.seed(Seed+1); pi_1001 <- runif(n=1, min = 0, max=min_pi_1001)
+      set.seed(Seed+2); pi_1110 <- runif(n=1, min = 0, max=min_pi_1110)
+      set.seed(Seed+3); pi_1101 <- runif(n=1, min = 0, max=min_pi_1101)
+      set.seed(Seed+4); pi_1011 <- runif(n=1, min = 0, max=min_pi_1011)
+      set.seed(Seed+5); pi_1111 <- runif(n=1, min = 0, max=min_pi_1111)
+      set.seed(Seed+6); pi_0110 <- runif(n=1, min = 0, max=min_pi_0110)
+      set.seed(Seed+7); pi_0011 <- runif(n=1, min = 0, max=min_pi_0011)
+      set.seed(Seed+8); pi_0111 <- runif(n=1, min = 0, max=min_pi_0111)
+      set.seed(Seed+9); pi_1100 <- runif(n=1, min = 0, max=min_pi_1100)
       
       Seed <- Seed-1   
       set.seed(Seed)
@@ -897,11 +884,11 @@ fit <-
       set.seed(Seed)
       vector_b <- 
         matrix(data=c(1, sample(size = 1, pi1_1_), sample(size = 1, pi1_0_), sample(size = 1, pi_1_1), 
-                      sample(size = 1, pi_1_0), sample(size = 1, pi0_1_), sample(size = 1, pi_0_1)), 
-               ncol=1) 
+                      sample(size = 1, pi_1_0), sample(size = 1, pi0_1_), sample(size = 1, pi_0_1)), ncol=1) 
       pi_r <- solve(A_r) %*% (vector_b - (A_f %*% pi_f))
       
-      if ((sum(pi_r >= 0 & pi_r <= 1) == 7)==TRUE) {
+      if (((sum(pi_r >= 0 & pi_r <= 1) == 7)==TRUE) & ((vector_b[2] + vector_b[3] + vector_b[6]) <= 1) 
+          & ((vector_b[4] + vector_b[5] + vector_b[7]) <= 1)){
         
         for (l in 1: length(pi_r)){
           if (pi_r[l] < 0) {pi_r[l] <- c(0)}
@@ -1059,11 +1046,11 @@ fit <-
       min_pi_0111 <- min(pi0_1_, pi_1_1)
       min_pi_1100 <- min(pi1_0_, pi_1_0)
       
-      pi_1111 <- runif(n=1, min = 0, max=min_pi_1111)
-      pi_0110 <- runif(n=1, min = 0, max=min_pi_0110)
-      pi_0011 <- runif(n=1, min = 0, max=min_pi_0011)
-      pi_0111 <- runif(n=1, min = 0, max=min_pi_0111)
-      pi_1100 <- runif(n=1, min = 0, max=min_pi_1100)
+      set.seed(Seed+1); pi_1111 <- runif(n=1, min = 0, max=min_pi_1111)
+      set.seed(Seed+2); pi_0110 <- runif(n=1, min = 0, max=min_pi_0110)
+      set.seed(Seed+3); pi_0011 <- runif(n=1, min = 0, max=min_pi_0011)
+      set.seed(Seed+4); pi_0111 <- runif(n=1, min = 0, max=min_pi_0111)
+      set.seed(Seed+5); pi_1100 <- runif(n=1, min = 0, max=min_pi_1100)
       Seed <- Seed-1   
       set.seed(Seed)
       
@@ -1078,7 +1065,8 @@ fit <-
       pi_r <-   
         solve(A_star_r) %*% (vector_b - (A_star_f %*% pi_f))
       
-      if ((sum(pi_r >= 0 & pi_r <= 1) == 7)==TRUE) {
+      if (((sum(pi_r >= 0 & pi_r <= 1) == 7)==TRUE) & ((vector_b[2] + vector_b[3] + vector_b[6]) <= 1) 
+          & ((vector_b[4] + vector_b[5] + vector_b[7]) <= 1)){
         
         for (l in 1: length(pi_r)){
           if (pi_r[l] < 0) {pi_r[l] <- c(0)}
@@ -1228,11 +1216,11 @@ fit <-
       min_pi_0111 <- min(pi0_1_, pi_1_1)
       min_pi_1100 <- min(pi1_0_, pi_1_0)
       
-      pi_1001 <- runif(n=1, min = 0, max=min_pi_1001)
-      pi_1101 <- runif(n=1, min = 0, max=min_pi_1101)
-      pi_1111 <- runif(n=1, min = 0, max=min_pi_1111)
-      pi_0111 <- runif(n=1, min = 0, max=min_pi_0111)
-      pi_1100 <- runif(n=1, min = 0, max=min_pi_1100)
+      set.seed(Seed+1); pi_1001 <- runif(n=1, min = 0, max=min_pi_1001)
+      set.seed(Seed+2); pi_1101 <- runif(n=1, min = 0, max=min_pi_1101)
+      set.seed(Seed+3); pi_1111 <- runif(n=1, min = 0, max=min_pi_1111)
+      set.seed(Seed+4); pi_0111 <- runif(n=1, min = 0, max=min_pi_0111)
+      set.seed(Seed+5); pi_1100 <- runif(n=1, min = 0, max=min_pi_1100)
       
       Seed <- Seed-1  
       set.seed(Seed)
@@ -1246,7 +1234,8 @@ fit <-
       
       pi_r <- solve(A_star_r) %*% (vector_b - (A_star_f %*% pi_f))
       
-      if ((sum(pi_r >= 0 & pi_r <= 1) == 7)==TRUE) {
+      if (((sum(pi_r >= 0 & pi_r <= 1) == 7)==TRUE) & ((vector_b[2] + vector_b[3] + vector_b[6]) <= 1) 
+          & ((vector_b[4] + vector_b[5] + vector_b[7]) <= 1)){
         
         for (l in 1: length(pi_r)){
           if (pi_r[l] < 0) {pi_r[l] <- c(0)}
@@ -1379,8 +1368,8 @@ fit <-
       min_pi_0111 <- min(pi0_1_, pi_1_1)
       min_pi_1100 <- min(pi1_0_, pi_1_0)
       
-      pi_0111 <- runif(n=1, min = 0, max=min_pi_0111)
-      pi_1100 <- runif(n=1, min = 0, max=min_pi_1100)
+      set.seed(Seed+1); pi_0111 <- runif(n=1, min = 0, max=min_pi_0111)
+      set.seed(Seed+2); pi_1100 <- runif(n=1, min = 0, max=min_pi_1100)
       Seed <- Seed-1  
       set.seed(Seed)
       
@@ -1394,7 +1383,8 @@ fit <-
       pi_r <-   
         solve(A_star_r) %*% (vector_b - (A_star_f %*% pi_f))
       
-      if ((sum(pi_r >= 0 & pi_r <= 1) == 7)==TRUE) {
+      if (((sum(pi_r >= 0 & pi_r <= 1) == 7)==TRUE) & ((vector_b[2] + vector_b[3] + vector_b[6]) <= 1) 
+          & ((vector_b[4] + vector_b[5] + vector_b[7]) <= 1)){
         
         for (l in 1: length(pi_r)){
           if (pi_r[l] < 0) {pi_r[l] <- c(0)}
