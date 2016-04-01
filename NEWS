@@ -1,7 +1,7 @@
-Changes in version 0.1-68 - 0.1-69
+Changes in version 0.1-68 - 0.1-71
 
-  o The functions FixedDiscDiscrIT and Plot.FixedDiscrDiscrIT have been added 
- 
+  o The functions FixedDiscDiscrIT, ICA.BinBin.Grid.Sample.Uncert and Plot.FixedDiscrDiscrIT have been added 
+  o Corrected typos
 
 
 Changes in version 0.1-65-0.1-67
