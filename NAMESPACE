@@ -1,7 +1,7 @@
 import(rgl)
 import(lattice)
 import(latticeExtra)
-
+#import(mixtools)
 
 import(survival)
 
@@ -44,6 +44,7 @@ importFrom("stats", "binomial")
 importFrom("stats", "optim")
 importFrom("utils", capture.output)
 importFrom("stats", "coefficients", "na.omit", "pchisq")
+importFrom("stats", "dnorm", "rnorm")
 
 exportPattern("^[[:alpha:]]+")
 export(plot.UnifixedContCont, plot.UnimixedContCont, plot.BifixedContCont, plot.BimixedContCont, 
@@ -55,7 +56,8 @@ summary.MICA.ContCont, summary.MinSurrContCont, summary.SPF.BinBin, summary.Sing
 summary.TrialLevelMA, summary.TwoStageSurvSurv, summary.Prentice, summary.PredTrialTContCont, plot.FixedBinBinIT,
 summary.FixedBinContIT, summary.FixedContBinIT, plot.FixedBinContIT, plot.FixedContBinIT, summary.SurvSurv,
 plot.SurvSurv, summary.TrialLevelIT, plot.TrialLevelIT, summary.MaxEntICA.BinBin, plot.MaxEntICA.BinBin, 
-plot.MaxEntSPF.BinBin, summary.MaxEntSPF.BinBin, plot.FixedDiscrDiscrIT)
+plot.MaxEntSPF.BinBin, summary.MaxEntSPF.BinBin, plot.FixedDiscrDiscrIT,
+plot.ICA.BinCont, summary.ICA.BinCont)
 
 S3method(plot, UnifixedContCont)
 S3method(plot, UnimixedContCont)
@@ -80,7 +82,7 @@ S3method(plot, TrialLevelIT)
 S3method(plot, MaxEntICA.BinBin)
 S3method(plot, MaxEntSPF.BinBin)
 S3method(plot, FixedDiscrDiscrIT)
-
+S3method(plot, ICA.BinCont)
 
 S3method(summary, UnifixedContCont)
 S3method(summary, UnimixedContCont)
@@ -105,3 +107,4 @@ S3method(summary, SurvSurv)
 S3method(summary, TrialLevelIT)
 S3method(summary, MaxEntICA.BinBin)
 S3method(summary, MaxEntSPF.BinBin)
+S3method(summary, ICA.BinCont)

@@ -23,6 +23,7 @@
 \alias{summary.TrialLevelIT}
 \alias{summary.MaxEntICA.BinBin}
 \alias{summary.MaxEntSPF.BinBin}
+\alias{summary.ICA.BinCont}
 \title{Summary}
 \description{summary}
 \usage{
@@ -49,5 +50,6 @@
 \method{summary}{TrialLevelIT}(object, ..., Object)
 \method{summary}{MaxEntICA.BinBin}(object, ..., Object)
 \method{summary}{MaxEntSPF.BinBin}(object, ..., Object)
+\method{summary}{ICA.BinCont}(object, ..., Object)
 }
 \keyword{internal}

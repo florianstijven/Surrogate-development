@@ -1,3 +1,6 @@
+Changes in version 0.1.72
+  o The function ICA.BinCont has been added
+
 Changes in version 0.1-68 - 0.1-71
 
   o The functions FixedDiscDiscrIT, ICA.BinBin.Grid.Sample.Uncert and Plot.FixedDiscrDiscrIT have been added 
