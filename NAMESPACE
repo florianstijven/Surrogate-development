@@ -57,7 +57,7 @@ summary.TrialLevelMA, summary.TwoStageSurvSurv, summary.Prentice, summary.PredTr
 summary.FixedBinContIT, summary.FixedContBinIT, plot.FixedBinContIT, plot.FixedContBinIT, summary.SurvSurv,
 plot.SurvSurv, summary.TrialLevelIT, plot.TrialLevelIT, summary.MaxEntICA.BinBin, plot.MaxEntICA.BinBin, 
 plot.MaxEntSPF.BinBin, summary.MaxEntSPF.BinBin, plot.FixedDiscrDiscrIT,
-plot.ICA.BinCont, summary.ICA.BinCont)
+plot.ICA.BinCont, summary.ICA.BinCont, summary.FixedDiscrDiscrIT)
 
 S3method(plot, UnifixedContCont)
 S3method(plot, UnimixedContCont)
@@ -108,3 +108,4 @@ S3method(summary, TrialLevelIT)
 S3method(summary, MaxEntICA.BinBin)
 S3method(summary, MaxEntSPF.BinBin)
 S3method(summary, ICA.BinCont)
+S3method(summary,FixedDiscrDiscrIT)

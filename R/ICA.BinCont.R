@@ -248,7 +248,7 @@ fit <-
        pi_Delta_T_1=as.numeric(pi_Delta_T_1_all),
        pi_0_00=as.numeric(pi_0_00_e_all),
        pi_0_01=as.numeric(pi_0_01_e_all),
-       pi_0_11=as.numeric(pi_0_10_e_all),
+       pi_0_10=as.numeric(pi_0_10_e_all),
        pi_0_11=as.numeric(pi_0_11_e_all), 
        mu_0_00=as.numeric(mu_0_00_all),
        mu_0_01=as.numeric(mu_0_01_all),

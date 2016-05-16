@@ -5,7 +5,7 @@
 \description{
 This function provides a plot that displays the frequencies, percentages, cumulative percentages or densities of the individual causal association (ICA; \eqn{R^2_{H}}) in the setting where S is continuous and T is binary. }
 \usage{
-\method{plot}{ICA.BinCont}(x, Xlab, Main=" ", Type="Density", Labels=TRUE, \dots)
+\method{plot}{ICA.BinCont}(x, Xlab, Main=" ", Type="Percent", Labels=FALSE, \dots)
 }
 \arguments{
 \item{x}{An object of class \code{ICA.BinCont}. See \code{\link{ICA.BinCont}}.}

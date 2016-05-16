@@ -1,4 +1,4 @@
-plot.ICA.BinCont <- function(x, Xlab, Main=" ", Type="Density", Labels=TRUE, ...){
+plot.ICA.BinCont <- function(x, Xlab, Main=" ", Type="Percent", Labels=FALSE, ...){
 
   if (missing(Xlab)) {Xlab <- expression(R[H]^2)}
   
@@ -18,10 +18,10 @@ plot.ICA.BinCont <- function(x, Xlab, Main=" ", Type="Density", Labels=TRUE, ...
       labs <- paste(round((1-cumulMidPoint), digits=4)*100, "%", sep="")
       
       if (Labels==FALSE){
-        plot(h,freq=T, xlab=Xlab, ylab="Frequency", main=Main)
+        plot(h,freq=T, xlab=Xlab, ylab="Frequency", main=Main, col="grey")
       }
       if (Labels==TRUE){
-        plot(h,freq=T, xlab=Xlab, ylab="Frequency", main=Main, labels=labs)
+        plot(h,freq=T, xlab=Xlab, ylab="Frequency", main=Main, labels=labs, col="grey")
       }
     }
     
@@ -34,10 +34,10 @@ plot.ICA.BinCont <- function(x, Xlab, Main=" ", Type="Density", Labels=TRUE, ...
       labs <- paste(round((1-cumulMidPoint), digits=4)*100, "%", sep="")
       
       if (Labels==FALSE){
-        plot(h, freq=F, xlab=Xlab, ylab="Percentage", main=Main)
+        plot(h, freq=F, xlab=Xlab, ylab="Percentage", main=Main, col="grey")
       }
       if (Labels==TRUE){
-        plot(h, freq=F, xlab=Xlab, ylab="Percentage", main=Main, labels=labs)
+        plot(h, freq=F, xlab=Xlab, ylab="Percentage", main=Main, labels=labs, col="grey")
       }
       }
       

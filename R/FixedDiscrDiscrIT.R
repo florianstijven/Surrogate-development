@@ -19,7 +19,7 @@ FixedDiscrDiscrIT<-function(Dataset,Surr,True,Treat,Trial.ID,Weighted=TRUE,Setti
 Total.length<-length(Dataset[,1])  
 Dataset<-na.omit(Dataset)
 Removed.obs<-Total.length-length(Dataset[,1])
-if (Removed.obs>1) {cat("Problem: parewise deletion due to missing data in", Removed.obs,"rows")}
+if (Removed.obs>1) {cat("Problem: pairwise deletion due to missing data in", Removed.obs,"rows")}
 
 
   Surr <- Dataset[,paste(substitute(Surr))]
@@ -41,6 +41,7 @@ trialnumber<-length(unique(Trial.ID))
 R2h.included<-rep("Y",trialnumber)
 R2ht.included<-rep("Y",trialnumber)
 
+
   ######################################################
   ###### R2h.max Individual level surrogacy   ##########
   ######################################################
@@ -61,7 +62,7 @@ R2ht.included<-rep("Y",trialnumber)
         
         #### R2H CODE lrm confidence intervals
         if (is.nan(g2[i])) {g2[i]<-NA; {cat("Problem R2h: model failure for one of the models of trial", i, "/N.\r\n")}
-		R2h.included[i]<-"N"} else {
+		R2h.included[i]<-"N"; l.ncpara[i]<-NA; u.ncpara[i]<-NA} else {
           if (abs(g2[i])<1e-04) {g2[i]<-0}
           l.ncpara[i]<-qchisq(0.025,1,g2[i])
           if (pchisq(g2[i],1,0)<=0.95) {l.ncpara[i]<-0}
@@ -80,9 +81,10 @@ R2ht.included<-rep("Y",trialnumber)
               l.ncpara[i]<-qchisq(0.025,1,g2[i])
               if (pchisq(g2[i],1,0)<=0.95) {l.ncpara[i]<-0}
               u.ncpara[i]<-qchisq(0.975,1,g2[i])}}else {{cat("Problem R2h: model failure for one of the models of trial", i, "/N.\r\n")}
-			R2h.included[i]<-"N"}
+			R2h.included[i]<-"N";l.ncpara[i]<-NA; u.ncpara[i]<-NA}
         }}
-    modRmax<-rms::lrm(True~1)
+    remove<-rep(R2h.included,Obs.per.trial)
+    modRmax<-rms::lrm(True[remove=="Y"]~1)
   }
   if (Setting==c("ordbin")){
     
@@ -94,20 +96,21 @@ R2ht.included<-rep("Y",trialnumber)
       Trial[i]<-i
       tryCatch({mod1<-glm(True[Trial.ID==i]~Treat[Trial.ID==i],family=binomial(link=logit))},error=function(e){error1[i]<<-1})
       tryCatch({mod2<-glm(True[Trial.ID==i]~Treat[Trial.ID==i]+Surr[Trial.ID==i],family=binomial(link=logit))},error=function(e){error2[i]<<-1})
-      if (error1[i]!=1&error2[i]!=1){
+      if (error1[i]!=1&error2[i]!=1&!is.na(as.numeric(mod1$coefficients[2]))){
         g2[i]<-2*(as.numeric(logLik(mod2))-as.numeric(logLik(mod1)))
         expg2<-expg2+exp(-g2[i]/Obs.per.trial[i])
         
         # R2H CODE lrm confidence intervals
         if (is.nan(g2[i])) {g2[i]<-NA; {cat("Problem R2h: model failure for one of the models of trial", i, "/N.\r\n")}
-		R2h.included[i]<-"N"} else {
+		R2h.included[i]<-"N";l.ncpara[i]<-NA; u.ncpara[i]<-NA} else {
           l.ncpara[i]<-qchisq(0.025,1,g2[i])
           if (pchisq(g2[i],1,0)<=0.95) {l.ncpara[i]<-0}
           u.ncpara[i]<-qchisq(0.975,1,g2[i])
         }}else {{cat("Problem R2h: model failure for one of the models of trial", i, "/N.\r\n")}
-		R2h.included[i]<-"N"}
+		R2h.included[i]<-"N";l.ncpara[i]<-NA; u.ncpara[i]<-NA}
     }
-    modRmax<-glm(True~1,family=binomial(link=logit))
+    remove<-rep(R2h.included,Obs.per.trial)
+    modRmax<-glm(True[remove=="Y"]~1,family=binomial(link=logit))
   }
   if (Setting==c("ordord")){
     
@@ -125,15 +128,15 @@ R2ht.included<-rep("Y",trialnumber)
         
         #### R2H CODE lrm confidence intervals
         if (is.nan(g2[i])) {g2[i]<-NA; {cat("Problem R2h: model failure for one of the models of trial", i, "/N. \r\n ")}
-		R2h.included[i]<-"N"} else {
+		R2h.included[i]<-"N";l.ncpara[i]<-NA; u.ncpara[i]<-NA} else {
           if (abs(g2[i])<1e-04) {g2[i]<-0}
           l.ncpara[i]<-qchisq(0.025,1,g2[i])
           if (pchisq(g2[i],1,0)<=0.95) {l.ncpara[i]<-0}
           u.ncpara[i]<-qchisq(0.975,1,g2[i])
         }}else{{cat("Problem R2h: model failure for one of the models of trial", i, "/N. \r\n ")}
-		R2h.included[i]<-"N"}}
-    
-    modRmax<-rms::lrm(True~1)
+		R2h.included[i]<-"N";l.ncpara[i]<-NA; u.ncpara[i]<-NA}}
+    remove<-rep(R2h.included,Obs.per.trial)
+    modRmax<-rms::lrm(True[remove=="Y"]~1)
     
   }
   
@@ -156,7 +159,8 @@ R2ht.included<-rep("Y",trialnumber)
   
   
   R2h<-data.frame(cbind(R2h.max, R2h.max.lb, R2h.max.ub)) 
-  
+  colnames(R2h) <- c("R2h", "CI lower limit", "CI upper limit")
+  rownames(R2h) <- c(" ")
   
   
   ############################################################
@@ -220,7 +224,7 @@ level<-unique(Treat)
       modht1.f<-NULL
       ordFIRTH<-FALSE
       
-      tryCatch({modht1.f<-polr(True[Trial.ID==i]~Treat[Trial.ID==i],method=("logistic"))},error=function(e){},warning=function(w){})
+      tryCatch({modht1.f<-polr(as.factor(True[Trial.ID==i])~Treat[Trial.ID==i],method=("logistic"))},error=function(e){},warning=function(w){})
       if (length(coefficients(modht1.f))==0|is.null(modht1.f)) {Treatment.T[i]<-NA; ordFIRTH<-TRUE}else{
         Treatment.T[i]<-coefficients(modht1.f)}
       
@@ -238,7 +242,7 @@ level<-unique(Treat)
       if (length(True[Treat == level[1] & Trial.ID == i])==0|length(True[Treat == level[2] & Trial.ID == i])==0){
         cat("Problem: R2ht, only one treatment group in trial",i,"/N, trial removed \r\n")
 	R2ht.included[i]<-"N"
-        Separation.T[i]<-"NA"
+        Separation.T[i]<-"YES"
       }else{
         #all the results of one are higher than the other treatment
         if (max(as.numeric(True[Treat==level[1] & Trial.ID==i]))<=min(as.numeric(True[Treat==level[2] & Trial.ID==i]))|max(as.numeric(True[Treat==level[2]& Trial.ID==i]))<=min(as.numeric(True[Treat==level[1]& Trial.ID==i]))){
@@ -311,8 +315,9 @@ Level.Surr<-unique(Surr)
           ordFIRTH<-TRUE
         }}}
     if (length(Surr[Treat==level[1]&Trial.ID==i])==0|length(Surr[Treat==level[2]&Trial.ID==i])==0){
+      cat("Problem: R2ht, only one treatment group in trial",i,"/N, trial removed \r\n")
       Treatment.S[i]<-mui.f.o[1:(length(unique(Surr))-1),i]<-NA
-      Separation.S[i]<-"NA"
+      Separation.S[i]<-"YES"
 	R2ht.included[i]<-"N"
     } else{
       if (max(as.numeric(Surr[Treat==level[1]&Trial.ID==i]))<=min(as.numeric(Surr[Treat==level[2]&Trial.ID==i]))|max(as.numeric(Surr[Treat==level[2]&Trial.ID==i]))<=min(as.numeric(Surr[Treat==level[1]&Trial.ID==i]))){
@@ -369,7 +374,7 @@ Level.Surr<-unique(Surr)
 
 
 Trial.Spec.Results <- data.frame(Trial, Obs.per.trial,R2h.included,R2ht.included,Separation.S,Separation.T,Intercept.S,Treatment.S,Treatment.T)
-colnames(Trial.Spec.Results) <- c(NULL, "Trial", "Obs.per.trial","R2h.Included","R2ht.Included","Sepatation.S","Separation.T", "Intercept.S", "Treatment.S", "Treatment.T")
+colnames(Trial.Spec.Results) <- c(NULL, "Trial", "Obs.per.trial","R2h.Included","R2ht.Included","Separation.S","Separation.T", "Intercept.S", "Treatment.S", "Treatment.T")
 rownames(Trial.Spec.Results) <- NULL
 
 lrfht1.f<-NULL
@@ -403,9 +408,11 @@ if (remain.trials.f<3|logLik(lrfht2.f)==Inf){r2ht.f<-u.r2ht.f<-l.r2ht.f<-NA
 
 
 R2ht<-data.frame(cbind(R2ht.f,l.r2ht.f,u.r2ht.f))
+colnames(R2ht) <- c("R2ht", "CI lower limit", "CI upper limit")
+rownames(R2ht) <- c(" ")
 
 fit <- 
-  list(Trial.Spec.Results=Trial.Spec.Results,R2ht=R2ht, R2h=R2h)   
+  list(Trial.Spec.Results=Trial.Spec.Results,R2ht=R2ht, R2h=R2h,Call=match.call())   
 
 class(fit) <- "FixedDiscrDiscrIT"
 fit 
