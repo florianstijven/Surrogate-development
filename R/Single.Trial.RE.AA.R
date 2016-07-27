@@ -35,7 +35,8 @@ Single.Trial.RE.AA <- function(Dataset, Surr, True, Treat, Pat.ID, Alpha=.05, Nu
   # CI AA
   rho_z <- var(model12$residuals[,2], model12$residuals[,1])/ sqrt(var(model12$residuals[,2])*var(model12$residuals[,1]))
   Z <- .5*log((1+rho_z)/(1-rho_z)) 
-  rho_lb <- max(0, (exp(2*(Z-(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))-1)/(exp(2*(Z-(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))+1))
+  
+  rho_lb <- max((exp(2*(Z-(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))-1)/(exp(2*(Z-(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))+1))
   rho_ub <- min(1, (exp(2*(Z+(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))-1)/(exp(2*(Z+(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))+1))
   rho_sd <- sqrt((1-rho_z**2)/(N.total-2))
   rho_results_FishZ <- data.frame(cbind(rho_z, rho_sd , rho_lb, rho_ub))

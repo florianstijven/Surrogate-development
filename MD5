@@ -1,11 +1,12 @@
-7e8398e9a6ea7da8246b599cb1ee3f5d *DESCRIPTION
-7799d5d0be48e9ccc40bacfb1875d90c *NAMESPACE
-2f555b5a2e28be0c55354e798e76e007 *NEWS
+3a61d627af59ec4f769f613e121f61be *DESCRIPTION
+5f0fafea2eb46ddc0d8ebfbf5002136d *NAMESPACE
+69d6dae7a5ba74eeb4f5c91e3ea67688 *NEWS
 4088aeb535ac82329d35f0403ecedf16 *R/BifixedContCont.R
 44fe814dd34da0e513889f98338fd5ff *R/BimixedContCont.R
 d0cef0dcdff0bced4b64b68988db4499 *R/CausalDiagramBinBin.R
 46a9fa9c2a29ae500b899c77875b5b92 *R/CausalDiagramContCont.R
 22e39f4f4b750702371fd4fc4ee70e59 *R/Data.Processing.R
+be0a9e380e65d67c25929f939e857c69 *R/Fano.BinBin.R
 ea416a2e6a1ea20140cd37d8a4732e72 *R/FixedBinBinIT.r
 b2f3dcde1efe22ee4f873e4a39097c32 *R/FixedBinContIT.r
 3bef1e8bcc4d166bb2a5fd8bf6aba101 *R/FixedContBinIT.r
@@ -22,7 +23,7 @@ e18c67a214b7c80024b1fec35a8c1c66 *R/ICABinBin.R
 ec93e7b740845be4c7d0305d9717fc32 *R/LongToWide.R
 856c7d397cda2477061876dd38a98441 *R/MICA.Sample.ContCont.R
 253323f6b10504db1e95a46d40ab00a6 *R/MICAContCont.R
-4fa46f3fdfbf37d1452de1624f18f3b1 *R/MarginalProbs.R
+73aea1345b0c11da47fe6d46d6ce8ddc *R/MarginalProbs.R
 48cc0667fa5db7751962595a16f145c8 *R/MaxEntICABinBin.R
 7f1e81dd1e14e95b76a5b58a90cc3e77 *R/MaxEntSPFBinBin.R
 2040bddddab3392ad8d6a5a5900422be *R/MinSurrContCont.R
@@ -39,7 +40,7 @@ a06204e4b19f34979d5d65a837b198e6 *R/Sim.Data.MTS.R
 6a601dec53e57aca69d55b15aeeffd6c *R/Sim.Data.STS.R
 4f3f87f650a54aa0eae8b39c1194275a *R/SimDataCounterfactualsBinBin.R
 e447acffe3f6ff15c823a180b99686ac *R/SimDataSTSBinBin.R
-70b97556b373b9e399c51ea564e435e8 *R/Single.Trial.RE.AA.R
+265171b6aa7bdebab3780f3b78c5c2ec *R/Single.Trial.RE.AA.R
 2fdd276ab4054eef97f8eacc59063512 *R/SummaryITContCont.R
 91aa1c0cbf1f0aa722e2b83e1cba00ea *R/SummaryMaxEntSPFBinBin.R
 03d09101502b7a9d2faa5c26a43e6629 *R/SummaryMetaAnalyticMTSContCont.R
@@ -54,6 +55,7 @@ ec09e95b3a29d5dc422ced35587fe961 *R/TwoStageSurvSurv.R
 300bb0486926677c80886fc31b376b53 *R/UnifixedContCont.R
 3fff34ef44c0e7fbbf1e96599e9c9a8e *R/UnimixedContCont.R
 b6c30f9622f45d8fd0cc6a1cbc5653ad *R/plot.BinContCombnIT.R
+698b26a1c8d6c9fe55778adcc0cdd2ab *R/plot.Fano.BinBin.R
 7e1d67be87655810e9e7d2a4c4782334 *R/plot.InfoTheoretic.R
 2b4eba5a03d06f41a36bf29cc75c087d *R/plot.MaxEntSPF.BinBin.R
 041db50204073cf27498aab92bf42d15 *R/plot.MetaAnalyticMTS.R
@@ -66,7 +68,8 @@ b6c30f9622f45d8fd0cc6a1cbc5653ad *R/plot.BinContCombnIT.R
 c0b328960722661eca8fb9d54097e512 *R/plot_ICABinCont.R
 2780ad21cda5044c124d117a85de5cbd *R/plot_MaxEntICABinBin.R
 81a99fcc0939e5c8e0845143dba2102c *R/plot_SPPBinBin.R
-e551c5395667f9586fd47e9511df665c *R/summary.FixedDIscrDiscrIT.R
+85cbe5f66408302d1c39dcee3bb69516 *R/summary.Fano.BinBin.R
+a7dda1cd5c8510166e35ac14b444900b *R/summary.FixedDIscrDiscrIT.R
 0c545cab4bd646efb8561d875a45654b *R/summary.SurvSurv.R
 ac36e8fa9329cb0402e0411a83e8023f *R/summary.TrialLevelIT.R
 85514deff8f015e8aea50fc6609cdb7e *R/summary.TwoStageSurvSurv.R
@@ -86,6 +89,7 @@ d4a3b6b14331d19ae8caad2e50d79e3d *man/BifixedContCont.Rd
 c1d96ed37a7613c8eefe6ec52f5cdac2 *man/CIGTS.Rd
 b30a1f51a6cf94bb166813df957774db *man/CausalDiagramBinBin.Rd
 0971d0c375e2a71a2e7401453a548293 *man/CausalDiagramContCont.Rd
+f7e5d83669dab94ccb17850cda91c8d0 *man/Fano.BinBin.Rd
 88e46a0aac98627b7ee57281a9b8e40c *man/FixedBinBinIT.Rd
 3b110f71cecafae1ede23e53f2a34bb7 *man/FixedBinContIT.Rd
 51f2c17d845e2073389c6118a797c66f *man/FixedContBinIT.Rd
@@ -133,6 +137,7 @@ f5963cbb6eed3c7b5abb69848cdb0a6c *man/TrialLevelMA.Rd
 779bb61f321b509409601a02f58b9b3a *man/UnifixedContCont.Rd
 8c30fd3483c35bf16e25126e031d99b8 *man/UnimixedContCont.Rd
 9d50fdada69c2136440688b7f7a1398a *man/plot.CausalInference.Rd
+4f23e8983a95c240d72033c472643ae7 *man/plot.Fano.BinBin.Rd
 3895a6d1a0e61e057a26d7d9c9a71238 *man/plot.ICABinBin.Rd
 32ac9a7968a660b0e275db5239c5673a *man/plot.ICABinCont.Rd
 e5d5b8c4d97a0185df5605334bf5116e *man/plot.InformationTheoretic.Rd
@@ -146,4 +151,4 @@ acd7a4d1baff5bf29d011a1dde21c928 *man/plot.InformationTheoreticSurvSurv.Rd
 e6062db25aae0825944eea371b6ef4d0 *man/plot.TrialLevelIT.Rd
 3241f36f4c01fc7d3a30ebb411c166bc *man/plot.TrialLevelMA.Rd
 11b92825b1890f507a1383cac1454e32 *man/plot.TwoStageSurvSurv.Rd
-d8398dd9daa0896b5858d315672edce8 *man/summary.gen.Rd
+a4091a61bb9fa306701b43e658cf90d4 *man/summary.gen.Rd

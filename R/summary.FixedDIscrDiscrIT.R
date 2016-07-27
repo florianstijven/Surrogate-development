@@ -1,4 +1,3 @@
-
 summary.FixedDiscrDiscrIT<-function(object,...,Object){
   
   if (missing(Object)){Object<-object}

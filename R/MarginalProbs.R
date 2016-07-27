@@ -9,6 +9,14 @@ MarginalProbs <- function(Dataset=Dataset, Surr=Surr, True=True, Treat=Treat) {
   if ((sort(unique(Dataset$Treat))[1]==c(-1) & sort(unique(Dataset$Treat))[2]==c(1))==FALSE)
     stop("Please make sure that the treatment is coded as control = -1 and experimental = 1.")
   
+  if (length(unique(Dataset$Surr)) > 2) {stop("\nWarning: S should be coded with only two values!\n\n")}
+  if ((min(unique(Dataset$Surr)) != 0) && (length(unique(Dataset$Surr)) == 2)){stop("\nWarning: S should be coded as 0/1!\n\n")}
+  if ((max(unique(Dataset$Surr)) != 1) && (length(unique(Dataset$Surr)) == 2)){stop("\nWarning: S should be coded as 0/1!\n\n")}
+  
+  if (length(unique(Dataset$True)) > 2) {stop("\nWarning: T should be coded with only two values!\n\n")}
+  if ((min(unique(Dataset$True)) != 0) && (length(unique(Dataset$True)) == 2)){stop("\nWarning: T should be coded as 0/1!\n\n")}
+  if ((max(unique(Dataset$True)) != 1) && (length(unique(Dataset$True)) == 2)){stop("\nWarning: T should be coded as 0/1!\n\n")}
+  
   cont <- table(Dataset$Surr[Dataset$Treat==-1], Dataset$True[Dataset$Treat==-1])
   exp <- table(Dataset$Surr[Dataset$Treat==1], Dataset$True[Dataset$Treat==1])
   
