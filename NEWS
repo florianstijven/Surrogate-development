@@ -1,6 +1,7 @@
-Changes in version 0.1.73 - 0.1.74
+Changes in version 0.1.73 - 0.1.75
   o Fano.BinBin added
   o Changes in the function MarginalProbs, summary() has been added for object of class FixedDiscrDiscrIT 
+  o Typos corrected in manual
 
 
 

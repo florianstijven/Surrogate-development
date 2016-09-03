@@ -8,8 +8,8 @@ Fano.BinBin(pi1_,  pi_1, rangepi10=c(0,min(pi1_,1-pi_1)),
 fano_delta=c(0.1), M=100, Seed=1)
 }
 \arguments{
-  \item{pi1_}{A scalar or a vector of plausibel values that represents the proportion of responders under treatment.}
-  \item{pi_1}{A scalar or a vector of plausibel values that represents the proportion of responders under control.}
+  \item{pi1_}{A scalar or a vector of plausibel values that represents the proportion of responders under control treatment.}
+  \item{pi_1}{A scalar or a vector of plausibel values that represents the proportion of responders under investigational treatment.}
   \item{rangepi10}{Represents the range from which \eqn{\pi_{10}} is sampled. By default, Monte Carlo simulation will be constrained to the interval \eqn{[0,\min(\pi_{1\cdot},\pi_{\cdot0})]} but this allows the user to specify a more narrow range. \code{rangepi10=c(0,0)} is equivalent to the assumption of monotonicity for the true endpoint.}
   \item{fano_delta}{A scalar or a vector that specifies the values for the upper bound of the prediction error \eqn{\delta}. Default \code{fano_delta=c(0.2)}.}
   \item{M}{The number of random samples that have to be drawn for the freely varying parameter \eqn{\pi_{10}}. Default \code{M=1000}. The number of random samples should be sufficiently large in relation to the length of the interval \code{rangepi10}. Typically \code{M=1000} yields a sufficiently fine grid. In case \code{rangepi10} is a single value: \code{M=1} }
