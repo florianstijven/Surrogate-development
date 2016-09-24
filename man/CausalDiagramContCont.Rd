@@ -8,7 +8,7 @@ This function provides a diagram that depicts the medians of the correlations be
 }
 \usage{
 CausalDiagramContCont(x, Min=-1, Max=1, Cex.Letters=3, Cex.Corrs=2, 
-Lines.Rel.Width=TRUE, Col.Pos.Neg=TRUE)
+Lines.Rel.Width=TRUE, Col.Pos.Neg=TRUE, Histograms.Counterfactuals=FALSE)
 }
 \arguments{
   \item{x}{An object of class \code{ICA.ContCont} or \code{MICA.ContCont}. See \code{\link{ICA.ContCont}} or \code{\link{MICA.ContCont}}.}
@@ -18,6 +18,7 @@ Lines.Rel.Width=TRUE, Col.Pos.Neg=TRUE)
   \item{Cex.Corrs}{The size of the text depicting the median correlations between the counterfactuals. Default=\eqn{2}.}
   \item{Lines.Rel.Width}{Logical. When \code{Lines.Rel.Width=TRUE}, the widths of the lines that represent the correlations between the counterfactuals are relative to the size of the correlations (i.e., a smaller line is used for correlations closer to zero whereas a thicker line is used for (absolute) correlations closer to \eqn{1}). When \code{Lines.Rel.Width=FALSE}, the width of all lines representing the correlations between the counterfactuals is identical. Default=\code{TRUE}.}
   \item{Col.Pos.Neg}{Logical. When \code{Col.Pos.Neg=TRUE}, the color of the lines that represent the correlations between the counterfactuals is red for negative correlations and black for positive ones. When \code{Col.Pos.Neg=FALSE}, all lines are in black. Default=\code{TRUE}.}
+  \item{Histograms.Counterfactuals}{Should plots that shows the densities for the inidentifiable correlations be shown? Default =\code{FALSE}.}
 }
 \references{
 Alonso, A., Van der Elst, W., Molenberghs, G., Buyse, M., & Burzykowski, T. (submitted). On the relationship between the causal inference and meta-analytic paradigms for the validation of surrogate markers. 

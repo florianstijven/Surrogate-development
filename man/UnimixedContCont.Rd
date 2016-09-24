@@ -24,7 +24,7 @@ Seed=sample(1:1000, size=1), \dots)
   \item{Alpha}{The \eqn{\alpha}-level that is used to determine the confidence intervals around \eqn{R^2_{trial}}, \eqn{R_{trial}}, \eqn{R^2_{indiv}}, and \eqn{R_{indiv}}. Default \eqn{0.05}.}
 \item{Number.Bootstraps}{The confidence intervals for \eqn{R^2_{indiv}} and \eqn{R_{indiv}} are determined as based on a bootstrap procedure. \code{Number.Bootstraps} specifies the number of bootstrap samples that are to be used. Default \eqn{500}.}
 \item{Seed}{The seed to be used in the bootstrap procedure. Default \eqn{sample(1:1000, size=1)}.}
-\item{\dots}{Other arguments to be passed to the function \code{lmer} (of the R package \code{lme4}) that is used to fit the geralized linear mixed-effect models in the function \code{BimixedContCont}. For details, see \href{http://cran.r-project.org/web/packages/lme4/lme4.pdf}{the lme4 manual}. }
+\item{\dots}{Other arguments to be passed to the function \code{lmer} (of the R package \code{lme4}) that is used to fit the geralized linear mixed-effect models in the function \code{BimixedContCont}. For details, see \href{https://CRAN.R-project.org/package=lme4}{the lme4 manual}. }
 }
 \details{
 When the full bivariate mixed-effects model is fitted to assess surrogacy in the meta-analytic framework (for details, Buyse & Molenberghs, 2000), computational issues often occur. In that situation, the use of simplified model-fitting strategies may be warranted (for details, see Burzykowski et al., 2005; Tibaldi et al., 2003).   

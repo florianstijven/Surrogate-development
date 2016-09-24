@@ -21,7 +21,7 @@ Min.Trial.Size=2, Alpha=.05, \dots)
   Default \code{Model=c("Full")}. }
   \item{Min.Trial.Size}{The minimum number of patients that a trial should contain to be included in the analysis. If the number of patients in a trial is smaller than the value specified by \code{Min.Trial.Size}, the data of the trial are excluded from the analysis. Default \eqn{2}.}
   \item{Alpha}{The \eqn{\alpha}-level that is used to determine the confidence intervals around \eqn{R^2_{trial}}, \eqn{R_{trial}}, \eqn{R^2_{indiv}} and \eqn{R_{indiv}}. Default \eqn{0.05}.}  
-  \item{\dots}{Other arguments to be passed to the function \code{lmer} (of the R package \code{lme4}) that is used to fit the geralized linear mixed-effect models in the function \code{BimixedContCont}. For details, see \href{http://cran.r-project.org/web/packages/lme4/lme4.pdf}{the lme4 manual}. }
+  \item{\dots}{Other arguments to be passed to the function \code{lmer} (of the R package \code{lme4}) that is used to fit the geralized linear mixed-effect models in the function \code{BimixedContCont}. For details, see \href{https://CRAN.R-project.org/package=lme4}{the lme4 manual}. }
 }
 \details{
 The function \code{BimixedContCont} fits a bivariate mixed-effects model to assess surrogacy (for details, see Buyse et al., 2000). In particular, the following mixed-effects model is fitted: 

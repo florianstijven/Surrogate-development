@@ -1,4 +1,4 @@
-CausalDiagramContCont <- function(x, Min=-1, Max=1, Cex.Letters=3, Cex.Corrs=2, Lines.Rel.Width=TRUE, Col.Pos.Neg=TRUE) {
+CausalDiagramContCont <- function(x, Min=-1, Max=1, Cex.Letters=3, Cex.Corrs=2, Lines.Rel.Width=TRUE, Col.Pos.Neg=TRUE, Histograms.Counterfactuals=FALSE) {
   
 if (class(x)=="ICA.ContCont"){
 
@@ -80,6 +80,16 @@ if (class(x)=="MICA.ContCont"){
     segments(x0=9, y0=8, x1=9, y1=2, lwd=1, col=col_T0T1)
   }
 
+  if (Histograms.Counterfactuals==TRUE){
+    par(mfrow=c(2, 2))
+    hist((sub$T0T1), main=expression(rho[T0T1]), xlab=expression(rho[T0T1]))
+    hist((sub$T0S1), main=expression(rho[T0S1]), xlab=expression(rho[T0S1]))
+    hist((sub$T1S0), main=expression(rho[T1S0]), xlab=expression(rho[T1S0]))
+    hist((sub$S0S1), main=expression(rho[S0S1]), xlab=expression(rho[S0S1]))
+    par(mfrow=c(1, 1))
+    }
+  
+  
 }  
   
 

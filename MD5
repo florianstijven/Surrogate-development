@@ -1,10 +1,10 @@
-d49cf51f259f60c705be02b4c98ae649 *DESCRIPTION
+1dcc6150c743f901930edebed3177f66 *DESCRIPTION
 5f0fafea2eb46ddc0d8ebfbf5002136d *NAMESPACE
-d7f80d5b8f683057dd6060aa0262bebe *NEWS
+798bcb8e2cc09ef933fb026feec0ec7f *NEWS
 4088aeb535ac82329d35f0403ecedf16 *R/BifixedContCont.R
 44fe814dd34da0e513889f98338fd5ff *R/BimixedContCont.R
 d0cef0dcdff0bced4b64b68988db4499 *R/CausalDiagramBinBin.R
-46a9fa9c2a29ae500b899c77875b5b92 *R/CausalDiagramContCont.R
+6b0abe80e68407a61b45c84a9a7feff8 *R/CausalDiagramContCont.R
 22e39f4f4b750702371fd4fc4ee70e59 *R/Data.Processing.R
 be0a9e380e65d67c25929f939e857c69 *R/Fano.BinBin.R
 ea416a2e6a1ea20140cd37d8a4732e72 *R/FixedBinBinIT.r
@@ -85,10 +85,10 @@ f2459384dd6b545910f433fb97ed5f7e *data/Schizo_Bin.rda
 f974c2b04ccf73ed94195eecd8e062cd *data/Schizo_PANSS.rda
 3898305c3f03333e7f808e984fabb429 *man/ARMD.Rd
 d4a3b6b14331d19ae8caad2e50d79e3d *man/BifixedContCont.Rd
-7b99d58ff125b0132bdbecd79b71ae44 *man/BimixedContCont.Rd
+424dfc58c367ea1f7a22701e25bc9eb2 *man/BimixedContCont.Rd
 c1d96ed37a7613c8eefe6ec52f5cdac2 *man/CIGTS.Rd
 b30a1f51a6cf94bb166813df957774db *man/CausalDiagramBinBin.Rd
-0971d0c375e2a71a2e7401453a548293 *man/CausalDiagramContCont.Rd
+47d6dea079aed67e1a922011b7749307 *man/CausalDiagramContCont.Rd
 62ff4b80e14e4988c7897c9e36668ef5 *man/Fano.BinBin.Rd
 88e46a0aac98627b7ee57281a9b8e40c *man/FixedBinBinIT.Rd
 3b110f71cecafae1ede23e53f2a34bb7 *man/FixedBinContIT.Rd
@@ -110,7 +110,7 @@ e0f81fbe2073a1a6d704041dfdca9af3 *man/MICA.Sample.ContCont.Rd
 fa3f5402560e08bd80b013b40491653e *man/MaxEntICABinBin.Rd
 fc51f036975123a9314bf01bd8add90b *man/MaxEntSPFBinBin.Rd
 f86c9ffd072e975b7ed1fc35f7fa36bb *man/MinSurrContCont.Rd
-6087fe10691828ab404c3e23e42747b1 *man/MixedContContIT.Rd
+660ad4dbcf97c522a2c990ede63a4362 *man/MixedContContIT.Rd
 efd15b0d1ad83c65fb5f1872df9f97d7 *man/Ovarian.Rd
 58d8fd1c571d99ff7ca4f97b1fe10d44 *man/Plot.FixedDiscrDiscrIT.Rd
 9b9b695c538580cb7b4d75f8b03de8c6 *man/Plot.PredTrialTContCont.Rd
@@ -135,7 +135,7 @@ b3b60cd5e7c16ab63f7a53925d204be5 *man/Sim.Data.STS.Rd
 f5963cbb6eed3c7b5abb69848cdb0a6c *man/TrialLevelMA.Rd
 159f06f87294439ad7f4f50b3873123f *man/TwoStageSurvSurv.Rd
 779bb61f321b509409601a02f58b9b3a *man/UnifixedContCont.Rd
-8c30fd3483c35bf16e25126e031d99b8 *man/UnimixedContCont.Rd
+3567b0613f9ba923ef1b09ef3a72ad74 *man/UnimixedContCont.Rd
 9d50fdada69c2136440688b7f7a1398a *man/plot.CausalInference.Rd
 4f23e8983a95c240d72033c472643ae7 *man/plot.Fano.BinBin.Rd
 3895a6d1a0e61e057a26d7d9c9a71238 *man/plot.ICABinBin.Rd
