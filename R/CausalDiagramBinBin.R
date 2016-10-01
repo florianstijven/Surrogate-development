@@ -1,7 +1,7 @@
 CausalDiagramBinBin <- function(x, Values="Corrs", Theta_T0S0, Theta_T1S1, Min=0, Max=1, Cex.Letters=3, 
                                 Cex.Corrs=2, 
                                 Lines.Rel.Width=TRUE, Col.Pos.Neg=TRUE,
-                                Monotonicity) {
+                                Monotonicity, Histograms.Correlations=FALSE) {
   
   if (class(x)!="ICA.BinBin") {stop("The function CausalDiagramBinBin should be applied to an object of class ICA.BinBin.")}
   
@@ -12,7 +12,7 @@ CausalDiagramBinBin <- function(x, Values="Corrs", Theta_T0S0, Theta_T1S1, Min=0
   sub <- dat[dat$x.R2_H >= Min & dat$x.R2_H <= Max,] 
   
   if ((Monotonicity=="No" | Monotonicity=="True.Endp" | Monotonicity=="Surr.Endp" | Monotonicity=="Surr.True.Endp")==FALSE){
-    stop("The Monotonicity=... argument is not correctly specified \n")
+    stop("The Monotonicity=... argument is not correctly specified. \n")
   }
   
   if (Monotonicity=="No"){sub <- sub[sub$Monotonicity=="No",]}
@@ -208,8 +208,19 @@ CausalDiagramBinBin <- function(x, Values="Corrs", Theta_T0S0, Theta_T1S1, Min=0
     segments(x0=1.5, y0=9, x1=8.5, y1=9, lwd=1, col=col_T0S0)
     segments(x0=1.5, y0=1, x1=8.5, y1=1, lwd=1, col=col_T1S1)
     segments(x0=9, y0=8, x1=9, y1=2, lwd=1,  col=col_T0T1)
-    
+       
   }
+  
+if  (Histograms.Correlations==TRUE){
+  dev.new(width = 10, height = 10)
+  par(mar = c(4.4, 2.5, 2, 1))
+  par(mfrow=c(2, 2))
+  hist(R2_H_T0T1, main=expression(paste(r[h]^2, "(", T[0], ",", T[1], ")")), xlab="", col="grey")
+  hist(R2_H_S1T0, main=expression(paste(r[h]^2, "(", T[0], ",", S[1], ")")), xlab="", col="grey")
+  hist(R2_H_S0T1, main=expression(paste(r[h]^2, "(", T[1], ",", S[0], ")")), xlab="", col="grey")
+  hist(R2_H_S0S1, main=expression(paste(r[h]^2, "(", S[0], ",", S[1], ")")), xlab="", col="grey")
+  par(mfrow=c(1, 1))
+}  
   
    
 if (Values=="ORs"){
@@ -316,4 +327,12 @@ if (Values=="ORs"){
   
   }
   
+  if  (Histograms.Correlations==TRUE & Values == "Corrs"){
+  fit <- 
+    list(R2_H_T0T1=as.numeric(R2_H_T0T1), R2_H_S1T0=as.numeric(R2_H_S1T0), R2_H_S0T1=as.numeric(R2_H_S0T1),
+         R2_H_S0S1=as.numeric(R2_H_S0S1), R2_H_S0T0=as.numeric(R2_H_S0T0), R2_H_S1T1=as.numeric(R2_H_S1T1),
+         Call=match.call())   
+  }
 } 
+
+

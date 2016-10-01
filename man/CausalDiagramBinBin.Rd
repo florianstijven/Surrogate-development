@@ -9,7 +9,7 @@ This function provides a diagram that depicts the medians of the informational c
 \usage{
 CausalDiagramBinBin(x, Values="Corrs", Theta_T0S0, Theta_T1S1, 
 Min=0, Max=1, Cex.Letters=3, Cex.Corrs=2, Lines.Rel.Width=TRUE, 
-Col.Pos.Neg=TRUE, Monotonicity)
+Col.Pos.Neg=TRUE, Monotonicity, Histograms.Correlations=FALSE)
 }
 \arguments{
   \item{x}{An object of class \code{ICA.BinBin}. See \code{\link{ICA.BinBin}}.}
@@ -23,8 +23,16 @@ Col.Pos.Neg=TRUE, Monotonicity)
   \item{Lines.Rel.Width}{Logical. When \code{Lines.Rel.Width=TRUE}, the widths of the lines that represent the odds ratios between the counterfactuals are relative to the size of the odds ratios (i.e., a smaller/thicker line is used for smaller/higher odds ratios. When \code{Lines.Rel.Width=FALSE}, the width of all lines representing the odds ratios between the counterfactuals is identical. Default=\code{TRUE}.  Only considered when \code{Values="ORs"}.}
   \item{Col.Pos.Neg}{Logical. When \code{Col.Pos.Neg=TRUE}, the color of the lines that represent the odds ratios between the counterfactuals is red for odds ratios below \eqn{1} and black for the ones above \eqn{1}. When \code{Col.Pos.Neg=FALSE}, all lines are in black. Default=\code{TRUE}. Only considered when \code{Values="ORs"}.}
 \item{Monotonicity}{Specifies the monotonicity scenario that should be considered (i.e., \code{Monotonicity=c("No")}, \code{Monotonicity=c("True.Endp")}, \code{Monotonicity=c("Surr.Endp")}, or \code{Monotonicity=c("Surr.True.Endp")}).}
+\item{Histograms.Correlations}{Should histograms of the informational coefficients of association \eqn{R_{H}^{2}} be provided? Default \code{Histograms.Correlations=FALSE}.}
 }
-
+\value{The following components are stored in the fitted object if histograms of the informational correlations are requested in the function call (i.e., if \code{Histograms.Correlations=TRUE} and \code{Values="Corrs"} in the function call):
+\item{R2_H_T0T1}{The informational coefficients of association \eqn{R_{H}^{2}} between \eqn{T_0} and \eqn{T_1}.}
+\item{R2_H_S1T0}{The informational coefficients of association \eqn{R_{H}^{2}} between \eqn{S_1} and \eqn{T_0}.}
+\item{R2_H_S0T1}{The informational coefficients of association \eqn{R_{H}^{2}} between \eqn{S_0} and \eqn{T_1}.}
+\item{R2_H_S0S1}{The informational coefficients of association \eqn{R_{H}^{2}} between \eqn{S_0} and \eqn{S_1}.}
+\item{R2_H_S0T0}{The informational coefficients of association \eqn{R_{H}^{2}} between \eqn{S_0} and \eqn{T_0}.}
+\item{R2_H_S1T1}{The informational coefficients of association \eqn{R_{H}^{2}} between \eqn{S_1} and \eqn{T_1}.}
+}
 \references{
 Alonso, A., Van der Elst, W., Molenberghs, G., Buyse, M., & Burzykowski, T. (submitted). On the relationship between the causal inference and meta-analytic paradigms for the validation of surrogate markers. 
 
