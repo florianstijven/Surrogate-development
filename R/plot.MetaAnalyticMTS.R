@@ -5,8 +5,8 @@ plot.UnifixedContCont <- plot.BifixedContCont <- plot.UnimixedContCont <-
  
   Object <- x 
   if (Trial.Level==TRUE){ 
-    if (missing(Xlab.Trial)) {Xlab.Trial <- expression(paste("Treatment effect on the Surrogate endpoint ", (alpha[i])))}
-    if (missing(Ylab.Trial)) {Ylab.Trial <- expression(paste("Treatment effect on the True endpoint  ",(beta[i])))}
+    if (missing(Xlab.Trial)) {Xlab.Trial <- expression(paste("Treatment effect on the surrogate endpoint ", (alpha[i])))}
+    if (missing(Ylab.Trial)) {Ylab.Trial <- expression(paste("Treatment effect on the true endpoint  ",(beta[i])))}
     if (missing(Main.Trial)) {Main.Trial <- c("Trial-level surrogacy")}
     dev.new()
     par=Par
@@ -20,8 +20,8 @@ plot.UnifixedContCont <- plot.BifixedContCont <- plot.UnimixedContCont <-
   }
   
   if (Indiv.Level==TRUE){ 
-    if (missing(Xlab.Indiv)) {Xlab.Indiv <- expression(paste("Residuals for the Surrogate endpoint ", (epsilon[Sij])))}
-    if (missing(Ylab.Indiv)) {Ylab.Indiv <- expression(paste("Residuals for the True endpoint  ", (epsilon[Tij])))}
+    if (missing(Xlab.Indiv)) {Xlab.Indiv <- expression(paste("Residuals for the surrogate endpoint ", (epsilon[Sij])))}
+    if (missing(Ylab.Indiv)) {Ylab.Indiv <- expression(paste("Residuals for the true endpoint  ", (epsilon[Tij])))}
     if (missing(Main.Indiv)) {Main.Indiv <- c("Individual-level surrogacy")}
     dev.new()
     par=Par
@@ -37,8 +37,8 @@ plot.BimixedContCont <- function(x, Trial.Level=TRUE, Weighted=TRUE, Indiv.Level
   Object <- x 
   
   if (Trial.Level==TRUE){ 
-    if (missing(Xlab.Trial)) {Xlab.Trial <- expression(paste("Treatment effect on the Surrogate endpoint ", (alpha[i])))}
-    if (missing(Ylab.Trial)) {Ylab.Trial <- expression(paste("Treatment effect on the True endpoint  ",(beta[i])))}
+    if (missing(Xlab.Trial)) {Xlab.Trial <- expression(paste("Treatment effect on the surrogate endpoint ", (alpha[i])))}
+    if (missing(Ylab.Trial)) {Ylab.Trial <- expression(paste("Treatment effect on the true endpoint  ",(beta[i])))}
     if (missing(Main.Trial)) {Main.Trial <- c("Trial-level surrogacy")}
     dev.new()
     par=Par
@@ -54,8 +54,8 @@ plot.BimixedContCont <- function(x, Trial.Level=TRUE, Weighted=TRUE, Indiv.Level
   }
   
   if (Indiv.Level==TRUE){ 
-    if (missing(Xlab.Indiv)) {Xlab.Indiv <- expression(paste("Residuals for the Surrogate endpoint ", (epsilon[Sij])))}
-    if (missing(Ylab.Indiv)) {Ylab.Indiv <- expression(paste("Residuals for the True endpoint  ", (epsilon[Tij])))}
+    if (missing(Xlab.Indiv)) {Xlab.Indiv <- expression(paste("Residuals for the surrogate endpoint ", (epsilon[Sij])))}
+    if (missing(Ylab.Indiv)) {Ylab.Indiv <- expression(paste("Residuals for the true endpoint  ", (epsilon[Tij])))}
     if (missing(Main.Indiv)) {Main.Indiv <- c("Individual-level surrogacy")}
     dev.new()
     par=Par

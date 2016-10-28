@@ -52,6 +52,7 @@ Wim Van der Elst, Ariel Alonso, & Geert Molenberghs
 \code{\link{MICA.ContCont}}, \code{\link{ICA.Sample.ContCont}}, \code{\link{Single.Trial.RE.AA}}, \code{\link{plot Causal-Inference ContCont}}
 }
 \examples{
+\dontrun{ #time-consuming code parts
 # Generate the vector of ICA.ContCont values when rho_T0S0=rho_T1S1=.95, 
 # sigma_T0T0=90, sigma_T1T1=100,sigma_ S0S0=10, sigma_S1S1=15, and  
 # the grid of values {0, .2, ..., 1} is considered for the correlations
@@ -81,6 +82,7 @@ S0S1=seq(0, 1, by=.2))
 # Examine results
 summary(SurICA2)
 plot(SurICA2)
+}
 }
 \keyword{Causal-Inference framework}
 \keyword{Counterfactuals}

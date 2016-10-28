@@ -18,13 +18,13 @@ ICA.BinBin.Grid.Sample.Uncert <- function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_
     
     if (Monotonicity=="General"){
       
-      try(T_No <- ICA.BinBin.Grid.Sample(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1, Seed=Seed.orig, Monotonicity=c("No"), M, Volume.Perc), silent=TRUE)
+      try(T_No <- ICA.BinBin.Grid.Sample.Uncert(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1, Seed=Seed.orig, Monotonicity=c("No"), M, Volume.Perc), silent=TRUE)
       Pi.Vectors <- pi_f_all <- pi_r_all <- C3_all <- R2_H_all <- theta_T_all <- theta_S_all <- H_Delta_T_all <- pi_all <- NULL
-      try(T_True <- ICA.BinBin.Grid.Sample(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1, Seed=Seed.orig, Monotonicity=c("True.Endp"), M, Volume.Perc), silent=TRUE)
+      try(T_True <- ICA.BinBin.Grid.Sample.Uncert(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1, Seed=Seed.orig, Monotonicity=c("True.Endp"), M, Volume.Perc), silent=TRUE)
       Pi.Vectors <- pi_f_all <- pi_r_all <- C3_all <- R2_H_all <- theta_T_all <- theta_S_all <- H_Delta_T_all <- pi_all <- NULL
-      try(T_Surr <- ICA.BinBin.Grid.Sample(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1, Seed=Seed.orig, Monotonicity=c("Surr.Endp"), M, Volume.Perc), silent=TRUE)
+      try(T_Surr <- ICA.BinBin.Grid.Sample.Uncert(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1, Seed=Seed.orig, Monotonicity=c("Surr.Endp"), M, Volume.Perc), silent=TRUE)
       Pi.Vectors <- pi_f_all <- pi_r_all <- C3_all <- R2_H_all <- theta_T_all <- theta_S_all <- H_Delta_T_all <- pi_all <- NULL
-      try(T_SurrTrue <- ICA.BinBin.Grid.Sample(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1, Seed=Seed.orig, Monotonicity=c("Surr.True.Endp"), M, Volume.Perc), silent=TRUE)
+      try(T_SurrTrue <- ICA.BinBin.Grid.Sample.Uncert(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1, Seed=Seed.orig, Monotonicity=c("Surr.True.Endp"), M, Volume.Perc), silent=TRUE)
       Pi.Vectors <- pi_f_all <- pi_r_all <- C3_all <- R2_H_all <- theta_T_all <- theta_S_all <- H_Delta_T_all <- pi_all <- NULL
       
       

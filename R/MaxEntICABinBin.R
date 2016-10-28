@@ -336,10 +336,7 @@ H_max <- -sum(h_max_all)
 
 
 fit <- 
-  list(R2_H=as.numeric(R2_H), Vector_p = p_i_all, H_max=H_max, Call=match.call()) #,
-#r_1_1=as.numeric(r_1_1), r_min1_1=as.numeric(r_m1_1), r_0_1=as.numeric(r_0_1),
-#r_1_0=as.numeric(r_1_0), r_min1_0=as.numeric(r_m1_0), r_0_0=as.numeric(r_0_0),
-#r_1_min1=as.numeric(r_1_m1), r_min1_min1=as.numeric(r_m1_m1), r_0_min1=as.numeric(r_0_m1))
+  list(R2_H=as.numeric(R2_H), Vector_p = p_i_all, H_max=H_max, Call=match.call()) 
 
 class(fit) <- "MaxEntICA.BinBin"
 fit

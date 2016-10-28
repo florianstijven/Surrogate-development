@@ -55,6 +55,7 @@ Wim Van der Elst, Paul Meyvisch, Ariel Alonso & Geert Molenberghs
 \code{\link{ICA.ContCont}}, \code{\link{MICA.ContCont}}, \code{\link{ICA.BinBin}}, \code{\link{ICA.BinBin.Grid.Sample}}
 }
 \examples{
+\dontrun{ #time-consuming code parts
 # Compute R2_H given the marginals, 
 # assuming monotonicity for S and T and grids
 # pi_0111=seq(0, 1, by=.001) and 
@@ -65,6 +66,7 @@ Monotonicity=c("Surr.True.Endp"), M=2500, Seed=1)
 
 # obtain plot of R2_H
 plot(ICA, R2_H=TRUE)
+}
 }
 \keyword{Causal-Inference framework}
 \keyword{Counterfactuals}

@@ -73,6 +73,7 @@ Wim Van der Elst, Ariel Alonso, & Geert Molenberghs
 \code{\link{UnifixedContCont}}, \code{\link{BifixedContCont}}, \code{\link{UnimixedContCont}}
 }
 \examples{
+\dontrun{ #time-consuming code parts
 # Generate dataset
 Sim.Data.MTS(N.Total=2000, N.Trial=15, R.Trial.Target=.8, 
 R.Indiv.Target=.8, D.aa=10, D.bb=50, Fixed.Effects=c(1, 2, 30, 90), 
@@ -93,6 +94,7 @@ summary(Pred_Beta)
 
 # Plot the results
 plot(Pred_Beta)
+}
 }
 \keyword{New trial}
 \keyword{Predict treatment effect T}

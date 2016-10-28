@@ -1,5 +1,6 @@
 Pred.TrialT.ContCont <- function(Object, mu_S0, alpha_0, alpha.CI=0.05){
 
+  
   if (class(Object)=="BimixedContCont") {Dmat <- Object$D}
   if (class(Object)=="UnimixedContCont"){Dmat <- Object$D.Equiv}
   if (class(Object)=="BifixedContCont") {Dmat <- Object$D.Equiv}
@@ -114,7 +115,6 @@ summary.PredTrialTContCont <- function(object, ..., Object){
 
 
 plot.PredTrialTContCont <- function(x, Size.New.Trial=5, CI.Segment=1, ...){
-  
   plot(x = x$Surr.Model, Indiv.Level = FALSE, col="grey", Main.Trial=expression(paste("Predicted ",beta[0])), ...)
   points(x$alpha_0, x$Beta_0, col="black", pch=1, cex=Size.New.Trial, lwd=2)
   segments(x0 = x$alpha_0, y0 = x$Lower, x1 = x$alpha_0, y1 = x$Upper, 

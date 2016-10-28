@@ -81,6 +81,7 @@ if (class(x)=="MICA.ContCont"){
   }
 
   if (Histograms.Counterfactuals==TRUE){
+    dev.new()
     par(mfrow=c(2, 2))
     hist((sub$T0T1), main=expression(rho[T0T1]), xlab=expression(rho[T0T1]))
     hist((sub$T0S1), main=expression(rho[T0S1]), xlab=expression(rho[T0S1]))

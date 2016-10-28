@@ -63,6 +63,7 @@ Wim Van der Elst, Ariel Alonso, & Geert Molenberghs
 \code{\link{ICA.ContCont}},  \code{\link{MICA.Sample.ContCont}}, \code{\link{plot Causal-Inference ContCont}}, \code{\link{UnifixedContCont}}, \code{\link{UnimixedContCont}}, \code{\link{BifixedContCont}}, \code{\link{BimixedContCont}}
 }
 \examples{
+\dontrun{ #time-consuming code parts
 # Generate the vector of MICA values when R_trial=.8, rho_T0S0=rho_T1S1=.8,
 # sigma_T0T0=90, sigma_T1T1=100,sigma_ S0S0=10, sigma_S1S1=15, D.aa=5, D.bb=10,  
 # and when the grid of values {0, .2, ..., 1} is considered for the 
@@ -94,6 +95,7 @@ T0S0=rnorm(n=10000000, mean=.8, sd=.1),
 T1S1=rnorm(n=10000000, mean=.8, sd=.1),
 T0T0=90, T1T1=100, S0S0=10, S1S1=15, T0T1=seq(0, 1, by=.2), 
 T0S1=seq(0, 1, by=.2), T1S0=seq(0, 1, by=.2), S0S1=seq(0, 1, by=.2))
+}
 }
 \keyword{Causal-Inference framework}
 \keyword{Counterfactuals}

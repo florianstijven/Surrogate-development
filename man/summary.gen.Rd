@@ -26,6 +26,7 @@
 \alias{summary.ICA.BinCont}
 \alias{summary.FixedDiscrDiscrIT}
 \alias{summary.Fano.BinBin}
+\alias{summary.MaxEntContCont}
 \title{Summary}
 \description{summary}
 \usage{
@@ -55,5 +56,6 @@
 \method{summary}{ICA.BinCont}(object, ..., Object)
 \method{summary}{FixedDiscrDiscrIT}(object, ..., Object)
 \method{summary}{Fano.BinBin}(object, ..., Object, Type = "Overall")
+\method{summary}{MaxEntContCont}(object, ..., Object)
 }
 \keyword{internal}

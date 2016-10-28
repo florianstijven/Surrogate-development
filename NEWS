@@ -1,9 +1,10 @@
-Changes in version 0.1.73 - 0.1.77
+Changes in version 0.1.73 - 0.1.79
   o Fano.BinBin added
   o Changes in the function MarginalProbs, summary() has been added for object of class FixedDiscrDiscrIT 
   o Typos corrected in manual
   o Option Histograms.Counterfactuals added in function CausalDiagramContCont()
-  0 Option Histograms.Correlations added in function CausalDiagramBinBin()
+  o Option Histograms.Correlations added in function CausalDiagramBinBin()
+  o The function MaxEntContCont was added
 
 
 Changes in version 0.1.72

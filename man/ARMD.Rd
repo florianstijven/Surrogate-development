@@ -14,7 +14,7 @@ A \code{data.frame} with \eqn{181} observations on \eqn{5} variables.
     \item{\code{Center}}{The center in which the patient was treated.}
     \item{\code{Treat}}{The treatment indicator, coded as \eqn{-1} = placebo and \eqn{1} = interferon-\eqn{\alpha}.}
     \item{\code{Diff24}}{The change in the visual acuity at \eqn{24} weeks after starting treatment. This endpoint is a potential surrogate for \code{Diff52}.}
-    \item{\code{Diff52}}{The change in the visual acuity at \eqn{52} weeks after starting treatment. This outcome serves as the true endpoint  .}
+    \item{\code{Diff52}}{The change in the visual acuity at \eqn{52} weeks after starting treatment. This outcome serves as the true endpoint.}
   }
 }
 \keyword{ARMD}
