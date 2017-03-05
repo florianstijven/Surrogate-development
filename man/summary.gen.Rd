@@ -27,6 +27,8 @@
 \alias{summary.FixedDiscrDiscrIT}
 \alias{summary.Fano.BinBin}
 \alias{summary.MaxEntContCont}
+\alias{summary.ICA.ContCont.MultS}
+\alias{summary.AA.MultS}
 \title{Summary}
 \description{summary}
 \usage{
@@ -57,5 +59,7 @@
 \method{summary}{FixedDiscrDiscrIT}(object, ..., Object)
 \method{summary}{Fano.BinBin}(object, ..., Object, Type = "Overall")
 \method{summary}{MaxEntContCont}(object, ..., Object)
+\method{summary}{ICA.ContCont.MultS}(object, ..., Object)
+\method{summary}{AA.MultS}(object, ..., Object)
 }
 \keyword{internal}

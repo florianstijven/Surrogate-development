@@ -59,7 +59,8 @@ plot.SurvSurv, summary.TrialLevelIT, plot.TrialLevelIT, summary.MaxEntICA.BinBin
 plot.MaxEntSPF.BinBin, summary.MaxEntSPF.BinBin, plot.FixedDiscrDiscrIT,
 plot.ICA.BinCont, summary.ICA.BinCont, summary.FixedDiscrDiscrIT, 
 plot.Fano.BinBin, summary.Fano.BinBin,
-plot.MaxEntContCont, summary.MaxEntContCont)
+plot.MaxEntContCont, summary.MaxEntContCont, 
+plot.ICA.ContCont.MultS, summary.ICA.ContCont.MultS, summary.AA.MultS)
 
 
 S3method(plot, Fano.BinBin)
@@ -88,6 +89,7 @@ S3method(plot, MaxEntSPF.BinBin)
 S3method(plot, FixedDiscrDiscrIT)
 S3method(plot, ICA.BinCont)
 S3method(plot, MaxEntContCont)
+S3method(plot, ICA.ContCont.MultS)
 
 S3method(summary, Fano.BinBin)
 S3method(summary, UnifixedContCont)
@@ -116,3 +118,5 @@ S3method(summary, MaxEntSPF.BinBin)
 S3method(summary, ICA.BinCont)
 S3method(summary, FixedDiscrDiscrIT)
 S3method(summary, MaxEntContCont)
+S3method(summary, ICA.ContCont.MultS)
+S3method(summary, AA.MultS)
