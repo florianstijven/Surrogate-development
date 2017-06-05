@@ -60,7 +60,8 @@ plot.MaxEntSPF.BinBin, summary.MaxEntSPF.BinBin, plot.FixedDiscrDiscrIT,
 plot.ICA.BinCont, summary.ICA.BinCont, summary.FixedDiscrDiscrIT, 
 plot.Fano.BinBin, summary.Fano.BinBin,
 plot.MaxEntContCont, summary.MaxEntContCont, 
-plot.ICA.ContCont.MultS, summary.ICA.ContCont.MultS, summary.AA.MultS)
+plot.ICA.ContCont.MultS, summary.ICA.ContCont.MultS, summary.AA.MultS, 
+plot.PPE.BinBin, plot.comb27.BinBin, summary.PPE.BinBin)
 
 
 S3method(plot, Fano.BinBin)
@@ -90,6 +91,8 @@ S3method(plot, FixedDiscrDiscrIT)
 S3method(plot, ICA.BinCont)
 S3method(plot, MaxEntContCont)
 S3method(plot, ICA.ContCont.MultS)
+S3method(plot, PPE.BinBin)
+S3method(plot, comb27.BinBin)
 
 S3method(summary, Fano.BinBin)
 S3method(summary, UnifixedContCont)
@@ -120,3 +123,4 @@ S3method(summary, FixedDiscrDiscrIT)
 S3method(summary, MaxEntContCont)
 S3method(summary, ICA.ContCont.MultS)
 S3method(summary, AA.MultS)
+S3method(summary, PPE.BinBin)

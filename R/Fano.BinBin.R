@@ -4,12 +4,23 @@ Fano.BinBin <-function(pi1_ ,  pi_1 , rangepi10=c(0,min(pi1_,1-pi_1)), fano_delt
 {
 
 #############################################################
+# treatment effect should be positive                       #
+#############################################################
+
+   if (pi1_ > pi_1)
+     { cat("Treatment effect should be positive",sep=" ")    
+    }
+
+ if (pi1_ <= pi_1){
+
+
+#############################################################
 # Initialize                                                #
 #############################################################
 
 
 seed<-pi_f_all<-H_Delta_T_all<-R2_HL_all <-delta_all<-uncertainty_all<-NULL
-pi00<-pi01<-pi11<-pi10<-maxpi10<-minpi10<-samplepi10<-NULL
+pi00<-pi01<-pi11<-pi10<-maxpi10<-minpi10<-samplepi10<-PPE_T_all<-NULL
 
 
      
@@ -104,6 +115,8 @@ for (i in 1:M){
          sum_T_min1 <- mat1
          sum_T_0 <- mat2
          sum_T_1 <- mat3
+         PPE_T=1-max(mat1,mat2,mat3)
+
 
         for (delta in fano_delta) 
         {
@@ -120,6 +133,7 @@ for (i in 1:M){
           R2_HL_all <- rbind(R2_HL_all, R2_HL)
           delta_all<-rbind(delta_all,delta)
           H_Delta_T_all<-rbind(H_Delta_T_all, H_Delta_T)
+          PPE_T_all<-rbind(PPE_T_all,PPE_T)
           maxpi10<-rbind(maxpi10,rangepi10[2])
           minpi10<-rbind(minpi10,rangepi10[1])
           samplepi10<-rbind(samplepi10,samplepi_10)
@@ -135,10 +149,11 @@ for (i in 1:M){
  }
 }
 }
-fit<-list(R2_HL=as.numeric(R2_HL_all), H_Delta_T=as.numeric(H_Delta_T_all), minpi10=as.numeric(minpi10),maxpi10=as.numeric(maxpi10),samplepi10=as.numeric(samplepi10),
+fit<-list(R2_HL=as.numeric(R2_HL_all), H_Delta_T=as.numeric(H_Delta_T_all), PPE_T=as.numeric(PPE_T_all),minpi10=as.numeric(minpi10),maxpi10=as.numeric(maxpi10),samplepi10=as.numeric(samplepi10),
       delta=as.numeric(delta_all),uncertainty=as.numeric(uncertainty_all), pi_00=as.numeric(pi00),pi_11=as.numeric(pi11),pi_01=as.numeric(pi01),pi_10=as.numeric(pi10))
 class(fit)<-"Fano.BinBin"
 fit
+}
 }
 
 

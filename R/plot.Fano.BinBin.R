@@ -13,7 +13,7 @@ vector_legend<-NULL
 if (Type=="Scatter"){
 
 #sort to make line plots work
-y=as.data.frame(x[1:11])
+y=as.data.frame(x[1:12])
 order.pi10=order(y$delta,y$uncertainty,y$pi_10)
 x=y[order.pi10,]
 

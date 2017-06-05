@@ -44,6 +44,20 @@ cat("\n\n\n# H_Delta_T summary")
   cat("\n\nQuantiles of the H_Delta_T distribution: \n\n")
   quant <- quantile(x$H_Delta_T[x$delta==Delta[1]], probs = c(.05, .10, .20, .50, .80, .90, .95))
   print(quant)
+  
+  
+cat("\n\n\n# PPE_T summary")
+  
+ cat("\n#--------------------------------------------------------\n\n")  
+  cat("Mean (SD) PPE_T: ", format(round(mean(x$PPE_T[x$delta==Delta[1]]), 4), nsmall = 4), " (", format(round(sd(x$PPE_T[x$delta==Delta[1]]), 4), nsmall = 4), ")", 
+      "  [min: ", format(round(min(x$PPE_T[x$delta==Delta[1]]), 4), nsmall = 4), "; max: ",  format(round(max(x$PPE_T[x$delta==Delta[1]]), 4), nsmall = 4), "]", sep="")
+  cat("\nMode PPE_T: ", format(round(mode(x$PPE_T[x$delta==Delta[1]])$mode_val, 4), nsmall = 4))
+  cat("\n\nQuantiles of the PPE_T distribution: \n\n")
+  quant <- quantile(x$PPE_T[x$delta==Delta[1]], probs = c(.05, .10, .20, .50, .80, .90, .95))
+  print(quant)
+  
+  
+  
 
 
 cat("\n\n\n# pi_00 summary")

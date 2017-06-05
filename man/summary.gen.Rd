@@ -29,6 +29,7 @@
 \alias{summary.MaxEntContCont}
 \alias{summary.ICA.ContCont.MultS}
 \alias{summary.AA.MultS}
+\alias{summary.PPE.BinBin}
 \title{Summary}
 \description{summary}
 \usage{
@@ -61,5 +62,6 @@
 \method{summary}{MaxEntContCont}(object, ..., Object)
 \method{summary}{ICA.ContCont.MultS}(object, ..., Object)
 \method{summary}{AA.MultS}(object, ..., Object)
+\method{summary}{PPE.BinBin}(object, ..., Object)
 }
 \keyword{internal}

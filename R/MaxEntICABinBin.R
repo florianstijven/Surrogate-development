@@ -23,7 +23,6 @@ A_f <- matrix(data=c(1, 0, 1, 0, 0, 0, 1,
                      1, 0, 1, 0, 1, 0, 0), ncol=9)
 A_mat <- A <- cbind(A_r, A_f)
 
-
 min_fun <- function(par){
   1/16 *   
     ((exp(t(A[,1])%*%par-1) - t(vector_b) %*% par)  + 

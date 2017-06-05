@@ -1,3 +1,6 @@
+Changes in version 0.2
+  o Added functions PPE.BinBin and comb27.BinBin
+
 Changes in version 0.1.80
   o ICA.ContCont.MultS, ICA.ContCont.MultS_alt and AA.Mult added
   o Typo corrected in Pred.TrialT.ContCont() function (thanks to Maria C. for reporting the typo)
