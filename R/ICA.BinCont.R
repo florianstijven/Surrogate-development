@@ -1,8 +1,10 @@
 ICA.BinCont <- function(Dataset, Surr, True, Treat, Diff.Sigma=TRUE, 
-         G_pi_00=seq(from=0, to=1, by=.2), 
-         G_rho_01_00=seq(from=0, to=1, by=.2), G_rho_01_01=seq(from=0, to=1, by=.2), 
-         G_rho_01_10=seq(from=0, to=1, by=.2), G_rho_01_11=seq(from=0, to=1, by=.2), 
-         M=10, Seed=sample(1:100000, size=1)){          
+         G_pi_00 = seq(0, 1, by=.01), 
+         G_rho_01_00=seq(-1, 1, by=.01), G_rho_01_01=seq(-1, 1, by=.01), 
+         G_rho_01_10=seq(-1, 1, by=.01), G_rho_01_11=seq(-1, 1, by=.01), 
+         M=1000, Seed=123){          
+  
+  set.seed(Seed)
   
   totaal <- M*length(G_pi_00)*length(G_rho_01_00)*length(G_rho_01_10)*length(G_rho_01_01)*length(G_rho_01_11)
 
@@ -43,26 +45,24 @@ pi_1_00_e_all <- pi_1_01_e_all <- pi_1_10_e_all <- pi_1_11_e_all <- NULL
 mu_1_00_all <- mu_1_01_all <- mu_1_10_all <- mu_1_11_all <- NULL
 sigma_11_00_all <- sigma_11_01_all <- sigma_11_10_all <- sigma_11_11_all <- NULL
 
- for (a in 1: length(G_pi_00)){
-  for (b in 1: length(G_rho_01_00)){
-   for (c in 1: length(G_rho_01_01)){
-    for (d in 1: length(G_rho_01_10)){
-     for (e in 1: length(G_rho_01_11)){
-       for (i in 1: M){
+aantal <- 0
 
-         count <- count+1
-         cat("\n", (count/totaal)*100, "% done. \n", sep="") 
-         
-G_rho_01_00_hier <- G_rho_01_00[b]
-G_rho_01_01_hier <- G_rho_01_01[c]
-G_rho_01_10_hier <- G_rho_01_10[d]
-G_rho_01_11_hier <- G_rho_01_11[e]
+while (aantal < M){
+#set.seed(i+Seed)
+count <- count+1
 
-pi_00_hier <- G_pi_00[a]  
+G_rho_01_00_hier <- sample(G_rho_01_00, size = 1)
+G_rho_01_01_hier <- sample(G_rho_01_01, size = 1)
+G_rho_01_10_hier <- sample(G_rho_01_10, size = 1)
+G_rho_01_11_hier <- sample(G_rho_01_11, size = 1)
+
+pi_00_hier <- sample(G_pi_00, size=1)   
 pi_10_hier <- pi_punt0 - pi_00_hier #UD
 pi_01_hier <- pi_0punt -  pi_00_hier #UD
 pi_11_hier <- pi_1punt -  pi_10_hier #UD 
 
+#((pi_00_hier >= 0 & pi_10_hier >= 0 & pi_01_hier >= 0 & pi_11_hier >= 0) & 
+#    (pi_00_hier <= 1 & pi_10_hier <= 1 & pi_01_hier <= 1 & pi_11_hier <= 1))
 
 if ((pi_00_hier >= 0 & pi_10_hier >= 0 & pi_01_hier >= 0 & pi_11_hier >= 0) & 
   (pi_00_hier <= 1 & pi_10_hier <= 1 & pi_01_hier <= 1 & pi_11_hier <= 1)){
@@ -71,15 +71,18 @@ pi_Delta_T_min1 <- pi_10_hier
 pi_Delta_T_0 <- pi_00_hier + pi_11_hier
 pi_Delta_T_1 <- pi_01_hier 
 
-Seed <- Seed+1; set.seed(Seed)
-mix1 <- invisible(mixtools::normalmixEM(arbvar = Diff.Sigma, x = na.exclude(S_0), 
+#Seed <- Seed+1; set.seed(Seed)
+#set.seed(1)
+try(mix1 <- invisible(mixtools::normalmixEM(arbvar = Diff.Sigma, x = na.exclude(S_0), #maxrestarts = 100000,
                               lambda=c(pi_00_hier, pi_01_hier, pi_10_hier, pi_11_hier), k=4, 
-                              maxit = 1000000)) 
-Seed <- Seed+1; set.seed(Seed)
-mix2 <- invisible(mixtools::normalmixEM(arbvar = Diff.Sigma, x = na.exclude(S_1), 
+                              maxit = 1000000)), silent=TRUE) 
+#Seed <- Seed+123; set.seed(Seed)
+try(mix2 <- invisible(mixtools::normalmixEM(arbvar = Diff.Sigma, x = na.exclude(S_1), 
                               lambda=c(pi_00_hier, pi_01_hier, pi_10_hier, pi_11_hier), k=4, 
-                              maxit = 1000000))
+                              maxit = 1000000)), silent=TRUE)
 
+if (exists("mix1")==TRUE & exists("mix2")==TRUE){
+  
 # mixture components f(S_0)
 pi_0_00_e <- mix1$lambda[1]
 pi_0_01_e <- mix1$lambda[2] 
@@ -154,17 +157,17 @@ f_Delta_S <- function(val){
 }
 
 # I_10
-Seed <- Seed+1; set.seed(Seed)
+#Seed <- Seed+1; set.seed(Seed)
 S1 <- rnorm(n=10000, mean = mu_s10, sd = sqrt(sigma_s10))
 I_10 <- mean(log(dnorm(S1, mu_s10, sd = sqrt(sigma_s10)) / f_Delta_S(S1)))
 
 # I_01
-Seed <- Seed+1; set.seed(Seed)
+#Seed <- Seed+1; set.seed(Seed)
 S2 <- rnorm(n=10000, mean = mu_s01, sd = sqrt(sigma_s01))
 I_01 <- mean(log(dnorm(S2, mu_s01, sd = sqrt(sigma_s01)) / f_Delta_S(S2)))
 
 # I_00
-Seed <- Seed+1; set.seed(Seed)
+#Seed <- Seed+1; set.seed(Seed)
 S3 <- rnorm(n=10000, mean = mu_s00, sd = sqrt(sigma_s00))
 I_00 <- mean(log(
   ((omega_1 * dnorm(S3, mu_s00, sd = sqrt(sigma_s00))) + 
@@ -172,7 +175,7 @@ I_00 <- mean(log(
     f_Delta_S(S3)))
 
 # I_11
-Seed <- Seed+1; set.seed(Seed)
+#Seed <- Seed+1; set.seed(Seed)
 S4 <- rnorm(n=10000, mean = mu_s11, sd = sqrt(sigma_s11))
 I_11 <-mean(log(
   ((omega_1 * dnorm(S4, mu_s00, sd = sqrt(sigma_s00))) + 
@@ -186,6 +189,10 @@ H_Delta_S <-
      (pi_Delta_T_0 * log(pi_Delta_T_0)) +
      (pi_Delta_T_1 * log(pi_Delta_T_1)))
 R2_H <- I_Delta_T_Delta_S / H_Delta_S
+
+aantal <- aantal + 1
+cat("\n", (aantal/M)*100, "% done. \n", sep="") 
+
 R2_H_all <- c(R2_H_all, R2_H)
 
 G_rho_01_00_all <- cbind(G_rho_01_00_all, G_rho_01_00_hier)
@@ -226,16 +233,13 @@ sigma_11_10_all <- cbind(sigma_11_10_all, sigma_11_10)
 sigma_11_11_all <- cbind(sigma_11_11_all, sigma_11_11)
 
 
-
-#flush.console()
-#cat("\n \n R2_H =", R2_H, "\n")
-
-
 } # einde if eigen_mat_a en eigen_mat_b pos def
-}  # einde for (a in 1: M) loop
-}}}}  # einde for i in 1:length(G_pi_ij) loops
-}}
 
+}
+
+} # einde for (a in 1: M) loop
+}
+       
 fit <- 
   list(R2_H=R2_H_all, pi_00=as.numeric(pi_00_all), pi_01=as.numeric(pi_01_all), 
        pi_10=as.numeric(pi_10_all), pi_11=as.numeric(pi_11_all), 

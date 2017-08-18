@@ -5,9 +5,9 @@
 The function \code{ICA.BinCont} quantifies surrogacy in the single-trial causal-inference framework (individual causal association) when the surrogate endpoint is continuous (normally distributed) and the true endpoint is a binary outcome. For details, see Alonso \emph{et al.} (2016). }
 \usage{
 ICA.BinCont(Dataset, Surr, True, Treat, Diff.Sigma=TRUE, 
-  G_pi_00=seq(from = 0, to=1, by = .2), G_rho_01_00=seq(from = 0, to=1, by = .2), 
-  G_rho_01_01=seq(from = 0, to=1, by = .2), G_rho_01_10=seq(from = 0, to=1, by = .2), 
-  G_rho_01_11=seq(from = 0, to=1, by = .2), M=10, Seed=sample(1:100000, size=1))
+  G_pi_00=seq(0, 1, by=.01), G_rho_01_00=seq(-1, 1, by=.01), 
+  G_rho_01_01=seq(-1, 1, by=.01), G_rho_01_10=seq(-1, 1, by=.01), 
+  G_rho_01_11=seq(-1, 1, by=.01), M=1000, Seed=123)
 }
 \arguments{
   \item{Dataset}{A \code{data.frame} that should consist of one line per patient. Each line contains (at least) a surrogate value, a true endpoint value, and a treatment indicator.}
@@ -15,13 +15,13 @@ ICA.BinCont(Dataset, Surr, True, Treat, Diff.Sigma=TRUE,
   \item{True}{The name of the variable in \code{Dataset} that contains the true endpoint values.}
   \item{Treat}{The name of the variable in \code{Dataset} that contains the treatment indicators. The treatment indicator should be coded as \eqn{1} for the experimental group and \eqn{-1} for the control group.}
   \item{Diff.Sigma}{Logical. If \code{Diff.Sigma=TRUE}, then the mixtures of normal distributions are allowed to have different variances. If \code{Diff.Sigma=FALSE}, then the mixtures of normal distributions are not allowed to have different variances (selecting the latter option speeds up the required calculations). Default \code{Diff.Sigma=TRUE}.}
-  \item{G_pi_00}{A grid of values to be considered for \eqn{\pi_{11}}, i.e., the unidentifiable probability \eqn{P(T_1=0,T_0=0)}. Default \code{seq(from = 0, to = 1, by = .2)}.}
-  \item{G_rho_01_00}{A grid of values to be considered for the association parameter \eqn{\rho_{01}^{00}}. Default \code{seq(from = 0, to = 1, by = .2)}.}
-  \item{G_rho_01_01}{A grid of values to be considered for the association parameter \eqn{\rho_{01}^{01}}. Default \code{seq(from = 0, to = 1, by = .2)}.}
-  \item{G_rho_01_10}{A grid of values to be considered for the association parameter \eqn{\rho_{01}^{10}}. Default \code{seq(from = 0, to = 1, by = .2)}.}
-  \item{G_rho_01_11}{A grid of values to be considered for the association parameter \eqn{\rho_{01}^{11}}. Default \code{seq(from = 0, to = 1, by = .2)}.}
-  \item{M}{The number of runs that are conducted for all \eqn{\pi_{11}} by \eqn{\rho_{01}^{00}} by \eqn{\rho_{01}^{01}} by \eqn{\rho_{01}^{10}} by \eqn{\rho_{01}^{11}} combinations. Default 10.}
-  \item{Seed}{The seed to be used to generate \eqn{\pi_r}. Default \code{Seed=sample(1:100000, size=1)}.}
+  \item{G_pi_00}{A grid of values to be considered for \eqn{\pi_{11}}, i.e., the unidentifiable probability \eqn{P(T_1=0,T_0=0)}. Default \code{seq(0, 1, by=.01)}.}
+  \item{G_rho_01_00}{A grid of values to be considered for the association parameter \eqn{\rho_{01}^{00}}. Default \code{seq(-1, 1, by=.01)}.}
+  \item{G_rho_01_01}{A grid of values to be considered for the association parameter \eqn{\rho_{01}^{01}}. Default \code{seq(-1, 1, by=.01)}.}
+  \item{G_rho_01_10}{A grid of values to be considered for the association parameter \eqn{\rho_{01}^{10}}. Default \code{seq(-1, 1, by=.01)}.}
+  \item{G_rho_01_11}{A grid of values to be considered for the association parameter \eqn{\rho_{01}^{11}}. Default \code{seq(-1, 1, by=.01)}.}
+  \item{M}{The number of ICA values to be sampled. Default \code{M=1000}.}
+  \item{Seed}{The seed to be used to generate \eqn{\pi_r}. Default \code{Seed=123}.}
   }
 
 \value{An object of class \code{ICA.BinCont} with components,
@@ -65,7 +65,7 @@ ICA.BinCont(Dataset, Surr, True, Treat, Diff.Sigma=TRUE,
 
 }
 \references{
-Alonso, A., Van der Elst, W., & Meyvisch, P. (2016). Surrogate markers validation: the continuous-binary setting from a causal inference perspective.
+Alonso, A., Van der Elst, W., & Molenberghs, G. (2016). Surrogate markers validation: the continuous-binary setting from a causal inference perspective.
 }
 \author{
 Wim Van der Elst, Paul Meyvisch, & Ariel Alonso

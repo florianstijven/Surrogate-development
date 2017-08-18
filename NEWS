@@ -1,5 +1,6 @@
-Changes in version 0.2
-  o Added functions PPE.BinBin and comb27.BinBin
+Changes in version 0.2 - 0.4
+  o Added functions PPE.BinBin, comb27.BinBin and ECT
+  o Dataset CIGTS_BinCont added
 
 Changes in version 0.1.80
   o ICA.ContCont.MultS, ICA.ContCont.MultS_alt and AA.Mult added
