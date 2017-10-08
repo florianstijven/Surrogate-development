@@ -4,12 +4,13 @@
 Fits univariate mixed-effect models to assess surrogacy in the meta-analytic multiple-trial setting
  (continuous-continuous case)}
 \description{
-The function \code{UnimixedContCont} uses the univariate mixed-effects approach to estimate trial- and individual-level surrogacy when the data of multiple clinical trials are available. The user can specify whether a (weighted or unweighted) full, semi-reduced, or reduced model should be fitted. See the \bold{Details} section below.   
+The function \code{UnimixedContCont} uses the univariate mixed-effects approach to estimate trial- and individual-level surrogacy when the data of multiple clinical trials are available. The user can specify whether a (weighted or unweighted) full, semi-reduced, or reduced model should be fitted. See the \bold{Details} section below.  Further, the Individual Causal Association (ICA) is computed.     
 }
 \usage{
 UnimixedContCont(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model=c("Full"), 
 Weighted=TRUE, Min.Trial.Size=2, Alpha=.05, Number.Bootstraps=500,
-Seed=sample(1:1000, size=1), \dots)
+Seed=sample(1:1000, size=1), T0T1=seq(-1, 1, by=.2), T0S1=seq(-1, 1, by=.2), 
+T1S0=seq(-1, 1, by=.2), S0S1=seq(-1, 1, by=.2), \dots)
 }
 \arguments{
   \item{Dataset}{A \code{data.frame} that should consist of one line per patient. Each line contains (at least) a surrogate value, a true endpoint value, a treatment indicator, a patient ID, and a trial ID.}
@@ -24,6 +25,10 @@ Seed=sample(1:1000, size=1), \dots)
   \item{Alpha}{The \eqn{\alpha}-level that is used to determine the confidence intervals around \eqn{R^2_{trial}}, \eqn{R_{trial}}, \eqn{R^2_{indiv}}, and \eqn{R_{indiv}}. Default \eqn{0.05}.}
 \item{Number.Bootstraps}{The confidence intervals for \eqn{R^2_{indiv}} and \eqn{R_{indiv}} are determined as based on a bootstrap procedure. \code{Number.Bootstraps} specifies the number of bootstrap samples that are to be used. Default \eqn{500}.}
 \item{Seed}{The seed to be used in the bootstrap procedure. Default \eqn{sample(1:1000, size=1)}.}
+\item{T0T1}{A scalar or vector that contains the correlation(s) between the counterfactuals T0 and T1 that should be considered in the computation of \eqn{\rho_{\Delta}} (ICA). For details, see function \code{ICA.ContCont}. Default \code{seq(-1, 1, by=.2)}.}
+  \item{T0S1}{A scalar or vector that contains the correlation(s) between the counterfactuals T0 and S1 that should be considered in the computation of \eqn{\rho_{\Delta}}. Default \code{seq(-1, 1, by=.2)}.}
+  \item{T1S0}{A scalar or vector that contains the correlation(s) between the counterfactuals T1 and S0 that should be considered in the computation of \eqn{\rho_{\Delta}}. Default \code{seq(-1, 1, by=.2)}.}
+  \item{S0S1}{A scalar or vector that contains the correlation(s) between the counterfactuals S0 and S1 that should be considered in the computation of \eqn{\rho_{\Delta}}. Default \code{seq(-1, 1, by=.2)}.}
 \item{\dots}{Other arguments to be passed to the function \code{lmer} (of the R package \code{lme4}) that is used to fit the geralized linear mixed-effect models in the function \code{BimixedContCont}.}
 }
 \details{
@@ -74,6 +79,12 @@ The classical coefficient of determination of the fitted stage 2 model provides 
   \item{Indiv.R}{A \code{data.frame} that contains the individual-level correlation coefficient (\eqn{R_{indiv}}), its standard error and confidence interval.}
   \item{Cor.Endpoints}{A \code{data.frame} that contains the correlations between the surrogate and the true endpoint in the control treatment group (i.e., \eqn{\rho_{T0S0}}) and in the experimental treatment group (i.e., \eqn{\rho_{T1S1}}), their standard errors and their confidence intervals.}
 \item{D.Equiv}{The variance-covariance matrix of the trial-specific intercept and treatment effects for the surrogate and true endpoints (when a full or semi-reduced model is fitted, i.e., when \code{Model=c("Full")} or \code{Model=c("SemiReduced")} is used in the function call), or the variance-covariance matrix of the trial-specific treatment effects for the surrogate and true endpoints (when a reduced model is fitted, i.e., when \code{Model=c("Reduced")} is used in the function call).  The variance-covariance matrix \code{D.Equiv} is equivalent to the \eqn{\bold{D}} matrix that would be obtained when a (full or reduced) bivariate mixed-effects approach is used; see function \code{\link{BimixedContCont}}).}
+  \item{ICA}{A fitted object of class \code{ICA.ContCont}.}
+  \item{T0T0}{The variance of the true endpoint in the control treatment condition.}
+  \item{T1T1}{The variance of the true endpoint in the experimental treatment condition.}
+  \item{S0S0}{The variance of the surrogate endpoint in the control treatment condition.}
+  \item{S1S1}{The variance of the surrogate endpoint in the experimental treatment condition.}
+
 }
 \references{
 Burzykowski, T., Molenberghs, G., & Buyse, M. (2005). \emph{The evaluation of surrogate endpoints}. New York: Springer-Verlag.

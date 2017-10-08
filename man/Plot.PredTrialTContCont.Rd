@@ -22,6 +22,7 @@ Wim Van der Elst, Ariel Alonso, & Geert Molenberghs
 \seealso{\link{Pred.TrialT.ContCont}
 }
 \examples{
+\dontrun{ # time consuming code part
 # Generate dataset
 Sim.Data.MTS(N.Total=2000, N.Trial=15, R.Trial.Target=.95, 
 R.Indiv.Target=.8, D.aa=10, D.bb=50, 
@@ -42,6 +43,7 @@ summary(Pred_Beta)
 
 # Plot the results
 plot(Pred_Beta)
+}
 }
 \keyword{New trial}
 \keyword{Predict treatment effect T}

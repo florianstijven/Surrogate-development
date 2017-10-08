@@ -4,11 +4,12 @@
 Fits a bivariate mixed-effects model to assess surrogacy in the meta-analytic multiple-trial setting 
 (Continuous-continuous case)}
 \description{
-The function \code{BimixedContCont} uses the bivariate mixed-effects approach to estimate trial- and individual-level surrogacy when the data of multiple clinical trials are available. The user can specify whether a full or reduced model should be fitted. See the \bold{Details} section below.   
+The function \code{BimixedContCont} uses the bivariate mixed-effects approach to estimate trial- and individual-level surrogacy when the data of multiple clinical trials are available. The user can specify whether a full or reduced model should be fitted. See the \bold{Details} section below.  Further, the Individual Causal Association (ICA) is computed.   
 }
 \usage{
 BimixedContCont(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model=c("Full"), 
-Min.Trial.Size=2, Alpha=.05, \dots)
+Min.Trial.Size=2, Alpha=.05, T0T1=seq(-1, 1, by=.2), T0S1=seq(-1, 1, by=.2), 
+T1S0=seq(-1, 1, by=.2), S0S1=seq(-1, 1, by=.2), \dots)
 }
 \arguments{
   \item{Dataset}{A \code{data.frame} that should consist of one line per patient. Each line contains (at least) a surrogate value, a true endpoint value, a treatment indicator, a patient ID, and a trial ID.}
@@ -20,7 +21,11 @@ Min.Trial.Size=2, Alpha=.05, \dots)
   \item{Model}{The type of model that should be fitted, i.e., \code{Model=c("Full")} or \code{Model=c("Reduced")}. See the \bold{Details} section below. 
   Default \code{Model=c("Full")}. }
   \item{Min.Trial.Size}{The minimum number of patients that a trial should contain to be included in the analysis. If the number of patients in a trial is smaller than the value specified by \code{Min.Trial.Size}, the data of the trial are excluded from the analysis. Default \eqn{2}.}
-  \item{Alpha}{The \eqn{\alpha}-level that is used to determine the confidence intervals around \eqn{R^2_{trial}}, \eqn{R_{trial}}, \eqn{R^2_{indiv}} and \eqn{R_{indiv}}. Default \eqn{0.05}.}  
+  \item{Alpha}{The \eqn{\alpha}-level that is used to determine the confidence intervals around \eqn{R^2_{trial}}, \eqn{R_{trial}}, \eqn{R^2_{indiv}} and \eqn{R_{indiv}}. Default \eqn{0.05}.}
+  \item{T0T1}{A scalar or vector that contains the correlation(s) between the counterfactuals T0 and T1 that should be considered in the computation of \eqn{\rho_{\Delta}} (ICA). For details, see function \code{ICA.ContCont}. Default \code{seq(-1, 1, by=.2)}.}
+  \item{T0S1}{A scalar or vector that contains the correlation(s) between the counterfactuals T0 and S1 that should be considered in the computation of \eqn{\rho_{\Delta}}. Default \code{seq(-1, 1, by=.2)}.}
+  \item{T1S0}{A scalar or vector that contains the correlation(s) between the counterfactuals T1 and S0 that should be considered in the computation of \eqn{\rho_{\Delta}}. Default \code{seq(-1, 1, by=.2)}.}
+  \item{S0S1}{A scalar or vector that contains the correlation(s) between the counterfactuals S0 and S1 that should be considered in the computation of \eqn{\rho_{\Delta}}. Default \code{seq(-1, 1, by=.2)}.}
   \item{\dots}{Other arguments to be passed to the function \code{lmer} (of the R package \code{lme4}) that is used to fit the geralized linear mixed-effect models in the function \code{BimixedContCont}.}
 }
 \details{
@@ -88,6 +93,12 @@ Alternatively, the bivariate mixed-effects model may be abandonned and the user 
   \item{Cor.Endpoints}{A \code{data.frame} that contains the correlations between the surrogate and the true endpoint in the control treatment group (i.e., \eqn{\rho_{T0S0}}) and in the experimental treatment group (i.e., \eqn{\rho_{T1S1}}), their standard errors and their confidence intervals.}
 \item{D}{The variance-covariance matrix of the random effects (the \eqn{\bold{D}} matrix), i.e., a \eqn{4} by \eqn{4} variance-covariance matrix of the random intercept and treatment effects when a full model is fitted (i.e., when \code{Model=c("Full")} is used in the function call), or a \eqn{2} by \eqn{2} variance-covariance matrix of the random treatment effects when a reduced model is fitted (i.e., when \code{Model=c("Reduced")} is used in the function call).}
   \item{Sigma}{The \eqn{2} by \eqn{2} variance-covariance matrix of the residuals (\eqn{\varepsilon_{Sij}} and \eqn{\varepsilon_{Tij}}).}
+    \item{ICA}{A fitted object of class \code{ICA.ContCont}.}
+  \item{T0T0}{The variance of the true endpoint in the control treatment condition.}
+  \item{T1T1}{The variance of the true endpoint in the experimental treatment condition.}
+  \item{S0S0}{The variance of the surrogate endpoint in the control treatment condition.}
+  \item{S1S1}{The variance of the surrogate endpoint in the experimental treatment condition.}
+
 }  
 
 \references{

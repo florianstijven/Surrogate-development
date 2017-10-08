@@ -1,5 +1,5 @@
 plot.UnifixedContCont <- plot.BifixedContCont <- plot.UnimixedContCont <- 
-  function(x, Trial.Level=TRUE, Weighted=TRUE, Indiv.Level=TRUE, 
+  function(x, Trial.Level=TRUE, Weighted=TRUE, Indiv.Level=TRUE, ICA=TRUE, Entropy.By.ICA=FALSE,
   Xlab.Indiv, Ylab.Indiv, Xlab.Trial, Ylab.Trial, Main.Trial, Main.Indiv, 
   Par=par(oma=c(0, 0, 0, 0), mar=c(5.1, 4.1, 4.1, 2.1)),...) {
  
@@ -19,6 +19,19 @@ plot.UnifixedContCont <- plot.BifixedContCont <- plot.UnimixedContCont <-
       abline(lm(Object$Results.Stage.1$Treatment.T ~ Object$Results.Stage.1$Treatment.S))}
   }
   
+  
+  if (ICA==TRUE){
+    Fit <- MaxEntContCont(x=Object$ICA, T0T0 = Object$T0T0, T1T1 = Object$T1T1, S0S0 = Object$S0S0, S1S1 = Object$S1S1)
+    dev.new(); plot(Fit, Main="Individual Causal Association")
+    }
+  
+  if (Entropy.By.ICA==TRUE){
+    Fit <- MaxEntContCont(x=Object$ICA, T0T0 = Object$T0T0, T1T1 = Object$T1T1, S0S0 = Object$S0S0, S1S1 = Object$S1S1)
+    dev.new(); plot(Fit, Entropy.By.ICA = TRUE)
+    points(x=Fit$Max.Ent, y=Fit$ICA.Max.Ent, col="red", pch=3, cex=2)
+    }
+  
+  
   if (Indiv.Level==TRUE){ 
     if (missing(Xlab.Indiv)) {Xlab.Indiv <- expression(paste("Residuals for the surrogate endpoint ", (epsilon[Sij])))}
     if (missing(Ylab.Indiv)) {Ylab.Indiv <- expression(paste("Residuals for the true endpoint  ", (epsilon[Tij])))}
@@ -30,7 +43,12 @@ plot.UnifixedContCont <- plot.BifixedContCont <- plot.UnimixedContCont <-
   }    
 } 
 
-plot.BimixedContCont <- function(x, Trial.Level=TRUE, Weighted=TRUE, Indiv.Level=TRUE, Xlab.Indiv, Ylab.Indiv, Xlab.Trial, Ylab.Trial, Main.Trial, Main.Indiv, 
+
+
+
+
+plot.BimixedContCont <- function(x, Trial.Level=TRUE, Weighted=TRUE, Indiv.Level=TRUE, ICA=TRUE, Entropy.By.ICA=FALSE,
+                                 Xlab.Indiv, Ylab.Indiv, Xlab.Trial, Ylab.Trial, Main.Trial, Main.Indiv, 
                                  Par=par(oma=c(0, 0, 0, 0), mar=c(5.1, 4.1, 4.1, 2.1)), ...){
   
 
@@ -52,6 +70,20 @@ plot.BimixedContCont <- function(x, Trial.Level=TRUE, Weighted=TRUE, Indiv.Level
       abline(lm(data.frame(Object$Trial.Spec.Results)$Treatment.T ~ data.frame(Object$Trial.Spec.Results)$Treatment.S))
     }
   }
+  
+  if (ICA==TRUE){
+    Fit <- MaxEntContCont(x=Object$ICA, T0T0 = Object$T0T0, T1T1 = Object$T1T1, S0S0 = Object$S0S0, S1S1 = Object$S1S1)
+    dev.new(); plot(Fit, Main="Individual Causal Association")
+  }
+  
+  if (Entropy.By.ICA==TRUE){
+    Fit <- MaxEntContCont(x=Object$ICA, T0T0 = Object$T0T0, T1T1 = Object$T1T1, S0S0 = Object$S0S0, S1S1 = Object$S1S1)
+    
+    dev.new(); 
+    plot(Fit, Entropy.By.ICA = TRUE)
+    points(x=Fit$Max.Ent, y=Fit$ICA.Max.Ent, col="red", pch=3, cex=2)
+  }
+    
   
   if (Indiv.Level==TRUE){ 
     if (missing(Xlab.Indiv)) {Xlab.Indiv <- expression(paste("Residuals for the surrogate endpoint ", (epsilon[Sij])))}

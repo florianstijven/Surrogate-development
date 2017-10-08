@@ -37,6 +37,30 @@ summary.UnifixedContCont <- summary.UnimixedContCont <- function(object, ..., Ob
   print(format(round(Object$Trial.R, 4), nsmall = 4))
   cat("\n")
   print(format(round(Object$Indiv.R, 4), nsmall = 4))
+  
+  #ICA
+  mode <- function(data) {
+    x <- data
+    z <- density(x)
+    mode_val <- z$x[which.max(z$y)]
+    fit <- list(mode_val= mode_val)
+  }
+  cat("\n\n\n# ICA results summary")
+  cat("\n#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n")
+  cat("Mean (SD) ICA: ", format(round(mean(Object$ICA$ICA), 4), nsmall = 4), " (", format(round(sd(Object$ICA$ICA), 4), nsmall = 4), ")", 
+      "  [min: ", format(round(min(Object$ICA$ICA), 4), nsmall = 4), "; max: ",  format(round(max(Object$ICA$ICA), 4), nsmall = 4), "]", sep="")
+  cat("\nMode ICA: ", format(round(mode(Object$ICA$ICA)$mode_val, 4), nsmall = 4))
+  cat("\n\nQuantiles of the ICA distribution: \n\n")
+  quant <- quantile(Object$ICA$ICA, probs = c(.05, .10, .20, .50, .80, .90, .95))
+  print(quant)
+  
+  # Max ent results
+  Fit <- MaxEntContCont(x=Object$ICA, T0T0 = Object$T0T0, T1T1 = Object$T1T1, S0S0 = Object$S0S0, S1S1 = Object$S1S1)
+  cat("\n\nMaximum entropy ICA: ")
+  cat(Fit$ICA.Max.Ent) #, " (with entropy = ", Object$Max.Ent, ")\n", sep = "")
+  cat("\n\nObtained under correlation structure:\n")
+  print(Fit$Table.ICA.Entropy[1,3:8], row.names = "")
+  cat("\n")
 }
 
 summary.BifixedContCont <- function(object, ..., Object){
@@ -77,6 +101,30 @@ summary.BifixedContCont <- function(object, ..., Object){
   print(format(round(Object$Trial.R, 4), nsmall = 4))
   cat("\n")
   print(format(round(Object$Indiv.R, 4), nsmall = 4))  
+  
+  #ICA
+  mode <- function(data) {
+    x <- data
+    z <- density(x)
+    mode_val <- z$x[which.max(z$y)]
+    fit <- list(mode_val= mode_val)
+  }
+  cat("\n\n\n# ICA results summary")
+  cat("\n#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n")
+  cat("Mean (SD) ICA: ", format(round(mean(Object$ICA$ICA), 4), nsmall = 4), " (", format(round(sd(Object$ICA$ICA), 4), nsmall = 4), ")", 
+      "  [min: ", format(round(min(Object$ICA$ICA), 4), nsmall = 4), "; max: ",  format(round(max(Object$ICA$ICA), 4), nsmall = 4), "]", sep="")
+  cat("\nMode ICA: ", format(round(mode(Object$ICA$ICA)$mode_val, 4), nsmall = 4))
+  cat("\n\nQuantiles of the ICA distribution: \n\n")
+  quant <- quantile(Object$ICA$ICA, probs = c(.05, .10, .20, .50, .80, .90, .95))
+  print(quant)
+  
+  # Max ent results
+  Fit <- MaxEntContCont(x=Object$ICA, T0T0 = Object$T0T0, T1T1 = Object$T1T1, S0S0 = Object$S0S0, S1S1 = Object$S1S1)
+  cat("\n\nMaximum entropy ICA: ")
+  cat(Fit$ICA.Max.Ent) #, " (with entropy = ", Object$Max.Ent, ")\n", sep = "")
+  cat("\n\nObtained under correlation structure:\n")
+  print(Fit$Table.ICA.Entropy[1,3:8], row.names = "")
+  cat("\n")
 }
 
 
@@ -118,4 +166,28 @@ summary.BimixedContCont <- function(object, ..., Object){
   print(format(round(Object$Trial.R, 4), nsmall = 4))
   cat("\n")
   print(format(round(Object$Indiv.R, 4), nsmall = 4))  
+  
+  #ICA
+  mode <- function(data) {
+    x <- data
+    z <- density(x)
+    mode_val <- z$x[which.max(z$y)]
+    fit <- list(mode_val= mode_val)
+  }
+  cat("\n\n\n# ICA results summary")
+  cat("\n#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n")
+  cat("Mean (SD) ICA: ", format(round(mean(Object$ICA$ICA), 4), nsmall = 4), " (", format(round(sd(Object$ICA$ICA), 4), nsmall = 4), ")", 
+      "  [min: ", format(round(min(Object$ICA$ICA), 4), nsmall = 4), "; max: ",  format(round(max(Object$ICA$ICA), 4), nsmall = 4), "]", sep="")
+  cat("\nMode ICA: ", format(round(mode(Object$ICA$ICA)$mode_val, 4), nsmall = 4))
+  cat("\n\nQuantiles of the ICA distribution: \n\n")
+  quant <- quantile(Object$ICA$ICA, probs = c(.05, .10, .20, .50, .80, .90, .95))
+  print(quant)
+  
+  # Max ent results
+  Fit <- MaxEntContCont(x=Object$ICA, T0T0 = Object$T0T0, T1T1 = Object$T1T1, S0S0 = Object$S0S0, S1S1 = Object$S1S1)
+  cat("\n\nMaximum entropy ICA: ")
+  cat(Fit$ICA.Max.Ent) #, " (with entropy = ", Object$Max.Ent, ")\n", sep = "")
+  cat("\n\nObtained under correlation structure:\n")
+  print(Fit$Table.ICA.Entropy[1,3:8], row.names = "")
+  cat("\n")
 }

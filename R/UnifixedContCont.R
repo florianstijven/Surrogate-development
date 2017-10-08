@@ -1,5 +1,6 @@
 UnifixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model=c("Full"), Weighted=TRUE, Min.Trial.Size=2, 
-                     Alpha=.05, Number.Bootstraps=500, Seed=sample(1:1000, size=1)){
+                     Alpha=.05, Number.Bootstraps=500, Seed=sample(1:1000, size=1), 
+                     T0T1=seq(-1, 1, by=.2), T0S1=seq(-1, 1, by=.2), T1S0=seq(-1, 1, by=.2), S0S1=seq(-1, 1, by=.2)){
   
   if ((Model==c("Full") | Model==c("Reduced") | Model==c("SemiReduced"))==FALSE) {stop ("The specification of the Model=c(\"...\") argument of the call is incorrect. Use either Model=c(\"Full\"), Model=c(\"Reduced\"), or Model=c(\"SemiReduced\").")}     
   Surr <- Dataset[,paste(substitute(Surr))]
@@ -17,6 +18,19 @@ UnifixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model
   N.total <- Data.Proc$N.total
   N.trial <- Data.Proc$N.trial
   Obs.per.trial <- Data.Proc$Obs.per.trial
+  
+  # ICA
+  S1 <- dataS$outcome[dataS$Treat==1]
+  S0 <- dataS$outcome[dataS$Treat!=1]
+  T1 <- dataT$outcome[dataS$Treat==1]
+  T0 <- dataT$outcome[dataS$Treat!=1]
+  r_T0S0 <- cor(T0,S0)
+  r_T1S1 <- cor(T1,S1)
+  set.seed(123); ICA <- ICA.ContCont(T0S0 = r_T0S0, T1S1 = r_T1S1, 
+                                            T0T0 = var(T0), T1T1 = var(T1), S0S0 = var(S0), S1S1 = var(S1), 
+                                            T0T1=seq(-1, 1, by=.2), T0S1=seq(-1, 1, by=.2), T1S0=seq(-1, 1, by=.2), 
+                                            S0S1=seq(-1, 1, by=.2))
+
   
   # stage 1
   if (Model==c("Full")|Model==c("SemiReduced")){
@@ -173,10 +187,12 @@ UnifixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model
   rownames(Cor.Endpoints) <- c("r_T0S0", "r_T1S1")
   colnames(Cor.Endpoints) <- c("Estimate", "Standard Error", "CI lower limit", "CI upper limit")
   
+  T0T0 = var(T0); T1T1 = var(T1); S0S0 = var(S0); S1S1 = var(S1)
+  
   fit <- 
     list(Data.Analyze=wide, Obs.Per.Trial=Obs.per.trial, Results.Stage.1=Results.Stage.1, Residuals.Stage.1=Residuals.Stage.1, 
          Results.Stage.2=Results.Stage.2, Trial.R2=Trial.R2, Indiv.R2=Indiv.R2, Trial.R=Trial.R, Indiv.R=Indiv.R, Cor.Endpoints=Cor.Endpoints, 
-         D.Equiv=D.equiv, Call=match.call())
+         D.Equiv=D.equiv, ICA=ICA, T0T0 = T0T0, T1T1 = T1T1, S0S0 = S0S0, S1S1 = S1S1, Call=match.call())
   
   class(fit) <- "UnifixedContCont"
   fit

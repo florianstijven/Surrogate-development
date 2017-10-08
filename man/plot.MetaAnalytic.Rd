@@ -11,22 +11,24 @@ Produces plots that provide a graphical representation of trial- and/or individu
 }
 \usage{
 \method{plot}{BifixedContCont}(x, Trial.Level=TRUE, Weighted=TRUE, 
-Indiv.Level=TRUE, Xlab.Indiv, Ylab.Indiv, Xlab.Trial, Ylab.Trial, 
-Main.Trial, Main.Indiv, Par=par(oma=c(0, 0, 0, 0), 
+Indiv.Level=TRUE, ICA=TRUE, Entropy.By.ICA=FALSE, Xlab.Indiv, Ylab.Indiv, 
+Xlab.Trial, Ylab.Trial, Main.Trial, Main.Indiv, Par=par(oma=c(0, 0, 0, 0), 
 mar=c(5.1, 4.1, 4.1, 2.1)), \dots)
 
 \method{plot}{BimixedContCont}(x, Trial.Level=TRUE, Weighted=TRUE, 
-Indiv.Level=TRUE, Xlab.Indiv, Ylab.Indiv, Xlab.Trial, Ylab.Trial, 
-Main.Trial, Main.Indiv, Par=par(oma=c(0, 0, 0, 0), 
+Indiv.Level=TRUE, ICA=TRUE, Entropy.By.ICA=FALSE, Xlab.Indiv, Ylab.Indiv, 
+Xlab.Trial, Ylab.Trial, Main.Trial, Main.Indiv, Par=par(oma=c(0, 0, 0, 0), 
 mar=c(5.1, 4.1, 4.1, 2.1)), \dots)
 
 \method{plot}{UnifixedContCont}(x, Trial.Level=TRUE, Weighted=TRUE, 
-Indiv.Level=TRUE, Xlab.Indiv, Ylab.Indiv, Xlab.Trial, Ylab.Trial, 
+Indiv.Level=TRUE, ICA=TRUE, Entropy.By.ICA=FALSE, 
+Xlab.Indiv, Ylab.Indiv, Xlab.Trial, Ylab.Trial, 
 Main.Trial, Main.Indiv, Par=par(oma=c(0, 0, 0, 0), 
 mar=c(5.1, 4.1, 4.1, 2.1)), \dots)
 
 \method{plot}{UnimixedContCont}(x, Trial.Level=TRUE, Weighted=TRUE, 
-Indiv.Level=TRUE, Xlab.Indiv, Ylab.Indiv, Xlab.Trial, Ylab.Trial, 
+Indiv.Level=TRUE, ICA=TRUE, Entropy.By.ICA=FALSE, 
+Xlab.Indiv, Ylab.Indiv, Xlab.Trial, Ylab.Trial, 
 Main.Trial, Main.Indiv, Par=par(oma=c(0, 0, 0, 0), 
 mar=c(5.1, 4.1, 4.1, 2.1)), \dots)
 
@@ -36,6 +38,8 @@ mar=c(5.1, 4.1, 4.1, 2.1)), \dots)
   \item{Trial.Level}{Logical. If \code{Trial.Level=TRUE} and an object of class \code{UnifixedContCont}, \code{BifixedContCont}, \code{UnimixedContCont},  or \code{BimixedContCont} is considered, a plot of the trial-specific treatment effects on the true endpoint against the trial-specific treatment effect on the surrogate endpoints is provided (as a graphical representation of \eqn{R_{trial}}). If \code{Trial.Level=TRUE} and an object of class \code{Single.Trial.RE.AA} is considered, a plot of the treatment effect on the true endpoint against the treatment effect on the surrogate endpoint is provided, and a regression line that goes through the origin with slope RE is added to the plot (to depict the constant RE assumption, see \code{\link{Single.Trial.RE.AA}} for details).  If \code{Trial.Level=FALSE}, this plot is not provided. Default \code{TRUE}.}
   \item{Weighted}{Logical. This argument only has effect when the user requests a trial-level surrogacy plot (i.e., when \code{Trial.Level=TRUE} in the function call) and when an object of class \code{UnifixedContCont}, \code{BifixedContCont}, \code{UnimixedContCont}, or \code{BimixedContCont} is considered (not when an object of class \code{Single.Trial.RE.AA} is considered). If \code{Weighted=TRUE}, the circles that depict the trial-specific treatment effects on the true endpoint against the surrogate endpoint are proportional to the number of patients in the trial. If \code{Weighted=FALSE}, all circles have the same size. Default \code{TRUE}.}
   \item{Indiv.Level}{Logical. If \code{Indiv.Level=TRUE}, a plot of the trial- and treatment-corrected residuals of the true and surrogate endpoints is provided (when an object of class \code{UnifixedContCont}, \code{BifixedContCont}, \code{UnimixedContCont}, or \code{BimixedContCont} is considered), or a plot of the treatment-corrected residuals (when an object of class \code{Single.Trial.RE.AA} is considered). This plot provides a graphical representation of \eqn{R_{indiv}}. If \code{Indiv.Level=FALSE}, this plot is not provided. Default \code{TRUE}.}
+  \item{ICA}{Logical. Should a plot of the individual level causal association be shown? Default \code{ICA=TRUE}.}
+\item{Entropy.By.ICA}{Logical. Should a plot that shows ICA against the entropy be shown? Default \code{Entropy.By.ICA=FALSE}.}
   \item{Xlab.Indiv}{The legend of the X-axis of the plot that depicts individual-level surrogacy. Default "Residuals for the surrogate endpoint (\eqn{\varepsilon_{Sij}})" (without the \eqn{i} subscript when an object of class \code{Single.Trial.RE.AA} is considered).}
   \item{Ylab.Indiv}{The legend of the Y-axis of the plot that depicts individual-level surrogacy. Default "Residuals for the true endpoint (\eqn{\varepsilon_{Tij}})" (without the \eqn{i} subscript when an object of class \code{Single.Trial.RE.AA} is considered).}
   \item{Xlab.Trial}{The legend of the X-axis of the plot that depicts trial-level surrogacy. Default "Treatment effect on the surrogate endpoint (\eqn{\alpha_{i}})" (without the \eqn{i} subscript when an object of class \code{Single.Trial.RE.AA} is considered).}
@@ -54,6 +58,7 @@ Wim Van der Elst, Ariel Alonso, & Geert Molenberghs
 \seealso{\link{UnifixedContCont}, \link{BifixedContCont}, \link{UnifixedContCont}, \link{BimixedContCont}, \link{Single.Trial.RE.AA}
 }
 \examples{
+\dontrun{ # time consuming code part
 ##### Multiple-trial setting
 
 ## Load ARMD dataset
@@ -99,6 +104,7 @@ SurSTS <- Single.Trial.RE.AA(Dataset=ARMD, Surr=Diff24, True=Diff52, Treat=Treat
 # Request a plot of individual-level surrogacy and a plot that depicts the Relative effect 
 # and the constant RE assumption:
 plot(SurSTS, Trial.Level=TRUE, Indiv.Level=TRUE)
+}
 }
 
 \keyword{Plot surrogacy}

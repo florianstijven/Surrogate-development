@@ -11,7 +11,7 @@ MaxEntContCont(x, T0T0, T1T1, S0S0, S1S1)
 }
 \arguments{
   \item{x}{A fitted object of class \code{ICA.ContCont}.}
-    \item{T0T0}{A scalar that specifies the variance of the true endpoint in the control treatment condition.}
+  \item{T0T0}{A scalar that specifies the variance of the true endpoint in the control treatment condition.}
   \item{T1T1}{A scalar that specifies the variance of the true endpoint in the experimental treatment condition.}
   \item{S0S0}{A scalar that specifies the variance of the surrogate endpoint in the control treatment condition.}
   \item{S1S1}{A scalar that specifies the variance of the surrogate endpoint in the experimental treatment condition.}

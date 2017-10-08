@@ -2,11 +2,12 @@
 \alias{BifixedContCont}
 \title{Fits a bivariate fixed-effects model to assess surrogacy in the meta-analytic multiple-trial setting (Continuous-continuous case)}
 \description{
-The function \code{BifixedContCont} uses the bivariate fixed-effects approach to estimate trial- and individual-level surrogacy when the data of multiple clinical trials are available. The user can specify whether a (weighted or unweighted) full, semi-reduced, or reduced model should be fitted. See the \bold{Details} section below.   
+The function \code{BifixedContCont} uses the bivariate fixed-effects approach to estimate trial- and individual-level surrogacy when the data of multiple clinical trials are available. The user can specify whether a (weighted or unweighted) full, semi-reduced, or reduced model should be fitted. See the \bold{Details} section below. Further, the Individual Causal Association (ICA) is computed.   
 }
 \usage{
 BifixedContCont(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model=c("Full"), 
-Weighted=TRUE, Min.Trial.Size=2, Alpha=.05)
+Weighted=TRUE, Min.Trial.Size=2, Alpha=.05, T0T1=seq(-1, 1, by=.2), 
+T0S1=seq(-1, 1, by=.2), T1S0=seq(-1, 1, by=.2), S0S1=seq(-1, 1, by=.2))
 }
 \arguments{
   \item{Dataset}{A \code{data.frame} that should consist of one line per patient. Each line contains (at least) a surrogate value, a true endpoint value, a treatment indicator, a patient ID, and a trial ID.}
@@ -20,6 +21,10 @@ Weighted=TRUE, Min.Trial.Size=2, Alpha=.05)
 \item{Weighted}{Logical. If \code{TRUE}, then a weighted regression analysis is conducted at stage 2 of the two-stage approach. If \code{FALSE}, then an unweighted regression analysis is conducted at stage 2 of the two-stage approach. See the \bold{Details} section below. Default \code{TRUE}.}
   \item{Min.Trial.Size}{The minimum number of patients that a trial should contain in order to be included in the analysis. If the number of patients in a trial is smaller than the value specified by \code{Min.Trial.Size}, the data of the trial are excluded from the analysis. Default \eqn{2}.}
   \item{Alpha}{The \eqn{\alpha}-level that is used to determine the confidence intervals around \eqn{R^2_{trial}}, \eqn{R_{trial}}, \eqn{R^2_{indiv}} and \eqn{R_{indiv}}. Default \eqn{0.05}.}
+\item{T0T1}{A scalar or vector that contains the correlation(s) between the counterfactuals T0 and T1 that should be considered in the computation of \eqn{\rho_{\Delta}} (ICA). For details, see function \code{ICA.ContCont}. Default \code{seq(-1, 1, by=.2)}.}
+  \item{T0S1}{A scalar or vector that contains the correlation(s) between the counterfactuals T0 and S1 that should be considered in the computation of \eqn{\rho_{\Delta}}. Default \code{seq(-1, 1, by=.2)}.}
+  \item{T1S0}{A scalar or vector that contains the correlation(s) between the counterfactuals T1 and S0 that should be considered in the computation of \eqn{\rho_{\Delta}}. Default \code{seq(-1, 1, by=.2)}.}
+  \item{S0S1}{A scalar or vector that contains the correlation(s) between the counterfactuals S0 and S1 that should be considered in the computation of \eqn{\rho_{\Delta}}. Default \code{seq(-1, 1, by=.2)}.}
 }
 \details{
 When the full bivariate mixed-effects model is fitted to assess surrogacy in the meta-analytic framework (for details, Buyse & Molenberghs, 2000), computational issues often occur. In that situation, the use of simplified model-fitting strategies may be warranted (for details, see Burzykowski et al., 2005; Tibaldi et al., 2003).   
@@ -60,7 +65,6 @@ When the argument \code{Weighted=FALSE} is used in the function call, the model 
 
 The classical coefficient of determination of the fitted stage 2 model provides an estimate of \eqn{R^2_{trial}}.
 }
-
 \value{An object of class \code{BifixedContCont} with components,
   \item{Data.Analyze}{Prior to conducting the surrogacy analysis, data of patients who have a missing value for the surrogate and/or the true endpoint are excluded. In addition, the data of trials (i) in which only one type of the treatment was administered, and (ii) in which either the surrogate or the true endpoint was a constant (i.e., all patients within a trial had the same surrogate and/or true endpoint value) are excluded. In addition, the user can specify the minimum number of patients that a trial should contain in order to include the trial in the analysis. If the number of patients in a trial is smaller than the value specified by \code{Min.Trial.Size}, the data of the trial are excluded. \code{Data.Analyze} is the dataset on which the surrogacy analysis was conducted.}
   \item{Obs.Per.Trial}{A \code{data.frame} that contains the total number of patients per trial and the number of patients who were administered the control treatment and the experimental treatment in each of the trials (in \code{Data.Analyze}).}
@@ -74,6 +78,11 @@ The classical coefficient of determination of the fitted stage 2 model provides 
   \item{Cor.Endpoints}{A \code{data.frame} that contains the correlations between the surrogate and the true endpoint in the control treatment group (i.e., \eqn{\rho_{T0S0}}) and in the experimental treatment group (i.e., \eqn{\rho_{T1S1}}), their standard errors and their confidence intervals.}
   \item{D.Equiv}{The variance-covariance matrix of the trial-specific intercept and treatment effects for the surrogate and true endpoints (when a full or semi-reduced model is fitted, i.e., when \code{Model=c("Full")} or \code{Model=c("SemiReduced")} is used in the function call), or the variance-covariance matrix of the trial-specific treatment effects for the surrogate and true endpoints (when a reduced model is fitted, i.e., when \code{Model=c("Reduced")} is used in the function call).  The variance-covariance matrix \code{D.Equiv} is equivalent to the \eqn{\bold{D}} matrix that would be obtained when a (full or reduced) bivariate mixed-effect approach is used; see function \code{\link{BimixedContCont}}).}
   \item{Sigma}{The \eqn{2} by \eqn{2} variance-covariance matrix of the residuals (\eqn{\varepsilon_{Sij}} and \eqn{\varepsilon_{Tij}}).}
+  \item{ICA}{A fitted object of class \code{ICA.ContCont}.}
+  \item{T0T0}{The variance of the true endpoint in the control treatment condition.}
+  \item{T1T1}{The variance of the true endpoint in the experimental treatment condition.}
+  \item{S0S0}{The variance of the surrogate endpoint in the control treatment condition.}
+  \item{S1S1}{The variance of the surrogate endpoint in the experimental treatment condition.}
 }
 \references{
 Burzykowski, T., Molenberghs, G., & Buyse, M. (2005). \emph{The evaluation of surrogate endpoints}. New York: Springer-Verlag.
@@ -88,6 +97,7 @@ Wim Van der Elst, Ariel Alonso, & Geert Molenberghs
 \seealso{\code{\link{UnifixedContCont}}, \code{\link{UnimixedContCont}}, \code{\link{BimixedContCont}}, \code{\link{plot Meta-Analytic}}
 }
 \examples{
+\dontrun{ # time consuming code part
 # Example 1, based on the ARMD data
 data(ARMD)
 
@@ -119,7 +129,7 @@ Trial.ID=Trial.ID, Pat.ID=Pat.ID, , Model="Reduced", Weighted=FALSE)
 # Show summary and plots of results:
 summary(Sur2)
 plot(Sur2, Weighted=FALSE)}
-
+}
 }
 
 \keyword{Multiple-trial setting}

@@ -14,7 +14,6 @@ summary.MaxEntICA.BinBin <- function(object, ..., Object){
   cat("\n#~~~~~~~~~~~~~~~~~~~~~~\n\n")  
   cat(Object$H_max, "\n")
   
-    
   cat("\n\n# R2_H results")
   cat("\n#~~~~~~~~~~~~~\n\n")  
   cat(Object$R2_H, "\n\n")
