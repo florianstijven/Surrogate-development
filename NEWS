@@ -1,5 +1,5 @@
-Changes in version 0.2 - 0.5
-  o Added functions PPE.BinBin, comb27.BinBin and ECT
+Changes in version 0.2 - 0.6
+  o Added functions PPE.BinBin, comb27.BinBin, ECT, SPF.BinCont
   o Dataset CIGTS_BinCont added
 
 Changes in version 0.1.80

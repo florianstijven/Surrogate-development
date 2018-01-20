@@ -45,6 +45,10 @@ importFrom("stats", "optim")
 importFrom("utils", capture.output)
 importFrom("stats", "coefficients", "na.omit", "pchisq")
 importFrom("stats", "dnorm", "rnorm")
+importFrom("stats", "pnorm")
+importFrom("stats", "ks.test")
+importFrom("stats", "pbeta")
+importFrom("stats", "mad")
 
 exportPattern("^[[:alpha:]]+")
 export(plot.UnifixedContCont, plot.UnimixedContCont, plot.BifixedContCont, plot.BimixedContCont, 
@@ -54,8 +58,8 @@ summary.UnimixedContCont, summary.BifixedContCont, summary.BimixedContCont,
 summary.FixedContContIT, summary.FixedContContIT, summary.ICA.BinBin, summary.ICA.ContCont, 
 summary.MICA.ContCont, summary.MinSurrContCont, summary.SPF.BinBin, summary.Single.Trial.RE.AA, 
 summary.TrialLevelMA, summary.TwoStageSurvSurv, summary.Prentice, summary.PredTrialTContCont, plot.FixedBinBinIT,
-summary.FixedBinContIT, summary.FixedContBinIT, plot.FixedBinContIT, plot.FixedContBinIT, summary.SurvSurv,
-plot.SurvSurv, summary.TrialLevelIT, plot.TrialLevelIT, summary.MaxEntICA.BinBin, plot.MaxEntICA.BinBin, 
+summary.FixedBinContIT, summary.FixedContBinIT, plot.FixedBinContIT, plot.FixedContBinIT, summary.SurvSurv, summary.SPF.BinCont,
+plot.SurvSurv, summary.TrialLevelIT, plot.TrialLevelIT, summary.MaxEntICA.BinBin, plot.MaxEntICA.BinBin, plot.SPF.BinCont,
 plot.MaxEntSPF.BinBin, summary.MaxEntSPF.BinBin, plot.FixedDiscrDiscrIT,
 plot.ICA.BinCont, summary.ICA.BinCont, summary.FixedDiscrDiscrIT, 
 plot.Fano.BinBin, summary.Fano.BinBin,
@@ -74,6 +78,7 @@ S3method(plot, ICA.ContCont)
 S3method(plot, MICA.ContCont)
 S3method(plot, MinSurrContCont)
 S3method(plot, SPF.BinBin)
+S3method(plot, SPF.BinCont)
 S3method(plot, Single.Trial.RE.AA)
 S3method(plot, MixedContContIT)
 S3method(plot, ICA.BinBin)
@@ -106,6 +111,7 @@ S3method(summary, ICA.ContCont)
 S3method(summary, MICA.ContCont)
 S3method(summary, MinSurrContCont)
 S3method(summary, SPF.BinBin)
+S3method(summary, SPF.BinCont)
 S3method(summary, Single.Trial.RE.AA)
 S3method(summary, TrialLevelMA)
 S3method(summary, TwoStageSurvSurv)

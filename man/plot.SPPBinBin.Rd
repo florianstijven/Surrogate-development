@@ -2,7 +2,7 @@
 \alias{plot SPF BinBin}
 \alias{plot.SPF.BinBin}
 \title{
-Plots the surrogate predictive function (SPF).
+Plots the surrogate predictive function (SPF) in the binary-binary settinf.
 }
 \description{
 Plots the surrogate predictive function (SPF), i.e., \eqn{r(i,j)=P(\Delta T=i|\Delta S=j)}, in the setting where both \eqn{S} and \eqn{T} are binary endpoints. For example, \eqn{r(-1,1)} quantifies the probability that the treatment has a negative effect on the true endpoint (\eqn{\Delta T=-1}) given that it has a positive effect on the surrogate (\eqn{\Delta S=1}).}

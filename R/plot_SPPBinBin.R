@@ -5,6 +5,7 @@ plot.SPF.BinBin <- function(x, Type="All.Histograms", Specific.Pi="r_0_0", Col="
 
   if (missing(Col)) {Col = "grey"}
   
+ 
   if (Type=="All.Histograms"){
     
     #no mono

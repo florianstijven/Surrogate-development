@@ -31,6 +31,7 @@
 \alias{summary.AA.MultS}
 \alias{summary.PPE.BinBin}
 \alias{summary.ECT}
+\alias{summary.SPF.BinCont}
 \title{Summary}
 \description{summary}
 \usage{
@@ -65,5 +66,6 @@
 \method{summary}{AA.MultS}(object, ..., Object)
 \method{summary}{PPE.BinBin}(object, ..., Object)
 \method{summary}{ECT}(object, ..., Object)
+\method{summary}{SPF.BinCont}(object, ..., Object)
 }
 \keyword{internal}
