@@ -49,6 +49,7 @@ importFrom("stats", "pnorm")
 importFrom("stats", "ks.test")
 importFrom("stats", "pbeta")
 importFrom("stats", "mad")
+importFrom("utils", "flush.console")
 
 exportPattern("^[[:alpha:]]+")
 export(plot.UnifixedContCont, plot.UnimixedContCont, plot.BifixedContCont, plot.BimixedContCont, 
@@ -65,7 +66,8 @@ plot.ICA.BinCont, summary.ICA.BinCont, summary.FixedDiscrDiscrIT,
 plot.Fano.BinBin, summary.Fano.BinBin,
 plot.MaxEntContCont, summary.MaxEntContCont, 
 plot.ICA.ContCont.MultS, summary.ICA.ContCont.MultS, summary.AA.MultS, 
-plot.PPE.BinBin, plot.comb27.BinBin, summary.PPE.BinBin, summary.ECT)
+plot.PPE.BinBin, plot.comb27.BinBin, summary.PPE.BinBin, summary.ECT,
+summary.Bootstrap.MEP.BinBin)
 
 
 S3method(plot, Fano.BinBin)
@@ -131,3 +133,4 @@ S3method(summary, ICA.ContCont.MultS)
 S3method(summary, AA.MultS)
 S3method(summary, PPE.BinBin)
 S3method(summary, ECT)
+S3method(summary, Bootstrap.MEP.BinBin)

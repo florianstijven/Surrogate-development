@@ -1,3 +1,32 @@
+#x = Fit1
+
+#library(plotly)
+#T_m1 <- Object$P_Delta_T_min1
+#T_0 <- Object$P_Delta_T_0
+#T_1 <- Object$P_Delta_T_1
+#Data_here <- cbind(T_m1, T_0, T_1)
+#Select <- T_m1
+
+#library(rgl)
+#plot3d(x = T_m1, y = T_0, z = T_1, col="red", size=3)
+
+#library(scatterplot3d)
+#attach(mtcars)
+#scatterplot3d(wt,disp,mpg, main="3D Scatterplot")
+
+#plot_ly(x = T_m1, y = T_0, z = T_1, #color = ~am, 
+#        colors = c('#BF382A', '#0C4B8E')) %>%
+#  layout(scene = list(xaxis = list(title = "Delta T = -1| Delta S"),
+#                      yaxis = list(title = "Delta T = 0| Delta S"),
+#                      zaxis = list(title = "Delta T = 1| Delta S")))
+
+#library(plotly)
+# volcano is a numeric matrix that ships with R
+#p <- plot_ly(z = ~volcano) %>% add_surface()
+
+
+#######
+
 plot.SPF.BinCont <- function(x, Type="Frequency", Col="grey", Main, 
           Xlab=TRUE, ...){
                             

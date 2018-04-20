@@ -1,7 +1,7 @@
 CausalDiagramBinBin <- function(x, Values="Corrs", Theta_T0S0, Theta_T1S1, Min=0, Max=1, Cex.Letters=3, 
                                 Cex.Corrs=2, 
                                 Lines.Rel.Width=TRUE, Col.Pos.Neg=TRUE,
-                                Monotonicity, Histograms.Correlations=FALSE) {
+                                Monotonicity, Histograms.Correlations=FALSE, Densities.Correlations=FALSE) {
   
   if (class(x)!="ICA.BinBin") {stop("The function CausalDiagramBinBin should be applied to an object of class ICA.BinBin.")}
   
@@ -215,12 +215,25 @@ if  (Histograms.Correlations==TRUE){
   dev.new(width = 10, height = 10)
   par(mar = c(4.4, 2.5, 2, 1))
   par(mfrow=c(2, 2))
-  hist(R2_H_T0T1, main=expression(paste(r[h]^2, "(", T[0], ",", T[1], ")")), xlab="", col="grey")
-  hist(R2_H_S1T0, main=expression(paste(r[h]^2, "(", T[0], ",", S[1], ")")), xlab="", col="grey")
-  hist(R2_H_S0T1, main=expression(paste(r[h]^2, "(", T[1], ",", S[0], ")")), xlab="", col="grey")
-  hist(R2_H_S0S1, main=expression(paste(r[h]^2, "(", S[0], ",", S[1], ")")), xlab="", col="grey")
+  hist(R2_H_T0T1, main=expression(paste(R[h]^2, "(", T[0], ",", T[1], ")")), xlab="", col="grey")
+  hist(R2_H_S1T0, main=expression(paste(R[h]^2, "(", T[0], ",", S[1], ")")), xlab="", col="grey")
+  hist(R2_H_S0T1, main=expression(paste(R[h]^2, "(", T[1], ",", S[0], ")")), xlab="", col="grey")
+  hist(R2_H_S0S1, main=expression(paste(R[h]^2, "(", S[0], ",", S[1], ")")), xlab="", col="grey")
   par(mfrow=c(1, 1))
 }  
+ 
+  
+if  (Densities.Correlations==TRUE){
+    dev.new(width = 10, height = 10)
+    par(mar = c(4.4, 2.5, 2, 1))
+    par(mfrow=c(2, 2))
+    plot(density(R2_H_T0T1), main=expression(paste(R[h]^2, "(", T[0], ",", T[1], ")")), xlab="", col=1)
+    plot(density(R2_H_S1T0), main=expression(paste(R[h]^2, "(", T[0], ",", S[1], ")")), xlab="", col=1)
+    plot(density(R2_H_S0T1), main=expression(paste(R[h]^2, "(", T[1], ",", S[0], ")")), xlab="", col=1)
+    plot(density(R2_H_S0S1), main=expression(paste(R[h]^2, "(", S[0], ",", S[1], ")")), xlab="", col=1)
+    par(mfrow=c(1, 1))
+  }  
+  
   
    
 if (Values=="ORs"){

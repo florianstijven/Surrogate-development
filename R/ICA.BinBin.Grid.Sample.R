@@ -128,7 +128,7 @@ if (length(pi1_1_)==1 & length(pi1_0_)==1 & length(pi_1_1)==1 &
     
     tot_combn_No <- 
       as.numeric(length(pi_1))*as.numeric(length(pi_2))*as.numeric(length(pi_3))*as.numeric(length(pi_4))*
-     as.numeric(length(pi_5))*as.numeric(length(pi_6))*as.numeric(length(pi_7))*as.numeric(length(pi_8))*as.numeric(length(pi_9))
+      as.numeric(length(pi_5))*as.numeric(length(pi_6))*as.numeric(length(pi_7))*as.numeric(length(pi_8))*as.numeric(length(pi_9))
     
     #if (Volume.Perc==0){Seed <- round(runif(min=(1+tot_combn_No), max=2147483647, n=1), digits=0)}
     

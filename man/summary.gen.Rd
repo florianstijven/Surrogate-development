@@ -32,6 +32,7 @@
 \alias{summary.PPE.BinBin}
 \alias{summary.ECT}
 \alias{summary.SPF.BinCont}
+\alias{summary.Bootstrap.MEP.BinBin}
 \title{Summary}
 \description{summary}
 \usage{
@@ -67,5 +68,6 @@
 \method{summary}{PPE.BinBin}(object, ..., Object)
 \method{summary}{ECT}(object, ..., Object)
 \method{summary}{SPF.BinCont}(object, ..., Object)
+\method{summary}{Bootstrap.MEP.BinBin}(object, ..., Object)
 }
 \keyword{internal}

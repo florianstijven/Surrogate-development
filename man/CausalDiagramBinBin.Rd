@@ -9,7 +9,8 @@ This function provides a diagram that depicts the medians of the informational c
 \usage{
 CausalDiagramBinBin(x, Values="Corrs", Theta_T0S0, Theta_T1S1, 
 Min=0, Max=1, Cex.Letters=3, Cex.Corrs=2, Lines.Rel.Width=TRUE, 
-Col.Pos.Neg=TRUE, Monotonicity, Histograms.Correlations=FALSE)
+Col.Pos.Neg=TRUE, Monotonicity, Histograms.Correlations=FALSE, 
+Densities.Correlations=FALSE)
 }
 \arguments{
   \item{x}{An object of class \code{ICA.BinBin}. See \code{\link{ICA.BinBin}}.}
@@ -24,6 +25,7 @@ Col.Pos.Neg=TRUE, Monotonicity, Histograms.Correlations=FALSE)
   \item{Col.Pos.Neg}{Logical. When \code{Col.Pos.Neg=TRUE}, the color of the lines that represent the odds ratios between the counterfactuals is red for odds ratios below \eqn{1} and black for the ones above \eqn{1}. When \code{Col.Pos.Neg=FALSE}, all lines are in black. Default=\code{TRUE}. Only considered when \code{Values="ORs"}.}
 \item{Monotonicity}{Specifies the monotonicity scenario that should be considered (i.e., \code{Monotonicity=c("No")}, \code{Monotonicity=c("True.Endp")}, \code{Monotonicity=c("Surr.Endp")}, or \code{Monotonicity=c("Surr.True.Endp")}).}
 \item{Histograms.Correlations}{Should histograms of the informational coefficients of association \eqn{R_{H}^{2}} be provided? Default \code{Histograms.Correlations=FALSE}.}
+\item{Densities.Correlations}{Should densities of the informational coefficients of association \eqn{R_{H}^{2}} be provided? Default \code{Densities.Correlations=FALSE}.}
 }
 \value{The following components are stored in the fitted object if histograms of the informational correlations are requested in the function call (i.e., if \code{Histograms.Correlations=TRUE} and \code{Values="Corrs"} in the function call):
 \item{R2_H_T0T1}{The informational coefficients of association \eqn{R_{H}^{2}} between \eqn{T_0} and \eqn{T_1}.}
