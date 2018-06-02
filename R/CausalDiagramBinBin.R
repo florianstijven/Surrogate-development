@@ -340,12 +340,15 @@ if (Values=="ORs"){
   
   }
   
+  par(mar=c(5.1, 4.1, 4.1, 2.1))
+  
+  
   if  (Histograms.Correlations==TRUE & Values == "Corrs"){
   fit <- 
     list(R2_H_T0T1=as.numeric(R2_H_T0T1), R2_H_S1T0=as.numeric(R2_H_S1T0), R2_H_S0T1=as.numeric(R2_H_S0T1),
          R2_H_S0S1=as.numeric(R2_H_S0S1), R2_H_S0T0=as.numeric(R2_H_S0T0), R2_H_S1T1=as.numeric(R2_H_S1T1),
          Call=match.call())   
   }
-} 
+  } 
 
 

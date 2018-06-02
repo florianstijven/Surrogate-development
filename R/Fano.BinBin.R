@@ -3,15 +3,6 @@ Fano.BinBin <-function(pi1_ ,  pi_1 , rangepi10=c(0,min(pi1_,1-pi_1)), fano_delt
                            
 {
 
-#############################################################
-# treatment effect should be positive                       #
-#############################################################
-
-   if (pi1_ > pi_1)
-     { cat("Treatment effect should be positive",sep=" ")    
-    }
-
- if (pi1_ <= pi_1){
 
 
 #############################################################
@@ -154,7 +145,7 @@ fit<-list(R2_HL=as.numeric(R2_HL_all), H_Delta_T=as.numeric(H_Delta_T_all), PPE_
 class(fit)<-"Fano.BinBin"
 fit
 }
-}
+
 
 
 

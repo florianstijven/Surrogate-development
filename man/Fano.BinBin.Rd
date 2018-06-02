@@ -47,7 +47,6 @@ Paul Meyvisch, Wim Van der Elst, Ariel Alonso
 \code{\link{plot.Fano.BinBin}}
 }
 \examples{
-\dontrun{ # time consuming part of code
 # Conduct the analysis assuming no montonicity
 # for the true endpoint, using a range of
 # upper bounds for prediction errors 
@@ -61,7 +60,6 @@ fano_delta=c(0.05, 0.1, 0.2), M=1000)
 Fano.BinBin(pi1_ = runif(n=20,min=0.504,max=0.681), 
 pi_1 = runif(n=20,min=0.679,max=0.849), 
 fano_delta=c(0.05, 0.1, 0.2), M=10, Seed=2)
-}
 }
 \keyword{Causal-Inference framework}
 \keyword{Counterfactuals}

@@ -1,15 +1,15 @@
-cecf0ece5d21520014254ec3c70d44c6 *DESCRIPTION
+0902967a8c353a99efe37597afd5b533 *DESCRIPTION
 bf69cce0b1c950e8d88c4cad0bcae9a3 *NAMESPACE
 91f899b9585ccba909909ad53776b9d0 *NEWS
 54a039aa9dec68b7603bc94e03865d0e *R/AA.MultS.R
 0012bbd9b9b6ce2998e1f1d5b72003ad *R/BifixedContCont.R
 ad6fe8e05f7c66d62988608b0426b514 *R/BimixedContCont.R
 c0f8fd92c99a68c9ebedb9df128152c3 *R/Bootstrap.MEP.BinBin.R
-f04b649a181972c5894e34578d23bd73 *R/CausalDiagramBinBin.R
+f13d88ce576a8da95611ab3b934b87ab *R/CausalDiagramBinBin.R
 95377bc10fd249fc2cd7e8010011e73d *R/CausalDiagramContCont.R
 22e39f4f4b750702371fd4fc4ee70e59 *R/Data.Processing.R
 27e1620ba60032aef4659e64421dc5a6 *R/ECT.R
-0c52afdaac3a7148a937a3f01cb107fc *R/Fano.BinBin.R
+c1be29c014eb0313c3ef9e9a5d16aa5e *R/Fano.BinBin.R
 ea416a2e6a1ea20140cd37d8a4732e72 *R/FixedBinBinIT.r
 b2f3dcde1efe22ee4f873e4a39097c32 *R/FixedBinContIT.r
 3bef1e8bcc4d166bb2a5fd8bf6aba101 *R/FixedContBinIT.r
@@ -113,7 +113,7 @@ c1d96ed37a7613c8eefe6ec52f5cdac2 *man/CIGTS.Rd
 a4ad3c424f23a1241ed17c4da9f407bd *man/CausalDiagramBinBin.Rd
 47d6dea079aed67e1a922011b7749307 *man/CausalDiagramContCont.Rd
 cb3e0d13cec6f5f309c610f418699d66 *man/ECT.Rd
-a3d5dfc13e2ccce3861202d749a15c3f *man/Fano.BinBin.Rd
+57531bb0d4fa9dabd23dcbae42908124 *man/Fano.BinBin.Rd
 88e46a0aac98627b7ee57281a9b8e40c *man/FixedBinBinIT.Rd
 3b110f71cecafae1ede23e53f2a34bb7 *man/FixedBinContIT.Rd
 51f2c17d845e2073389c6118a797c66f *man/FixedContBinIT.Rd
