@@ -1,4 +1,4 @@
-0902967a8c353a99efe37597afd5b533 *DESCRIPTION
+e6392e41e81cd88d1c36c689984393d2 *DESCRIPTION
 bf69cce0b1c950e8d88c4cad0bcae9a3 *NAMESPACE
 91f899b9585ccba909909ad53776b9d0 *NEWS
 54a039aa9dec68b7603bc94e03865d0e *R/AA.MultS.R
@@ -34,7 +34,7 @@ ac40870615e9d129cca8a6a7960b4258 *R/MaxEntICABinBin.R
 7f1e81dd1e14e95b76a5b58a90cc3e77 *R/MaxEntSPFBinBin.R
 2040bddddab3392ad8d6a5a5900422be *R/MinSurrContCont.R
 61b2888048c105cddac9e8f9976cab06 *R/MixedContContIT.R
-2409eac4588b39ed4648784aebfe02ef *R/PPE.BinBin.R
+d3181ea0af9b4e9e7cfa998a935bdedc *R/PPE.BinBin.R
 63521d212dd50b899955b08497552e91 *R/Plot.FixedDiscrDiscrIT.R
 0fc2b07e18c390c55a2a353e543e6d5e *R/Pos.Def.Matrices.R
 025580156cdee8931c6dc3b80f2e4967 *R/Pred.TrialT.ContCont.R
@@ -139,7 +139,7 @@ fc51f036975123a9314bf01bd8add90b *man/MaxEntSPFBinBin.Rd
 f86c9ffd072e975b7ed1fc35f7fa36bb *man/MinSurrContCont.Rd
 393e40414794e9f5c1d8065ce7b95f20 *man/MixedContContIT.Rd
 efd15b0d1ad83c65fb5f1872df9f97d7 *man/Ovarian.Rd
-5694ddd838aad950a5c18c553af614e8 *man/PPE.BinBin.Rd
+a8b415245f5a88898c0f215e3eba96f9 *man/PPE.BinBin.Rd
 58d8fd1c571d99ff7ca4f97b1fe10d44 *man/Plot.FixedDiscrDiscrIT.Rd
 7e62e19218c79c311db64baa060f5b5d *man/Plot.PredTrialTContCont.Rd
 6f146481ccb62b54466b6d3122b19e86 *man/Pos.Def.Matrices.Rd

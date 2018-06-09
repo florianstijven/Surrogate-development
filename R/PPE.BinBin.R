@@ -1,18 +1,12 @@
+#
+# matrices Paul
+# M=number of valid vectors
+# Monotonicity always 'No'
+#
 
-PPE.BinBin <-function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1, Monotonicity=c("No"),M=1000, Seed=1)
+
+PPE.BinBin <-function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1, M=1000, Seed=1)
 {
-
-#############################################################
-# Run diagnostics                                           #
-#############################################################
-
-#monotocity invokation
-
-   mon=length(Monotonicity)
-   for (i in 1:mon){if (!(Monotonicity[i]=="No" | Monotonicity[i]=="True.Endp" | Monotonicity[i]=="Surr.Endp" | Monotonicity[i]=="Surr.True.Endp"))
-     { cat("Monotonicity='",Monotonicity[i],"'is not a valid option",sep=" ")
-     }
-    }
 
      
 #############################################################
@@ -20,7 +14,7 @@ PPE.BinBin <-function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1, Monotonici
 #############################################################
 
 
-   R2_H_all<-Pi_f_all<-Grid<-I<-seed<-pi_f_all<- result<-POS<-H_Delta_T_all <-result<-monotonicity_all<-Pe_all<-Prediction_all<-NULL
+   R2_H_all<-Pi_f_all<-Grid<-I<-seed<-pi_f_all<- result<-POS<-H_Delta_T_all <-result<-Pe_all<-monotonicity_all<-Prediction_all<-NULL
    pi0000<-pi0100<-pi0001<-pi0101<-pi1101<-pi1111<-pi0011<-pi0111<-pi1100<-pi0010<-pi1110<-pi0110<-pi1010<-pi1000<-pi1001<-pi1011<-RPE_all<-NULL
    I_Delta_T_Delta_S_all<-H_Delta_S_all<-support_delta_T_all<-combo_all<-pi_all<-index_all<-PPE_T_all<-PPE_all<-NULL
 
@@ -46,51 +40,46 @@ PPE.BinBin <-function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1, Monotonici
                   0,0,0,0,0,0,1,0,0,
                   0,0,0,1,0,0,0,0,0), ncol=16)
 
-
-#############################################################
-#  Run Monte Carlo algorithm by monotonicity assumption     #
-#############################################################
-
-     
-for (monotonicity in Monotonicity) 
-{
+   
+   #############################################################
+   #1) Define A_r and A_f                                      #
+   #############################################################
+   
+   
+   A_r <- matrix(data=c(1, 0, 0, 0, 0, 0, 0,
+                        1, 0, 0, 0, 1, 0, 0,
+                        1, 0, 0, 0, 0, 0, 1,
+                        1, 0, 0, 1, 0, 0, 0,
+                        1, 0, 1, 1, 0, 0, 0,
+                        1, 1, 0, 1, 0, 0, 0,
+                        1, 0, 0, 0, 0, 1, 1), ncol=7)
+   
+   A_f <- matrix(data=c(1, 0, 0, 1, 0, 1, 0,
+                        1, 0, 1, 0, 1, 0, 0,
+                        1, 0, 0, 0, 0, 1, 0,
+                        1, 1, 0, 0, 1, 0, 0,
+                        1, 0, 0, 0, 1, 1, 0,
+                        1, 1, 0, 0, 0, 0, 0,
+                        1, 0, 1, 0, 0, 0, 0,
+                        1, 0, 1, 0, 0, 0, 1,
+                        1, 1, 0, 0, 0, 0, 1), ncol=9)
+   A=cbind(A_r,A_f)
+   
+   invAr=solve(A_r)
 
  
 #############################################################
 #  Apply Monte Carlo Simulation                             #
 #############################################################
 
+   
 set.seed(Seed)
-
-for (index in 1:M){
-
-
-#############################################################
-#1) Define A_r and A_f                                      #
-#############################################################
-
-
-    A_r <- matrix(data=c(1, 0, 0, 0, 0, 0, 0,
-                         1, 0, 0, 0, 1, 0, 0,
-                         1, 0, 0, 0, 0, 0, 1,
-                         1, 0, 0, 1, 0, 0, 0,
-                         1, 0, 1, 1, 0, 0, 0,
-                         1, 1, 0, 1, 0, 0, 0,
-                         1, 0, 0, 0, 0, 1, 1), ncol=7)
-
-    A_f <- matrix(data=c(1, 0, 0, 1, 0, 1, 0,
-                         1, 0, 1, 0, 1, 0, 0,
-                         1, 0, 0, 0, 0, 1, 0,
-                         1, 1, 0, 0, 1, 0, 0,
-                         1, 0, 0, 0, 1, 1, 0,
-                         1, 1, 0, 0, 0, 0, 0,
-                         1, 0, 1, 0, 0, 0, 0,
-                         1, 0, 1, 0, 0, 0, 1,
-                         1, 1, 0, 0, 0, 0, 1), ncol=9)
-    A=cbind(A_r,A_f)
-
-    invAr=solve(A_r)
-
+   
+index<-0
+runs<-0
+while (index < M){
+  
+runs<-runs+1
 
 
 ######################################################################################
@@ -112,8 +101,10 @@ for (index in 1:M){
    PI_1_0=vector_b[5]
    PI0_1_=vector_b[6]
    PI_0_1=vector_b[7]
-   PI_0_0=1-vector_b[4]-vector_b[6]-vector_b[7]
-   PI0_0_=1-vector_b[3]-vector_b[3]-vector_b[5]
+#this is the corrected version
+   PI_0_0=1-vector_b[4]-vector_b[5]-vector_b[7]
+   PI0_0_=1-vector_b[2]-vector_b[3]-vector_b[6]
+
 
 
 #############################################################
@@ -134,18 +125,6 @@ for (index in 1:M){
    min_pi_1011 <- min(PI1_1_, PI_0_1)
 
 
-##################################################################################################################
-# Based on monotonicity assumptions: delete columns of matrix A, determine A_f and override sampling minima.     #
-# Note: this seems comp. intensive but required. The sampling range of the MC algorithm depends on the sampling  #
-#       of the marginal probs. The latter determine the sampling range which is further restricted by the        #
-#       monotonicity assumption.                                                                                 #
-##################################################################################################################
-
-   if (monotonicity=="True.Endp") {A<-A[,-16:-13]; min_pi_1010=min_pi_1000=min_pi_1001=min_pi_1011=0}
-   if (monotonicity=="Surr.Endp") {A<-A[,-10:-13]; min_pi_0010=min_pi_1110=min_pi_0110=min_pi_1010=0}
-   if (monotonicity=="Surr.True.Endp" ) {A<-A[,-16:-10]; min_pi_1010=min_pi_1000=min_pi_1001=min_pi_1011=min_pi_0010=min_pi_1110=min_pi_0110=0}
-
-   A_f=A[,8:ncol(A)]
  
    #randomly generate freely varying parameters
    pi_0111 <- runif(n=1, min = 0, max=min_pi_0111)
@@ -159,13 +138,10 @@ for (index in 1:M){
    pi_1011 <- runif(n=1, min = 0, max=min_pi_1011)
    
    pi_f <- matrix(data = c(pi_0111, pi_1100, pi_0010, pi_1110, pi_0110, pi_1010, pi_1000, pi_1001, pi_1011), ncol = 1)
-   pi_f_reduced<-pi_f
-   if (monotonicity=="True.Endp") { pi_f_reduced<-pi_f[-6:-9]}
-   if (monotonicity=="Surr.Endp") {pi_f_reduced<-pi_f[-3:-6]}
-   if (monotonicity=="Surr.True.Endp" ) {pi_f_reduced<-pi_f[-3:-9]}
-
-       
-    pi_r <- invAr %*% (vector_b - (A_f %*% pi_f_reduced))
+  
+   pi_r <- invAr %*% (vector_b - (A_f %*% pi_f))
+   
+   monotonicity=c('No')
         
     if ((sum(pi_r >= 0 & pi_r <= 1) == 7)==TRUE) {
           
@@ -175,7 +151,8 @@ for (index in 1:M){
           }
           
     pi <- rbind(pi_r, pi_f)
-          
+   
+    
     
 ######################################################################
 # Compute PP_T, PPE and RPE from the individual causal effects table.#
@@ -222,33 +199,39 @@ for (index in 1:M){
  
      R2_H <- I_Delta_T_Delta_S / min(H_Delta_T, H_Delta_S)
 
-     support_delta_T=sum(ifelse(sum_T_min1>0,1,0),ifelse(sum_T_0>0,1,0),ifelse(sum_T_1>0,1,0)) 
                
      I_Delta_T_Delta_S_all=rbind(I_Delta_T_Delta_S_all,I_Delta_T_Delta_S)
      H_Delta_T_all <-rbind(H_Delta_T_all, H_Delta_T)
      H_Delta_S_all <-rbind(H_Delta_S_all, H_Delta_S)          
      R2_H_all <- rbind(R2_H_all, R2_H)
-     monotonicity_all<-rbind(monotonicity_all,monotonicity) 
+     monotonicity_all <- rbind(monotonicity_all, monotonicity)
+   
          
      pi_all <- cbind(pi_all, pi) 
+     index<-index+1
      index_all<-cbind(index_all,index)
      PPE_T_all<-rbind(PPE_T_all,PPE_T)
      PPE_all<-rbind(PPE_all,PPE)
      RPE_all<-rbind(RPE_all,RPE)
    
+     num <- dim(R2_H_all)[2]
+    
      Pi.Vectors <- data.frame(t(pi_all)) 
-        colnames(Pi.Vectors) <- c("Pi_0000", "Pi_0100", "Pi_0001", "Pi_0101", "Pi_1101", "Pi_1111", "Pi_0011", 
-                                  "Pi_0111", "Pi_1100", "Pi_0010", "Pi_1110", "Pi_0110", "Pi_1010", "Pi_1000", "Pi_1001", "Pi_1011") 
-                         
-  }
-}
-}
-}
-fit<-data.frame(index=as.numeric(index_all),Monotonicity=as.character(monotonicity_all),PPE=as.numeric(PPE_all),RPE=as.numeric(RPE_all),
+      # colnames(Pi.Vectors) <- c("Pi_0000", "Pi_0100", "Pi_0001", "Pi_0101", "Pi_1101", "Pi_1111", "Pi_0011", 
+      #                            "Pi_0111", "Pi_1100", "Pi_0010", "Pi_1110", "Pi_0110", "Pi_1010", "Pi_1000", "Pi_1001", "Pi_1011") 
+    
+    }#valid=true
+   }#pi_r>0
+   }#while index<M
+
+print(runs)
+
+#Pi.Vectors= Pi.Vectors terugzetten
+fit<-data.frame(index=as.numeric(index_all),PPE=as.numeric(PPE_all),RPE=as.numeric(RPE_all), Monotonicity=as.character(monotonicity_all),
                 PPE_T=as.numeric(PPE_T_all), R2_H=as.numeric(R2_H_all), H_Delta_T=as.numeric(H_Delta_T_all),
-                H_Delta_S=as.numeric(H_Delta_S_all), I_Delta_T_Delta_S=as.numeric(I_Delta_T_Delta_S_all), Pi.Vectors= Pi.Vectors)
+                H_Delta_S=as.numeric(H_Delta_S_all), I_Delta_T_Delta_S=as.numeric(I_Delta_T_Delta_S_all))
 class(fit)<-"PPE.BinBin"
 fit
-}
+} #end function
 
 
