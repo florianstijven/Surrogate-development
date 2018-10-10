@@ -3,7 +3,7 @@ ICA.ContCont.MultS <- function(M = 500, N, Sigma,
   Seed=c(123),  Show.Progress=FALSE){
 
 SDs <- sqrt(diag(Sigma)); mu <- rep(0, times=length(SDs))
-results_here <- results <- all_delta_S_T <- all_delta_S_T_here <- NULL
+results_here <- results <- all_delta_S_T <- all_delta_S_T_here <- Lower.Dig.Corrs.All <- NULL
 
 found <- 0
 set.seed(Seed)
@@ -93,22 +93,28 @@ for (i in 1: M) {
     ICA <- (t(B) %*% solve(C) %*% B) / A
     Adj.ICA <- 1 - (1 - ICA) * ((N - 1) / (N - Aantal - 1))  
     
+    # Save lower diagonal Sigma, contains correlations
+    Lower.Dig.Corrs.Here <- Sigma_c[lower.tri(Sigma_c)]
+    
     # Fit models
     results_here <- 
       (c(ICA, Adj.ICA)) 
     
     results <- rbind(results, results_here)
+    Lower.Dig.Corrs.All <- data.frame(rbind(Lower.Dig.Corrs.All, Lower.Dig.Corrs.Here))
+    
   }  
    Sigma_c <- Sigma_c_orig  #LS!! 
   }
 
 row.names(results) <- NULL
+row.names(Lower.Dig.Corrs.All) <- NULL
 results <- data.frame(results, row.names = NULL)
 names(results) <- c("ICA", "Adj.ICA")
 
 fit <- 
   list(R2_H=(as.numeric(results$ICA)), Corr.R2_H=(as.numeric(results$Adj.ICA)),  #All_Delta_S_T = all_delta_S_T, 
-       Call=match.call()) 
+       Lower.Dig.Corrs.Sigma=Lower.Dig.Corrs.All, Call=match.call()) 
 
 class(fit) <- "ICA.ContCont.MultS"
 fit

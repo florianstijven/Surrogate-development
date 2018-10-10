@@ -35,6 +35,7 @@ An issue with this approach (i.e., substituting unidentified correlations by ran
 \value{An object of class \code{ICA.ContCont.MultS} with components,
 \item{R2_H}{The multiple-surrogate individual causal association value(s).}
 \item{Corr.R2_H}{The corrected multiple-surrogate individual causal association value(s).}
+\item{Lower.Dig.Corrs.All}{A \code{data.frame} that contains the matrix that contains the identifiable and unidentifiable correlations (lower diagonal elements) that were used to compute (\eqn{R^2_{H}}) in the run.}
 }
 \references{
 Van der Elst, W., Alonso, A. A., & Molenberghs, G. (2017). Univariate versus multivariate surrogate endpoints.

@@ -5,7 +5,7 @@
 The function \code{PPE.BinBin} assesses a surrogate predictive value using the probability of a prediction error in the single-trial causal-inference framework when both the surrogate and the true endpoints are binary outcomes. It additionally assesses the indivdiual causal association (ICA). See \bold{Details} below.}
 \usage{
 PPE.BinBin(pi1_1_, pi1_0_, pi_1_1, pi_1_0, 
-pi0_1_, pi_0_1, M=1000, Seed=1)
+pi0_1_, pi_0_1, M=10000, Seed=1)
 }
 \arguments{
   \item{pi1_1_}{A scalar that contains values for \eqn{P(T=1,S=1|Z=0)}, i.e., the probability that \eqn{S=T=1} when under treatment \eqn{Z=0}.}
@@ -14,7 +14,7 @@ pi0_1_, pi_0_1, M=1000, Seed=1)
   \item{pi_1_0}{A scalar that contains values for \eqn{P(T=1,S=0|Z=1)}.}
   \item{pi0_1_}{A scalar that contains values for \eqn{P(T=0,S=1|Z=0)}.}
   \item{pi_0_1}{A scalar that contains values for \eqn{P(T=0,S=1|Z=1)}.}
-  \item{M}{The number of valid vectors that have to be obtained. Default \code{M=1000}. }
+  \item{M}{The number of valid vectors that have to be obtained. Default \code{M=10000}. }
   \item{Seed}{The seed to be used to generate \eqn{\pi_r}. Default \code{Seed=1}.}
 
 }
@@ -38,13 +38,13 @@ The function \code{PPE.BinBin} computes \eqn{R_{H}^{2}} using a grid-based appro
 \item{H_Delta_T}{The vector of the entropies of \eqn{\Delta_T}.}
 \item{H_Delta_S}{The vector of the entropies of \eqn{\Delta_S}.}
 \item{I_Delta_T_Delta_S}{The vector of the mutual information of \eqn{\Delta_S} and \eqn{\Delta_T}.}
-\item{Pi.Vectors}{An object of class \code{data.frame} that contains the valid \eqn{\pi} vectors.}
+
 
 }
 \references{
 Alonso A,  Van der Elst W, Molenberghs G, Buyse M and Burzykowski T. (2016). An information-theoretic approach for the evaluation of surrogate endpoints based on causal inference. 
 
-Alonso A, Van der Elst W and Meyvisch P (2016). Assessing a surrogate predictive value: A causal inference approach. 
+Meyvisch P., Alonso A.,Van der Elst W, Molenberghs G. (2018). Assessing the predictive value of a binary surrogate for a binary true endpoint, based on the minimum probability of a prediction error.
 }
 \author{
 Paul Meyvisch, Wim Van der Elst, Ariel Alonso, Geert Molenberghs
@@ -53,7 +53,7 @@ Paul Meyvisch, Wim Van der Elst, Ariel Alonso, Geert Molenberghs
 \code{\link{ICA.BinBin.Grid.Sample}}
 }
 \examples{
-# Conduct the analysis assuming no montonicity
+# Conduct the analysis 
  
 \dontrun{ # time consuming code part
 PPE.BinBin(pi1_1_=0.4215, pi0_1_=0.0538, pi1_0_=0.0538,

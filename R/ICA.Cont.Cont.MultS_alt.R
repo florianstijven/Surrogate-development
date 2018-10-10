@@ -3,7 +3,7 @@ ICA.ContCont.MultS_alt <- function(M = 500, N, Sigma,
   Seed=c(123), Model = "Delta_T ~ Delta_S1 + Delta_S2", Show.Progress=FALSE){
 
 SDs <- sqrt(diag(Sigma)); mu <- rep(0, times=length(SDs))
-results_here <- results <- all_delta_S_T <- all_delta_S_T_here <- NULL
+results_here <- results <- all_delta_S_T <- all_delta_S_T_here <- Lower.Dig.Corrs.All <- NULL
 
 found <- 0
 set.seed(Seed)
@@ -66,6 +66,10 @@ for (i in 1: M) {
       names(Data_here)[s+1] <- paste("Delta_S", s, sep="")
     }   
 
+    # Save lower diagonal Sigma, contains correlations
+    Lower.Dig.Corrs.Here <- Sigma_c[lower.tri(Sigma_c)]
+    
+    
     # Fit models
     ICA <- sqrt(summary(lm(Model, data = Data_here))$r.squared)
     Adj.ICA2 <- (summary(lm(Model, data = Data_here))$adj.r.squared)
@@ -77,6 +81,9 @@ for (i in 1: M) {
       cbind(ICA, Adj.ICA, res_error_Delta_T_given_delta_S, res_error_Delta_T) 
     
     results <- rbind(results, results_here)
+    
+    Lower.Dig.Corrs.All <- data.frame(rbind(Lower.Dig.Corrs.All, Lower.Dig.Corrs.Here))
+    row.names(Lower.Dig.Corrs.All) <- NULL
     
     all_delta_S_T_here <- cbind(i, ICA, Adj.ICA, Delta_T, All_Delta_S)
     all_delta_S_T <- rbind(all_delta_S_T, all_delta_S_T_here)  
@@ -90,6 +97,7 @@ for (i in 1: M) {
 fit <- 
   list(R2_H=(as.numeric(results$ICA)**2), Corr.R2_H=(as.numeric(results$Adj.ICA)**2), Res_Err_Delta_T = as.numeric(results$res_error_Delta_T), 
        Res_Err_Delta_T_Given_S = as.numeric(results$res_error_Delta_T_given_delta_S), #All_Delta_S_T = all_delta_S_T, 
+       Lower.Dig.Corrs.Sigma=Lower.Dig.Corrs.All, 
        Call=match.call()) 
 
 class(fit) <- "ICA.ContCont.MultS"

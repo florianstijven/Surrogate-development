@@ -39,6 +39,7 @@ Finally, the multivariate ICA (\eqn{R^2_{H}}) is estimated by regressing \eqn{\D
 \item{Corr.R2_H}{The corrected multiple-surrogate individual causal association value(s).}
 \item{Res_Err_Delta_T}{The residual errors (prediction errors) for intercept-only models of \eqn{\Delta T} (i.e., models that do not include \eqn{\Delta S_1}, \eqn{\Delta S_2}, etc as predictors).}
 \item{Res_Err_Delta_T_Given_S}{The residual errors (prediction errors) for models where \eqn{\Delta T} is regressed on \eqn{\Delta S_1}, \eqn{\Delta S_2}, etc.}
+\item{Lower.Dig.Corrs.All}{A \code{data.frame} that contains the matrix that contains the identifiable and unidentifiable correlations (lower diagonal elements) that were used to compute (\eqn{R^2_{H}}) in the run.}
 }
 \references{
 Van der Elst, W., Alonso, A. A., & Molenberghs, G. (2017). Univariate versus multivariate surrogate endpoints.

@@ -50,6 +50,7 @@ importFrom("stats", "ks.test")
 importFrom("stats", "pbeta")
 importFrom("stats", "mad")
 importFrom("utils", "flush.console")
+importFrom("stats", "uniroot")
 
 exportPattern("^[[:alpha:]]+")
 export(plot.UnifixedContCont, plot.UnimixedContCont, plot.BifixedContCont, plot.BimixedContCont, 
