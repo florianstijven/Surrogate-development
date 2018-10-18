@@ -1,6 +1,6 @@
-beab4c402637212bcced0e6096f7604a *DESCRIPTION
+d16f146ae1d5453814f3a492fc9b516c *DESCRIPTION
 6ca7417e8fd5313b372396409d748280 *NAMESPACE
-91f899b9585ccba909909ad53776b9d0 *NEWS
+4cabe31b920f22c88050281e4d78ee46 *NEWS
 54a039aa9dec68b7603bc94e03865d0e *R/AA.MultS.R
 0012bbd9b9b6ce2998e1f1d5b72003ad *R/BifixedContCont.R
 ad6fe8e05f7c66d62988608b0426b514 *R/BimixedContCont.R
@@ -36,6 +36,7 @@ ac40870615e9d129cca8a6a7960b4258 *R/MaxEntICABinBin.R
 2040bddddab3392ad8d6a5a5900422be *R/MinSurrContCont.R
 61b2888048c105cddac9e8f9976cab06 *R/MixedContContIT.R
 8dd4ce2183ca08d8d3dfefa323cb690c *R/PPE.BinBin.R
+e3e93b6e90297fda9c1341281d8c03fc *R/PROC.BinBin.R
 63521d212dd50b899955b08497552e91 *R/Plot.FixedDiscrDiscrIT.R
 0fc2b07e18c390c55a2a353e543e6d5e *R/Pos.Def.Matrices.R
 025580156cdee8931c6dc3b80f2e4967 *R/Pred.TrialT.ContCont.R
@@ -72,7 +73,7 @@ b6c30f9622f45d8fd0cc6a1cbc5653ad *R/plot.BinContCombnIT.R
 2b4eba5a03d06f41a36bf29cc75c087d *R/plot.MaxEntSPF.BinBin.R
 345ca5ee1abb3c713f5d385c8217d1a0 *R/plot.MetaAnalyticMTS.R
 3b79d4f49fc16a49ae2208d99fc35c23 *R/plot.MetaAnalyticSTS.R
-fb969635ea9dc44bbbadf22259530d7d *R/plot.PPE.BinBin.R
+1e42483f45f2bd6b7155ad7f35307487 *R/plot.PPE.BinBin.R
 c586db230f1fae7c44c9f9be9fa4dc25 *R/plot.SPPBinCont.R
 d8df6bfa712d64002e9e933883932001 *R/plot.SurvSurv.R
 45b35fc96da32fbf08d80a5a1ed4b501 *R/plot.TrialLevelIT.R
@@ -142,6 +143,7 @@ f86c9ffd072e975b7ed1fc35f7fa36bb *man/MinSurrContCont.Rd
 393e40414794e9f5c1d8065ce7b95f20 *man/MixedContContIT.Rd
 efd15b0d1ad83c65fb5f1872df9f97d7 *man/Ovarian.Rd
 8c7a51d3e96e212029fe1f8a53ec2dda *man/PPE.BinBin.Rd
+bd946ebf615f4097ea0e183a9bad89cc *man/PROC.BinBin.Rd
 58d8fd1c571d99ff7ca4f97b1fe10d44 *man/Plot.FixedDiscrDiscrIT.Rd
 7e62e19218c79c311db64baa060f5b5d *man/Plot.PredTrialTContCont.Rd
 6f146481ccb62b54466b6d3122b19e86 *man/Pos.Def.Matrices.Rd
@@ -182,7 +184,7 @@ b2b1769511253fe102d890187d790301 *man/plot.MaxEntContCont.Rd
 322d83f97d765f10290fc1b7b732f493 *man/plot.MaxEntSPFBinBin.Rd
 d2148d381b234caa82b83df5ad428ab7 *man/plot.MetaAnalytic.Rd
 8a53fc6a4e75750da35944262f9a1ee8 *man/plot.MinSurrContCont.Rd
-a833cd44b79de9d289fa21ad3912ec52 *man/plot.PPE.BinBin.Rd
+e98012566675b8efc65517714b700236 *man/plot.PPE.BinBin.Rd
 3caea457cfc1fff055166257bebceadd *man/plot.SPPBinBin.Rd
 21f12e52d9d8cfd1ec771846a2e8a21a *man/plot.SPPBinCont.Rd
 e6062db25aae0825944eea371b6ef4d0 *man/plot.TrialLevelIT.Rd

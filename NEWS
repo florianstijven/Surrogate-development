@@ -1,5 +1,5 @@
-Changes in version 0.2 - 0.61
-  o Added functions PPE.BinBin, comb27.BinBin, ECT, SPF.BinCont, Bootstrap.MEP.BinBin
+Changes in version 0.2 - 1.1
+  o Added functions PPE.BinBin, comb27.BinBin, ECT, SPF.BinCont, Bootstrap.MEP.BinBin, PROC.BinBin, plot.PPE.BinBin.R
   o Dataset CIGTS_BinCont added
 
 Changes in version 0.1.80

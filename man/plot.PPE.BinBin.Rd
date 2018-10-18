@@ -5,20 +5,16 @@
 The function \code{plot.PPE.BinBin} plots the distribution of \eqn{PPE}, \eqn{RPE} or \eqn{R^2_{H}} in the setting where both surrogate and true endpoints are binary in the single-trial causal-inference framework.  See \bold{Details} below.}
 \usage{
 \method{plot}{PPE.BinBin}(x,Type="Density",Param="PPE",Xlab.PE,main.PE,
-ylab="density",Par=par(mfrow=c(1,1),oma=c(0,0,0,0),mar=c(5.1,4.1,4.1,2.1)),
-Cex.Legend=1,Cex.Position="bottomright", lwd=3,linety=1,color=1,Breaks=0.05,
-xlimits=c(0,1), \dots)
+ylab="density",Cex.Legend=1,Cex.Position="bottomright", lwd=3,linety=1,color=1,
+Breaks=0.05, xlimits=c(0,1), \dots)
 }
 \arguments{
   \item{x}{An object of class \code{PPE.BinBin}. See \code{\link{PPE.BinBin}}.}
   \item{Type}{The type of plot that is produced. When \code{Type="Freq"}, a histogram is produced. When \code{Type="Density"}, a density is produced.  Default \code{Type="Density"}.} 
-  \item{Param}{@@@ AANVULLEN.}
+  \item{Param}{Parameter to be plotted: is either "PPE", "RPE" or "ICA"}
   \item{Xlab.PE}{The label of the X-axis when density plots or histograms are produced.}
   \item{main.PE}{Title of the density plot or histogram.}
   \item{ylab}{The label of the Y-axis for the density plots. Default \code{ylab="density"}. }
-  \item{Par}{Graphical parameters for the plot. Default \code{par(mfrow=c(1,1),oma=c(0,0,0,0),mar=c(5.1,4.1,4.1,2.1))}.}
-  \item{oma}{@@@ AANVULLEN.}
-  \item{mar}{@@@ AANVULLEN.}
   \item{Cex.Legend}{The size of the legend. Default \code{Cex.Legend=1}.}
   \item{Cex.Position}{The position of the legend.  Default \code{Cex.Position="bottomright"}.}
   \item{lwd}{The line width for the density plot. Default \code{lwd=3}.}
