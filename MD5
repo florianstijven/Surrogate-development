@@ -1,4 +1,4 @@
-d16f146ae1d5453814f3a492fc9b516c *DESCRIPTION
+5310a3d7184681249b66294653c5c027 *DESCRIPTION
 6ca7417e8fd5313b372396409d748280 *NAMESPACE
 4cabe31b920f22c88050281e4d78ee46 *NEWS
 54a039aa9dec68b7603bc94e03865d0e *R/AA.MultS.R
@@ -97,8 +97,6 @@ bdcb59c162eb3849d0448cbac56236d5 *R/summary_ICABinBin.R
 e532af93cd1b914dd37d788bd48dfc57 *R/summary_MaxEntICABinBin.R
 17cd34f4d8cc50a4662735d4daab806f *data/ARMD.MultS.rda
 b5223bac59476987576b3fa039cf1efe *data/ARMD.rda
-1687648cedf3eeec76405ccc89a28c5d *data/CIGTS.rda
-6ff1313d4e4bba6e1d787e2e47397760 *data/CIGTS_BinCont.rda
 d53b5aeee48ce1ee30f8d6e351cc5177 *data/Ovarian.rda
 76b6688b1b49e142acbb8a02bffef5aa *data/Schizo.rda
 f2459384dd6b545910f433fb97ed5f7e *data/Schizo_Bin.rda
@@ -110,8 +108,6 @@ f974c2b04ccf73ed94195eecd8e062cd *data/Schizo_PANSS.rda
 b992b313fed832e7f0005ee74c7c985c *man/BifixedContCont.Rd
 fee66ebef7f819c95b9a350dd2cd57aa *man/BimixedContCont.Rd
 c63c0e71f1c15e0ccb4fdbe4b5fbb169 *man/Bootstrap.MEP.BinBin.Rd
-c1d96ed37a7613c8eefe6ec52f5cdac2 *man/CIGTS.Rd
-85527d417762cb57dee606fda13cd1d1 *man/CIGTS_BinCont.Rd
 a4ad3c424f23a1241ed17c4da9f407bd *man/CausalDiagramBinBin.Rd
 47d6dea079aed67e1a922011b7749307 *man/CausalDiagramContCont.Rd
 cb3e0d13cec6f5f309c610f418699d66 *man/ECT.Rd
