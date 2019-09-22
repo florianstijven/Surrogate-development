@@ -21,11 +21,11 @@ Dmat[3,3] <- D.aa
 Dmat[4,4] <- D.bb 
 Dmat[3,4] <- Dmat[4,3] <- sqrt(R2.trial.target * (Dmat[3,3] * Dmat[4,4])) 
 set.seed(Seed)
-ran.eff <- mvrnorm(N.Trial, rep(0,4), Dmat) 
+ran.eff <- MASS::mvrnorm(N.Trial, rep(0,4), Dmat) 
 Smat <- diag(2)
 Smat[1,2] <- Smat[2,1] <- R.Indiv.Target 
 set.seed(Seed)
-errors <- mvrnorm(N.Total, rep(0,2), Smat)
+errors <- MASS::mvrnorm(N.Total, rep(0,2), Smat)
 
 Z <- Trial_ID <- Surr <- True <- NULL
 for (i in 1: N.Trial){
@@ -50,11 +50,11 @@ if (Model==c("Reduced")){
   Dmat[2,2] <- D.bb 
   Dmat[1,2] <- Dmat[2,1] <- sqrt(R2.trial.target * (Dmat[1,1] * Dmat[2,2])) 
   set.seed(Seed)
-  ran.eff <- mvrnorm(N.Trial, rep(0,2), Dmat) 
+  ran.eff <- MASS::mvrnorm(N.Trial, rep(0,2), Dmat) 
   Smat <- diag(2)
   Smat[1,2] <- Smat[2,1] <- R.Indiv.Target 
   set.seed(Seed)
-  errors <- mvrnorm(N.Total, rep(0,2), Smat)
+  errors <- MASS::mvrnorm(N.Total, rep(0,2), Smat)
   
   Z <- Trial_ID <- Surr <- True <- NULL
   for (i in 1: N.Trial){

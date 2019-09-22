@@ -1,17 +1,15 @@
-import(rgl)
-import(lattice)
-import(latticeExtra)
-#import(mixtools)
-
-import(survival)
-
-import(MASS)
-#import(lme4)
-import(msm)
-import(graphics)
-import(grDevices)
-
 # Imported functions
+importFrom(MASS, polr)
+importFrom(MASS, studres)
+importFrom(MASS, mvrnorm)
+importFrom(msm, deltamethod)
+importFrom(survival, Surv)
+importFrom(survival, coxph)
+importFrom("grDevices", "dev.new", "dev.off", "pdf")
+importFrom("graphics", "abline", "axis", "barplot", "box", "boxplot",
+             "hist", "legend", "lines", "mtext", "par", "plot", "points",
+             "segments", "text", "title")
+importFrom("rgl", plot3d)
 importFrom("nlme", lme)
 importFrom("lme4", lmer)
 importFrom("lme4", ranef)
@@ -39,8 +37,6 @@ importFrom("stats", vcov)
 importFrom("stats", ecdf)
 importFrom("stats", quantile)
 importFrom("stats", "binomial")
-#importFrom("survival", Surv)
-#importFrom("survival", coxph)
 importFrom("stats", "optim")
 importFrom("utils", capture.output)
 importFrom("stats", "coefficients", "na.omit", "pchisq")
@@ -51,6 +47,7 @@ importFrom("stats", "pbeta")
 importFrom("stats", "mad")
 importFrom("utils", "flush.console")
 importFrom("stats", "uniroot")
+importFrom("graphics", "arrows")
 
 exportPattern("^[[:alpha:]]+")
 export(plot.UnifixedContCont, plot.UnimixedContCont, plot.BifixedContCont, plot.BimixedContCont, 
@@ -68,7 +65,7 @@ plot.Fano.BinBin, summary.Fano.BinBin,
 plot.MaxEntContCont, summary.MaxEntContCont, 
 plot.ICA.ContCont.MultS, summary.ICA.ContCont.MultS, summary.AA.MultS, 
 plot.PPE.BinBin, plot.comb27.BinBin, summary.PPE.BinBin, summary.ECT,
-summary.Bootstrap.MEP.BinBin)
+summary.Bootstrap.MEP.BinBin, plot.ISTE.ContCont, summary.ISTE.ContCont)
 
 
 S3method(plot, Fano.BinBin)
@@ -101,6 +98,7 @@ S3method(plot, MaxEntContCont)
 S3method(plot, ICA.ContCont.MultS)
 S3method(plot, PPE.BinBin)
 S3method(plot, comb27.BinBin)
+S3method(plot, ISTE.ContCont)
 
 S3method(summary, Fano.BinBin)
 S3method(summary, UnifixedContCont)
@@ -135,3 +133,4 @@ S3method(summary, AA.MultS)
 S3method(summary, PPE.BinBin)
 S3method(summary, ECT)
 S3method(summary, Bootstrap.MEP.BinBin)
+S3method(summary, ISTE.ContCont)

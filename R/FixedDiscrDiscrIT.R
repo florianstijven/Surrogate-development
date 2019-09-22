@@ -224,7 +224,7 @@ level<-unique(Treat)
       modht1.f<-NULL
       ordFIRTH<-FALSE
       
-      tryCatch({modht1.f<-polr(as.factor(True[Trial.ID==i])~Treat[Trial.ID==i],method=("logistic"))},error=function(e){},warning=function(w){})
+      tryCatch({modht1.f<-MASS::polr(as.factor(True[Trial.ID==i])~Treat[Trial.ID==i],method=("logistic"))},error=function(e){},warning=function(w){})
       if (length(coefficients(modht1.f))==0|is.null(modht1.f)) {Treatment.T[i]<-NA; ordFIRTH<-TRUE}else{
         Treatment.T[i]<-coefficients(modht1.f)}
       
@@ -296,7 +296,7 @@ Level.Surr<-unique(Surr)
   for (i in 1:trialnumber){
     ordFIRTH<-FALSE
     modht1.f<-NULL
-    tryCatch({modht1.f<-polr(as.factor(Surr[Trial.ID==i])~Treat[Trial.ID==i],method=("logistic"))},error=function(e){})
+    tryCatch({modht1.f<-MASS::polr(as.factor(Surr[Trial.ID==i])~Treat[Trial.ID==i],method=("logistic"))},error=function(e){})
     if (length(coefficients(modht1.f))==0|is.null(modht1.f)) {
       Treatment.S[i]<- mui.f.o[1:(length(unique(Surr))-1),i]<-NA
       ordFIRTH<-TRUE

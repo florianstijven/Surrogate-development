@@ -1,6 +1,6 @@
-5310a3d7184681249b66294653c5c027 *DESCRIPTION
-6ca7417e8fd5313b372396409d748280 *NAMESPACE
-4cabe31b920f22c88050281e4d78ee46 *NEWS
+4061da886306f65483dc27c3616e9fc7 *DESCRIPTION
+6668265e660e381663a7cc4b2be67efb *NAMESPACE
+de3848dc493c79e40b7449eb76b08623 *NEWS
 54a039aa9dec68b7603bc94e03865d0e *R/AA.MultS.R
 0012bbd9b9b6ce2998e1f1d5b72003ad *R/BifixedContCont.R
 ad6fe8e05f7c66d62988608b0426b514 *R/BimixedContCont.R
@@ -14,7 +14,7 @@ ea416a2e6a1ea20140cd37d8a4732e72 *R/FixedBinBinIT.r
 b2f3dcde1efe22ee4f873e4a39097c32 *R/FixedBinContIT.r
 3bef1e8bcc4d166bb2a5fd8bf6aba101 *R/FixedContBinIT.r
 f5161dcceb92a7cdad3ad389f42ff08c *R/FixedContContIT.r
-763dee296c8aebdf91a1a6f0386c4e85 *R/FixedDiscrDiscrIT.R
+8f552f2da2e53b5bb5bef0771f34785e *R/FixedDiscrDiscrIT.R
 5fc896bd29c1c8ff5dea40159e8f4ce5 *R/ICA.BinBin.Grid.Full.R
 0f4948e8b0b5c8e9c909b54a271f1084 *R/ICA.BinBin.Grid.Sample.R
 bc5217f8694b3a6087d661e9a1681f12 *R/ICA.BinBin.Grid.Sample.Uncert.R
@@ -26,6 +26,7 @@ e83cc56af16ecba18378718facac6e09 *R/ICA.Cont.Cont.MultS.R
 e18c67a214b7c80024b1fec35a8c1c66 *R/ICABinBin.R
 3edb855f4c7faa76d24a825d5000f3fc *R/ICABinBinCounterAssum.R
 8a633aced8f2a411dfe0a3d7bc099df4 *R/ICAContCont.R
+4ad4139b16fe5b076da41fa8067a81b2 *R/ISTE.ContCont.R
 ec93e7b740845be4c7d0305d9717fc32 *R/LongToWide.R
 856c7d397cda2477061876dd38a98441 *R/MICA.Sample.ContCont.R
 253323f6b10504db1e95a46d40ab00a6 *R/MICAContCont.R
@@ -46,11 +47,11 @@ e3e93b6e90297fda9c1341281d8c03fc *R/PROC.BinBin.R
 4d7f187d8f2e42bc5003cd3d4f9a2c3b *R/SPF.BinCont.R
 883fb157d46a842cabaec160c6a5a1f1 *R/SPP.BinBin.R
 7eac5c5958d67c12f084518e574dd2f2 *R/Sim.Data.Counterfactuals.R
-a06204e4b19f34979d5d65a837b198e6 *R/Sim.Data.MTS.R
+6597883accbca6f0c6b018797855b21c *R/Sim.Data.MTS.R
 6a601dec53e57aca69d55b15aeeffd6c *R/Sim.Data.STS.R
 4f3f87f650a54aa0eae8b39c1194275a *R/SimDataCounterfactualsBinBin.R
 e447acffe3f6ff15c823a180b99686ac *R/SimDataSTSBinBin.R
-265171b6aa7bdebab3780f3b78c5c2ec *R/Single.Trial.RE.AA.R
+f46600d5c13a0375c90c03b3733f72f4 *R/Single.Trial.RE.AA.R
 00776b5f4b3c0cba0d2cc3ae8c6358e0 *R/Summary.SPF.BinCont.R
 2fdd276ab4054eef97f8eacc59063512 *R/SummaryITContCont.R
 91aa1c0cbf1f0aa722e2b83e1cba00ea *R/SummaryMaxEntSPFBinBin.R
@@ -128,6 +129,7 @@ ab30bb49c1bcfeee325a0d4b48a61711 *man/ICA.ContCont.Mult_alt.Rd
 cb959714245a20e1c854fef6cdd82c3b *man/ICABinBinCounterAssum.Rd
 b77e1395235318b9426bfc71bcb8ec6d *man/ICABinCont.Rd
 c350eddf8632d34056389182fa5157da *man/ICAContCont.Rd
+06b4e1856eb58fb66b0bc27026a0cb3f *man/ISTE.ContCont.Rd
 88673b04a974f3a2d1ea16518d93387f *man/LongToWide.Rd
 e0f81fbe2073a1a6d704041dfdca9af3 *man/MICA.Sample.ContCont.Rd
 581e17d9cd75ddabfff9979c5240a51a *man/MICAContCont.Rd
@@ -172,6 +174,7 @@ d633dc0ed5983394bc2389181145ccd2 *man/comb27.BinBin.Rd
 d75583b90ac6af5b4caca0efe74f529a *man/plot.ICA.ContCont.Mult.Rd
 3895a6d1a0e61e057a26d7d9c9a71238 *man/plot.ICABinBin.Rd
 32ac9a7968a660b0e275db5239c5673a *man/plot.ICABinCont.Rd
+cc472ac0f6a24b7f55fa3df5c12b6137 *man/plot.ISTE.ContCont.Rd
 e5d5b8c4d97a0185df5605334bf5116e *man/plot.InformationTheoretic.Rd
 12ae7e08ec5a34a0b349475416e7353d *man/plot.InformationTheoreticBinCombn.Rd
 acd7a4d1baff5bf29d011a1dde21c928 *man/plot.InformationTheoreticSurvSurv.Rd
@@ -187,4 +190,4 @@ e6062db25aae0825944eea371b6ef4d0 *man/plot.TrialLevelIT.Rd
 3241f36f4c01fc7d3a30ebb411c166bc *man/plot.TrialLevelMA.Rd
 11b92825b1890f507a1383cac1454e32 *man/plot.TwoStageSurvSurv.Rd
 695e3b0cf181aa6ab8c9d0c22f272340 *man/plot.comb27.BinBin.Rd
-055c60cf4a6e3af3013a97e9e9dd5f4f *man/summary.gen.Rd
+1cff0d2df213d64d29bbd614db84d207 *man/summary.gen.Rd

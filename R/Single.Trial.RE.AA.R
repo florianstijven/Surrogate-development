@@ -50,7 +50,7 @@ Single.Trial.RE.AA <- function(Dataset, Surr, True, Treat, Pat.ID, Alpha=.05, Nu
   var_beta <- vcov(model12)[4,4]   
   estm <- as.numeric(cbind(beta, alpha))
   estv <- matrix(c(var_beta, cov_a_b_s, cov_a_b_s, var_alpha), nrow=2)
-  std <- deltamethod (~ (x1/x2), estm, estv)   
+  std <- msm::deltamethod (~ (x1/x2), estm, estv)   
   RE_low <- as.numeric(RE+(qnorm(Alpha/2)*std))
   RE_high <- as.numeric(RE+(qnorm(1-Alpha/2)*std))
   RE_results_Delta <- data.frame(cbind(RE, std, RE_low, RE_high))   
@@ -96,7 +96,7 @@ Single.Trial.RE.AA <- function(Dataset, Surr, True, Treat, Pat.ID, Alpha=.05, Nu
     RE_boot[i] <- beta_boot[i] / alpha_boot[i]
   }
  
-  res_RE <- studres(lm(RE_boot ~ 1))
+  res_RE <- MASS::studres(lm(RE_boot ~ 1))
   if ((max(abs(res_RE)) > qt(c(1-(Alpha/(2*Number.Bootstraps))), df=(Number.Bootstraps-1-1), lower.tail=TRUE))==TRUE){
   cat("\nWarning: There were outliers in the bootstrapped RE sample.")
   cat("\nThe bootstrap-based standard error and/or confidence interval of RE may not be")
