@@ -29,8 +29,7 @@ BimixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model=
   r_T1S1 <- cor(T1,S1)
   set.seed(123); ICA <- ICA.ContCont(T0S0 = r_T0S0, T1S1 = r_T1S1, 
                                             T0T0 = var(T0), T1T1 = var(T1), S0S0 = var(S0), S1S1 = var(S1), 
-                                            T0T1=seq(-1, 1, by=.2), T0S1=seq(-1, 1, by=.2), T1S0=seq(-1, 1, by=.2), 
-                                            S0S1=seq(-1, 1, by=.2))
+                                     T0T1=T0T1, T0S1=T0S1, T1S0=T1S0, S0S1=S0S1)
   
   if (Model==c("Full")){
     

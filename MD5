@@ -1,9 +1,9 @@
-4061da886306f65483dc27c3616e9fc7 *DESCRIPTION
+7593b94b080b9ebfc0510354356f57a8 *DESCRIPTION
 6668265e660e381663a7cc4b2be67efb *NAMESPACE
 de3848dc493c79e40b7449eb76b08623 *NEWS
 54a039aa9dec68b7603bc94e03865d0e *R/AA.MultS.R
-0012bbd9b9b6ce2998e1f1d5b72003ad *R/BifixedContCont.R
-ad6fe8e05f7c66d62988608b0426b514 *R/BimixedContCont.R
+7dff0a0255935a0b9e027e9e9fc02576 *R/BifixedContCont.R
+03ae6328a7747aaab67e36e36ef0934e *R/BimixedContCont.R
 c0f8fd92c99a68c9ebedb9df128152c3 *R/Bootstrap.MEP.BinBin.R
 f13d88ce576a8da95611ab3b934b87ab *R/CausalDiagramBinBin.R
 95377bc10fd249fc2cd7e8010011e73d *R/CausalDiagramContCont.R
@@ -64,8 +64,8 @@ cec230357f91879a32dc79e20f738a13 *R/Test.Mono.R
 d31d97e0823977269f86cf3e16c6eeb0 *R/TrialLevelIT.R
 dd40e840f896b172e3ab27346d6f2ed6 *R/TrialLevelMA.R
 ec09e95b3a29d5dc422ced35587fe961 *R/TwoStageSurvSurv.R
-14fa63fed6f1583b121176e2eca47d80 *R/UnifixedContCont.R
-f5fe1c63990ffe4c3acbb7d877a04702 *R/UnimixedContCont.R
+a810272ebf22f0c8fa6ed2ec495349a0 *R/UnifixedContCont.R
+5678f283f858c2b2a7da4927790f5c01 *R/UnimixedContCont.R
 190d8b0a01b2e2564680cda5b7af06e2 *R/comb27.BinBin.R
 b6c30f9622f45d8fd0cc6a1cbc5653ad *R/plot.BinContCombnIT.R
 9c6bcd3f957eaf457605ebb74f781f5e *R/plot.Fano.BinBin.R
