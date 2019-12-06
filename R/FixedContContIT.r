@@ -231,9 +231,11 @@ for (i in 1:N.trial) {
   
   fit <- 
     list(Data.Analyze=wide, Obs.Per.Trial=Obs.per.trial, Trial.Spec.Results=Trial.Spec.Results,  
-         R2ht=R2ht, R2h.ind.clust=R2h.cluster.based, R2h.ind=R2h.single, Boot.CI=Boot.CI, Cor.Endpoints=Cor.Endpoints, Residuals=Residuals, Call=match.call())   
+         R2ht=R2ht, R2h.ind.clust=R2h.single, R2h.ind=R2h.cluster.based, Boot.CI=Boot.CI, Cor.Endpoints=Cor.Endpoints, Residuals=Residuals, Call=match.call())   
   
   class(fit) <- "FixedContContIT"
   fit  
   
 }
+
+

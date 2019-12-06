@@ -3,7 +3,7 @@
 \title{Individual-level surrogate threshold effect for continuous normally distributed surrogate and true endpoints.}
 \description{Computes the individual-level surrogate threshold effect in the causal-inference single-trial setting where both the surrogate and the true endpoint are continuous normally distributed variables. For details, see paper in the references section.}
 \usage{ISTE.ContCont(Mean_T1, Mean_T0, Mean_S1, Mean_S0, N, Delta_S=c(-10, 0, 10), 
-alpha.PI=0.05, PI.Bound=0, PI.Lower=TRUE, Show.Prediction.Plots=TRUE, Save.Plots="No", 
+zeta.PI=0.05, PI.Bound=0, PI.Lower=TRUE, Show.Prediction.Plots=TRUE, Save.Plots="No", 
 T0S0, T1S1, T0T0=1, T1T1=1, S0S0=1, S1S1=1, T0T1=seq(-1, 1, by=.001), 
 T0S1=seq(-1, 1, by=.001), T1S0=seq(-1, 1, by=.001),
 S0S1=seq(-1, 1, by=.001), M.PosDef=500, Seed=123)}
@@ -14,7 +14,7 @@ S0S1=seq(-1, 1, by=.001), M.PosDef=500, Seed=123)}
 \item{Mean_S0}{A scalar or vector that specifies the mean of the surrogate endpoint in the control condition (a vector is used to account for estimation uncertainty).}
 \item{N}{The sample size of the clinical trial.}
 \item{Delta_S}{The vector or scalar of \eqn{\Delta S} values for which the expected \eqn{\Delta T} and its prediction error has to be computed.}
-\item{alpha.PI}{The alpha-level to be used in the computation of the prediction interval around \eqn{E(\Delta T)}. Default \code{alpha.PI=0.05}, i.e., the \eqn{95\%} prediction interval.}
+\item{zeta.PI}{The alpha-level to be used in the computation of the prediction interval around \eqn{E(\Delta T)}. Default \code{zeta.PI=0.05}, i.e., the \eqn{95\%} prediction interval.}
 \item{PI.Bound}{The ISTE is defined as the value of \eqn{\Delta S} for which the lower (or upper) bound of the \eqn{(1-\alpha)\%} prediction interval around \eqn{E(\Delta T)} is 0. If another threshold value than 0 is desired, this can be requested by using the \code{PI.Bound} argument. For example, the argument \code{PI.Bound=5} can be used in the function call to obtain the values of \eqn{\Delta S} for which the lower (or upper) bound of the \eqn{(1-\alpha)\%} prediction intervals (in the different runs of the algorithm)around \eqn{\Delta T} equal 5.}
 \item{PI.Lower}{Logical. Should a lower (\code{PI.Lower=TRUE}) or upper (\code{PI.Lower=FALSE}) prediction interval be used in the computation of ISTE? Default \code{PI.Lower=TRUE}.}
 \item{Show.Prediction.Plots}{Logical. Should plots that depict \eqn{E(\Delta T)} against \eqn{\Delta S} (prediction function), the prediction interval, and the ISTE for the different runs of the algorithm be shown? Default \code{Show.Prediction.Plots=TRUE}.}
@@ -57,7 +57,7 @@ See paper in the references section.
 \item{Total.Num.Matrices}{An object of class \code{numeric} that contains the total number of matrices that can be formed as based on the user-specified correlations in the function call.}
 \item{Pos.Def}{A \code{data.frame} that contains the positive definite matrices that can be formed based on the user-specified correlations. These matrices are used to compute the vector of the ISTE values.}
 \item{ICA}{Apart from ISTE, ICA is also computed (the individual causal association). For details, see \code{\link{ICA.ContCont}}.}
-\item{alpha.PI}{The \code{alpha.PI} value specified in the function call.}
+\item{zeta.PI}{The \code{zeta.PI} value specified in the function call.}
 \item{PI.Bound}{The \code{PI.Bound} value specified in the function call.}
 \item{PI.Lower}{The \code{PI.Lower} value specified in the function call.}
 \item{Delta_S}{The \code{Delta_S} value(s) specified in the function call.}
@@ -95,7 +95,7 @@ Mean_S1 <- runif(min=-9.600, max=-8.276, n=1000)
 \dontrun{
 ISTE <- ISTE.ContCont(Mean_T1=Mean_T1, Mean_T0=Mean_T0, 
  Mean_S1=Mean_S1, Mean_S0=Mean_S0, N=2128, Delta_S=c(-50:50), 
- alpha.PI=0.05, PI.Bound=0, Show.Prediction.Plots=TRUE,
+ zeta.PI=0.05, PI.Bound=0, Show.Prediction.Plots=TRUE,
  Save.Plots="No", T0S0=T0S0, T1S1=T1S1, T0T0=T0T0, T1T1=T1T1, 
  S0S0=S0S0, S1S1=S1S1)
 

@@ -1,4 +1,4 @@
-ISTE.ContCont <- function(Mean_T1, Mean_T0, Mean_S1, Mean_S0, N, Delta_S=c(-10, 0, 10), alpha.PI=0.05, 
+ISTE.ContCont <- function(Mean_T1, Mean_T0, Mean_S1, Mean_S0, N, Delta_S=c(-10, 0, 10), zeta.PI=0.05, 
   PI.Bound=0, PI.Lower=TRUE, Show.Prediction.Plots=TRUE, Save.Plots="No", 
   T0S0, T1S1, T0T0=1, T1T1=1, S0S0=1, S1S1=1, T0T1=seq(-1, 1, by=.001), T0S1=seq(-1, 1, by=.001), 
   T1S0=seq(-1, 1, by=.001), S0S1=seq(-1, 1, by=.001), M.PosDef=500, Seed=123) { 
@@ -114,7 +114,7 @@ ISTE.ContCont <- function(Mean_T1, Mean_T0, Mean_S1, Mean_S0, N, Delta_S=c(-10, 
       MSE <- ((N-1)/(N-2)) * (var_delta_T - ((cov_deltaT_deltaS**2) / var_delta_S)) #; MSE 
       
       #var_delta_T * (1 - ICA.ContCont.Fitted$ICA[1]**2). p59 K
-      t_val <- qt(c(1-alpha.PI/2), df=N-2)
+      t_val <- qt(c(1-zeta.PI/2), df=N-2)
       S_squared_pred <- MSE * (1 + (1/N) + (((Delta_S - Mean_DeltaS)**2)/(var_delta_S*(N-1))))
       
       PI_Interval_Low <- (b0 + b1 * Delta_S) - (t_val * sqrt(S_squared_pred)) #; PI_interval_min
@@ -177,7 +177,10 @@ ISTE.ContCont <- function(Mean_T1, Mean_T0, Mean_S1, Mean_S0, N, Delta_S=c(-10, 
         min_val_y <- min(PI_Interval_Low, STE_Low_PI)
         plot(main=paste("Run", total), x=Delta_S, y=(b0 + b1 * Delta_S), 
              xlab=expression(paste(Delta, S[0])), 
-             ylab=expression(paste("E(", Delta, T, "|", Delta, S[0], ")")), type="l", ylim=c(min_val_y, max_val_y), lwd=2)
+             ylab=expression(paste("E(", Delta, T, "|", Delta, S[0], ")")), type="l", 
+             ylim=c(min_val_y, max_val_y), 
+         #    xlim=c(STE_Low_PI*-1.5, STE_Low_PI*1.5),
+             lwd=2)
         lines(x=Delta_S, y=PI_Interval_Low, col=1, lty=2)
         lines(x=Delta_S, y=PI_Interval_Up, col=1, lty=2)
         abline(h=PI.Bound, col="grey")
@@ -244,7 +247,7 @@ ISTE.ContCont <- function(Mean_T1, Mean_T0, Mean_S1, Mean_S0, N, Delta_S=c(-10, 
          T0T0=T0T0_all, T1T1=T1T1_all, S0S0=S0S0_all, S1S1=S1S1_all, 
          Mean_DeltaT=Mean_DeltaT_all, Mean_DeltaS=Mean_DeltaS_all,
          Total.Num.Matrices=Total.Num.Matrices, Pos.Def=Results.ICA[,1:6], ICA=Results.ICA$ICA,
-         alpha.PI=0.05, PI.Bound=PI.Bound, PI.Lower=PI.Lower, #GoodSurr=Results.ICA[,7:9], 
+         zeta.PI=0.05, PI.Bound=PI.Bound, PI.Lower=PI.Lower, #GoodSurr=Results.ICA[,7:9], 
          Delta_S=Delta_S,
          Call=match.call())
   

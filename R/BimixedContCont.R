@@ -3,7 +3,7 @@ BimixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model=
                     T0T1=seq(-1, 1, by=.2), T0S1=seq(-1, 1, by=.2), T1S0=seq(-1, 1, by=.2), 
                     S0S1=seq(-1, 1, by=.2), ...){
   
-  if ((Model==c("Full") | Model==c("Reduced"))==FALSE) {stop ("The specification of the Model=c(\"...\") argument of the call is incorrect. Use either Model=c(\"Full\") or Model=c(\"Reduced\").")}     
+  if ((Model==c("Full") | Model==c("Reduced"))==FALSE){stop ("The specification of the Model=c(\"...\") argument of the call is incorrect. Use either Model=c(\"Full\") or Model=c(\"Reduced\").")}     
   Surr <- Dataset[,paste(substitute(Surr))]
   True <- Dataset[,paste(substitute(True))]
   Treat <- Dataset[,paste(substitute(Treat))]
