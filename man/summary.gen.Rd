@@ -34,6 +34,7 @@
 \alias{summary.SPF.BinCont}
 \alias{summary.Bootstrap.MEP.BinBin}
 \alias{summary.ISTE.ContCont}
+\alias{summary.BimixedCbCContCont}
 \title{Summary}
 \description{summary}
 \usage{
@@ -71,5 +72,6 @@
 \method{summary}{SPF.BinCont}(object, ..., Object)
 \method{summary}{Bootstrap.MEP.BinBin}(object, ..., Object)
 \method{summary}{ISTE.ContCont}(object, ..., Object)
+\method{summary}{BimixedCbCContCont}(object, ..., Object)
 }
 \keyword{internal}

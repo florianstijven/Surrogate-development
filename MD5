@@ -1,12 +1,13 @@
-5b69bc1cafa0359870f38131decf2b30 *DESCRIPTION
-6668265e660e381663a7cc4b2be67efb *NAMESPACE
-349f84df33f89a7c26f37deff2b5477f *NEWS
+964f9eac4149ccc64c96992bace9ddeb *DESCRIPTION
+315a0911847c7daa748ccef47e5e5a23 *NAMESPACE
+b42ba2e6ca6e0749a226e8c3c277beab *NEWS
 54a039aa9dec68b7603bc94e03865d0e *R/AA.MultS.R
 7dff0a0255935a0b9e027e9e9fc02576 *R/BifixedContCont.R
 ff80c28e37c09e59a281d9dc09ceeb94 *R/BimixedContCont.R
 c0f8fd92c99a68c9ebedb9df128152c3 *R/Bootstrap.MEP.BinBin.R
 f13d88ce576a8da95611ab3b934b87ab *R/CausalDiagramBinBin.R
 95377bc10fd249fc2cd7e8010011e73d *R/CausalDiagramContCont.R
+53a9080ab51d05289e9214415d680636 *R/CbC.R
 22e39f4f4b750702371fd4fc4ee70e59 *R/Data.Processing.R
 27e1620ba60032aef4659e64421dc5a6 *R/ECT.R
 c1be29c014eb0313c3ef9e9a5d16aa5e *R/Fano.BinBin.R
@@ -107,6 +108,7 @@ f974c2b04ccf73ed94195eecd8e062cd *data/Schizo_PANSS.rda
 820fffd0d7992831627fd0c9eab3c2a4 *man/ARMD.MultS.Rd
 5c7c758f1888845e33a27d27575dbd8d *man/ARMD.Rd
 b992b313fed832e7f0005ee74c7c985c *man/BifixedContCont.Rd
+92c152a98c284f6c5388382a4c9ccf81 *man/BimixedCbCContCont.Rd
 fee66ebef7f819c95b9a350dd2cd57aa *man/BimixedContCont.Rd
 c63c0e71f1c15e0ccb4fdbe4b5fbb169 *man/Bootstrap.MEP.BinBin.Rd
 a4ad3c424f23a1241ed17c4da9f407bd *man/CausalDiagramBinBin.Rd
@@ -190,4 +192,4 @@ e6062db25aae0825944eea371b6ef4d0 *man/plot.TrialLevelIT.Rd
 3241f36f4c01fc7d3a30ebb411c166bc *man/plot.TrialLevelMA.Rd
 11b92825b1890f507a1383cac1454e32 *man/plot.TwoStageSurvSurv.Rd
 695e3b0cf181aa6ab8c9d0c22f272340 *man/plot.comb27.BinBin.Rd
-1cff0d2df213d64d29bbd614db84d207 *man/summary.gen.Rd
+f51276e161a21bed27410ccc205c3d24 *man/summary.gen.Rd

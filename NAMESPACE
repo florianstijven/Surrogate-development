@@ -48,6 +48,7 @@ importFrom("stats", "mad")
 importFrom("utils", "flush.console")
 importFrom("stats", "uniroot")
 importFrom("graphics", "arrows")
+importFrom("stats", "weighted.mean")
 
 exportPattern("^[[:alpha:]]+")
 export(plot.UnifixedContCont, plot.UnimixedContCont, plot.BifixedContCont, plot.BimixedContCont, 
@@ -65,7 +66,8 @@ plot.Fano.BinBin, summary.Fano.BinBin,
 plot.MaxEntContCont, summary.MaxEntContCont, 
 plot.ICA.ContCont.MultS, summary.ICA.ContCont.MultS, summary.AA.MultS, 
 plot.PPE.BinBin, plot.comb27.BinBin, summary.PPE.BinBin, summary.ECT,
-summary.Bootstrap.MEP.BinBin, plot.ISTE.ContCont, summary.ISTE.ContCont)
+summary.Bootstrap.MEP.BinBin, plot.ISTE.ContCont, summary.ISTE.ContCont, 
+summary.BimixedCbCContCont)
 
 
 S3method(plot, Fano.BinBin)
@@ -134,3 +136,4 @@ S3method(summary, PPE.BinBin)
 S3method(summary, ECT)
 S3method(summary, Bootstrap.MEP.BinBin)
 S3method(summary, ISTE.ContCont)
+S3method(summary, BimixedCbCContCont)
