@@ -19,7 +19,7 @@ Z <- rbinom(N.Total,1,0.5)
 Z[Z==0] <- c(-1)
 Ideal <- cbind(Ideal, Z)
 colnames(Ideal) <- c("T0", "T1", "S0", "S1", "Z")
-Ideal <- data.frame(Ideal)
+Ideal <- data.frame(Ideal, stringsAsFactors = TRUE)
 mu_c <- mu_c-.5
 Ideal$S0 <- Ideal$S0 + mu_c[1]
 Ideal$S1 <- Ideal$S1 + mu_c[2]

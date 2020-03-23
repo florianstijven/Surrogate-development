@@ -20,7 +20,7 @@ TrialLevelIT <- function(Alpha.Vector, Mu_S.Vector=NULL, Beta.Vector, N.Trial,
   d1 <- qchisq((1-Alpha), 1, g2)
   R2ht.lb <- max(0, 1-exp(-k1/N.Trial))
   R2ht.ub <- min(1, 1-exp(-d1/N.Trial))
-  R2ht <- data.frame(cbind(R2ht.value, R2ht.lb, R2ht.ub)) #output
+  R2ht <- data.frame(cbind(R2ht.value, R2ht.lb, R2ht.ub), stringsAsFactors = TRUE) #output
   colnames(R2ht) <- c("R2ht", "CI lower limit", "CI upper limit")
   rownames(R2ht) <- c(" ")    
   

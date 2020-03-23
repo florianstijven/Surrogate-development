@@ -144,7 +144,7 @@ ICA.BinBin.Grid.Full <- function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1,
     cat("\nor use the function ICA.BinBin.Grid.Sample or ICA.BinBin.Grid.\n")
     }
     
-    combins <- data.frame(expand.grid(pi_1, pi_2, pi_3, pi_4, pi_5, pi_6, pi_7, pi_8, pi_9))
+    combins <- data.frame(expand.grid(pi_1, pi_2, pi_3, pi_4, pi_5, pi_6, pi_7, pi_8, pi_9), stringsAsFactors = TRUE)
     
   for (k in 1: tot_combn){
     
@@ -243,7 +243,7 @@ ICA.BinBin.Grid.Full <- function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1,
     
     sum_pi_f <- colSums(pi_all[8:16,]) 
     Pi.Vectors <- 
-      data.frame(t(rbind(pi_all, sum_pi_f))) 
+      data.frame(t(rbind(pi_all, sum_pi_f)), stringsAsFactors = TRUE) 
     colnames(Pi.Vectors) <- c("Pi_0000", "Pi_0100", "Pi_0010", "Pi_0001", "Pi_0101", "Pi_1000", "Pi_1010", 
                               "Pi_1001", "Pi_1110", "Pi_1101", "Pi_1011", "Pi_1111", "Pi_0110", "Pi_0011", "Pi_0111", "Pi_1100", "Sum.Pi.f") 
     
@@ -292,7 +292,7 @@ ICA.BinBin.Grid.Full <- function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1,
       cat("\nor use the function ICA.BinBin.Grid.Sample or ICA.BinBin.Grid.\n")
     }
     
-    combins <- data.frame(expand.grid(pi_1, pi_2, pi_3, pi_4, pi_5))
+    combins <- data.frame(expand.grid(pi_1, pi_2, pi_3, pi_4, pi_5), stringsAsFactors = TRUE)
     
     for (k in 1: tot_combn){
       
@@ -389,7 +389,7 @@ ICA.BinBin.Grid.Full <- function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1,
     
     sum_pi_f <- colSums(pi_all[8:12,]) 
     Pi.Vectors <- 
-      data.frame(t(rbind(pi_all, sum_pi_f))) 
+      data.frame(t(rbind(pi_all, sum_pi_f)), stringsAsFactors = TRUE) 
     colnames(Pi.Vectors) <- c("Pi_0000", "Pi_0100", "Pi_0010", "Pi_0001", "Pi_0101", 
                               "Pi_1110", "Pi_1101", "Pi_1111", "Pi_0110", "Pi_0011", "Pi_0111", "Pi_1100", "Sum.Pi.f")  
     
@@ -437,7 +437,7 @@ ICA.BinBin.Grid.Full <- function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1,
       cat("\nor use the function ICA.BinBin.Grid.Sample or ICA.BinBin.Grid.\n")
     }
     
-    combins <- data.frame(expand.grid(pi_1, pi_2, pi_3, pi_4, pi_5))
+    combins <- data.frame(expand.grid(pi_1, pi_2, pi_3, pi_4, pi_5), stringsAsFactors = TRUE)
     
     for (k in 1: tot_combn){
       
@@ -535,7 +535,7 @@ ICA.BinBin.Grid.Full <- function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1,
     sum_pi_f <- colSums(pi_all[8:12,]) 
     
     Pi.Vectors <- 
-      data.frame(t(rbind(pi_all, sum_pi_f))) 
+      data.frame(t(rbind(pi_all, sum_pi_f)), stringsAsFactors = TRUE) 
     colnames(Pi.Vectors) <- c("Pi_0000", "Pi_0100", "Pi_0001", "Pi_0101", "Pi_1000",  
                               "Pi_1011", "Pi_0011", "Pi_1001", "Pi_1101", "Pi_1111", "Pi_0111", "Pi_1100", "Sum.Pi.f")   
     
@@ -573,7 +573,7 @@ ICA.BinBin.Grid.Full <- function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1,
       cat("\nor use the function ICA.BinBin.Grid.Sample or ICA.BinBin.Grid.\n")
     }
     
-    combins <- data.frame(expand.grid(pi_1, pi_2))
+    combins <- data.frame(expand.grid(pi_1, pi_2), stringsAsFactors = TRUE)
     
     for (k in 1: tot_combn){
       
@@ -671,7 +671,7 @@ ICA.BinBin.Grid.Full <- function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1,
     
     sum_pi_f <- colSums(pi_all[8:9,]) 
     Pi.Vectors <- 
-      data.frame(t(rbind(pi_all, sum_pi_f))) 
+      data.frame(t(rbind(pi_all, sum_pi_f)), stringsAsFactors = TRUE) 
     colnames(Pi.Vectors) <- c("Pi_0000", "Pi_0100", "Pi_0001", "Pi_0101",  
                               "Pi_1101", "Pi_1111", "Pi_0011", "Pi_0111", "Pi_1100", "Sum.Pi.f") 
         

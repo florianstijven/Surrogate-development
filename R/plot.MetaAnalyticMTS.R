@@ -61,13 +61,13 @@ plot.BimixedContCont <- function(x, Trial.Level=TRUE, Weighted=TRUE, Indiv.Level
     dev.new()
     par=Par
     if (Weighted==TRUE){
-      plot(data.frame(Object$Trial.Spec.Results)$Treatment.S, data.frame(Object$Trial.Spec.Results)$Treatment.T, cex=(data.frame(Object$Trial.Spec.Results)$Obs.per.trial / (max(data.frame(Object$Trial.Spec.Results)$Obs.per.trial)))*8, xlab=Xlab.Trial, ylab=Ylab.Trial, main=Main.Trial,...)
-      abline(lm(data.frame(Object$Trial.Spec.Results)$Treatment.T ~ data.frame(Object$Trial.Spec.Results)$Treatment.S))
+      plot(data.frame(Object$Trial.Spec.Results, stringsAsFactors = TRUE)$Treatment.S, data.frame(Object$Trial.Spec.Results, stringsAsFactors = TRUE)$Treatment.T, cex=(data.frame(Object$Trial.Spec.Results, stringsAsFactors = TRUE)$Obs.per.trial / (max(data.frame(Object$Trial.Spec.Results, stringsAsFactors = TRUE)$Obs.per.trial)))*8, xlab=Xlab.Trial, ylab=Ylab.Trial, main=Main.Trial,...)
+      abline(lm(data.frame(Object$Trial.Spec.Results, stringsAsFactors = TRUE)$Treatment.T ~ data.frame(Object$Trial.Spec.Results, stringsAsFactors = TRUE)$Treatment.S))
     }
     
     if (Weighted==FALSE){
-      plot(data.frame(Object$Trial.Spec.Results)$Treatment.S, data.frame(Object$Trial.Spec.Results)$Treatment.T, xlab=Xlab.Trial, ylab=Ylab.Trial, main=Main.Trial, ...)
-      abline(lm(data.frame(Object$Trial.Spec.Results)$Treatment.T ~ data.frame(Object$Trial.Spec.Results)$Treatment.S))
+      plot(data.frame(Object$Trial.Spec.Results, stringsAsFactors = TRUE)$Treatment.S, data.frame(Object$Trial.Spec.Results, stringsAsFactors = TRUE)$Treatment.T, xlab=Xlab.Trial, ylab=Ylab.Trial, main=Main.Trial, ...)
+      abline(lm(data.frame(Object$Trial.Spec.Results, stringsAsFactors = TRUE)$Treatment.T ~ data.frame(Object$Trial.Spec.Results, stringsAsFactors = TRUE)$Treatment.S))
     }
   }
   

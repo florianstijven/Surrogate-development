@@ -96,14 +96,14 @@ BimixedCbCContCont = function(Dataset, Surr, True, Treat, Trial.ID,Min.Treat.Siz
   R2ind.sd <- sqrt((4 * R2ind * ((1 - R2ind)^2))/(N - 3))
   R2ind.lb <- max(0, R2ind + qnorm(Alpha/2) * R2ind.sd)
   R2ind.ub <- min(1, R2ind + qnorm(1 - Alpha/2) * R2ind.sd)
-  Indiv.R2 <- data.frame(cbind(R2ind, R2ind.sd, R2ind.lb, R2ind.ub))
+  Indiv.R2 <- data.frame(cbind(R2ind, R2ind.sd, R2ind.lb, R2ind.ub), stringsAsFactors = TRUE)
   colnames(Indiv.R2) <- c("R2 Indiv", "Standard Error", 
                           "CI lower limit", "CI upper limit")
   
   R2trial.sd <- sqrt((4 * R2trial * (1 - R2trial)^2)/(N - 3))
   R2trial.lb <- max(0, R2trial + qnorm(Alpha/2) * (R2trial.sd))
   R2trial.ub <- min(1, R2trial + qnorm(1 - Alpha/2) * (R2trial.sd))
-  Trial.R2 <- data.frame(cbind(R2trial, R2trial.sd,R2trial.lb, R2trial.ub))
+  Trial.R2 <- data.frame(cbind(R2trial, R2trial.sd,R2trial.lb, R2trial.ub), stringsAsFactors = TRUE)
   colnames(Trial.R2) <- c("R2 Trial", "Standard Error", 
                           "CI lower limit", "CI upper limit")
   rownames(Trial.R2) = rownames(Indiv.R2) <- c(" ")

@@ -4,7 +4,7 @@ MarginalProbs <- function(Dataset=Dataset, Surr=Surr, True=True, Treat=Treat) {
   True <- Dataset[,paste(substitute(True))]
   Treat <- Dataset[,paste(substitute(Treat))]
   
-  Dataset <- na.exclude(data.frame(cbind(Surr, True, Treat)))
+  Dataset <- na.exclude(data.frame(cbind(Surr, True, Treat), stringsAsFactors = TRUE))
   if (length(unique(Dataset$Treat))!=2) stop("Please make sure that the treatment variable has only 2 levels.")
   if ((sort(unique(Dataset$Treat))[1]==c(-1) & sort(unique(Dataset$Treat))[2]==c(1))==FALSE)
     stop("Please make sure that the treatment is coded as control = -1 and experimental = 1.")

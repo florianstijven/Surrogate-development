@@ -13,8 +13,8 @@
   wide <- (na.exclude(Dataset))[,1:5]
   Data.analyze <- reshape(data=wide, direction="long", varying=c("Surr", "True"), v.names="outcome", timevar="endpoint", times=c("-1", "1"), new.row.names = 1:((dim(wide)[1])*2))[,1:5]
   row.names(Data.analyze) <- NULL
-  dataS <- data.frame(Data.analyze[Data.analyze$endpoint==-1,]) 
-  dataT <- data.frame(Data.analyze[Data.analyze$endpoint==1,]) 
+  dataS <- data.frame(Data.analyze[Data.analyze$endpoint==-1,], stringsAsFactors = TRUE) 
+  dataT <- data.frame(Data.analyze[Data.analyze$endpoint==1,], stringsAsFactors = TRUE) 
   trialNames <- unique(dataS$Trial.ID)
   
   for (i in 1: length(unique(wide$Trial.ID))){ # remove trials with constant outcome within trial
@@ -37,7 +37,7 @@
   rownames(wide) <- NULL
   N.total <- nrow(wide)
   N.trial <- length(unique(wide$Trial.ID))
-  Obs.per.trial <- data.frame(cbind(unique(wide$Trial.ID), table(wide$Trial.ID, wide$Treat), table(wide$Trial.ID, wide$Treat)[,1]+table(wide$Trial.ID, wide$Treat)[,2]))
+  Obs.per.trial <- data.frame(cbind(unique(wide$Trial.ID), table(wide$Trial.ID, wide$Treat), table(wide$Trial.ID, wide$Treat)[,1]+table(wide$Trial.ID, wide$Treat)[,2]), stringsAsFactors = TRUE)
   colnames(Obs.per.trial) <- c("Trial", "Number.cont.Treat", "Number.exp.Treat", "Obs.per.trial")  
   rownames(Obs.per.trial) <- NULL
   

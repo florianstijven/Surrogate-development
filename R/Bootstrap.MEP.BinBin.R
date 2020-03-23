@@ -1,17 +1,4 @@
 # Bootstrap around SPF values
-# library(Surrogate); data("Schizo_Bin")
-
-# input
-# Data = Schizo_Bin; Surr = "BPRS_Bin"; True = "PANSS_Bin"; Treat = "Treat";  M = 5; Seed=123  
-
-# Voorbeeld
-#MEP_CI <- Bootstrap.MEP.BinBin(Data = Schizo_Bin, Surr = "BPRS_Bin", True = "PANSS_Bin",
-#                     Treat = "Treat", M = 3, Seed=123)
-#summary(MEP_CI)
-
-
-
-# start function
 Bootstrap.MEP.BinBin <- function(Data, Surr, True, Treat, M=100, Seed=123){
 
 All_r_1_1 <- All_r_min1_1 <- All_r_0_1 <- All_r_1_0 <- All_r_min1_0 <- All_r_0_0 <- All_r_1_min1 <- All_r_min1_min1 <- All_r_0_min1 <- NULL

@@ -8,7 +8,7 @@ CausalDiagramBinBin <- function(x, Values="Corrs", Theta_T0S0, Theta_T1S1, Min=0
   if (missing(Theta_T0S0)) {Theta_T0S0 <- 1}
   if (missing(Theta_T1S1)) {Theta_T1S1 <- 1} 
   
-  dat <- data.frame(cbind(x$Pi.Vectors, x$R2_H, x$Theta_T, x$Theta_S))
+  dat <- data.frame(cbind(x$Pi.Vectors, x$R2_H, x$Theta_T, x$Theta_S), stringsAsFactors = TRUE)
   sub <- dat[dat$x.R2_H >= Min & dat$x.R2_H <= Max,] 
   
   if ((Monotonicity=="No" | Monotonicity=="True.Endp" | Monotonicity=="Surr.Endp" | Monotonicity=="Surr.True.Endp")==FALSE){

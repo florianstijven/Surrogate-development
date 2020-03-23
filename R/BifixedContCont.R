@@ -43,11 +43,12 @@ BifixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model=
     Treatment.T <- Model.stage.1$coefficients[,2][(N.trial+1):(2*N.trial)]
     Residuals.Model.S <- residuals(Model.stage.1)[,1]
     Residuals.Model.T <- residuals(Model.stage.1)[,2]
-    Results.Stage.1 <- data.frame(Obs.per.trial$Trial, Obs.per.trial$Obs.per.trial, Intercept.S, Intercept.T, Treatment.S, Treatment.T)         
+    Results.Stage.1 <- data.frame(Obs.per.trial$Trial, Obs.per.trial$Obs.per.trial, Intercept.S,
+                                  Intercept.T, Treatment.S, Treatment.T, stringsAsFactors = TRUE)         
     colnames(Results.Stage.1) <- c(NULL, "Trial", "Obs.per.trial", "Intercept.S", "Intercept.T", "Treatment.S", "Treatment.T")
     rownames(Results.Stage.1) <- NULL 
     D.equiv <- var(Results.Stage.1[,3:6])
-    Residuals.Stage.1 <- data.frame(Residuals.Model.T, Residuals.Model.S) 
+    Residuals.Stage.1 <- data.frame(Residuals.Model.T, Residuals.Model.S, stringsAsFactors = TRUE) 
     rownames(Residuals.Stage.1) <- NULL
     Residuals.Stage.1 <- cbind(wide$Pat.ID, Residuals.Stage.1)
     colnames(Residuals.Stage.1) <- c("Pat.ID", "Residuals.Model.T", "Residuals.Model.S")
@@ -61,11 +62,11 @@ BifixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model=
     Treatment.T <- Model.stage.1$coefficients[,2][2:(N.trial+1)]
     Residuals.Model.S <- residuals(Model.stage.1)[,1]
     Residuals.Model.T <- residuals(Model.stage.1)[,2]
-    Results.Stage.1 <- data.frame(Obs.per.trial$Trial, Obs.per.trial$Obs.per.trial, Treatment.S, Treatment.T)
+    Results.Stage.1 <- data.frame(Obs.per.trial$Trial, Obs.per.trial$Obs.per.trial, Treatment.S, Treatment.T, stringsAsFactors = TRUE)
     colnames(Results.Stage.1) <- c(NULL, "Trial", "Obs.per.trial", "Treatment.S", "Treatment.T")
     rownames(Results.Stage.1) <- NULL 
     D.equiv <- var(Results.Stage.1[,3:4])
-    Residuals.Stage.1 <- data.frame(Residuals.Model.T, Residuals.Model.S)
+    Residuals.Stage.1 <- data.frame(Residuals.Model.T, Residuals.Model.S, stringsAsFactors = TRUE)
     rownames(Residuals.Stage.1) <- NULL
     Residuals.Stage.1 <- cbind(wide$Pat.ID, Residuals.Stage.1)
     colnames(Residuals.Stage.1) <- c("Pat.ID", "Residuals.Model.T", "Residuals.Model.S") 
@@ -90,7 +91,7 @@ BifixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model=
   Trial.R2.sd <- sqrt((4*Trial.R2.value*(1-Trial.R2.value)^2)/(N.trial-3))
   Trial.R2.lb <- max(0, Trial.R2.value + qnorm(Alpha/2) *(Trial.R2.sd))
   Trial.R2.ub <- min(1, Trial.R2.value + qnorm(1-Alpha/2)*(Trial.R2.sd))
-  Trial.R2 <- data.frame(cbind(Trial.R2.value, Trial.R2.sd, Trial.R2.lb, Trial.R2.ub))
+  Trial.R2 <- data.frame(cbind(Trial.R2.value, Trial.R2.sd, Trial.R2.lb, Trial.R2.ub), stringsAsFactors = TRUE)
   colnames(Trial.R2) <- c("R2 Trial", "Standard Error", "CI lower limit", "CI upper limit")
   rownames(Trial.R2) <- c(" ")
   
@@ -100,7 +101,7 @@ BifixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model=
   Trial.R.lb <- max(0, (exp(2*(Z-(qnorm(1-Alpha/2)*sqrt(1/(N.trial-3)))))-1)/(exp(2*(Z-(qnorm(1-Alpha/2)*sqrt(1/(N.trial-3)))))+1))
   Trial.R.ub <- min(1, (exp(2*(Z+(qnorm(1-Alpha/2)*sqrt(1/(N.trial-3)))))-1)/(exp(2*(Z+(qnorm(1-Alpha/2)*sqrt(1/(N.trial-3)))))+1))
   Trial.R.sd <- sqrt((1-Trial.R.value**2)/(N.trial-2))
-  Trial.R <- data.frame(cbind(Trial.R.value, Trial.R.sd, Trial.R.lb, Trial.R.ub))
+  Trial.R <- data.frame(cbind(Trial.R.value, Trial.R.sd, Trial.R.lb, Trial.R.ub), stringsAsFactors = TRUE)
   colnames(Trial.R) <- c("R Trial", "Standard Error", "CI lower limit", "CI upper limit")
   rownames(Trial.R) <- c(" ")
   
@@ -125,7 +126,7 @@ BifixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model=
   R2ind.sd <- sqrt((4*R2ind*((1-R2ind)**2))/(N.total-3))
   R2ind.lb <- max(0,R2ind + qnorm(Alpha/2)*R2ind.sd)
   R2ind.ub <- min(1,R2ind + qnorm(1-Alpha/2)*R2ind.sd)
-  Indiv.R2 <- data.frame(cbind(R2ind, R2ind.sd, R2ind.lb, R2ind.ub))
+  Indiv.R2 <- data.frame(cbind(R2ind, R2ind.sd, R2ind.lb, R2ind.ub), stringsAsFactors = TRUE)
   colnames(Indiv.R2) <- c("R2 Indiv", "Standard Error", "CI lower limit", "CI upper limit")
   rownames(Indiv.R2) <- c(" ")
   Min.Eigen.VarCovarResid <- min(eigen(VarCovarResid)$values)    # lowest eigenvalue
@@ -137,7 +138,7 @@ BifixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model=
   Indiv.R.lb <- max(0, (exp(2*(Z-(qnorm(1-.05/2)*sqrt(1/(N.trial-3)))))-1)/(exp(2*(Z-(qnorm(1-.05/2)*sqrt(1/(N.trial-3)))))+1))
   Indiv.R.ub <- min(1, (exp(2*(Z+(qnorm(1-.05/2)*sqrt(1/(N.trial-3)))))-1)/(exp(2*(Z+(qnorm(1-.05/2)*sqrt(1/(N.trial-3)))))+1))
   Indiv.R.sd <- sqrt((1-Rind**2)/(N.total-2))
-  Indiv.R <- data.frame(cbind(Rind, Indiv.R.sd, Indiv.R.lb, Indiv.R.ub))
+  Indiv.R <- data.frame(cbind(Rind, Indiv.R.sd, Indiv.R.lb, Indiv.R.ub), stringsAsFactors = TRUE)
   colnames(Indiv.R) <- c("R Indiv", "Standard Error", "CI lower limit", "CI upper limit")
   row.names(Indiv.R) <- c(" ") 
   
@@ -149,17 +150,17 @@ BifixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model=
   rho_lb <- max(0, (exp(2*(Z_T0S0-(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))-1)/(exp(2*(Z_T0S0-(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))+1))
   rho_ub <- min(1, (exp(2*(Z_T0S0+(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))-1)/(exp(2*(Z_T0S0+(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))+1))
   rho_sd <- sqrt((1-T0S0**2)/(N.total-2))
-  rho_results_T0S0 <- data.frame(cbind(T0S0, rho_sd , rho_lb, rho_ub))
+  rho_results_T0S0 <- data.frame(cbind(T0S0, rho_sd , rho_lb, rho_ub), stringsAsFactors = TRUE)
   colnames(rho_results_T0S0) <- c("Estimate", "Standard Error", "CI lower limit", "CI upper limit")
   rownames(rho_results_T0S0) <- c(" ")
   Z_T1S1 <- .5*log((1+T1S1)/(1-T1S1)) 
   rho_lb <- max(0, (exp(2*(Z_T1S1-(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))-1)/(exp(2*(Z_T1S1-(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))+1))
   rho_ub <- min(1, (exp(2*(Z_T1S1+(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))-1)/(exp(2*(Z_T1S1+(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))+1))
   rho_sd <- sqrt((1-T1S1**2)/(N.total-2))
-  rho_results_T1S1 <- data.frame(cbind(T1S1, rho_sd , rho_lb, rho_ub))
+  rho_results_T1S1 <- data.frame(cbind(T1S1, rho_sd , rho_lb, rho_ub), stringsAsFactors = TRUE)
   colnames(rho_results_T1S1) <- c("Estimate", "Standard Error", "CI lower limit", "CI upper limit")
   rownames(rho_results_T1S1) <- c(" ")
-  Cor.Endpoints <- data.frame(rbind(rho_results_T0S0, rho_results_T1S1))
+  Cor.Endpoints <- data.frame(rbind(rho_results_T0S0, rho_results_T1S1), stringsAsFactors = TRUE)
   rownames(Cor.Endpoints) <- c("r_T0S0", "r_T1S1")
   colnames(Cor.Endpoints) <- c("Estimate", "Standard Error", "CI lower limit", "CI upper limit")
   

@@ -32,7 +32,7 @@ for (i in 1: nrow(combins)) {
  }
 }
 
-Generated.Matrices <<- data.frame(Generated.Matrices)
+Generated.Matrices <<- data.frame(Generated.Matrices, stringsAsFactors = TRUE)
 
 fit <- list(Generated.Matrices=Generated.Matrices)
 

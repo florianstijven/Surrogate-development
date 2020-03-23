@@ -120,27 +120,7 @@ if (Object$Monotonicity=="General"){
   cat("\nMax:\n")
   print(tapply(results[,2], list(results[,1]), max))
   
-  #  results <- cbind.data.frame(Object$Pi.Vectors$Monotonicity, Object$C3)
-  
-  #  cat("\n\n# C3 results summary")
-  #  cat("\n#~~~~~~~~~~~~~~~~~~~\n\nMean:\n")
-  #  print(tapply(results[,2], list(results[,1]), mean))
-  
-  #  cat("\nMedian:\n")
-  #  print(tapply(results[,2], list(results[,1]), pc50))
-  
-  #  cat("\nMode:\n")
-  #  print(data.frame(t(tapply(results[,2], list(results[,1]), mode)), row.names=""))
-  
-  #  cat("\nSD:\n")
-  #  print(tapply(results[,2], list(results[,1]), sd))
-  
-  #  cat("\nMin:\n")
-  #  print(tapply(results[,2], list(results[,1]), min))
-  #  cat("\nMax:\n")
-  #  print(tapply(results[,2], list(results[,1]), max))
-  
-  
+
   results <- cbind.data.frame(Object$Pi.Vectors$Monotonicity, Object$Theta_T)
   
   cat("\n\n# Theta_T results summary")

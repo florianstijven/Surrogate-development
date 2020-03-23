@@ -5,7 +5,7 @@ ICA.BinBin.CounterAssum <- function(x, r2_h_S0S1_min, r2_h_S0S1_max, r2_h_S0T1_m
   if (class(x)!="ICA.BinBin") {stop("The function R2HBinBinCounterAssumpt should be applied to an object of 
                                     class ICA.BinBin.")}
   
-  sub <- data.frame(cbind(x$Pi.Vectors, x$R2_H, x$Theta_T, x$Theta_S))
+  sub <- data.frame(cbind(x$Pi.Vectors, x$R2_H, x$Theta_T, x$Theta_S), stringsAsFactors = TRUE)
   
   if ((Monotonicity=="No" | Monotonicity=="True.Endp" | Monotonicity=="Surr.Endp" | Monotonicity=="Surr.True.Endp" | Monotonicity=="General")==FALSE){
     stop("The Monotonicity=... argument is not correctly specified \n")
@@ -140,11 +140,11 @@ ICA.BinBin.CounterAssum <- function(x, r2_h_S0S1_min, r2_h_S0S1_max, r2_h_S0T1_m
   compF <- sub$Monotonicity
   
   results <-
-     data.frame(compA, compB, compC, compD, compE, as.character(compF))
+     data.frame(compA, compB, compC, compD, compE, as.character(compF), stringsAsFactors = TRUE)
   
   colnames(results) <- c("R2_H", "r2_h_S0S1", "r2_h_T0T1", "r2_h_S0T1", "r2_h_S1T0", "Monotonicity")
   
-  subset <- results <- data.frame(results)
+  subset <- results <- data.frame(results, stringsAsFactors = TRUE)
   
   subset <- subset[subset$r2_h_S0S1 > r2_h_S0S1_min & subset$r2_h_S0S1 < r2_h_S0S1_max,]
   subset <- subset[subset$r2_h_T0T1 > r2_h_T0T1_min & subset$r2_h_T0T1 < r2_h_T0T1_max,]

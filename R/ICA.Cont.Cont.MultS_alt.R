@@ -60,7 +60,7 @@ for (i in 1: M) {
     }
 
     Data_here <- cbind(Delta_T, All_Delta_S)
-    Data_here <- data.frame(Data_here) 
+    Data_here <- data.frame(Data_here, stringsAsFactors = TRUE) 
     
     for (s in 1: (dim(Data_here)[2]-1)){
       names(Data_here)[s+1] <- paste("Delta_S", s, sep="")
@@ -82,14 +82,14 @@ for (i in 1: M) {
     
     results <- rbind(results, results_here)
     
-    Lower.Dig.Corrs.All <- data.frame(rbind(Lower.Dig.Corrs.All, Lower.Dig.Corrs.Here))
+    Lower.Dig.Corrs.All <- data.frame(rbind(Lower.Dig.Corrs.All, Lower.Dig.Corrs.Here), stringsAsFactors = TRUE)
     row.names(Lower.Dig.Corrs.All) <- NULL
     
     all_delta_S_T_here <- cbind(i, ICA, Adj.ICA, Delta_T, All_Delta_S)
     all_delta_S_T <- rbind(all_delta_S_T, all_delta_S_T_here)  
   }  
 
-  results <- data.frame(results)
+  results <- data.frame(results, stringsAsFactors = TRUE)
   
   Sigma_c <- Sigma_c_orig  #LS!! 
   }

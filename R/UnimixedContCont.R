@@ -43,13 +43,13 @@ UnimixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model
     Treatment.S <- coef(Model.S)$Trial.ID[,2]
     Intercept.T <- coef(Model.T)$Trial.ID[,1]
     Treatment.T <- coef(Model.T)$Trial.ID[,2]
-    Results.Stage.1 <- data.frame(Obs.per.trial$Trial, Obs.per.trial$Obs.per.trial, Intercept.S, Intercept.T, Treatment.S, Treatment.T)         
+    Results.Stage.1 <- data.frame(Obs.per.trial$Trial, Obs.per.trial$Obs.per.trial, Intercept.S, Intercept.T, Treatment.S, Treatment.T, stringsAsFactors = TRUE)         
     colnames(Results.Stage.1) <- c(NULL, "Trial", "Obs.per.trial", "Intercept.S", "Intercept.T", "Treatment.S", "Treatment.T")
     rownames(Results.Stage.1) <- NULL
     D.equiv <- var(Results.Stage.1[,3:6])
     Residuals.Model.S <- residuals(Model.S, type='response')
     Residuals.Model.T <- residuals(Model.T, type='response')
-    Residuals.Stage.1 <- cbind(wide$Pat.ID, data.frame(Residuals.Model.S, Residuals.Model.T))
+    Residuals.Stage.1 <- cbind(wide$Pat.ID, data.frame(Residuals.Model.S, Residuals.Model.T, stringsAsFactors = TRUE))
     colnames(Residuals.Stage.1) <- c("Pat.ID", "Residuals.Model.S", "Residuals.Model.T") 
     rownames(Residuals.Stage.1) <- NULL
     
@@ -57,11 +57,11 @@ UnimixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model
     Fixed.effect.pars.T <- matrix(summary(Model.T)$coef[1:2], nrow=2) 
     rownames(Fixed.effect.pars.S) <- c("Intercept.S" , "Treatment.S")  
     rownames(Fixed.effect.pars.T) <- c("Intercept.T" , "Treatment.T")
-    Fixed.Effect.Pars <- data.frame(rbind(Fixed.effect.pars.S, Fixed.effect.pars.T))
+    Fixed.Effect.Pars <- data.frame(rbind(Fixed.effect.pars.S, Fixed.effect.pars.T), stringsAsFactors = TRUE)
     colnames(Fixed.Effect.Pars) <- c(" ")
     
-    Random.effect.pars.S <- data.frame(ranef(Model.S)$Trial.ID)
-    Random.effect.pars.T <- data.frame(ranef(Model.T)$Trial.ID)
+    Random.effect.pars.S <- data.frame(ranef(Model.S)$Trial.ID, stringsAsFactors = TRUE)
+    Random.effect.pars.T <- data.frame(ranef(Model.T)$Trial.ID, stringsAsFactors = TRUE)
     colnames(Random.effect.pars.S) <- c("Intercept.S", "Treatment.S")
     colnames(Random.effect.pars.T) <- c("Intercept.S", "Treatment.S")
     Random.Effect.Pars <- cbind(Random.effect.pars.S, Random.effect.pars.T)
@@ -77,14 +77,14 @@ UnimixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model
     names(Treatment.S)<-"Treatment.S"
     Treatment.T <- coef(Model.T)$Trial.ID[,2]
     names(Treatment.T)<-"Treatment.T"
-    Results.Stage.1 <- data.frame(Obs.per.trial$Trial, Obs.per.trial$Obs.per.trial, Treatment.S, Treatment.T)         
+    Results.Stage.1 <- data.frame(Obs.per.trial$Trial, Obs.per.trial$Obs.per.trial, Treatment.S, Treatment.T, stringsAsFactors = TRUE)         
     colnames(Results.Stage.1) <- c(NULL, "Trial", "Obs.per.trial", "Treatment.S", "Treatment.T")
     rownames(Results.Stage.1) <- NULL 
     D.equiv <- var(Results.Stage.1[,3:4])
     
     Residuals.Model.S <- residuals(Model.S, type='response')
     Residuals.Model.T <- residuals(Model.T, type='response')
-    Residuals.Stage.1 <- cbind(wide$Pat.ID, data.frame(Surr=Residuals.Model.S, True=Residuals.Model.T))
+    Residuals.Stage.1 <- cbind(wide$Pat.ID, data.frame(Surr=Residuals.Model.S, True=Residuals.Model.T, stringsAsFactors = TRUE))
     colnames(Residuals.Stage.1) <- c("Pat.ID", "Residuals.Model.S", "Residuals.Model.T") 
     rownames(Residuals.Stage.1) <- NULL
     
@@ -92,12 +92,12 @@ UnimixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model
     rownames(Fixed.effect.pars.S)[1:2]<-c("Intercept.S", "Treatment.S")
     Fixed.effect.pars.T <- matrix(summary(Model.T)$coef[1:2], nrow=2) 
     rownames(Fixed.effect.pars.T)[1:2]<-c("Intercept.T", "Treatment.T")
-    Fixed.Effect.Pars <- data.frame(rbind(Fixed.effect.pars.S, Fixed.effect.pars.T))
+    Fixed.Effect.Pars <- data.frame(rbind(Fixed.effect.pars.S, Fixed.effect.pars.T), stringsAsFactors = TRUE)
     colnames(Fixed.Effect.Pars) <- c(" ")
     
-    Random.effect.pars.S <- data.frame(ranef(Model.S)$Trial.ID)
+    Random.effect.pars.S <- data.frame(ranef(Model.S)$Trial.ID, stringsAsFactors = TRUE)
     colnames(Random.effect.pars.S) <- c("Treatment.S")
-    Random.effect.pars.T <- data.frame(ranef(Model.T)$Trial.ID)
+    Random.effect.pars.T <- data.frame(ranef(Model.T)$Trial.ID, stringsAsFactors = TRUE)
     colnames(Random.effect.pars.T) <- c("Treatment.T")
     Random.Effect.Pars <- cbind(Random.effect.pars.S, Random.effect.pars.T)
   }
@@ -119,7 +119,7 @@ UnimixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model
   Trial.R2.sd <- sqrt((4*Trial.R2.value*(1-Trial.R2.value)^2)/(N.trial-3))
   Trial.R2.lb <- max(0, Trial.R2.value + qnorm(Alpha/2) *(Trial.R2.sd))
   Trial.R2.ub <- min(1, Trial.R2.value + qnorm(1-Alpha/2)*(Trial.R2.sd))
-  Trial.R2 <- data.frame(cbind(Trial.R2.value, Trial.R2.sd, Trial.R2.lb, Trial.R2.ub))
+  Trial.R2 <- data.frame(cbind(Trial.R2.value, Trial.R2.sd, Trial.R2.lb, Trial.R2.ub), stringsAsFactors = TRUE)
   colnames(Trial.R2) <- c("R2 Trial", "Standard Error", "CI lower limit", "CI upper limit")
   rownames(Trial.R2) <- c(" ")
   
@@ -129,7 +129,7 @@ UnimixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model
   Trial.R.lb <- max(0, (exp(2*(Z-(qnorm(1-Alpha/2)*sqrt(1/(N.trial-3)))))-1)/(exp(2*(Z-(qnorm(1-Alpha/2)*sqrt(1/(N.trial-3)))))+1))
   Trial.R.ub <- min(1, (exp(2*(Z+(qnorm(1-Alpha/2)*sqrt(1/(N.trial-3)))))-1)/(exp(2*(Z+(qnorm(1-Alpha/2)*sqrt(1/(N.trial-3)))))+1))
   Trial.R.sd <- sqrt((1-Trial.R.value**2)/(N.trial-2))
-  Trial.R <- data.frame(cbind(Trial.R.value, Trial.R.sd, Trial.R.lb, Trial.R.ub))
+  Trial.R <- data.frame(cbind(Trial.R.value, Trial.R.sd, Trial.R.lb, Trial.R.ub), stringsAsFactors = TRUE)
   colnames(Trial.R) <- c("R Trial", "Standard Error", "CI lower limit", "CI upper limit")
   rownames(Trial.R) <- c(" ")
   
@@ -141,8 +141,8 @@ UnimixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model
     set.seed(Seed)
     Indicator <- sample(obs, N.total, replace=TRUE)
     Seed <- Seed + 1
-    Sample.boot.S <- data.frame(dataS[Indicator,])
-    Sample.boot.T <- data.frame(dataT[Indicator,])
+    Sample.boot.S <- data.frame(dataS[Indicator,], stringsAsFactors = TRUE)
+    Sample.boot.T <- data.frame(dataT[Indicator,], stringsAsFactors = TRUE)
     
     if (Model==c("Full") | Model==c("SemiReduced")){                              
       Boot.model.S <- try(lmer(outcome ~ Treat+(1+Treat|Trial.ID), data=Sample.boot.S, ...), silent = FALSE)
@@ -164,7 +164,7 @@ UnimixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model
   Var.Boot.r2 <- var(Boot.r2)
   Indiv.R2.lb <- max(0, R2ind + qnorm(Alpha/2)*sqrt(Var.Boot.r2)) 
   Indiv.R2.ub <- R2ind - qnorm(Alpha/2)*sqrt(Var.Boot.r2)
-  Indiv.R2 <- data.frame(cbind(R2ind, sqrt(Var.Boot.r2), Indiv.R2.lb, Indiv.R2.ub))
+  Indiv.R2 <- data.frame(cbind(R2ind, sqrt(Var.Boot.r2), Indiv.R2.lb, Indiv.R2.ub), stringsAsFactors = TRUE)
   colnames(Indiv.R2) <- c("R2 Indiv", "Standard Error", "CI lower limit", "CI upper limit")
   rownames(Indiv.R2) <- c(" ")
   
@@ -173,7 +173,7 @@ UnimixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model
   Var.Boot.r <- var(Boot.r)
   Indiv.R.lb <- max(0, Rind + qnorm(Alpha/2)*sqrt(Var.Boot.r))  
   Indiv.R.ub <- min(1, Rind - qnorm(Alpha/2)*sqrt(Var.Boot.r))
-  Indiv.R <- data.frame(cbind(Rind, sqrt(Var.Boot.r), Indiv.R.lb, Indiv.R.ub))
+  Indiv.R <- data.frame(cbind(Rind, sqrt(Var.Boot.r), Indiv.R.lb, Indiv.R.ub), stringsAsFactors = TRUE)
   colnames(Indiv.R) <- c("R Indiv", "Standard Error", "CI lower limit", "CI upper limit")
   rownames(Indiv.R) <- c(" ")
   
@@ -185,17 +185,17 @@ UnimixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model
   rho_lb <- max(0, (exp(2*(Z_T0S0-(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))-1)/(exp(2*(Z_T0S0-(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))+1))
   rho_ub <- min(1, (exp(2*(Z_T0S0+(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))-1)/(exp(2*(Z_T0S0+(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))+1))
   rho_sd <- sqrt((1-T0S0**2)/(N.total-2))
-  rho_results_T0S0 <- data.frame(cbind(T0S0, rho_sd , rho_lb, rho_ub))
+  rho_results_T0S0 <- data.frame(cbind(T0S0, rho_sd , rho_lb, rho_ub), stringsAsFactors = TRUE)
   colnames(rho_results_T0S0) <- c("Estimate", "Standard Error", "CI lower limit", "CI upper limit")
   rownames(rho_results_T0S0) <- c(" ")
   Z_T1S1 <- .5*log((1+T1S1)/(1-T1S1)) 
   rho_lb <- max(0, (exp(2*(Z_T1S1-(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))-1)/(exp(2*(Z_T1S1-(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))+1))
   rho_ub <- min(1, (exp(2*(Z_T1S1+(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))-1)/(exp(2*(Z_T1S1+(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))+1))
   rho_sd <- sqrt((1-T1S1**2)/(N.total-2))
-  rho_results_T1S1 <- data.frame(cbind(T1S1, rho_sd , rho_lb, rho_ub))
+  rho_results_T1S1 <- data.frame(cbind(T1S1, rho_sd , rho_lb, rho_ub), stringsAsFactors = TRUE)
   colnames(rho_results_T1S1) <- c("Estimate", "Standard Error", "CI lower limit", "CI upper limit")
   rownames(rho_results_T1S1) <- c(" ")
-  Cor.Endpoints <- data.frame(rbind(rho_results_T0S0, rho_results_T1S1))
+  Cor.Endpoints <- data.frame(rbind(rho_results_T0S0, rho_results_T1S1), stringsAsFactors = TRUE)
   rownames(Cor.Endpoints) <- c("r_T0S0", "r_T1S1")
   colnames(Cor.Endpoints) <- c("Estimate", "Standard Error", "CI lower limit", "CI upper limit")
   

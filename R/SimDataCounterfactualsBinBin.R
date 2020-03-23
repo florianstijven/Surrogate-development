@@ -39,7 +39,7 @@ Sim.Data.CounterfactualsBinBin <- function(Pi_s=rep(1/16, 16), N.Total=2000, See
   
   mat <- 
     data.frame((rbind(Pi_0000_ma, Pi_0100_ma, Pi_0010_ma, Pi_0001_ma, Pi_0101_ma, Pi_1000_ma, Pi_1010_ma, 
-                      Pi_1001_ma, Pi_1110_ma, Pi_1101_ma, Pi_1011_ma, Pi_1111_ma, Pi_0110_ma, Pi_0011_ma, Pi_0111_ma, Pi_1100_ma)))
+                      Pi_1001_ma, Pi_1110_ma, Pi_1101_ma, Pi_1011_ma, Pi_1111_ma, Pi_0110_ma, Pi_0011_ma, Pi_0111_ma, Pi_1100_ma)), stringsAsFactors = TRUE)
   colnames(mat) <- c("T0", "T1", "S0", "S1")
   
   set.seed(Seed) 
@@ -47,7 +47,7 @@ Sim.Data.CounterfactualsBinBin <- function(Pi_s=rep(1/16, 16), N.Total=2000, See
   Z[Z==0] <- c(-1)
   mat <- cbind(mat, Z)
   
-  mat_obs <- data.frame(matrix(NA, nrow=dim(mat)[1], ncol=3))
+  mat_obs <- data.frame(matrix(NA, nrow=dim(mat)[1], ncol=3), stringsAsFactors = TRUE)
   colnames(mat_obs) <- c("T", "S", "Z")
   for (i in 1: dim(mat)[1]){    
     if (mat$Z[i]==-1) {

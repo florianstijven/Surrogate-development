@@ -1,19 +1,5 @@
 
 FixedDiscrDiscrIT<-function(Dataset,Surr,True,Treat,Trial.ID,Weighted=TRUE,Setting=c("binord")){
-  
-#	if (!requireNamespace("OrdinalLogisticBiplot", quietly = TRUE)|!requireNamespace("logistf", quietly = TRUE)) {
-#    stop("OrdinalLogisticBiplot and logistf packages needed for this function to work. Please install them.",
-#      call. = FALSE)  }
-
-#	if (!requireNamespace("rms", quietly = TRUE)|!requireNamespace("MASS", quietly = TRUE)) {
-#	  stop("rms and MASS packages needed for this function to work. Please install them.\r\n",
-#	       call. = FALSE)  }
-
-#library(OrdinalLogisticBiplot)
-#library(logistf)
-
-#library(rms)
-#library(MASS)
 
 # removing missing data
 Total.length<-length(Dataset[,1])  
@@ -158,7 +144,7 @@ R2ht.included<-rep("Y",trialnumber)
   R2h.max.ub<-min(1, upper/(1-exp(2*as.numeric(logLik(modRmax))/sum(Obs.per.trial[R2h.included=="Y"]))))
   
   
-  R2h<-data.frame(cbind(R2h.max, R2h.max.lb, R2h.max.ub)) 
+  R2h<-data.frame(cbind(R2h.max, R2h.max.lb, R2h.max.ub), stringsAsFactors = TRUE) 
   colnames(R2h) <- c("R2h", "CI lower limit", "CI upper limit")
   rownames(R2h) <- c(" ")
   
@@ -373,7 +359,7 @@ Level.Surr<-unique(Surr)
 ######################
 
 
-Trial.Spec.Results <- data.frame(Trial, Obs.per.trial,R2h.included,R2ht.included,Separation.S,Separation.T,Intercept.S,Treatment.S,Treatment.T)
+Trial.Spec.Results <- data.frame(Trial, Obs.per.trial,R2h.included,R2ht.included,Separation.S,Separation.T,Intercept.S,Treatment.S,Treatment.T, stringsAsFactors = TRUE)
 colnames(Trial.Spec.Results) <- c(NULL, "Trial", "Obs.per.trial","R2h.Included","R2ht.Included","Separation.S","Separation.T", "Intercept.S", "Treatment.S", "Treatment.T")
 rownames(Trial.Spec.Results) <- NULL
 
@@ -407,7 +393,7 @@ if (remain.trials.f<3|logLik(lrfht2.f)==Inf){r2ht.f<-u.r2ht.f<-l.r2ht.f<-NA
                                              }
 
 
-R2ht<-data.frame(cbind(R2ht.f,l.r2ht.f,u.r2ht.f))
+R2ht<-data.frame(cbind(R2ht.f,l.r2ht.f,u.r2ht.f), stringsAsFactors = TRUE)
 colnames(R2ht) <- c("R2ht", "CI lower limit", "CI upper limit")
 rownames(R2ht) <- c(" ")
 

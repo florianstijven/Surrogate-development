@@ -14,13 +14,13 @@ Single.Trial.RE.AA <- function(Dataset, Surr, True, Treat, Pat.ID, Alpha=.05, Nu
   N.total <- Data.Proc$N.total
 
   model12 <- lm(cbind(wide$Surr, wide$True)~ wide$Treat, data=wide) 
-  Residuals <- data.frame(model12$residuals)
+  Residuals <- data.frame(model12$residuals, stringsAsFactors = TRUE)
   colnames(Residuals) <- c("Surr", "True")
   alpha <- model12$coefficients[2,1]
   alpha_se <- summary(model12)$"Response wide$Surr"$coefficients[2,2]
   alpha_lb <- alpha - (qt(c(1-Alpha/2), df=N.total, lower.tail=TRUE)*alpha_se)
   alpha_ub <- alpha + (qt(c(1-Alpha/2), df=N.total, lower.tail=TRUE)*alpha_se)
-  alpha_results <- data.frame(cbind(alpha, alpha_se , alpha_lb, alpha_ub))
+  alpha_results <- data.frame(cbind(alpha, alpha_se , alpha_lb, alpha_ub), stringsAsFactors = TRUE)
   colnames(alpha_results) <- c("Alpha", "Standard Error", "CI lower limit", "CI upper limit")
   rownames(alpha_results) <- c(" ")
   
@@ -28,7 +28,7 @@ Single.Trial.RE.AA <- function(Dataset, Surr, True, Treat, Pat.ID, Alpha=.05, Nu
   beta_se <- summary(model12)$"Response wide$True"$coefficients[2,2]
   beta_lb <- beta - (qt(c(1-Alpha/2), df=N.total, lower.tail=TRUE)*beta_se)
   beta_ub <- beta + (qt(c(1-Alpha/2), df=N.total, lower.tail=TRUE)*beta_se)
-  beta_results <- data.frame(cbind(beta, beta_se , beta_lb, beta_ub))
+  beta_results <- data.frame(cbind(beta, beta_se , beta_lb, beta_ub), stringsAsFactors = TRUE)
   colnames(beta_results) <- c("Beta", "Standard Error", "CI lower limit", "CI upper limit")
   rownames(beta_results) <- c(" ")
   
@@ -39,7 +39,7 @@ Single.Trial.RE.AA <- function(Dataset, Surr, True, Treat, Pat.ID, Alpha=.05, Nu
   rho_lb <- max((exp(2*(Z-(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))-1)/(exp(2*(Z-(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))+1))
   rho_ub <- min(1, (exp(2*(Z+(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))-1)/(exp(2*(Z+(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))+1))
   rho_sd <- sqrt((1-rho_z**2)/(N.total-2))
-  rho_results_FishZ <- data.frame(cbind(rho_z, rho_sd , rho_lb, rho_ub))
+  rho_results_FishZ <- data.frame(cbind(rho_z, rho_sd , rho_lb, rho_ub), stringsAsFactors = TRUE)
   colnames(rho_results_FishZ) <- c("AA (gamma)", "Standard Error", "CI lower limit", "CI upper limit")
   rownames(rho_results_FishZ) <- c(" ")
   
@@ -53,7 +53,7 @@ Single.Trial.RE.AA <- function(Dataset, Surr, True, Treat, Pat.ID, Alpha=.05, Nu
   std <- msm::deltamethod (~ (x1/x2), estm, estv)   
   RE_low <- as.numeric(RE+(qnorm(Alpha/2)*std))
   RE_high <- as.numeric(RE+(qnorm(1-Alpha/2)*std))
-  RE_results_Delta <- data.frame(cbind(RE, std, RE_low, RE_high))   
+  RE_results_Delta <- data.frame(cbind(RE, std, RE_low, RE_high), stringsAsFactors = TRUE)   
   colnames(RE_results_Delta) <- c("RE", "Standard Error", "CI lower limit", "CI upper limit")
   rownames(RE_results_Delta) <- c(" ")  
   
@@ -66,7 +66,7 @@ Single.Trial.RE.AA <- function(Dataset, Surr, True, Treat, Pat.ID, Alpha=.05, Nu
   C <- (beta^2) - (((qnorm(1-Alpha/2))^2)*var_beta)
   
   if ((A^2)-(B*C) < 0) {
-  RE_results_Fiel <- data.frame(cbind(RE, std, NaN, NaN))   
+  RE_results_Fiel <- data.frame(cbind(RE, std, NaN, NaN), stringsAsFactors = TRUE)   
   colnames(RE_results_Fiel) <- c("RE", "Standard Error", "CI lower limit", "CI upper limit")
   rownames(RE_results_Fiel) <- c(" ")}  
   
@@ -75,7 +75,7 @@ Single.Trial.RE.AA <- function(Dataset, Surr, True, Treat, Pat.ID, Alpha=.05, Nu
   try(RE_high <- ((A + sqrt((A^2)-(B*C)))/B), silent=TRUE)
   var <- ((beta/alpha)^2) * ((var_beta / (beta^2)) + (var_alpha / (alpha^2)) - (2 * (cov_a_b_s/(alpha*beta)))) 
   std <- sqrt(var)
-  RE_results_Fiel <- data.frame(cbind(RE, std, RE_low, RE_high))   
+  RE_results_Fiel <- data.frame(cbind(RE, std, RE_low, RE_high), stringsAsFactors = TRUE)   
   colnames(RE_results_Fiel) <- c("RE", "Standard Error", "CI lower limit", "CI upper limit")
   rownames(RE_results_Fiel) <- c(" ") 
   }
@@ -87,7 +87,7 @@ Single.Trial.RE.AA <- function(Dataset, Surr, True, Treat, Pat.ID, Alpha=.05, Nu
     for (i in 1:k){
     set.seed(Seed+i)
     index <- sample(obs, d.size, replace=TRUE)
-    sample <- data.frame(wide[index,])                             
+    sample <- data.frame(wide[index,], stringsAsFactors = TRUE)                             
     sample <- na.exclude(sample[order(sample$Pat.ID),])            
     model1 <- lm(cbind(sample$Surr, sample$True)~ sample$Treat, data=sample)
     alpha_boot[i] <- model1$coefficients[2,1]
@@ -106,12 +106,12 @@ Single.Trial.RE.AA <- function(Dataset, Surr, True, Treat, Pat.ID, Alpha=.05, Nu
   }
   
   RE_CIs <- quantile(RE_boot, probs=c(Alpha/2, 1-Alpha/2))                                                                     
-  RE_results_Boot <- data.frame(cbind(RE, sd(RE_boot), RE_CIs[1], RE_CIs[2]))   
+  RE_results_Boot <- data.frame(cbind(RE, sd(RE_boot), RE_CIs[1], RE_CIs[2]), stringsAsFactors = TRUE)   
   colnames(RE_results_Boot) <- c("RE", "Standard Error", "CI lower limit", "CI upper limit")
   rownames(RE_results_Boot) <- c(" ")
   
   rho_CIs <- quantile(rho_z_boot, probs=c(Alpha/2, 1-Alpha/2)) 
-  rho_results_Boot <- data.frame(cbind(rho_z, sd(rho_z_boot), rho_CIs[1], rho_CIs[2]))   
+  rho_results_Boot <- data.frame(cbind(rho_z, sd(rho_z_boot), rho_CIs[1], rho_CIs[2]), stringsAsFactors = TRUE)   
   colnames(rho_results_Boot) <- c("AA (gamma)", "Standard Error", "CI lower limit", "CI upper limit")
   rownames(rho_results_Boot) <- c(" ")
 
@@ -123,17 +123,17 @@ Single.Trial.RE.AA <- function(Dataset, Surr, True, Treat, Pat.ID, Alpha=.05, Nu
   rho_lb <- max(0, (exp(2*(Z_T0S0-(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))-1)/(exp(2*(Z_T0S0-(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))+1))
   rho_ub <- min(1, (exp(2*(Z_T0S0+(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))-1)/(exp(2*(Z_T0S0+(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))+1))
   rho_sd <- sqrt((1-T0S0**2)/(N.total-2))
-  rho_results_T0S0 <- data.frame(cbind(T0S0, rho_sd , rho_lb, rho_ub))
+  rho_results_T0S0 <- data.frame(cbind(T0S0, rho_sd , rho_lb, rho_ub), stringsAsFactors = TRUE)
   colnames(rho_results_T0S0) <- c("Estimate", "Standard Error", "CI lower limit", "CI upper limit")
   rownames(rho_results_T0S0) <- c(" ")
   Z_T1S1 <- .5*log((1+T1S1)/(1-T1S1)) 
   rho_lb <- max(0, (exp(2*(Z_T1S1-(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))-1)/(exp(2*(Z_T1S1-(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))+1))
   rho_ub <- min(1, (exp(2*(Z_T1S1+(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))-1)/(exp(2*(Z_T1S1+(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))+1))
   rho_sd <- sqrt((1-T1S1**2)/(N.total-2))
-  rho_results_T1S1 <- data.frame(cbind(T1S1, rho_sd , rho_lb, rho_ub))
+  rho_results_T1S1 <- data.frame(cbind(T1S1, rho_sd , rho_lb, rho_ub), stringsAsFactors = TRUE)
   colnames(rho_results_T1S1) <- c("Estimate", "Standard Error", "CI lower limit", "CI upper limit")
   rownames(rho_results_T1S1) <- c(" ")
-  Cor.Endpoints <- data.frame(rbind(rho_results_T0S0, rho_results_T1S1))
+  Cor.Endpoints <- data.frame(rbind(rho_results_T0S0, rho_results_T1S1), stringsAsFactors = TRUE)
   rownames(Cor.Endpoints) <- c("r_T0S0", "r_T1S1")
   colnames(Cor.Endpoints) <- c("Estimate", "Standard Error", "CI lower limit", "CI upper limit")
   

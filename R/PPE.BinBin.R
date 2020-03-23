@@ -206,7 +206,7 @@ runs<-runs+1
    
      num <- dim(R2_H_all)[2]
     
-     Pi.Vectors <- data.frame(t(pi_all)) 
+     Pi.Vectors <- data.frame(t(pi_all), stringsAsFactors = TRUE) 
       # colnames(Pi.Vectors) <- c("Pi_0000", "Pi_0100", "Pi_0001", "Pi_0101", "Pi_1101", "Pi_1111", "Pi_0011", 
       #                            "Pi_0111", "Pi_1100", "Pi_0010", "Pi_1110", "Pi_0110", "Pi_1010", "Pi_1000", "Pi_1001", "Pi_1011") 
     
@@ -219,7 +219,7 @@ print(runs)
 #Pi.Vectors= Pi.Vectors terugzetten
 fit<-data.frame(index=as.numeric(index_all),PPE=as.numeric(PPE_all),RPE=as.numeric(RPE_all), 
                 PPE_T=as.numeric(PPE_T_all), R2_H=as.numeric(R2_H_all), H_Delta_T=as.numeric(H_Delta_T_all),
-                H_Delta_S=as.numeric(H_Delta_S_all), I_Delta_T_Delta_S=as.numeric(I_Delta_T_Delta_S_all))
+                H_Delta_S=as.numeric(H_Delta_S_all), I_Delta_T_Delta_S=as.numeric(I_Delta_T_Delta_S_all), stringsAsFactors = TRUE)
 class(fit)<-"PPE.BinBin"
 fit
 } #end function

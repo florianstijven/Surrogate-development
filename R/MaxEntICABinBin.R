@@ -100,11 +100,11 @@ H_Delta_S <-
       ((mat7+mat8+mat9)*log2(mat7+mat8+mat9)))
 R2_H <- I_Delta_T_Delta_S / min(H_Delta_T, H_Delta_S)
 R2_H_BFGS <- R2_H  #OUTPUT
-Pi.Vector.BFGS <- data.frame(p_i_all)
+Pi.Vector.BFGS <- data.frame(p_i_all, stringsAsFactors = TRUE)
 names(Pi.Vector.BFGS) <- c("p*_0000", "p*_0100", "p*_0010", "p*_0001", "p*_0101", "p*_1000", "p*_1010",
                            "p*_1001", "p*_1110",
                            "p*_1101",  "p*_1011", "p*_1111", "p*_0110", "p*_0011", "p*_0111", "p*_1100")
-p_i_all_orig <- data.frame(p_i_all)
+p_i_all_orig <- data.frame(p_i_all, stringsAsFactors = TRUE)
 names(p_i_all_orig) <- c("Pi_0000", "Pi_0100", "Pi_0010", "Pi_0001", "Pi_0101", "Pi_1000", "Pi_1010",
                            "Pi_1001", "Pi_1110",
                            "Pi_1101",  "Pi_1011", "Pi_1111", "Pi_0110", "Pi_0011", "Pi_0111", "Pi_1100")
@@ -192,11 +192,11 @@ H_Delta_S <-
       ((mat7+mat8+mat9)*log2(mat7+mat8+mat9)))
 R2_H <- I_Delta_T_Delta_S / min(H_Delta_T, H_Delta_S)
 R2_H_CG <- R2_H  #OUTPUT
-Pi.Vector.CG <- data.frame(p_i_all)
+Pi.Vector.CG <- data.frame(p_i_all, stringsAsFactors = TRUE)
 names(Pi.Vector.CG) <- names(p_i_all) <- c("p*_0000", "p*_0100", "p*_0010", "p*_0001", "p*_0101", "p*_1000", "p*_1010",
                          "p*_1001", "p*_1110",
                          "p*_1101",  "p*_1011", "p*_1111", "p*_0110", "p*_0011", "p*_0111", "p*_1100")
-p_i_all_orig <- data.frame(p_i_all)
+p_i_all_orig <- data.frame(p_i_all, stringsAsFactors = TRUE)
 names(p_i_all_orig) <- c("Pi_0000", "Pi_0100", "Pi_0010", "Pi_0001", "Pi_0101", "Pi_1000", "Pi_1010",
                          "Pi_1001", "Pi_1110",
                          "Pi_1101",  "Pi_1011", "Pi_1111", "Pi_0110", "Pi_0011", "Pi_0111", "Pi_1100")
@@ -245,7 +245,7 @@ for (k in 1: dim(Fitted.ICA$Pi.Vectors)[1]){
   sq_dev <- sum((p_i_all_BFGS - Fitted.ICA$Pi.Vectors[k,][1:16])**2)
   sq_dev_all <- rbind(sq_dev_all, cbind(k, sq_dev))
 }
-sq_dev_all <- data.frame(sq_dev_all)
+sq_dev_all <- data.frame(sq_dev_all, stringsAsFactors = TRUE)
 sorted <- sq_dev_all[order(sq_dev_all$sq_dev),]
 min_sq <- sorted[1, 1]
 Pi.Vector.Min.SQ <- Fitted.ICA$Pi.Vectors[min_sq,][1:16]
@@ -288,12 +288,12 @@ H_Delta_S <-
 R2_H <- I_Delta_T_Delta_S / min(H_Delta_T, H_Delta_S)
 
 R2_H_Min.Diff <- as.numeric(R2_H)  #OUTPUT
-Pi.Vector.Min.Diff <- p_i_all <- data.frame(Pi.Vector.Min.SQ, row.names = " ")
+Pi.Vector.Min.Diff <- p_i_all <- data.frame(Pi.Vector.Min.SQ, row.names = " ", stringsAsFactors = TRUE)
 names(Pi.Vector.Min.Diff) <- names(p_i_all) <- c("p*_0000", "p*_0100", "p*_0010", "p*_0001", "p*_0101", "p*_1000", "p*_1010",
                                "p*_1001", "p*_1110",
                                "p*_1101",  "p*_1011", "p*_1111", "p*_0110", "p*_0011", "p*_0111", "p*_1100")
 
-p_i_all_orig <- data.frame(Pi.Vector.Min.Diff)
+p_i_all_orig <- data.frame(Pi.Vector.Min.Diff, stringsAsFactors = TRUE)
 names(p_i_all_orig) <- c("Pi_0000", "Pi_0100", "Pi_0010", "Pi_0001", "Pi_0101", "Pi_1000", "Pi_1010",
                          "Pi_1001", "Pi_1110",
                          "Pi_1101",  "Pi_1011", "Pi_1111", "Pi_0110", "Pi_0011", "Pi_0111", "Pi_1100")

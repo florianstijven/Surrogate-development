@@ -25,7 +25,7 @@ entropy_here <- 2 * log2(2 * pi) + (.5 * log2(det(Sigma_c)))
 entropy <- cbind(entropy, entropy_here)
 }
 
-results <- data.frame(cbind(x$ICA, as.numeric(entropy), x$Pos.Def))
+results <- data.frame(cbind(x$ICA, as.numeric(entropy), x$Pos.Def), stringsAsFactors = TRUE)
 names(results) <- c("ICA", "Entropy", "T0T1", "T0S0", "T0S1", "T1S0", "T1S1", "S0S1")
 results_all <- results[order(results$Entropy, decreasing = TRUE),]
 results <- results[order(results$Entropy, decreasing = TRUE),][1,]

@@ -127,7 +127,7 @@ MixedContContIT <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID,
   R2h.single.max.value <- R2h.single.value/(1-(exp(-L.0/N.total)))   
   R2h.single.max.lb <- max(0, (1-exp(-k1/N.total))/(1-(exp(-L.0/N.total))))
   R2h.single.max.ub <- min(1, (1-exp(-d1/N.total))/(1-(exp(-L.0/N.total))))
-  R2h.single.max <- data.frame(cbind(R2h.single.max.value, R2h.single.max.lb, R2h.single.max.ub))  # OUT
+  R2h.single.max <- data.frame(cbind(R2h.single.max.value, R2h.single.max.lb, R2h.single.max.ub), stringsAsFactors = TRUE)  # OUT
   colnames(R2h.single.max) <- c("R2h.single.max", "CI lower limit", "CI upper limit")
   rownames(R2h.single.max) <- c(" ")
     
@@ -140,17 +140,17 @@ MixedContContIT <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID,
   rho_lb <- max(0, (exp(2*(Z_T0S0-(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))-1)/(exp(2*(Z_T0S0-(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))+1))
   rho_ub <- min(1, (exp(2*(Z_T0S0+(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))-1)/(exp(2*(Z_T0S0+(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))+1))
   rho_sd <- sqrt((1-T0S0**2)/(N.total-2))
-  rho_results_T0S0 <- data.frame(cbind(T0S0, rho_sd , rho_lb, rho_ub))
+  rho_results_T0S0 <- data.frame(cbind(T0S0, rho_sd , rho_lb, rho_ub), stringsAsFactors = TRUE)
   colnames(rho_results_T0S0) <- c("Estimate", "Standard Error", "CI lower limit", "CI upper limit")
   rownames(rho_results_T0S0) <- c(" ")
   Z_T1S1 <- .5*log((1+T1S1)/(1-T1S1)) 
   rho_lb <- max(0, (exp(2*(Z_T1S1-(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))-1)/(exp(2*(Z_T1S1-(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))+1))
   rho_ub <- min(1, (exp(2*(Z_T1S1+(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))-1)/(exp(2*(Z_T1S1+(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))+1))
   rho_sd <- sqrt((1-T1S1**2)/(N.total-2))
-  rho_results_T1S1 <- data.frame(cbind(T1S1, rho_sd , rho_lb, rho_ub))
+  rho_results_T1S1 <- data.frame(cbind(T1S1, rho_sd , rho_lb, rho_ub), stringsAsFactors = TRUE)
   colnames(rho_results_T1S1) <- c("Estimate", "Standard Error", "CI lower limit", "CI upper limit")
   rownames(rho_results_T1S1) <- c(" ")
-  Cor.Endpoints <- data.frame(rbind(rho_results_T0S0, rho_results_T1S1))
+  Cor.Endpoints <- data.frame(rbind(rho_results_T0S0, rho_results_T1S1), stringsAsFactors = TRUE)
   rownames(Cor.Endpoints) <- c("r_T0S0", "r_T1S1")
   colnames(Cor.Endpoints) <- c("Estimate", "Standard Error", "CI lower limit", "CI upper limit")
   

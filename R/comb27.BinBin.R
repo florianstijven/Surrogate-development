@@ -255,10 +255,7 @@ P<-t(matrix(data=reeks, ncol=9))
           pi_all <- cbind(pi_all, pi) 
           index_all<-cbind(index_all,index)
 
-          #Pi.Vectors <- data.frame(t(pi_all)) 
-          #colnames(Pi.Vectors) <- c("Pi_0000", "Pi_0100", "Pi_0001", "Pi_0101", "Pi_1101", "Pi_1111", "Pi_0011", 
-          #                          "Pi_0111", "Pi_1100", "Pi_0010", "Pi_1110", "Pi_0110", "Pi_1010", "Pi_1000", "Pi_1001", "Pi_1011") 
-
+ 
                     
    }}}
      
@@ -269,7 +266,7 @@ fit<-data.frame(index=as.numeric(index_all),Monotonicity=as.character(monotonici
                 combo=as.character(combo_all),
                 R2_H=as.numeric(R2_H_all), H_Delta_T=as.numeric(H_Delta_T_all),
                 H_Delta_S=as.numeric(H_Delta_S_all),
-                I_Delta_T_Delta_S=as.numeric(I_Delta_T_Delta_S_all))
+                I_Delta_T_Delta_S=as.numeric(I_Delta_T_Delta_S_all), stringsAsFactors = TRUE)
 class(fit)<-"comb27.BinBin"
 fit
 

@@ -1146,7 +1146,7 @@ plot.SPF.BinBin <- function(x, Type="All.Histograms", Specific.Pi="r_0_0", Col="
     if (length(unique(Object$r_1_1)) <= 1){
       i <- cbind(NA, 1, 1)}
     
-    data <- data.frame(rbind(a, b, c, d, e, f, g, h, i))
+    data <- data.frame(rbind(a, b, c, d, e, f, g, h, i), stringsAsFactors = TRUE)
     names(data) <- c("Y", "Delta_T", "Delta_S")
     
     x <- as.factor(data$Delta_S)
@@ -1229,7 +1229,7 @@ plot.SPF.BinBin <- function(x, Type="All.Histograms", Specific.Pi="r_0_0", Col="
     if (length(unique(Object$r_1_1)) <= 1){
       i <- cbind(NA, 1, 1)}
     
-    data <- data.frame(rbind(a, b, c, d, e, f, g, h, i))
+    data <- data.frame(rbind(a, b, c, d, e, f, g, h, i), stringsAsFactors = TRUE)
     names(data) <- c("Y", "Delta_T", "Delta_S")
     
     x <- as.factor(data$Delta_S)

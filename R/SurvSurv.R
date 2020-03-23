@@ -8,7 +8,7 @@ Trial.ID, Weighted=TRUE, Alpha=.05){ #, Number.Bootstraps=500, Seed=sample(1:100
   TrueCens <- Dataset[,paste(substitute(TrueCens))]
   Treat <- Dataset[,paste(substitute(Treat))]
   Trial.ID <- Dataset[,paste(substitute(Trial.ID))]
-  All_data <- data.frame(cbind(Surr, SurrCens, True, TrueCens, Treat, Trial.ID))
+  All_data <- data.frame(cbind(Surr, SurrCens, True, TrueCens, Treat, Trial.ID), stringsAsFactors = TRUE)
   names(All_data) <- c("Surr", "SurrCens", "True", "TrueCens", "Treat", "Trial.ID")
 
   #R2h ind
@@ -39,7 +39,7 @@ Trial.ID, Weighted=TRUE, Alpha=.05){ #, Number.Bootstraps=500, Seed=sample(1:100
   d1 <- qchisq((1-Alpha), 1, g2)
   R2h.ind.lb <- max(0, 1-exp(-k1/length(All_data$Treat))) 
   R2h.ind.ub <- min(1, 1-exp(-d1/length(All_data$Treat)))
-  R2h.ind <- data.frame(cbind(R2h.ind.value, R2h.ind.lb, R2h.ind.ub))   # OUT
+  R2h.ind <- data.frame(cbind(R2h.ind.value, R2h.ind.lb, R2h.ind.ub), stringsAsFactors = TRUE)   # OUT
   colnames(R2h.ind) <- c("R2h.ind", "CI lower limit", "CI upper limit")
   rownames(R2h.ind) <- c(" ") 
   
@@ -51,7 +51,7 @@ Trial.ID, Weighted=TRUE, Alpha=.05){ #, Number.Bootstraps=500, Seed=sample(1:100
   d1 <- qchisq((1-Alpha), 1, g2)
   R2h.ind.lb <- max(0, 1-exp(-k1/Num.Events)) 
   R2h.ind.ub <- min(1, 1-exp(-d1/Num.Events))
-  R2h.ind.QF <- data.frame(cbind(R2h.ind.value, R2h.ind.lb, R2h.ind.ub))   # OUT
+  R2h.ind.QF <- data.frame(cbind(R2h.ind.value, R2h.ind.lb, R2h.ind.ub), stringsAsFactors = TRUE)   # OUT
   colnames(R2h.ind.QF) <- c("R2h.ind.QF", "CI lower limit", "CI upper limit")
   rownames(R2h.ind.QF) <- c(" ") 
   
@@ -105,7 +105,7 @@ Trial.ID, Weighted=TRUE, Alpha=.05){ #, Number.Bootstraps=500, Seed=sample(1:100
                         t(R2h.per.trial.ub.vec))
   colnames(R2h.By.Trial.QF) <- c("TrialID", "R2h.ind", "R2h_low", "R2h_up")
   rownames(R2h.By.Trial.QF) <- NULL 
-  R2h.By.Trial.QF <- data.frame(na.exclude(R2h.By.Trial.QF))      
+  R2h.By.Trial.QF <- data.frame(na.exclude(R2h.By.Trial.QF), stringsAsFactors = TRUE)      
   
   
   
@@ -188,7 +188,7 @@ Trial.ID, Weighted=TRUE, Alpha=.05){ #, Number.Bootstraps=500, Seed=sample(1:100
       Data.Analyze <- rbind(Data.Analyze, Data_hier)
     }
   }
-  Results.Stage.1 <- data.frame(Results.Stage.1)
+  Results.Stage.1 <- data.frame(Results.Stage.1, stringsAsFactors = TRUE)
   
   # stage 2
   if (Weighted==FALSE){
@@ -205,7 +205,7 @@ Trial.ID, Weighted=TRUE, Alpha=.05){ #, Number.Bootstraps=500, Seed=sample(1:100
   Trial.R2.sd <- sqrt((4*Trial.R2.value*(1-Trial.R2.value)^2)/(N.trial-3))
   Trial.R2.lb <- max(0, Trial.R2.value + qnorm(Alpha/2) *(Trial.R2.sd))
   Trial.R2.ub <- min(1, Trial.R2.value + qnorm(1-Alpha/2)*(Trial.R2.sd))
-  Trial.R2 <- data.frame(cbind(Trial.R2.value, Trial.R2.sd, Trial.R2.lb, Trial.R2.ub))
+  Trial.R2 <- data.frame(cbind(Trial.R2.value, Trial.R2.sd, Trial.R2.lb, Trial.R2.ub), stringsAsFactors = TRUE)
   colnames(Trial.R2) <- c("R2_trial", "Standard Error", "CI lower limit", "CI upper limit")
   rownames(Trial.R2) <- c(" ") 
   
@@ -215,7 +215,7 @@ Trial.ID, Weighted=TRUE, Alpha=.05){ #, Number.Bootstraps=500, Seed=sample(1:100
   Trial.R.lb <- max(0, (exp(2*(Z-(qnorm(1-Alpha/2)*sqrt(1/(N.trial-3)))))-1)/(exp(2*(Z-(qnorm(1-Alpha/2)*sqrt(1/(N.trial-3)))))+1))
   Trial.R.ub <- min(1, (exp(2*(Z+(qnorm(1-Alpha/2)*sqrt(1/(N.trial-3)))))-1)/(exp(2*(Z+(qnorm(1-Alpha/2)*sqrt(1/(N.trial-3)))))+1))
   Trial.R.sd <- sqrt((1-Trial.R.value**2)/(N.trial-2))
-  Trial.R <- data.frame(cbind(Trial.R.value, Trial.R.sd , Trial.R.lb, Trial.R.ub))
+  Trial.R <- data.frame(cbind(Trial.R.value, Trial.R.sd , Trial.R.lb, Trial.R.ub), stringsAsFactors = TRUE)
   colnames(Trial.R) <- c("R_trial", "Standard Error", "CI lower limit", "CI upper limit")
   row.names(Trial.R) <- c(" ") 
   

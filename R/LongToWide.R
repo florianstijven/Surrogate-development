@@ -4,7 +4,7 @@ LongToWide <- function(Dataset, OutcomeIndicator, IdIndicator,  TreatIndicator, 
   IdIndicator <- Dataset[,paste(substitute(IdIndicator))]
   TreatIndicator <- Dataset[,paste(substitute(TreatIndicator))]
   OutcomeValue <- Dataset[,paste(substitute(OutcomeValue))]
-  Dataset <- data.frame(cbind(OutcomeIndicator, IdIndicator, TreatIndicator, OutcomeValue))
+  Dataset <- data.frame(cbind(OutcomeIndicator, IdIndicator, TreatIndicator, OutcomeValue), stringsAsFactors = TRUE)
   
   reshape(data=Dataset, direction="wide", timevar="OutcomeIndicator", idvar=c("IdIndicator", "TreatIndicator"))
 

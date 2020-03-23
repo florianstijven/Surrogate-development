@@ -21,7 +21,7 @@ plot.MinSurrContCont <- function(x, main, col, Type="Percent", Labels=FALSE, Par
   if (missing(main)) {main = " "}
   if (missing(col)) {col=8}
   
-  dat <- data.frame(cbind(Object$T0T1, Object$Rho2.Min))
+  dat <- data.frame(cbind(Object$T0T1, Object$Rho2.Min), stringsAsFactors = TRUE)
   colnames(dat) <- c("T0T1", "Rho2.Min")
   dev.new()
   par=Par

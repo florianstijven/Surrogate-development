@@ -6,7 +6,7 @@ set.seed(Seed)
 errors <- mvrnorm(N.Total, rep(0,2), Smat)
 Treat <- sample(x=rep(c(-1, 1), each=(ceiling(N.Total/2))), N.Total, replace=FALSE)
 Pat_ID <- 1:N.Total
-supp <- data.frame(cbind(errors, Treat, Pat_ID))
+supp <- data.frame(cbind(errors, Treat, Pat_ID), stringsAsFactors = TRUE)
 colnames(supp) <- c("Surr", "True", "Treat", "Pat.ID")
 supp$Surr[supp$Treat==-1] <- supp$Surr[supp$Treat==-1]+Means[1] 
 supp$Surr[supp$Treat==1] <- supp$Surr[supp$Treat==1]+Means[2] 

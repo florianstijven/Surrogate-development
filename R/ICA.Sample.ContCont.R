@@ -43,7 +43,7 @@ ICA.Sample.ContCont <- function(T0S0, T1S1, T0T0=1, T1T1=1, S0S0=1, S1S1=1,
         rownames(Results) <- NULL}
     }
   }
-  Results <- data.frame(Results)
+  Results <- data.frame(Results, stringsAsFactors = TRUE)
   rownames(Results) <- NULL
   Total.Num.Matrices <- dim(Results)[1]
   

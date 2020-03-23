@@ -63,7 +63,7 @@ if (Model==c("Reduced")){
     Z <- append(x=Z, values=Z_temp)
     Trial_ID <- append(Trial_ID, Trial_ID_temp)
   }
-  supp <- data.frame(cbind(Z, Trial_ID))
+  supp <- data.frame(cbind(Z, Trial_ID), stringsAsFactors = TRUE)
   
   for (i in 1: N.Total){
     Surr_temp <- (((Fixed.Effects[1]) + ran.eff[supp$Trial_ID[i],1])*Z[i]) + errors[i,1]

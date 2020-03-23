@@ -25,7 +25,7 @@ FixedContBinIT <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID,
   N.trial <- Data.Proc$N.trial
   Obs.per.trial <- Data.Proc$Obs.per.trial
   
-  Trialname <- data.frame(table(Data.analyze$Trial.ID))[,1]  
+  Trialname <- data.frame(table(Data.analyze$Trial.ID), stringsAsFactors = TRUE)[,1]  
 
 # R2_ht          
 
@@ -49,7 +49,7 @@ Intercept.S <- coef(Model.S)[1:N.trial]
 Treatment.S <- coef(Model.S)[(1+N.trial):(2*N.trial)] 
 Intercept.T <- coef(Model.T)[1:N.trial]
 Treatment.T <- coef(Model.T)[(1+N.trial):(2*N.trial)] 
-Trial.Spec.Results <- data.frame(Obs.per.trial$Trial, Obs.per.trial$Obs.per.trial, Intercept.S, Intercept.T, Treatment.S, Treatment.T)
+Trial.Spec.Results <- data.frame(Obs.per.trial$Trial, Obs.per.trial$Obs.per.trial, Intercept.S, Intercept.T, Treatment.S, Treatment.T, stringsAsFactors = TRUE)
 colnames(Trial.Spec.Results) <- c(NULL, "Trial", "Obs.per.trial", "Intercept.S", "Intercept.T", "Treatment.S", "Treatment.T")
 rownames(Trial.Spec.Results) <- NULL 
 }
@@ -57,7 +57,7 @@ rownames(Trial.Spec.Results) <- NULL
 if (Model==c("Reduced")){  
 Treatment.S <- coef(Model.S)[2:(N.trial+1)]
 Treatment.T <- coef(Model.T)[2:(N.trial+1)]
-Trial.Spec.Results <- data.frame(Obs.per.trial$Trial, Obs.per.trial$Obs.per.trial, Treatment.S, Treatment.T)
+Trial.Spec.Results <- data.frame(Obs.per.trial$Trial, Obs.per.trial$Obs.per.trial, Treatment.S, Treatment.T, stringsAsFactors = TRUE)
 colnames(Trial.Spec.Results) <- c(NULL, "Trial", "Obs.per.trial", "Treatment.S", "Treatment.T")
 rownames(Trial.Spec.Results) <- NULL
 }
@@ -92,7 +92,7 @@ k1 <- qchisq(Alpha, 1, g2)
 d1 <- qchisq((1-Alpha), 1, g2)
 R2ht.lb <- max(0, 1-exp(-k1/N.trial))
 R2ht.ub <- min(1, 1-exp(-d1/N.trial))
-R2ht <- data.frame(cbind(R2ht.value, R2ht.lb, R2ht.ub)) #output
+R2ht <- data.frame(cbind(R2ht.value, R2ht.lb, R2ht.ub), stringsAsFactors = TRUE) #output
 colnames(R2ht) <- c("R2ht", "CI lower limit", "CI upper limit")
 rownames(R2ht) <- c(" ")    
 
@@ -111,7 +111,7 @@ k1 <- qchisq(Alpha, 1, g2)
 d1 <- qchisq((1-Alpha), 1, g2)
 R2h.ind.lb <- max(0, 1-exp(-k1/N.total)) 
 R2h.ind.ub <- min(1, 1-exp(-d1/N.total))
-R2h.ind <- data.frame(cbind(R2h.ind.value, R2h.ind.lb, R2h.ind.ub))   # OUT
+R2h.ind <- data.frame(cbind(R2h.ind.value, R2h.ind.lb, R2h.ind.ub), stringsAsFactors = TRUE)   # OUT
 colnames(R2h.ind) <- c("R2h.ind", "CI lower limit", "CI upper limit")
 rownames(R2h.ind) <- c(" ") 
 
@@ -134,7 +134,7 @@ L.0 <- min(L.0.a, L.0.b)
 R2h.ind.max.value <- R2h.ind.value/(1-(exp(-L.0/N.total)))   
 R2h.ind.max.lb <- max(0, (1-exp(-k1/N.total))/(1-(exp(-L.0/N.total))))
 R2h.ind.max.ub <- min(1, (1-exp(-d1/N.total))/(1-(exp(-L.0/N.total))))
-R2h.ind.max <- data.frame(cbind(R2h.ind.max.value, R2h.ind.max.lb, R2h.ind.max.ub))  # OUT
+R2h.ind.max <- data.frame(cbind(R2h.ind.max.value, R2h.ind.max.lb, R2h.ind.max.ub), stringsAsFactors = TRUE)  # OUT
 colnames(R2h.ind.max) <- c("R2h.ind.max", "CI lower limit", "CI upper limit")
 rownames(R2h.ind.max) <- c(" ")
 
@@ -175,7 +175,7 @@ for (i in 1:N.trial) {
     obs <- c(1:N.total)
     set.seed(Seed)
     Indicator <- sample(obs, N.total, replace=TRUE)  #sample with replacement from 1...Ntotal
-    Sample.Boot <- data.frame(wide[Indicator,])  
+    Sample.Boot <- data.frame(wide[Indicator,], stringsAsFactors = TRUE)  
     Seed <- Seed + 1
     sum.tot <- count <- c(0)    
  
@@ -213,7 +213,7 @@ Var.Boot.CI <- var(Boot.CI)
 Sort.CI <- sort(Boot.CI)
 Boot.CI.R2.lb <- max(0, R2h.ind.c.b.val + qnorm(Alpha/2)*sqrt(Var.Boot.CI))    
 Boot.CI.R2.ub <- min(1, R2h.ind.c.b.val - qnorm(Alpha/2)*sqrt(Var.Boot.CI))
-R2h.cluster.based <- data.frame(cbind(R2h.ind.c.b.val, sqrt(Var.Boot.CI), Boot.CI.R2.lb, Boot.CI.R2.ub))
+R2h.cluster.based <- data.frame(cbind(R2h.ind.c.b.val, sqrt(Var.Boot.CI), Boot.CI.R2.lb, Boot.CI.R2.ub), stringsAsFactors = TRUE)
 colnames(R2h.cluster.based) <- c("R2h", "Standard Error", "CI lower limit", "CI upper limit")
 rownames(R2h.cluster.based) <- c(" ")
   

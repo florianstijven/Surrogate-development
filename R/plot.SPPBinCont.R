@@ -36,7 +36,7 @@ plot.SPF.BinCont <- function(x, Type="Frequency", Col="grey", Main,
   
   if (Type=="Most.Likely.DeltaT"){
     if (missing(Main)){Main <- bquote(paste(Delta, "S in interval ["~.(Object$a), ",", ~.(Object$b), "]"))}
-    probs <- na.exclude(data.frame(cbind(Object$P_Delta_T_min1, Object$P_Delta_T_0, Object$P_Delta_T_1)))
+    probs <- na.exclude(data.frame(cbind(Object$P_Delta_T_min1, Object$P_Delta_T_0, Object$P_Delta_T_1), stringsAsFactors = TRUE))
     names(probs) <- c(-1, 0, 1)
     z<-apply(probs,1,which.max) 
     Most.Likely.Delta.T <- as.numeric(as.character(names(probs)[z])) 

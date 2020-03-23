@@ -34,7 +34,7 @@ Prentice <- function(Dataset, Surr, True, Treat, Pat.ID, Alpha=.05){
   P_crit1 <- summary(model12)$"Response wide$Surr"$coefficients[2, 4] 
   P_crit2 <- summary(model12)$"Response wide$True"$coefficients[2, 4] 
   P_crit3 <- summary(model3)$coefficients[2,4] 
-  P_crit4 <- data.frame(summary(model4)$coefficients)[2, 4]  
+  P_crit4 <- data.frame(summary(model4)$coefficients, stringsAsFactors = TRUE)[2, 4]  
   
   if ((P_crit1 < Alpha & P_crit2 < Alpha & P_crit3 < Alpha & P_crit4 > Alpha)==TRUE) {Prentice.Passed <- TRUE}
   if ((P_crit1 < Alpha & P_crit2 < Alpha & P_crit3 < Alpha & P_crit4 > Alpha)==FALSE) {Prentice.Passed <- FALSE}
