@@ -1,4 +1,6 @@
-CausalDiagramContCont <- function(x, Min=-1, Max=1, Cex.Letters=3, Cex.Corrs=2, Lines.Rel.Width=TRUE, Col.Pos.Neg=TRUE, Histograms.Counterfactuals=FALSE) {
+CausalDiagramContCont <- function(x, Min=-1, Max=1, Cex.Letters=3, Cex.Corrs=2, 
+                                  Lines.Rel.Width=TRUE, Col.Pos.Neg=TRUE, 
+                                  Histograms.Counterfactuals=FALSE) {
   
 if (class(x)=="ICA.ContCont"){
 
@@ -21,7 +23,7 @@ if (class(x)=="MICA.ContCont"){
   med_S0S1 <- round(median(sub$S0S1), digits=2)
   
   par(mar = c(0.1, 0.1, 0.1, 0.1))
-  plot(0:10, 0:10, axes=F, xlab="", ylab="", type="n")  
+  plot(0:10, 0:10, axes=FALSE, xlab="", ylab="", type="n")  
   par(oma=c(0, 0, 0, 0))
   text(1, 9, expression(S[0]), cex=Cex.Letters)
   text(1, 1, expression(S[1]), cex=Cex.Letters)
@@ -32,7 +34,7 @@ if (class(x)=="MICA.ContCont"){
   text(4, 3.1, med_T0S1, cex=Cex.Corrs)
   text(5, 9.5, med_T0S0, cex=Cex.Corrs)
   text(5, 0.5, med_T1S1, cex=Cex.Corrs)
-  text(9.6, 5, med_S0S1, cex=Cex.Corrs)
+  text(9.6, 5, med_T0T1, cex=Cex.Corrs)
   
   
   if (Lines.Rel.Width==TRUE){

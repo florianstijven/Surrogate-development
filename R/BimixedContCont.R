@@ -33,7 +33,8 @@ BimixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model=
   
   if (Model==c("Full")){
     
-    Model.S.and.T <- lmer(outcome ~ -1 + as.factor(endpoint):Treat + as.factor(endpoint) + (-1+endpoint+endpoint:Treat|Trial.ID), data=Data.analyze, ...)   #
+    Model.S.and.T <- lmer(outcome ~ -1 + as.factor(endpoint):Treat + as.factor(endpoint) + 
+                            (-1+endpoint+endpoint:Treat|Trial.ID), data=Data.analyze, ...)   #
     
     Fixed.effect.pars.S <- rbind(summary(Model.S.and.T)$coefficients[1], summary(Model.S.and.T)$coefficients[3]) 
     Fixed.effect.pars.T <- rbind(summary(Model.S.and.T)$coefficients[2], summary(Model.S.and.T)$coefficients[4]) 

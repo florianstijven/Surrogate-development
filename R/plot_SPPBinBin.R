@@ -1020,226 +1020,226 @@ plot.SPF.BinBin <- function(x, Type="All.Histograms", Specific.Pi="r_0_0", Col="
     plot(temp)  
   }
   
-  if (Type=="3D.Spinning.Mean"){
-    
-    # T = -1, S = -1
-    if (length(unique(Object$r_min1_min1)) > 1){
-      a <- cbind(mean(Object$r_min1_min1), -1, -1)}
-    if (length(unique(Object$r_min1_min1)) <= 1){
-      a <- cbind(NA, -1, -1)}
-    
-    # T = 0, S = -1
-    if (length(unique(Object$r_0_min1)) > 1){
-      b <- cbind(mean(Object$r_0_min1), 0, -1)}
-    if (length(unique(Object$r_0_min1)) <= 1){
-      b <- cbind(NA, 0, -1)}
-    
-    # T = 1, S = -1
-    if (length(unique(Object$r_1_min1)) > 1){
-      c <- cbind(mean(Object$r_1_min1), 1, -1)}
-    if (length(unique(Object$r_1_min1)) <= 1){
-      c <- cbind(NA, 1, -1)}
-    
-    # T = -1, S = 0
-    if (length(unique(Object$r_min1_0)) > 1){
-      d <- cbind(mean(Object$r_min1_0), -1, 0)}
-    if (length(unique(Object$r_min1_0)) <= 1){
-      d <- cbind(NA, -1, 0)}
-    
-    # T = 0, S = 0
-    if (length(unique(Object$r_0_0)) > 1){
-      e <- cbind(mean(Object$r_0_0), 0, 0)}
-    if (length(unique(Object$r_0_0)) <= 1){
-      e <- cbind(NA, 0, 0)}
-    
-    # T = 1, S = 0
-    if (length(unique(Object$r_1_0)) > 1){
-      f <- cbind(mean(Object$r_1_0), 1, 0)}
-    if (length(unique(Object$r_1_0)) <= 1){
-      f <- cbind(NA, 1, 0)}
-    
-    # T = -1, S = 1
-    if (length(unique(Object$r_min1_1)) > 1){
-      g <- cbind(mean(Object$r_min1_1), -1, 1)}
-    if (length(unique(Object$r_min1_1)) <= 1){
-      g <- cbind(NA, -1, 1)}
-    
-    # T = 0, S = 1
-    if (length(unique(Object$r_0_1)) > 1){
-      h <- cbind(mean(Object$r_0_1), 0, 1)}
-    if (length(unique(Object$r_0_1)) <= 1){
-      h <- cbind(NA, 0, 1)}
-    
-    # T = 1, S = 1
-    if (length(unique(Object$r_1_1)) > 1){
-      i <- cbind(mean(Object$r_1_1), 1, 1)}
-    if (length(unique(Object$r_1_1)) <= 1){
-      i <- cbind(NA, 1, 1)}
-    
-    data <- data.frame(rbind(a, b, c, d, e, f, g, h, i))
-    names(data) <- c("Y", "Delta_T", "Delta_S")
-    
-    x <- as.factor(data$Delta_S)
-    y <- as.factor(data$Delta_T)
-    z <- data$Y
-    
-    rgl::plot3d(x=x, y=y, z=z, col="red", size=3, type="s",
-           xlab="Delta_S", ylab="Delta_T", 
-           zlab="Mean")  
-    
-  }
-  
-  
-  if (Type=="3D.Spinning.Median"){
-    
-    # T = -1, S = -1
-    if (length(unique(Object$r_min1_min1)) > 1){
-      a <- cbind(median(Object$r_min1_min1), -1, -1)}
-    if (length(unique(Object$r_min1_min1)) <= 1){
-      a <- cbind(NA, -1, -1)}
-    
-    # T = 0, S = -1
-    if (length(unique(Object$r_0_min1)) > 1){
-      b <- cbind(median(Object$r_0_min1), 0, -1)}
-    if (length(unique(Object$r_0_min1)) <= 1){
-      b <- cbind(NA, 0, -1)}
-    
-    # T = 1, S = -1
-    if (length(unique(Object$r_1_min1)) > 1){
-      c <- cbind(median(Object$r_1_min1), 1, -1)}
-    if (length(unique(Object$r_1_min1)) <= 1){
-      c <- cbind(NA, 1, -1)}
-    
-    # T = -1, S = 0
-    if (length(unique(Object$r_min1_0)) > 1){
-      d <- cbind(median(Object$r_min1_0), -1, 0)}
-    if (length(unique(Object$r_min1_0)) <= 1){
-      d <- cbind(NA, -1, 0)}
-    
-    # T = 0, S = 0
-    if (length(unique(Object$r_0_0)) > 1){
-      e <- cbind(median(Object$r_0_0), 0, 0)}
-    if (length(unique(Object$r_0_0)) <= 1){
-      e <- cbind(NA, 0, 0)}
-    
-    # T = 1, S = 0
-    if (length(unique(Object$r_1_0)) > 1){
-      f <- cbind(median(Object$r_1_0), 1, 0)}
-    if (length(unique(Object$r_1_0)) <= 1){
-      f <- cbind(NA, 1, 0)}
-    
-    # T = -1, S = 1
-    if (length(unique(Object$r_min1_1)) > 1){
-      g <- cbind(median(Object$r_min1_1), -1, 1)}
-    if (length(unique(Object$r_min1_1)) <= 1){
-      g <- cbind(NA, -1, 1)}
-    
-    # T = 0, S = 1
-    if (length(unique(Object$r_0_1)) > 1){
-      h <- cbind(median(Object$r_0_1), 0, 1)}
-    if (length(unique(Object$r_0_1)) <= 1){
-      h <- cbind(NA, 0, 1)}
-    
-    # T = 1, S = 1
-    if (length(unique(Object$r_1_1)) > 1){
-      i <- cbind(median(Object$r_1_1), 1, 1)}
-    if (length(unique(Object$r_1_1)) <= 1){
-      i <- cbind(NA, 1, 1)}
-    
-    data <- data.frame(rbind(a, b, c, d, e, f, g, h, i), stringsAsFactors = TRUE)
-    names(data) <- c("Y", "Delta_T", "Delta_S")
-    
-    x <- as.factor(data$Delta_S)
-    y <- as.factor(data$Delta_T)
-    z <- data$Y
-    
-    plot3d(x=x, y=y, z=z, col="red", size=3, type="s",
-           xlab="Delta_S", ylab="Delta_T", 
-           zlab="Median")  
-    
-  }
-  
-  if (Type=="3D.Spinning.Mode"){
-    
-    mode <- function(data) {
-      x <- data
-      if (unique(x[1])!=0){
-        z <- density(x)
-        mode_val <- z$x[which.max(z$y)]
-        if (mode_val < 0){mode_val <- c(0)}
-      }
-      if (unique(x[1])==0){
-        model_val <- c(0)
-      }  
-      fit <- list(mode_val= mode_val)  
-    }
-    
-    
-    # T = -1, S = -1
-    if (length(unique(Object$r_min1_min1)) > 1){
-      a <- cbind(mode(Object$r_min1_min1)$mode_val, -1, -1)}
-    if (length(unique(Object$r_min1_min1)) <= 1){
-      a <- cbind(NA, -1, -1)}
-    
-    # T = 0, S = -1
-    if (length(unique(Object$r_0_min1)) > 1){
-      b <- cbind(mode(Object$r_0_min1)$mode_val, 0, -1)}
-    if (length(unique(Object$r_0_min1)) <= 1){
-      b <- cbind(NA, 0, -1)}
-    
-    # T = 1, S = -1
-    if (length(unique(Object$r_1_min1)) > 1){
-      c <- cbind(mode(Object$r_1_min1)$mode_val, 1, -1)}
-    if (length(unique(Object$r_1_min1)) <= 1){
-      c <- cbind(NA, 1, -1)}
-    
-    # T = -1, S = 0
-    if (length(unique(Object$r_min1_0)) > 1){
-      d <- cbind(mode(Object$r_min1_0)$mode_val, -1, 0)}
-    if (length(unique(Object$r_min1_0)) <= 1){
-      d <- cbind(NA, -1, 0)}
-    
-    # T = 0, S = 0
-    if (length(unique(Object$r_0_0)) > 1){
-      e <- cbind(mode(Object$r_0_0)$mode_val, 0, 0)}
-    if (length(unique(Object$r_0_0)) <= 1){
-      e <- cbind(NA, 0, 0)}
-    
-    # T = 1, S = 0
-    if (length(unique(Object$r_1_0)) > 1){
-      f <- cbind(mode(Object$r_1_0)$mode_val, 1, 0)}
-    if (length(unique(Object$r_1_0)) <= 1){
-      f <- cbind(NA, 1, 0)}
-    
-    # T = -1, S = 1
-    if (length(unique(Object$r_min1_1)) > 1){
-      g <- cbind(mode(Object$r_min1_1)$mode_val, -1, 1)}
-    if (length(unique(Object$r_min1_1)) <= 1){
-      g <- cbind(NA, -1, 1)}
-    
-    # T = 0, S = 1
-    if (length(unique(Object$r_0_1)) > 1){
-      h <- cbind(mode(Object$r_0_1)$mode_val, 0, 1)}
-    if (length(unique(Object$r_0_1)) <= 1){
-      h <- cbind(NA, 0, 1)}
-    
-    # T = 1, S = 1
-    if (length(unique(Object$r_1_1)) > 1){
-      i <- cbind(mode(Object$r_1_1)$mode_val, 1, 1)}
-    if (length(unique(Object$r_1_1)) <= 1){
-      i <- cbind(NA, 1, 1)}
-    
-    data <- data.frame(rbind(a, b, c, d, e, f, g, h, i), stringsAsFactors = TRUE)
-    names(data) <- c("Y", "Delta_T", "Delta_S")
-    
-    x <- as.factor(data$Delta_S)
-    y <- as.factor(data$Delta_T)
-    z <- data$Y
-    
-    rgl::plot3d(x=x, y=y, z=z, col="red", size=3, type="s",
-           xlab="Delta_S", ylab="Delta_T", 
-           zlab="Mode")  
-  }
+  # if (Type=="3D.Spinning.Mean"){
+  #   
+  #   # T = -1, S = -1
+  #   if (length(unique(Object$r_min1_min1)) > 1){
+  #     a <- cbind(mean(Object$r_min1_min1), -1, -1)}
+  #   if (length(unique(Object$r_min1_min1)) <= 1){
+  #     a <- cbind(NA, -1, -1)}
+  #   
+  #   # T = 0, S = -1
+  #   if (length(unique(Object$r_0_min1)) > 1){
+  #     b <- cbind(mean(Object$r_0_min1), 0, -1)}
+  #   if (length(unique(Object$r_0_min1)) <= 1){
+  #     b <- cbind(NA, 0, -1)}
+  #   
+  #   # T = 1, S = -1
+  #   if (length(unique(Object$r_1_min1)) > 1){
+  #     c <- cbind(mean(Object$r_1_min1), 1, -1)}
+  #   if (length(unique(Object$r_1_min1)) <= 1){
+  #     c <- cbind(NA, 1, -1)}
+  #   
+  #   # T = -1, S = 0
+  #   if (length(unique(Object$r_min1_0)) > 1){
+  #     d <- cbind(mean(Object$r_min1_0), -1, 0)}
+  #   if (length(unique(Object$r_min1_0)) <= 1){
+  #     d <- cbind(NA, -1, 0)}
+  #   
+  #   # T = 0, S = 0
+  #   if (length(unique(Object$r_0_0)) > 1){
+  #     e <- cbind(mean(Object$r_0_0), 0, 0)}
+  #   if (length(unique(Object$r_0_0)) <= 1){
+  #     e <- cbind(NA, 0, 0)}
+  #   
+  #   # T = 1, S = 0
+  #   if (length(unique(Object$r_1_0)) > 1){
+  #     f <- cbind(mean(Object$r_1_0), 1, 0)}
+  #   if (length(unique(Object$r_1_0)) <= 1){
+  #     f <- cbind(NA, 1, 0)}
+  #   
+  #   # T = -1, S = 1
+  #   if (length(unique(Object$r_min1_1)) > 1){
+  #     g <- cbind(mean(Object$r_min1_1), -1, 1)}
+  #   if (length(unique(Object$r_min1_1)) <= 1){
+  #     g <- cbind(NA, -1, 1)}
+  #   
+  #   # T = 0, S = 1
+  #   if (length(unique(Object$r_0_1)) > 1){
+  #     h <- cbind(mean(Object$r_0_1), 0, 1)}
+  #   if (length(unique(Object$r_0_1)) <= 1){
+  #     h <- cbind(NA, 0, 1)}
+  #   
+  #   # T = 1, S = 1
+  #   if (length(unique(Object$r_1_1)) > 1){
+  #     i <- cbind(mean(Object$r_1_1), 1, 1)}
+  #   if (length(unique(Object$r_1_1)) <= 1){
+  #     i <- cbind(NA, 1, 1)}
+  #   
+  #   data <- data.frame(rbind(a, b, c, d, e, f, g, h, i))
+  #   names(data) <- c("Y", "Delta_T", "Delta_S")
+  #   
+  #   x <- as.factor(data$Delta_S)
+  #   y <- as.factor(data$Delta_T)
+  #   z <- data$Y
+  #   
+  #   rgl::plot3d(x=x, y=y, z=z, col="red", size=3, type="s",
+  #          xlab="Delta_S", ylab="Delta_T", 
+  #          zlab="Mean")  
+  #   
+  # }
+  # 
+  # 
+  # if (Type=="3D.Spinning.Median"){
+  #   
+  #   # T = -1, S = -1
+  #   if (length(unique(Object$r_min1_min1)) > 1){
+  #     a <- cbind(median(Object$r_min1_min1), -1, -1)}
+  #   if (length(unique(Object$r_min1_min1)) <= 1){
+  #     a <- cbind(NA, -1, -1)}
+  #   
+  #   # T = 0, S = -1
+  #   if (length(unique(Object$r_0_min1)) > 1){
+  #     b <- cbind(median(Object$r_0_min1), 0, -1)}
+  #   if (length(unique(Object$r_0_min1)) <= 1){
+  #     b <- cbind(NA, 0, -1)}
+  #   
+  #   # T = 1, S = -1
+  #   if (length(unique(Object$r_1_min1)) > 1){
+  #     c <- cbind(median(Object$r_1_min1), 1, -1)}
+  #   if (length(unique(Object$r_1_min1)) <= 1){
+  #     c <- cbind(NA, 1, -1)}
+  #   
+  #   # T = -1, S = 0
+  #   if (length(unique(Object$r_min1_0)) > 1){
+  #     d <- cbind(median(Object$r_min1_0), -1, 0)}
+  #   if (length(unique(Object$r_min1_0)) <= 1){
+  #     d <- cbind(NA, -1, 0)}
+  #   
+  #   # T = 0, S = 0
+  #   if (length(unique(Object$r_0_0)) > 1){
+  #     e <- cbind(median(Object$r_0_0), 0, 0)}
+  #   if (length(unique(Object$r_0_0)) <= 1){
+  #     e <- cbind(NA, 0, 0)}
+  #   
+  #   # T = 1, S = 0
+  #   if (length(unique(Object$r_1_0)) > 1){
+  #     f <- cbind(median(Object$r_1_0), 1, 0)}
+  #   if (length(unique(Object$r_1_0)) <= 1){
+  #     f <- cbind(NA, 1, 0)}
+  #   
+  #   # T = -1, S = 1
+  #   if (length(unique(Object$r_min1_1)) > 1){
+  #     g <- cbind(median(Object$r_min1_1), -1, 1)}
+  #   if (length(unique(Object$r_min1_1)) <= 1){
+  #     g <- cbind(NA, -1, 1)}
+  #   
+  #   # T = 0, S = 1
+  #   if (length(unique(Object$r_0_1)) > 1){
+  #     h <- cbind(median(Object$r_0_1), 0, 1)}
+  #   if (length(unique(Object$r_0_1)) <= 1){
+  #     h <- cbind(NA, 0, 1)}
+  #   
+  #   # T = 1, S = 1
+  #   if (length(unique(Object$r_1_1)) > 1){
+  #     i <- cbind(median(Object$r_1_1), 1, 1)}
+  #   if (length(unique(Object$r_1_1)) <= 1){
+  #     i <- cbind(NA, 1, 1)}
+  #   
+  #   data <- data.frame(rbind(a, b, c, d, e, f, g, h, i), stringsAsFactors = TRUE)
+  #   names(data) <- c("Y", "Delta_T", "Delta_S")
+  #   
+  #   x <- as.factor(data$Delta_S)
+  #   y <- as.factor(data$Delta_T)
+  #   z <- data$Y
+  #   
+  #   plot3d(x=x, y=y, z=z, col="red", size=3, type="s",
+  #          xlab="Delta_S", ylab="Delta_T", 
+  #          zlab="Median")  
+  #   
+  # }
+  # 
+  # if (Type=="3D.Spinning.Mode"){
+  #   
+  #   mode <- function(data) {
+  #     x <- data
+  #     if (unique(x[1])!=0){
+  #       z <- density(x)
+  #       mode_val <- z$x[which.max(z$y)]
+  #       if (mode_val < 0){mode_val <- c(0)}
+  #     }
+  #     if (unique(x[1])==0){
+  #       model_val <- c(0)
+  #     }  
+  #     fit <- list(mode_val= mode_val)  
+  #   }
+  #   
+  #   
+  #   # T = -1, S = -1
+  #   if (length(unique(Object$r_min1_min1)) > 1){
+  #     a <- cbind(mode(Object$r_min1_min1)$mode_val, -1, -1)}
+  #   if (length(unique(Object$r_min1_min1)) <= 1){
+  #     a <- cbind(NA, -1, -1)}
+  #   
+  #   # T = 0, S = -1
+  #   if (length(unique(Object$r_0_min1)) > 1){
+  #     b <- cbind(mode(Object$r_0_min1)$mode_val, 0, -1)}
+  #   if (length(unique(Object$r_0_min1)) <= 1){
+  #     b <- cbind(NA, 0, -1)}
+  #   
+  #   # T = 1, S = -1
+  #   if (length(unique(Object$r_1_min1)) > 1){
+  #     c <- cbind(mode(Object$r_1_min1)$mode_val, 1, -1)}
+  #   if (length(unique(Object$r_1_min1)) <= 1){
+  #     c <- cbind(NA, 1, -1)}
+  #   
+  #   # T = -1, S = 0
+  #   if (length(unique(Object$r_min1_0)) > 1){
+  #     d <- cbind(mode(Object$r_min1_0)$mode_val, -1, 0)}
+  #   if (length(unique(Object$r_min1_0)) <= 1){
+  #     d <- cbind(NA, -1, 0)}
+  #   
+  #   # T = 0, S = 0
+  #   if (length(unique(Object$r_0_0)) > 1){
+  #     e <- cbind(mode(Object$r_0_0)$mode_val, 0, 0)}
+  #   if (length(unique(Object$r_0_0)) <= 1){
+  #     e <- cbind(NA, 0, 0)}
+  #   
+  #   # T = 1, S = 0
+  #   if (length(unique(Object$r_1_0)) > 1){
+  #     f <- cbind(mode(Object$r_1_0)$mode_val, 1, 0)}
+  #   if (length(unique(Object$r_1_0)) <= 1){
+  #     f <- cbind(NA, 1, 0)}
+  #   
+  #   # T = -1, S = 1
+  #   if (length(unique(Object$r_min1_1)) > 1){
+  #     g <- cbind(mode(Object$r_min1_1)$mode_val, -1, 1)}
+  #   if (length(unique(Object$r_min1_1)) <= 1){
+  #     g <- cbind(NA, -1, 1)}
+  #   
+  #   # T = 0, S = 1
+  #   if (length(unique(Object$r_0_1)) > 1){
+  #     h <- cbind(mode(Object$r_0_1)$mode_val, 0, 1)}
+  #   if (length(unique(Object$r_0_1)) <= 1){
+  #     h <- cbind(NA, 0, 1)}
+  #   
+  #   # T = 1, S = 1
+  #   if (length(unique(Object$r_1_1)) > 1){
+  #     i <- cbind(mode(Object$r_1_1)$mode_val, 1, 1)}
+  #   if (length(unique(Object$r_1_1)) <= 1){
+  #     i <- cbind(NA, 1, 1)}
+  #   
+  #   data <- data.frame(rbind(a, b, c, d, e, f, g, h, i), stringsAsFactors = TRUE)
+  #   names(data) <- c("Y", "Delta_T", "Delta_S")
+  #   
+  #   x <- as.factor(data$Delta_S)
+  #   y <- as.factor(data$Delta_T)
+  #   z <- data$Y
+  #   
+  #   rgl::plot3d(x=x, y=y, z=z, col="red", size=3, type="s",
+  #          xlab="Delta_S", ylab="Delta_T", 
+  #          zlab="Mode")  
+  # }
   
   
   

@@ -188,7 +188,7 @@ CausalDiagramBinBin <- function(x, Values="Corrs", Theta_T0S0, Theta_T1S1, Min=0
   med_S0S1 <- round(median(R2_H_S0S1, na.rm = T), digits=2)
   
   par(mar = c(0.1, 0.1, 0.1, 0.1))
-  plot(0:10, 0:10, axes=F, xlab="", ylab="", type="n")  
+  plot(0:10, 0:10, axes=FALSE, xlab="", ylab="", type="n")  
   par(oma=c(0, 0, 0, 0))
   text(1, 9, expression(S[0]), cex=Cex.Letters)
   text(1, 1, expression(S[1]), cex=Cex.Letters)
@@ -272,7 +272,7 @@ if (Values=="ORs"){
   med_S0S1 <- round(median(Theta_S0S1), digits=2)
   
   par(mar = c(0.1, 0.1, 0.1, 0.1))
-  plot(0:10, 0:10, axes=F, xlab="", ylab="", type="n")  
+  plot(0:10, 0:10, axes=FALSE, xlab="", ylab="", type="n")  
   par(oma=c(0, 0, 0, 0))
   text(1, 9, expression(S[0]), cex=Cex.Letters)
   text(1, 1, expression(S[1]), cex=Cex.Letters)
@@ -283,7 +283,7 @@ if (Values=="ORs"){
   text(4, 3.1, med_T0S1, cex=Cex.Corrs)
   text(5, 9.5, med_T0S0, cex=Cex.Corrs)
   text(5, 0.5, med_T1S1, cex=Cex.Corrs)
-  text(9.6, 5, med_S0S1, cex=Cex.Corrs)
+  text(9.6, 5, med_T0T1, cex=Cex.Corrs)
   
   
   if (Lines.Rel.Width==TRUE){

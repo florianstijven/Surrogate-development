@@ -1,12 +1,12 @@
-536d06f39e4a383242b4ac7ac083a8fa *DESCRIPTION
-315a0911847c7daa748ccef47e5e5a23 *NAMESPACE
+38dda0fa3baa12d1402cc417f7697f26 *DESCRIPTION
+5a4238d06a8f2a1235e7bf34e7d78f3c *NAMESPACE
 b42ba2e6ca6e0749a226e8c3c277beab *NEWS
 dddcb13fb6166e1a80bddd0ad30fce04 *R/AA.MultS.R
 db28524e0996db358533c5a51660fc33 *R/BifixedContCont.R
-72fc3b529c350ba13e135fbcc9e4153a *R/BimixedContCont.R
+379e08bf189350bc641cd3c319a7f151 *R/BimixedContCont.R
 757307974e5df3a8101f92f4fe198358 *R/Bootstrap.MEP.BinBin.R
-683a11d76af9c196f9c6c7c8badb2f72 *R/CausalDiagramBinBin.R
-95377bc10fd249fc2cd7e8010011e73d *R/CausalDiagramContCont.R
+742749e9d8fe52b851d22aecc9b08efe *R/CausalDiagramBinBin.R
+61b9616fd40470ecd69687564c1bd43d *R/CausalDiagramContCont.R
 07ff1cdfc6c5f01b5b5de4ffcfc52614 *R/CbC.R
 ac1d89509581813138a6f4905e91a233 *R/Data.Processing.R
 27e1620ba60032aef4659e64421dc5a6 *R/ECT.R
@@ -85,7 +85,7 @@ d8df6bfa712d64002e9e933883932001 *R/plot.SurvSurv.R
 6048400a4c4bfac0c7d64297a07960e6 *R/plot_ICABinBin.R
 c0b328960722661eca8fb9d54097e512 *R/plot_ICABinCont.R
 2780ad21cda5044c124d117a85de5cbd *R/plot_MaxEntICABinBin.R
-08b3cc4a6fbdfd6874dd4d44e971d6fe *R/plot_SPPBinBin.R
+f3dc679fe76c82cc0fe51028531f59ad *R/plot_SPPBinBin.R
 46e650cca1501cd6d1ff51ae1fd00070 *R/summary.Fano.BinBin.R
 a7dda1cd5c8510166e35ac14b444900b *R/summary.FixedDIscrDiscrIT.R
 6de704ad020ea211a2524ff76c76bf47 *R/summary.PPE.BinBin.R
@@ -186,7 +186,7 @@ b2b1769511253fe102d890187d790301 *man/plot.MaxEntContCont.Rd
 d2148d381b234caa82b83df5ad428ab7 *man/plot.MetaAnalytic.Rd
 8a53fc6a4e75750da35944262f9a1ee8 *man/plot.MinSurrContCont.Rd
 e98012566675b8efc65517714b700236 *man/plot.PPE.BinBin.Rd
-06fe04e5305737a06408d7fc7537bdc6 *man/plot.SPPBinBin.Rd
+adb2534b2004c668a3c04a9f065d0e8d *man/plot.SPPBinBin.Rd
 21f12e52d9d8cfd1ec771846a2e8a21a *man/plot.SPPBinCont.Rd
 e6062db25aae0825944eea371b6ef4d0 *man/plot.TrialLevelIT.Rd
 3241f36f4c01fc7d3a30ebb411c166bc *man/plot.TrialLevelMA.Rd

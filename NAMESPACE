@@ -9,7 +9,7 @@ importFrom("grDevices", "dev.new", "dev.off", "pdf")
 importFrom("graphics", "abline", "axis", "barplot", "box", "boxplot",
              "hist", "legend", "lines", "mtext", "par", "plot", "points",
              "segments", "text", "title")
-importFrom("rgl", plot3d)
+#importFrom("rgl", plot3d)
 importFrom("nlme", lme)
 importFrom("lme4", lmer)
 importFrom("lme4", ranef)
