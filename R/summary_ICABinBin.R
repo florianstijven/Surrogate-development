@@ -95,7 +95,7 @@ if (Object$Monotonicity=="General"){
   cat("\n#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n")
   
   cat("# R2_H results summary")
-  cat("\n~~~~~~~~~~~~~~~~~~~~~\n\nMean:\n")
+  cat("\n#~~~~~~~~~~~~~~~~~~~~~\n\nMean:\n")
   print(tapply(results[,2], list(results[,1]), mean))
   
   pc50 <- function(x=x){

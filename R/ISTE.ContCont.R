@@ -324,7 +324,7 @@ plot.ISTE.ContCont <- function(x, Outcome="ISTE", breaks=50, ...){
      
      if (Outcome=="Delta_S_For_Which_Delta_T_equal_0"){
        hist(x$Delta_S_For_Which_Delta_T_equal_0, 
-      xlab=expression(paste("E(", Delta, "T|", Delta, "S>", omega, ")>0)")),
+      xlab=expression(paste("E(", Delta, "T|", Delta, "S>", omega, ")>0")),
       main=" ", col="grey",  breaks=breaks, ...)
      }
      

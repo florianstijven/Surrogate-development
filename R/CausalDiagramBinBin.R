@@ -1,3 +1,9 @@
+
+
+#x = ICA; Min = 0.1; Max = 1; Monotonicity = "True.Endp"
+
+
+
 CausalDiagramBinBin <- function(x, Values="Corrs", Theta_T0S0, Theta_T1S1, Min=0, Max=1, Cex.Letters=3, 
                                 Cex.Corrs=2, 
                                 Lines.Rel.Width=TRUE, Col.Pos.Neg=TRUE,
@@ -15,10 +21,25 @@ CausalDiagramBinBin <- function(x, Values="Corrs", Theta_T0S0, Theta_T1S1, Min=0
     stop("The Monotonicity=... argument is not correctly specified. \n")
   }
   
+  # Modifications if only one monotonicity setting was specified in ICA and causal diagram calls
+  if (is.null(sub$Monotonicity)==TRUE){
+    sub$Monotonicity <- x$Monotonicity
+    if (all(sub$Monotonicity=="Surr.Endp")){sub$Monotonicity <- "Surr"; 
+    sub$Pi_0010 <- sub$Pi_1010 <- sub$Pi_1110 <- sub$Pi_0110 <- 0}
+    if (all(sub$Monotonicity=="True.Endp")){sub$Monotonicity <- "True"; 
+    sub$Pi_1000 <- sub$Pi_1010 <- sub$Pi_1001 <- sub$Pi_1011 <- 0}
+    if (all(sub$Monotonicity=="Surr.True.Endp")){sub$Monotonicity <- "SurrTrue"; 
+    sub$Pi_0010 <- sub$Pi_1010 <- sub$Pi_1110 <- sub$Pi_0110 <- sub$Pi_1000 <- sub$Pi_1010 <- sub$Pi_1001 <- sub$Pi_1011 <- 0}
+    }
+   
+  
   if (Monotonicity=="No"){sub <- sub[sub$Monotonicity=="No",]}
-  if (Monotonicity=="True.Endp"){sub <- sub[sub$Monotonicity=="True",]}
-  if (Monotonicity=="Surr.Endp"){sub <- sub[sub$Monotonicity=="Surr",]}
-  if (Monotonicity=="Surr.True.Endp"){sub <- sub[sub$Monotonicity=="SurrTrue",]}
+  if (Monotonicity=="True.Endp"){sub <- sub[c(sub$Monotonicity=="True"),]}
+  if (Monotonicity=="Surr.Endp"){sub <- sub[c(sub$Monotonicity=="Surr"),]}
+  if (Monotonicity=="Surr.True.Endp"){sub <- sub[c(sub$Monotonicity=="SurrTrue"),]}
+  
+  
+  
   
   if (dim(sub)[1]==0) {stop("There are no valid observations within the specified R2_H range [min, max].")}
   

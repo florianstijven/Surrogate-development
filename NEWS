@@ -1,5 +1,6 @@
-Changes in version 0.2 - 1.6
+Changes in version 1.6 - 1.9
   o Added function BimixedCbCContCont
+  o Bug corrected in CausalDiagramBinBin() function and typo in summary.ICA function (thanks to Niels Hagenbuch for reporting the issue)  
 
 Changes in version 0.2 - 1.5
   o Added functions PPE.BinBin, comb27.BinBin, ECT, SPF.BinCont, Bootstrap.MEP.BinBin, PROC.BinBin, plot.PPE.BinBin.R, ISTE.ContCont, plot.ISTE.ContCont
