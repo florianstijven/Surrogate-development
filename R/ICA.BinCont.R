@@ -6,8 +6,8 @@
 #M = 1; Dataset = Schizo_BinCont; attach(Schizo_BinCont)
 #Surr = PANSS; True = CGI_Bin; Treat=Treat; Diff.Sigma=F; Min.Pval.S_0 = 0.01 
 #Min.Pval.S_1 = 0.01; Diff.Sigma=FALSE; G_pi_00 = seq(0, 1, by=.01); 
-#G_rho_01_00=seq(-1, 1, by=.01); G_rho_01_01=seq(-1, 1, by=.01); 
-#G_rho_01_10=seq(-1, 1, by=.01); G_rho_01_11=seq(-1, 1, by=.01); 
+# G_rho_01_00=seq(-1, 1, by=.01); G_rho_01_01=seq(-1, 1, by=.01);
+# G_rho_01_10=seq(-1, 1, by=.01); G_rho_01_11=seq(-1, 1, by=.01);
 #M=1000; Seed=123
 #Save.Plots="/Users/WimVDE/Google Drive/Werk/_Recent/Ariel - BinCont/Appendix/Plots Mixtures/"
 #Test.Fit.Details=TRUE; Keep.All=FALSE
