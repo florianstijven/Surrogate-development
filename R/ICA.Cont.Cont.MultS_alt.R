@@ -36,7 +36,10 @@ for (i in 1: M) {
   
   Min.Eigen.Sigma <- try(min(eigen(Sigma_c)$values), TRUE)    # lowest eigenvalue
 
-  if ((class(Min.Eigen.Sigma)!="try-error") & (Min.Eigen.Sigma >= 0.00000000001)) {
+  
+
+    
+  if ((inherits(x = Min.Eigen.Sigma, what = "try-error")==FALSE) & (Min.Eigen.Sigma >= 0.00000000001)) {
     found <- found + 1
     if (Show.Progress==TRUE){cat((i/M)*100, "% done... ", sep="")}
     corMat <- Sigma_c

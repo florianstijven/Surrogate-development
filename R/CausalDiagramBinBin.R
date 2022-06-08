@@ -9,7 +9,7 @@ CausalDiagramBinBin <- function(x, Values="Corrs", Theta_T0S0, Theta_T1S1, Min=0
                                 Lines.Rel.Width=TRUE, Col.Pos.Neg=TRUE,
                                 Monotonicity, Histograms.Correlations=FALSE, Densities.Correlations=FALSE) {
   
-  if (class(x)!="ICA.BinBin") {stop("The function CausalDiagramBinBin should be applied to an object of class ICA.BinBin.")}
+  if (inherits(x = x, what = "ICA.BinBin")==FALSE){stop("The function CausalDiagramBinBin should be applied to an object of class ICA.BinBin.")}
   
   if (missing(Theta_T0S0)) {Theta_T0S0 <- 1}
   if (missing(Theta_T1S1)) {Theta_T1S1 <- 1} 

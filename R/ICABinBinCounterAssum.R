@@ -2,7 +2,8 @@ ICA.BinBin.CounterAssum <- function(x, r2_h_S0S1_min, r2_h_S0S1_max, r2_h_S0T1_m
                                     r2_h_T0T1_min, r2_h_T0T1_max, r2_h_T0S1_min, r2_h_T0S1_max, Monotonicity="General",
                                     Type="Freq", MainPlot=" ", Cex.Legend=1, Cex.Position="topright", ...) {
   
-  if (class(x)!="ICA.BinBin") {stop("The function R2HBinBinCounterAssumpt should be applied to an object of 
+
+  if (inherits(x = x, what = "ICA.BinBin")==FALSE) {stop("The function R2HBinBinCounterAssumpt should be applied to an object of 
                                     class ICA.BinBin.")}
   
   sub <- data.frame(cbind(x$Pi.Vectors, x$R2_H, x$Theta_T, x$Theta_S), stringsAsFactors = TRUE)

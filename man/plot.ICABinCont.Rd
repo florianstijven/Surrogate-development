@@ -5,14 +5,18 @@
 \description{
 This function provides a plot that displays the frequencies, percentages, cumulative percentages or densities of the individual causal association (ICA; \eqn{R^2_{H}}) in the setting where S is continuous and T is binary. }
 \usage{
-\method{plot}{ICA.BinCont}(x, Xlab, Main=" ", Type="Percent", Labels=FALSE, \dots)
+\method{plot}{ICA.BinCont}(x, Histogram.ICA=TRUE, Mixmean=TRUE,
+Mixvar=TRUE, Deviance=TRUE, 
+Type="Percent", Labels=FALSE, \dots)
 }
 \arguments{
 \item{x}{An object of class \code{ICA.BinCont}. See \code{\link{ICA.BinCont}}.}
-\item{Xlab}{The legend of the X-axis of the plot.}
-\item{Main}{The title of the plot.}
-\item{Type}{The type of plot that is produced. When \code{Type="Freq"} or \code{Type="Percent"}, the Y-axis shows frequencies or percentages of \eqn{R^2_{H}}. When \code{Type="CumPerc"}, the Y-axis shows cumulative percentages.  When \code{Type="Density"}, the density is shown}. 
-\item{Labels}{Logical. When \code{Labels=TRUE}, the percentage of \eqn{R^2_{H}} values that are equal to or larger than the midpoint value of each of the bins are displayed (on top of each bin). Default \code{FALSE}.}
+\item{Histogram.ICA}{Logical. Should a histogram of ICA be provided? Default \code{Histogram.ICA=TRUE}.}
+\item{Mixmean}{Logical. Should a plot of the calculated means of the fitted mixtures for \eqn{S[0]} and \eqn{S[1]} across the different runs be provided? Default \code{Mixmean=TRUE}.}
+\item{Mixvar}{Logical. Should a plot of the calculated variances of the fitted mixtures for \eqn{S[0]} and \eqn{S[1]} across the different runs be provided? Default \code{Mixvar=TRUE}.}
+\item{Deviance}{Logical. Should a box plot of the deviances for the fitted mixtures of \eqn{S[0]} and \eqn{S[1]} be provided? Default \code{Deviance=TRUE}.}
+\item{Type}{The type of plot that is produced for the histogram of ICA. When \code{Type="Freq"} or \code{Type="Percent"}, the Y-axis shows frequencies or percentages of \eqn{R^2_{H}}. When \code{Type="CumPerc"}, the Y-axis shows cumulative percentages.  When \code{Type="Density"}, the density is shown}. 
+\item{Labels}{Logical. When \code{Labels=TRUE}, the percentage of \eqn{R^2_{H}} values that are equal to or larger than the midpoint value of each of the bins are added in the histogram of ICA (on top of each bin). Default \code{FALSE}.}
  \item{\dots}{Extra graphical parameters to be passed to \code{hist()}.}
 }
 \references{

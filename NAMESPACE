@@ -1,4 +1,5 @@
 # Imported functions
+importFrom("stats", "nlm")
 importFrom(MASS, polr)
 importFrom(MASS, studres)
 importFrom(MASS, mvrnorm)

@@ -1,15 +1,15 @@
 CausalDiagramContCont <- function(x, Min=-1, Max=1, Cex.Letters=3, Cex.Corrs=2, 
                                   Lines.Rel.Width=TRUE, Col.Pos.Neg=TRUE, 
                                   Histograms.Counterfactuals=FALSE) {
-  
-if (class(x)=="ICA.ContCont"){
+
+if (inherits(x = x, what = "ICA.ContCont")==TRUE){  # if (class(x)=="ICA.ContCont")
 
   dat <- cbind(x$Pos.Def, x$ICA)
   colnames(dat) <- c("T0T1", "T0S0", "T0S1", "T1S0", "T1S1", "S0S1", "ICA")
   sub <- dat[dat$ICA >= Min & dat$ICA <= Max,] 
 }
  
-if (class(x)=="MICA.ContCont"){
+if (inherits(x = x, what = "MICA.ContCont")==TRUE){     # if (class(x)=="MICA.ContCont")
   dat <- cbind(x$Pos.Def, x$MICA)
   colnames(dat) <- c("T0T1", "T0S0", "T0S1", "T1S0", "T1S1", "S0S1", "MICA")
   sub <- dat[dat$MICA >= Min & dat$MICA <= Max,] 

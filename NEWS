@@ -1,4 +1,7 @@
-Changes in version 1.6 - 1.9
+Changes 2.1
+  O Updated ICA.BinCont() and plot.ICA.BinCont()
+
+Changes in version 1.6 - 2.0
   o Added function BimixedCbCContCont
   o Bug corrected in CausalDiagramBinBin() function and typo in summary.ICA function (thanks to Niels Hagenbuch for reporting the issue)  
 

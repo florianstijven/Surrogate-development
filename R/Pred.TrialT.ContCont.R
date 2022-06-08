@@ -1,10 +1,11 @@
 Pred.TrialT.ContCont <- function(Object, mu_S0, alpha_0, alpha.CI=0.05){
 
+#  if (inherits(x = Object, what = "BimixedContCont")==TRUE)
   
-  if (class(Object)=="BimixedContCont") {Dmat <- Object$D}
-  if (class(Object)=="UnimixedContCont"){Dmat <- Object$D.Equiv}
-  if (class(Object)=="BifixedContCont") {Dmat <- Object$D.Equiv}
-  if (class(Object)=="UnifixedContCont"){Dmat <- Object$D.Equiv}
+  if (inherits(x = Object, what = "BimixedContCont")==TRUE) {Dmat <- Object$D}
+  if (inherits(x = Object, what = "UnimixedContCont")==TRUE){Dmat <- Object$D.Equiv}
+  if (inherits(x = Object, what = "BifixedContCont")==TRUE) {Dmat <- Object$D.Equiv}
+  if (inherits(x = Object, what = "UnifixedContCont")==TRUE){Dmat <- Object$D.Equiv}
   
   if ((dim(Dmat)[1])==4){Model <- "Full"}
   if ((dim(Dmat)[1])==2){Model <- "Reduced"}
@@ -12,7 +13,7 @@ Pred.TrialT.ContCont <- function(Object, mu_S0, alpha_0, alpha.CI=0.05){
   # Full
   if (Model == "Full"){  
     
-  if (class(Object)=="BimixedContCont"){
+  if (inherits(x = Object, what = "BimixedContCont")==TRUE){
       Dmat <- Object$D
       mu_S_mod <- Object$Fixed.Effect.Pars[1,1]
       alpha_mod <- Object$Fixed.Effect.Pars[2,1]
@@ -20,7 +21,7 @@ Pred.TrialT.ContCont <- function(Object, mu_S0, alpha_0, alpha.CI=0.05){
     }
     
     
-  if (class(Object)=="UnimixedContCont"){
+  if (inherits(x = Object, what = "UnimixedContCont")==TRUE){
     Dmat <- Object$D.Equiv
     mu_S_mod <- Object$Fixed.Effect.Pars[1,1]
     alpha_mod <- Object$Fixed.Effect.Pars[2,1]
@@ -28,14 +29,14 @@ Pred.TrialT.ContCont <- function(Object, mu_S0, alpha_0, alpha.CI=0.05){
   }
   
   
-  if (class(Object)=="BifixedContCont"){
+  if (inherits(x = Object, what = "BifixedContCont")==TRUE){
     Dmat <- Object$D.Equiv
     mu_S_mod <- mean(Object$Results.Stage.1[,3])
     alpha_mod <- mean(Object$Results.Stage.1[,5])
     beta_mod <- mean(Object$Results.Stage.1[,6])
     }
   
-  if (class(Object)=="UnifixedContCont"){
+  if (inherits(x = Object, what = "UnifixedContCont")==TRUE){
     Dmat <- Object$D.Equiv
     mu_S_mod <-  mean(Object$Results.Stage.1[,3])
     alpha_mod <- mean(Object$Results.Stage.1[,5])
@@ -54,27 +55,27 @@ Pred.TrialT.ContCont <- function(Object, mu_S0, alpha_0, alpha.CI=0.05){
   
   if (Model == "Reduced"){  
     
-    if (class(Object)=="BimixedContCont"){
+    if (inherits(x = Object, what = "BimixedContCont")==TRUE){
       Dmat <- Object$D
       alpha_mod <- Object$Fixed.Effect.Pars[2,1]
       beta_mod <- Object$Fixed.Effect.Pars[4,1]
     }
     
     
-    if (class(Object)=="UnimixedContCont"){
+    if (inherits(x = Object, what = "UnimixedContCont")==TRUE){
       Dmat <- Object$D.Equiv
       alpha_mod <- Object$Fixed.Effect.Pars[2,1]
       beta_mod <- Object$Fixed.Effect.Pars[4,1]
     }
     
     
-    if (class(Object)=="BifixedContCont"){
+    if (inherits(x = Object, what = "BifixedContCont")==TRUE){
       Dmat <- Object$D.Equiv
       alpha_mod <- mean(Object$Results.Stage.1[,3])
       beta_mod <- mean(Object$Results.Stage.1[,4])
     }
     
-    if (class(Object)=="UnifixedContCont"){
+    if (inherits(x = Object, what = "UnifixedContCont")==TRUE){
       Dmat <- Object$D.Equiv
       alpha_mod <- mean(Object$Results.Stage.1[,3])
       beta_mod <- mean(Object$Results.Stage.1[,4])
