@@ -1,6 +1,6 @@
-d3ac34da13c5a56faac078d0261c49ac *DESCRIPTION
+976d7330ac0bb2c27bd0e9a09d1398cb *DESCRIPTION
 1a9f97fe7e0e83e846a639f4fae9c231 *NAMESPACE
-4cc918782c66e2e28cb1e45465611bf8 *NEWS
+84bdc3a28870e41e1810632a5a268502 *NEWS
 dddcb13fb6166e1a80bddd0ad30fce04 *R/AA.MultS.R
 db28524e0996db358533c5a51660fc33 *R/BifixedContCont.R
 379e08bf189350bc641cd3c319a7f151 *R/BimixedContCont.R
@@ -15,7 +15,7 @@ f8d918e97c961324c0f2babcb22b80a1 *R/FixedBinBinIT.r
 99f26c80569b5a60c0d568de5b208511 *R/FixedBinContIT.r
 c43354205f53cb5d747c816977b5df74 *R/FixedContBinIT.r
 68881fc87e2c29d50921f07afefc14fd *R/FixedContContIT.r
-b99054ac1e913f0ed82a84b3377656d4 *R/FixedDiscrDiscrIT.R
+8b78aaac29df481a123c32f39b9637b5 *R/FixedDiscrDiscrIT.R
 a87e7ae9691f65c31947ac1a16d46ee2 *R/ICA.BinBin.Grid.Full.R
 87ac0dbfd59f96bd9f7ad7a3c8b0e39b *R/ICA.BinBin.Grid.Sample.R
 80607d4b9ea07630eed6ee6de87bf8b1 *R/ICA.BinBin.Grid.Sample.Uncert.R
@@ -116,7 +116,7 @@ a4ad3c424f23a1241ed17c4da9f407bd *man/CausalDiagramBinBin.Rd
 47d6dea079aed67e1a922011b7749307 *man/CausalDiagramContCont.Rd
 cb3e0d13cec6f5f309c610f418699d66 *man/ECT.Rd
 57531bb0d4fa9dabd23dcbae42908124 *man/Fano.BinBin.Rd
-88e46a0aac98627b7ee57281a9b8e40c *man/FixedBinBinIT.Rd
+bf637c07388bf14dcdbc93fc3f8959b9 *man/FixedBinBinIT.Rd
 3b110f71cecafae1ede23e53f2a34bb7 *man/FixedBinContIT.Rd
 51f2c17d845e2073389c6118a797c66f *man/FixedContBinIT.Rd
 dc7681c64215886721044bb07f80de93 *man/FixedContContIT.Rd
