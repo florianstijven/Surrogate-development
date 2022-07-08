@@ -1,4 +1,4 @@
-ICA.BinCont <- function(Dataset, Surr, True, Treat, Diff.Sigma=FALSE, 
+ICA.BinCont <- function(Dataset, Surr, True, Treat, 
                         G_pi_10 = c(0,1),
                         G_rho_01_00=c(-1,1), 
                         G_rho_01_01=c(-1,1), 
@@ -17,6 +17,8 @@ ICA.BinCont <- function(Dataset, Surr, True, Treat, Diff.Sigma=FALSE,
   set.seed(Seed)
   
   totaal <- M*length(G_pi_10)*length(G_rho_01_00)*length(G_rho_01_01)*length(G_rho_01_10)*length(G_rho_01_11)
+  
+  Diff.Sigma = FALSE
 
   Surr <- Dataset[,paste(substitute(Surr))]
   True <- Dataset[,paste(substitute(True))]

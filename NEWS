@@ -1,5 +1,5 @@
-Changes 2.1-2.2
-  O Updated ICA.BinCont() and plot.ICA.BinCont()
+Changes 2.1-2.3
+  o Updated ICA.BinCont() and plot.ICA.BinCont()
 
 Changes in version 1.6 - 2.0
   o Added function BimixedCbCContCont

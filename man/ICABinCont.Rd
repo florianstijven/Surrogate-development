@@ -4,7 +4,7 @@
 \description{
 The function \code{ICA.BinCont} quantifies surrogacy in the single-trial setting within the causal-inference framework (individual causal association) when the surrogate endpoint is continuous (normally distributed) and the true endpoint is a binary outcome. For details, see Alonso Abad \emph{et al.} (2022). }
 \usage{
-ICA.BinCont(Dataset, Surr, True, Treat, Diff.Sigma=FALSE, 
+ICA.BinCont(Dataset, Surr, True, Treat, 
   G_pi_10=c(0,1), 
   G_rho_01_00=c(-1,1), 
   G_rho_01_01=c(-1,1), 
@@ -22,7 +22,6 @@ ICA.BinCont(Dataset, Surr, True, Treat, Diff.Sigma=FALSE,
   \item{Surr}{The name of the variable in \code{Dataset} that contains the surrogate endpoint values.}
   \item{True}{The name of the variable in \code{Dataset} that contains the true endpoint values.}
   \item{Treat}{The name of the variable in \code{Dataset} that contains the treatment indicators. The treatment indicator should be coded as \eqn{1} for the experimental group and \eqn{-1} for the control group.}
-  \item{Diff.Sigma}{Logical. If \code{Diff.Sigma=TRUE}, then the mixtures of normal distributions are allowed to have different variances. If \code{Diff.Sigma=FALSE}, then the mixtures of normal distributions are not allowed to have different variances (selecting the latter option speeds up the required calculations). Default \code{Diff.Sigma=FALSE}.}
   \item{G_pi_10}{The lower and upper limits of the uniform distribution from which the probability parameter \eqn{\pi_{10}} is sampled. Default \code{c(0,1)}. When \code{Monotonicity=TRUE} the values of these limits are set as \code{c(0,0)}.}
   \item{G_rho_01_00}{The lower and upper limits of the uniform distribution from which the association parameter \eqn{\rho_{01}^{00}} is sampled. Default \code{c(-1,1)}.}
   \item{G_rho_01_01}{The lower and upper limits of the uniform distribution from which the association parameter \eqn{\rho_{01}^{01}} is sampled. Default \code{c(-1,1)}.}
