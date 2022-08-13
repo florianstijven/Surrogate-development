@@ -31,7 +31,7 @@ Alonso & Molenbergs (2008) proposed to redefine the surrogate endpoint \eqn{S} a
 
 where \eqn{K_{ij}(t)} is the risk function for patient \eqn{j} in trial \eqn{i}, \eqn{x_{ij}} is a p-dimensional vector of (possibly) time-dependent covariates, \eqn{\beta} is a p-dimensional vector of unknown coefficients, \eqn{\lambda_{0i}(t)} is a trial-specific baseline hazard function, \eqn{S_{ij}} is a time-dependent covariate version of the surrogate endpoint, and \eqn{\phi} its associated effect.
 
-The mutual information between \eqn{S} and \eqn{T} is estimated as \eqn{I(T,S)=\eqn{1}{n}G^2}, where \eqn{n} is the number of patients and \eqn{G^2} is the log likelihood test comparing the previous two models. Individual-level surrogacy can then be estimated as 
+The mutual information between \eqn{S} and \eqn{T} is estimated as \eqn{I(T,S)=\frac{1}{n}G^2}, where \eqn{n} is the number of patients and \eqn{G^2} is the log likelihood test comparing the previous two models. Individual-level surrogacy can then be estimated as 
 
 \deqn{R^2_{h.ind} = 1 - exp \left(-\frac{1}{n}G^2 \right).}
 

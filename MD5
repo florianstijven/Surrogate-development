@@ -1,4 +1,4 @@
-ede7c7dd134ebc963795952051b080cd *DESCRIPTION
+8862da5f3487fa25c26ec50a84a5345a *DESCRIPTION
 1a9f97fe7e0e83e846a639f4fae9c231 *NAMESPACE
 aa78739db4db6eb28e19857befb4462c *NEWS
 dddcb13fb6166e1a80bddd0ad30fce04 *R/AA.MultS.R
@@ -155,17 +155,17 @@ b0df4312f3d7c49e8ae058e78f079e50 *man/RandVec.Rd
 2335f020553d3e66977ba1a11c23c879 *man/Restrictions.BinBin.Rd
 8fb15d04f8bc5ec90240087e537149a4 *man/SPP.BinBin.Rd
 a793feddcaacb5f219955d0d55cf2596 *man/SPP.BinCont.Rd
-f3883e3b38efa3086e7b64ae3500469f *man/Schizo.Rd
+4175a468687f3812d64edebe7c444637 *man/Schizo.Rd
 51fabeeb00b2ffff321ba72780baa38f *man/Schizo_Bin.Rd
-720c55b70c8fc909648fe725e9ecbcd8 *man/Schizo_BinCont.Rd
-c232835e4283b977790901d936530e77 *man/Schizo_PANSS.Rd
+e39b5763398eaad719c1aec6f9f8120c *man/Schizo_BinCont.Rd
+85b8b41b070e51525ba321b717a93cac *man/Schizo_PANSS.Rd
 e01b891ba0b8b9c0b6a91f33cf300f21 *man/Sim.Data.Counterfactuals.Rd
 8075b34659f202aa5088bd8a5b86727c *man/Sim.Data.CounterfactualsBinBin.Rd
 160b56336276b1250a9c2c68aec8422a *man/Sim.Data.MTS.Rd
 b3b60cd5e7c16ab63f7a53925d204be5 *man/Sim.Data.STS.Rd
 93f7fbf8e0ecc37e5518d928cf93eee0 *man/Sim.Data.STSBinBin.Rd
 2a1153627b213ac6c1ee6093ef8d6535 *man/Single.Trial.RE.AA.Rd
-7dc1b0033913f5155db4dcaa1cca9d0b *man/SurvSurv.Rd
+8536b2e44ed78754bfd50c7d631ad367 *man/SurvSurv.Rd
 590c73e1837a1aac5e57869204bc0fb7 *man/Test.Mono.Rd
 1c8ada43540db7ed593a1716d21981b8 *man/TrialLevelIT.Rd
 f5963cbb6eed3c7b5abb69848cdb0a6c *man/TrialLevelMA.Rd

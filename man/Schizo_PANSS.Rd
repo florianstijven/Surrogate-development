@@ -13,7 +13,7 @@ A \code{data.frame} with \eqn{2151} observations on \eqn{6} variables.
     \item{\code{Id}}{The patient ID.}
     \item{\code{InvestID}}{The ID of the investigator (psychiatrist) who treated the patient.}
     \item{\code{Treat}}{The treatment indicator, coded as \eqn{-1} = placebo and \eqn{1} = Risperidone.}
-    \item{\code{Week1}}{The change in the PANSS score \eqn{1} week after starting the treatment (= score at the start of the treatment - score at \eqn{1} week after starting the treatment).}
+    \item{\code{Week1}}{The change in the PANSS score \eqn{1} week after starting the treatment (= score at the end of the treatment - score at \eqn{1} week after starting the treatment).}
     \item{\code{Week2}}{The change in the PANSS score \eqn{2} weeks after starting the treatment.}
     \item{\code{Week4}}{The change in the PANSS score \eqn{4} weeks after starting the treatment.}
     \item{\code{Week6}}{The change in the PANSS score \eqn{6} weeks after starting the treatment.}
