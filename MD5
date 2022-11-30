@@ -1,5 +1,5 @@
-8862da5f3487fa25c26ec50a84a5345a *DESCRIPTION
-1a9f97fe7e0e83e846a639f4fae9c231 *NAMESPACE
+f9dabf9a36198efa520b0d0fe4b0ac3d *DESCRIPTION
+8a24aecfec2785b78dbe85b5f6fbcdf6 *NAMESPACE
 aa78739db4db6eb28e19857befb4462c *NEWS
 dddcb13fb6166e1a80bddd0ad30fce04 *R/AA.MultS.R
 db28524e0996db358533c5a51660fc33 *R/BifixedContCont.R
@@ -69,6 +69,9 @@ eef75794fc281620bb9146ce6b704fee *R/TrialLevelIT.R
 a4ef63a3ab838dc33ad64b8135a09fe3 *R/UnifixedContCont.R
 ed992333f082e875753a5769c8551b0b *R/UnimixedContCont.R
 76574624527504edd1f098da136d3129 *R/comb27.BinBin.R
+bec890654b4974e96255108a7fda4e1b *R/fit_model_SurvSurv.R
+f06fa7fbd55b99328e0fef113c669c7c *R/goodness_of_fit_SurvSurv.R
+63eda32cc9dcc3bfce237482edd9f4a0 *R/log_likelihoods.R
 b6c30f9622f45d8fd0cc6a1cbc5653ad *R/plot.BinContCombnIT.R
 9c6bcd3f957eaf457605ebb74f781f5e *R/plot.Fano.BinBin.R
 7e1d67be87655810e9e7d2a4c4782334 *R/plot.InfoTheoretic.R
@@ -87,6 +90,7 @@ d8df6bfa712d64002e9e933883932001 *R/plot.SurvSurv.R
 b7e67d64207e044aaff56acbbc9a0e83 *R/plot_ICABinCont.R
 2780ad21cda5044c124d117a85de5cbd *R/plot_MaxEntICABinBin.R
 f3dc679fe76c82cc0fe51028531f59ad *R/plot_SPPBinBin.R
+e1381d97401c63d65144adda33bbc95d *R/sensitivity_analysis_SurvSurv.R
 46e650cca1501cd6d1ff51ae1fd00070 *R/summary.Fano.BinBin.R
 a7dda1cd5c8510166e35ac14b444900b *R/summary.FixedDIscrDiscrIT.R
 6de704ad020ea211a2524ff76c76bf47 *R/summary.PPE.BinBin.R
@@ -98,6 +102,7 @@ ac36e8fa9329cb0402e0411a83e8023f *R/summary.TrialLevelIT.R
 011311e831bb53f0dbbf72bf0c983eeb *R/summary_ICABinCont.R
 181e46eea9bdf6e2362126ef17fd06be *R/summary_MaxEntContCont.R
 e532af93cd1b914dd37d788bd48dfc57 *R/summary_MaxEntICABinBin.R
+c1c6443b1e05cc61a5472cb54f04bde5 *R/utils.R
 17cd34f4d8cc50a4662735d4daab806f *data/ARMD.MultS.rda
 b5223bac59476987576b3fa039cf1efe *data/ARMD.rda
 d53b5aeee48ce1ee30f8d6e351cc5177 *data/Ovarian.rda
@@ -173,6 +178,10 @@ f5963cbb6eed3c7b5abb69848cdb0a6c *man/TrialLevelMA.Rd
 f56aca5e6f1f33c0a8d9d49f85dfe5df *man/UnifixedContCont.Rd
 6d61daaf70ea26423199e7f8d9447add *man/UnimixedContCont.Rd
 d633dc0ed5983394bc2389181145ccd2 *man/comb27.BinBin.Rd
+c96a3883a9e9a7236ce4ceca097eda03 *man/fit_model_SurvSurv.Rd
+ed86e05de9075fa1f73972171bb49174 *man/ica_SurvSurv_sens.Rd
+e141410a6401e6bcba22973eefa8d75b *man/marginal_gof_scr.Rd
+27678368c6be16b61705ed608b06261a *man/model_fit_measures.Rd
 9d50fdada69c2136440688b7f7a1398a *man/plot.CausalInference.Rd
 4f23e8983a95c240d72033c472643ae7 *man/plot.Fano.BinBin.Rd
 d75583b90ac6af5b4caca0efe74f529a *man/plot.ICA.ContCont.Mult.Rd

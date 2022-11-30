@@ -51,24 +51,47 @@ importFrom("stats", "uniroot")
 importFrom("graphics", "arrows")
 importFrom("stats", "weighted.mean")
 
-exportPattern("^[[:alpha:]]+")
-export(plot.UnifixedContCont, plot.UnimixedContCont, plot.BifixedContCont, plot.BimixedContCont, 
+export(plot.UnifixedContCont, plot.UnimixedContCont, plot.BifixedContCont, plot.BimixedContCont,
 plot.FixedContContIT, plot.ICA.ContCont, plot.MICA.ContCont, plot.MinSurrContCont, plot.SPF.BinBin,
-plot.Single.Trial.RE.AA, plot.MixedContContIT, plot.ICA.BinBin, plot.TrialLevelMA, plot.FixedBinBinIT, summary.UnifixedContCont, 
+plot.Single.Trial.RE.AA, plot.MixedContContIT, plot.ICA.BinBin, plot.TrialLevelMA, plot.FixedBinBinIT, summary.UnifixedContCont,
 summary.UnimixedContCont, summary.BifixedContCont, summary.BimixedContCont,
-summary.FixedContContIT, summary.FixedContContIT, summary.ICA.BinBin, summary.ICA.ContCont, 
-summary.MICA.ContCont, summary.MinSurrContCont, summary.SPF.BinBin, summary.Single.Trial.RE.AA, 
+summary.FixedContContIT, summary.FixedContContIT, summary.ICA.BinBin, summary.ICA.ContCont,
+summary.MICA.ContCont, summary.MinSurrContCont, summary.SPF.BinBin, summary.Single.Trial.RE.AA,
 summary.TrialLevelMA, summary.TwoStageSurvSurv, summary.Prentice, summary.PredTrialTContCont, plot.FixedBinBinIT,
 summary.FixedBinContIT, summary.FixedContBinIT, plot.FixedBinContIT, plot.FixedContBinIT, summary.SurvSurv, summary.SPF.BinCont,
 plot.SurvSurv, summary.TrialLevelIT, plot.TrialLevelIT, summary.MaxEntICA.BinBin, plot.MaxEntICA.BinBin, plot.SPF.BinCont,
 plot.MaxEntSPF.BinBin, summary.MaxEntSPF.BinBin, plot.FixedDiscrDiscrIT,
-plot.ICA.BinCont, summary.ICA.BinCont, summary.FixedDiscrDiscrIT, 
+plot.ICA.BinCont, summary.ICA.BinCont, summary.FixedDiscrDiscrIT,
 plot.Fano.BinBin, summary.Fano.BinBin,
-plot.MaxEntContCont, summary.MaxEntContCont, 
-plot.ICA.ContCont.MultS, summary.ICA.ContCont.MultS, summary.AA.MultS, 
+plot.MaxEntContCont, summary.MaxEntContCont,
+plot.ICA.ContCont.MultS, summary.ICA.ContCont.MultS, summary.AA.MultS,
 plot.PPE.BinBin, plot.comb27.BinBin, summary.PPE.BinBin, summary.ECT,
-summary.Bootstrap.MEP.BinBin, plot.ISTE.ContCont, summary.ISTE.ContCont, 
+summary.Bootstrap.MEP.BinBin, plot.ISTE.ContCont, summary.ISTE.ContCont,
 summary.BimixedCbCContCont)
+export(AA.MultS, BifixedContCont, BimixedCbCContCont,
+       BimixedContCont, ICA.BinBin.Grid.Sample,
+       CausalDiagramContCont, comb27.BinBin, Fano.BinBin, FixedBinBinIT,
+       FixedBinContIT, FixedContBinIT, FixedContContIT, FixedDiscrDiscrIT,
+       CausalDiagramBinBin, ECT, Fano.BinBin, ICA.BinBin.Grid.Full,
+       ICA.BinBin.Grid.Sample, ICA.BinBin.Grid.Sample.Uncert, ICA.ContCont,
+       ICA.ContCont.MultS.MPC, ICA.ContCont.MultS.PC,
+       ICA.ContCont.MultS, ICA.Sample.ContCont,
+       ISTE.ContCont,
+       LongToWide, MarginalProbs, MaxEntICABinBin,
+       MaxEntSPFBinBin, MICA.Sample.ContCont,
+       MinSurrContCont, MixedContContIT, Pos.Def.Matrices,
+       PPE.BinBin, Pred.TrialT.ContCont, Prentice, PROC.BinBin, RandVec,
+       Restrictions.BinBin,
+       Sim.Data.Counterfactuals, Sim.Data.CounterfactualsBinBin, Sim.Data.MTS,
+       Sim.Data.STS, Sim.Data.STSBinBin, Single.Trial.RE.AA,
+       SurvSurv, Test.Mono, TrialLevelIT,
+       TrialLevelMA, TwoStageSurvSurv, UnifixedContCont, UnimixedContCont,
+       SPF.BinBin)
+export(MICA.ContCont)
+export(fit_model_SurvSurv)
+export(ica_SurvSurv_sens)
+export(marginal_gof_scr)
+export(model_fit_measures)
 
 
 S3method(plot, Fano.BinBin)
