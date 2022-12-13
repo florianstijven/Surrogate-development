@@ -113,66 +113,19 @@ ICA.BinCont <- function(Dataset, Surr, True, Treat,
       pi_Delta_T_0 <- pi_00_hier + pi_11_hier
       pi_Delta_T_1 <- pi_01_hier
 
-      mix1 <- mix2 <- mix.object <- Sum_M_S_0 <- Sum_M_S_1 <- M1 <- M2 <- M3 <- M4 <- NULL
-
-      # Function to minimize deviance of normal mixtures
-      ## Unequal sigma's
-      if (Diff.Sigma==TRUE){
-        mixt.deviance <- function(theta,data){
-          pi_00 <- pi_00_hier
-          pi_01 <- pi_01_hier
-          pi_10 <- pi_10_hier
-          pi_11 <- pi_11_hier
-
-          mu_1 <- theta[1]
-          mu_2 <- theta[2]
-          mu_3 <- theta[3]
-          mu_4 <- theta[4]
-
-          sigma_1 <- theta[5]
-          sigma_2 <- theta[6]
-          sigma_3 <- theta[7]
-          sigma_4 <- theta[8]
-
-          pdf <- pi_00*dnorm(data,mu_1,sigma_1) +
-                 pi_01*dnorm(data,mu_2,sigma_2) +
-                 pi_10*dnorm(data,mu_3,sigma_3) +
-                 pi_11*dnorm(data,mu_4,sigma_4)
-
-          deviance <- -2*sum(log(pdf))
-          return(deviance)
-        }
-      }
-
-      ## Equal sigma's
-      if (Diff.Sigma==FALSE){
-        mixt.deviance <- function(theta,data){
-          pi_00 <- pi_00_hier
-          pi_01 <- pi_01_hier
-          pi_10 <- pi_10_hier
-          pi_11 <- pi_11_hier
-
-          mu_1 <- theta[1]
-          mu_2 <- theta[2]
-          mu_3 <- theta[3]
-          mu_4 <- theta[4]
-
-          sigma_all <- theta[5]
-
-          pdf <- pi_00*dnorm(data,mu_1,sigma_all) +
-                 pi_01*dnorm(data,mu_2,sigma_all) +
-                 pi_10*dnorm(data,mu_3,sigma_all) +
-                 pi_11*dnorm(data,mu_4,sigma_all)
-
-          deviance <- -2*sum(log(pdf))
-          return(deviance)
-        }
-      }
-
       # nonlinear minimization for the mixture deviance function using Newton-Raphson type algorithm
-      options(warn = -999)
-      mix1 <- nlm(f = mixt.deviance, p = Theta.S_0, na.exclude(S_0), iterlim = 100000)
-      mix2 <- nlm(f = mixt.deviance, p = Theta.S_1, na.exclude(S_1), iterlim = 100000)
+      mix1 <- fit_mixture_BinCont(
+        data_S = na.exclude(S_0),
+        theta_start_S = Theta.S_0,
+        pi_hier = c(pi_00_hier, pi_01_hier, pi_10_hier, pi_11_hier),
+        Diff.Sigma = Diff.Sigma
+      )
+      mix2 <- fit_mixture_BinCont(
+        data_S = na.exclude(S_1),
+        theta_start_S = Theta.S_1,
+        pi_hier = c(pi_00_hier, pi_01_hier, pi_10_hier, pi_11_hier),
+        Diff.Sigma = Diff.Sigma
+      )
       options(warn = 1)
 
       if (exists("mix1")==TRUE & exists("mix2")==TRUE & is.null(mix1)==FALSE & is.null(mix2)==FALSE &
@@ -378,8 +331,7 @@ ICA.BinCont <- function(Dataset, Surr, True, Treat,
           sigma_s10 <- sigma_00_10 + sigma_11_10 - (2 * (sqrt(sigma_00_10 * sigma_11_10) * G_rho_01_10_hier))
           sigma_s11 <- sigma_00_11 + sigma_11_11 - (2 * (sqrt(sigma_00_11 * sigma_11_11) * G_rho_01_11_hier))
 
-
-
+          # The mutual information is computed.
           I_Delta_T_Delta_S <- compute_mutinf_BinCont_mixture(
             mu_s = c(mu_s00, mu_s01, mu_s10, mu_s11),
             sigma_s = c(sigma_s00, sigma_s01, sigma_s10, sigma_s11),
@@ -689,3 +641,90 @@ compute_mutinf_BinCont_mixture = function(mu_s,
     pi_00_hier * I_00 + pi_01_hier * I_01 + pi_10_hier * I_10 + pi_11_hier * I_11
 }
 
+
+
+#' Fit normal mixture distribution given the component probabilities.
+#'
+#' The [fit_mixture_BinCont()] function fits the normal mixture distribution for
+#' a given set of component probabilities. The corresponding component means and
+#' component variances are thus estimated.
+#'
+#' @param data_S Vector of potential outcomes, either \eqn{S_0} or \eqn{S_1}.
+#' @param theta_start_S Starting values.
+#' @param pi_hier Vector of probabilities for the four components:
+#'   \eqn{(\pi_{00}, \pi_{01}, \pi_{10}, \pi_{11})}. These are fixed during
+#'   estimation.
+#' @param Diff.Sigma Are all component variances assumed equal?
+#' * `TRUE`: all component variances within treatment group are assumed equal
+#' * `FALSE`: component variances are not assumed to be equal
+#'
+#' @return object returned by the [nlm()] function
+#'
+#' @examples
+fit_mixture_BinCont = function(data_S,
+                               theta_start_S,
+                               pi_hier,
+                               Diff.Sigma) {
+  # Proportions of mixture components
+  pi_00_hier <- pi_hier[1]
+  pi_01_hier <- pi_hier[2]
+  pi_10_hier <- pi_hier[3]
+  pi_11_hier <- pi_hier[4]
+
+  pi_Delta_T_min1 <- pi_10_hier
+  pi_Delta_T_0 <- pi_00_hier + pi_11_hier
+  pi_Delta_T_1 <- pi_01_hier
+
+  mix <- NULL
+
+  # Function to minimize deviance of normal mixtures
+  ## Unequal sigma's
+  if (Diff.Sigma==TRUE){
+    mixt.deviance <- function(theta,data){
+      mu_1 <- theta[1]
+      mu_2 <- theta[2]
+      mu_3 <- theta[3]
+      mu_4 <- theta[4]
+
+      sigma_1 <- theta[5]
+      sigma_2 <- theta[6]
+      sigma_3 <- theta[7]
+      sigma_4 <- theta[8]
+
+      pdf <- pi_00_hier*dnorm(data,mu_1,sigma_1) +
+        pi_01_hier*dnorm(data,mu_2,sigma_2) +
+        pi_10_hier*dnorm(data,mu_3,sigma_3) +
+        pi_11_hier*dnorm(data,mu_4,sigma_4)
+
+      deviance <- -2*sum(log(pdf))
+      return(deviance)
+    }
+  }
+
+  ## Equal sigma's
+  if (Diff.Sigma==FALSE){
+    mixt.deviance <- function(theta,data){
+      mu_1 <- theta[1]
+      mu_2 <- theta[2]
+      mu_3 <- theta[3]
+      mu_4 <- theta[4]
+
+      sigma_all <- theta[5]
+
+      pdf <- pi_00_hier*dnorm(data,mu_1,sigma_all) +
+        pi_01_hier*dnorm(data,mu_2,sigma_all) +
+        pi_10_hier*dnorm(data,mu_3,sigma_all) +
+        pi_11_hier*dnorm(data,mu_4,sigma_all)
+
+      deviance <- -2*sum(log(pdf))
+      return(deviance)
+    }
+  }
+
+  # nonlinear minimization for the mixture deviance function using Newton-Raphson type algorithm
+  options(warn = -999)
+  mix <- nlm(f = mixt.deviance, p = theta_start_S, na.exclude(data_S), iterlim = 100000)
+  options(warn = 1)
+
+  return(mix)
+}
