@@ -1,17 +1,23 @@
-ICA.BinCont <- function(Dataset, Surr, True, Treat,
-                        G_pi_10 = c(0,1),
-                        G_rho_01_00=c(-1,1),
-                        G_rho_01_01=c(-1,1),
-                        G_rho_01_10=c(-1,1),
-                        G_rho_01_11=c(-1,1),
+ICA.BinCont <- function(Dataset,
+                        Surr,
+                        True,
+                        Treat,
+                        G_pi_10 = c(0, 1),
+                        G_rho_01_00 = c(-1, 1),
+                        G_rho_01_01 = c(-1, 1),
+                        G_rho_01_10 = c(-1, 1),
+                        G_rho_01_11 = c(-1, 1),
                         Theta.S_0,
                         Theta.S_1,
-                        M=1000, Seed=123,
-                        Monotonicity=FALSE,
-                        Independence=FALSE,
-                        Plots=TRUE, Save.Plots="No",
-                        Show.Details=FALSE,
-                        integration = "Monte Carlo"){
+                        M = 1000,
+                        Seed = 123,
+                        Monotonicity = FALSE,
+                        Independence = FALSE,
+                        Plots = TRUE,
+                        Save.Plots = "No",
+                        Show.Details = FALSE,
+                        integration = "Monte Carlo") {
+
 
   Nboot <- 1000
 
@@ -113,7 +119,8 @@ ICA.BinCont <- function(Dataset, Surr, True, Treat,
       pi_Delta_T_0 <- pi_00_hier + pi_11_hier
       pi_Delta_T_1 <- pi_01_hier
 
-      # nonlinear minimization for the mixture deviance function using Newton-Raphson type algorithm
+      # nonlinear minimization for the mixture deviance function using
+      # Newton-Raphson type algorithm
       mix1 <- fit_mixture_BinCont(
         data_S = na.exclude(S_0),
         theta_start_S = Theta.S_0,
@@ -659,7 +666,6 @@ compute_mutinf_BinCont_mixture = function(mu_s,
 #'
 #' @return object returned by the [nlm()] function
 #'
-#' @examples
 fit_mixture_BinCont = function(data_S,
                                theta_start_S,
                                pi_hier,
@@ -723,6 +729,152 @@ fit_mixture_BinCont = function(data_S,
   # nonlinear minimization for the mixture deviance function using Newton-Raphson type algorithm
   options(warn = -999)
   mix <- nlm(f = mixt.deviance, p = theta_start_S, na.exclude(data_S), iterlim = 100000)
+  options(warn = 1)
+
+  return(mix)
+}
+
+#' Fit two-component normal mixture distribution given component probabilities.
+#'
+#' The [fit_mixture_BinCont_two_comp()] function fits the two-component normal
+#' mixture distribution for a given set of component probabilities. This is an
+#' alternative estimation method where all true endpoint information is taken
+#' into account.
+#'
+#' @details The "original" estimation procedure considers the following mixture
+#' distribution for patient \eqn{i} given the observed data
+#' \deqn{S_0 \sim
+#'  \pi_{00} \cdot N(\mu^{00}_0, \sigma^{00}_0) + \pi_{01} \cdot N(\mu^{01}_0, \sigma^{01}_0) +
+#'  \pi_{10} \cdot N(\mu^{10}_0, \sigma^{10}_0) + \pi_{11} \cdot N(\mu^{11}_0, \sigma^{11}_0)}
+#' for \eqn{Z_{i} = 0}, and analogously for patients with \eqn{Z_{i} = 1}. This
+#' procedure is implemented in the [fit_mixture_BinCont_two_comp()].
+#'
+#' The estimation procedure that is implemented in this function considers the
+#' following mixture distribution instead:
+#' \deqn{S_0 | T_0 = k \sim
+#'  \pi_{k0} \cdot N(\mu^{k0}_0, \sigma^{k0}_0) + \pi_{k1} \cdot N(\mu^{k1}_0, \sigma^{k1}_0)}
+#' for \eqn{Z_{i} = 0}, and analogously for patients with \eqn{Z_{i} = 1}. This
+#' procedure takes the information in the true endpoint into account.
+#' Consequently, the estimation is simplified from four-component mixtures to
+#' two-component mixtures.
+#'
+#'
+#'
+#' @param data_S Vector of potential outcomes, either \eqn{S_0} or \eqn{S_1}.
+#' @param data_T Vector of potential outcomes, either \eqn{T_0} or \eqn{T_1}.
+#' @param theta_start_S Starting values.
+#' @param pi_hier Vector of probabilities for the four components:
+#'   \eqn{(\pi_{00}, \pi_{01}, \pi_{10}, \pi_{11})}. These are fixed during
+#'   estimation.
+#' @param group For which treatment group are the mixture components estimated:
+#'  * `0`: Control group
+#'  * `1`: Experimental group
+#' @param Diff.Sigma Are all component variances assumed equal?
+#' * `TRUE`: all component variances within treatment group are assumed equal
+#' * `FALSE`: component variances are not assumed to be equal
+#'
+#' @return object returned by the [nlm()] function
+#'
+fit_mixture_BinCont_two_comp = function(data_S,
+                                        data_T,
+                                        theta_start_S,
+                                        pi_hier,
+                                        group,
+                                        Diff.Sigma) {
+  # Proportions of mixture components
+  pi_00_hier <- pi_hier[1]
+  pi_01_hier <- pi_hier[2]
+  pi_10_hier <- pi_hier[3]
+  pi_11_hier <- pi_hier[4]
+
+  pi_Delta_T_min1 <- pi_10_hier
+  pi_Delta_T_0 <- pi_00_hier + pi_11_hier
+  pi_Delta_T_1 <- pi_01_hier
+
+  mix <- NULL
+
+  # Function to minimize deviance of normal mixtures
+  ## Unequal sigma's
+  if (Diff.Sigma==TRUE){
+    mixt.deviance <- function(theta, data_S, data_T, group){
+      mu_1 <- theta[1]
+      mu_2 <- theta[2]
+      mu_3 <- theta[3]
+      mu_4 <- theta[4]
+
+      sigma_1 <- theta[5]
+      sigma_2 <- theta[6]
+      sigma_3 <- theta[7]
+      sigma_4 <- theta[8]
+
+      if (group == 0) {
+        # likelihood contributions for patients with T_0 = 0
+        pdf_T_is_0 <- pi_00_hier * dnorm(data_S[data_T == 0], mu_1, sigma_1) +
+          pi_01_hier * dnorm(data_S[data_T == 0], mu_2, sigma_2)
+        # likelihood contributions for patients with T_0 = 1
+        pdf_T_is_1 <- pi_10_hier * dnorm(data_S[data_T == 1], mu_3, sigma_3) +
+          pi_11_hier * dnorm(data_S[data_T == 1], mu_4, sigma_4)
+      }
+      else if (group == 1) {
+        # likelihood contributions for patients with T_1 = 0
+        pdf_T_is_0 <- pi_00_hier * dnorm(data_S[data_T == 0], mu_1, sigma_1) +
+          pi_10_hier * dnorm(data_S[data_T == 0], mu_3, sigma_3)
+        # likelihood contributions for patients with T_1 = 1
+        pdf_T_is_1 <- pi_01_hier * dnorm(data_S[data_T == 1], mu_2, sigma_2) +
+          pi_11_hier * dnorm(data_S[data_T == 1], mu_4, sigma_4)
+      }
+
+
+      deviance <- -2*sum(log(pdf))
+      return(deviance)
+    }
+  }
+
+  ## Equal sigma's
+  if (Diff.Sigma==FALSE){
+    mixt.deviance <- function(theta, data_S, data_T, group){
+      mu_1 <- theta[1]
+      mu_2 <- theta[2]
+      mu_3 <- theta[3]
+      mu_4 <- theta[4]
+
+      sigma_1 <- theta[5]
+      sigma_2 <- theta[6]
+      sigma_3 <- theta[7]
+      sigma_4 <- theta[8]
+
+      if (group == 0) {
+        # likelihood contributions for patients with T_0 = 0
+        pdf_T_is_0 <- pi_00_hier * dnorm(data_S[data_T == 0], mu_1, sigma_all) +
+          pi_01_hier * dnorm(data_S[data_T == 0], mu_2, sigma_all)
+        # likelihood contributions for patients with T_0 = 1
+        pdf_T_is_1 <- pi_10_hier * dnorm(data_S[data_T == 1], mu_3, sigma_all) +
+          pi_11_hier * dnorm(data_S[data_T == 1], mu_4, sigma_all)
+      }
+      else if (group == 1) {
+        # likelihood contributions for patients with T_1 = 0
+        pdf_T_is_0 <- pi_00_hier * dnorm(data_S[data_T == 0], mu_1, sigma_all) +
+          pi_10_hier * dnorm(data_S[data_T == 0], mu_3, sigma_all)
+        # likelihood contributions for patients with T_1 = 1
+        pdf_T_is_1 <- pi_01_hier * dnorm(data_S[data_T == 1], mu_2, sigma_all) +
+          pi_11_hier * dnorm(data_S[data_T == 1], mu_4, sigma_all)
+      }
+
+      deviance <- -2*sum(log(pdf))
+      return(deviance)
+    }
+  }
+
+  # nonlinear minimization for the mixture deviance function using Newton-Raphson type algorithm
+  options(warn = -999)
+  mix <- nlm(
+    f = mixt.deviance,
+    p = theta_start_S,
+    data_S = na.exclude(data_S),
+    data_T = data_T,
+    group = group,
+    iterlim = 100000
+  )
   options(warn = 1)
 
   return(mix)
