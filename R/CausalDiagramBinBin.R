@@ -220,7 +220,7 @@ CausalDiagramBinBin <- function(x, Values="Corrs", Theta_T0S0, Theta_T1S1, Min=0
   text(4, 3.1, med_T0S1, cex=Cex.Corrs)
   text(5, 9.5, med_T0S0, cex=Cex.Corrs)
   text(5, 0.5, med_T1S1, cex=Cex.Corrs)
-  text(9.6, 5, med_S0S1, cex=Cex.Corrs)
+  text(9.6, 5, med_T0T1, cex=Cex.Corrs)
   
   col_S0S1 <- col_T1S0 <- col_T0S1 <- col_T0S0 <- col_T1S1 <- col_T0T1 <- 1
     segments(x0=1, y0=8, x1=1, y1=2, lwd=1, col=col_S0S1)

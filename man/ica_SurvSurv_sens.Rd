@@ -148,8 +148,8 @@ The equality assumptions have to be incorporated into the
 sensitivity analysis itself. Only one type of equality assumption has been
 implemented; this is the conditional independence assumption which can
 be specified to \code{\link[=ica_SurvSurv_sens]{ica_SurvSurv_sens()}} through the \code{cond_ind} argument:
-\deqn{\tilde{S}_0 \perp \!\!\! \perp T_1 | \tilde{S}_1 \; \text{and} \;
-\tilde{S}_1 \perp \!\!\! \perp T_0 | \tilde{S}_0 .} This can informally be
+\deqn{\tilde{S}_0 \perp \! \! \! \perp T_1 | \tilde{S}_1 \; \text{and} \;
+\tilde{S}_1 \perp \! \! \! \perp T_0 | \tilde{S}_0 .} This can informally be
 interpreted as ``what the control treatment does to the surrogate does not
 provide information on the survival time under experimental treatment if we
 already know what the experimental treatment does to the surrogate", and

@@ -1,11 +1,11 @@
-f9dabf9a36198efa520b0d0fe4b0ac3d *DESCRIPTION
-8a24aecfec2785b78dbe85b5f6fbcdf6 *NAMESPACE
+242b1381eb27c5c71597e86f2d5f7831 *DESCRIPTION
+f0731661fd6b775c407c42fbc7d02959 *NAMESPACE
 aa78739db4db6eb28e19857befb4462c *NEWS
 dddcb13fb6166e1a80bddd0ad30fce04 *R/AA.MultS.R
 db28524e0996db358533c5a51660fc33 *R/BifixedContCont.R
 379e08bf189350bc641cd3c319a7f151 *R/BimixedContCont.R
 757307974e5df3a8101f92f4fe198358 *R/Bootstrap.MEP.BinBin.R
-60239638dfa4153a8b9b9176c3aab4cd *R/CausalDiagramBinBin.R
+036278aca5c5a42a17ddb8347a906c38 *R/CausalDiagramBinBin.R
 9a8fc84fc0e5cb30600b414fcd1e323a *R/CausalDiagramContCont.R
 07ff1cdfc6c5f01b5b5de4ffcfc52614 *R/CbC.R
 ac1d89509581813138a6f4905e91a233 *R/Data.Processing.R
@@ -179,7 +179,7 @@ f56aca5e6f1f33c0a8d9d49f85dfe5df *man/UnifixedContCont.Rd
 6d61daaf70ea26423199e7f8d9447add *man/UnimixedContCont.Rd
 d633dc0ed5983394bc2389181145ccd2 *man/comb27.BinBin.Rd
 c96a3883a9e9a7236ce4ceca097eda03 *man/fit_model_SurvSurv.Rd
-ed86e05de9075fa1f73972171bb49174 *man/ica_SurvSurv_sens.Rd
+fab5749bd18b89abdd1ebfd9ea0e0129 *man/ica_SurvSurv_sens.Rd
 e141410a6401e6bcba22973eefa8d75b *man/marginal_gof_scr.Rd
 27678368c6be16b61705ed608b06261a *man/model_fit_measures.Rd
 9d50fdada69c2136440688b7f7a1398a *man/plot.CausalInference.Rd
