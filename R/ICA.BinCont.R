@@ -1,4 +1,5 @@
-ICA.BinCont <- function(Dataset, Surr, True, Treat, 
+ICA.BinCont <- function(Dataset, Surr, True, Treat,
+                        BS = FALSE,
                         G_pi_10 = c(0,1),
                         G_rho_01_00=c(-1,1), 
                         G_rho_01_01=c(-1,1), 
@@ -9,6 +10,8 @@ ICA.BinCont <- function(Dataset, Surr, True, Treat,
                         M=1000, Seed=123, 
                         Monotonicity=FALSE,
                         Independence=FALSE,
+                        HAA=FALSE,
+                        Cond_ind=FALSE,
                         Plots=TRUE, Save.Plots="No", 
                         Show.Details=FALSE){          
 
@@ -24,32 +27,14 @@ ICA.BinCont <- function(Dataset, Surr, True, Treat,
   True <- Dataset[,paste(substitute(True))]
   Treat <- Dataset[,paste(substitute(Treat))]
   
+  data_no_miss.original <- data.frame(na.exclude(cbind(Surr, True, Treat)))
   if (min(na.exclude(Treat))!=c(-1)) {stop("\nTreatment should be coded as -1=control and 1=experimental treatment.")}
   if (max(na.exclude(Treat))!=c(1))  {stop("\nTreatment should be coded as -1=control and 1=experimental treatment.")}
   if (length(unique(na.exclude(True)))>2) {stop("\nThe true endpoint should be binary.")}
   if (min(na.exclude(True))!=c(0)) {stop("\nThe true endpoint should be coded as 0=no response and 1=response.")}
   if (max(na.exclude(True))!=c(1))  {stop("\nThe true endpoint should be coded as 0=no response and 1=response.")}
   
-  data_no_miss <- data.frame(na.exclude(cbind(Surr, True, Treat)))
-  data_conttreat <- subset(data_no_miss, Treat=="-1")      
-  data_exptreat <- subset(data_no_miss, Treat=="1")      
-  S_0 <- data_conttreat$Surr
-  S_1 <- data_exptreat$Surr
-  
-  Surr <- na.exclude(Surr)   #LS
-  True <- na.exclude(True)   #LS
-  Treat <- na.exclude(Treat) #LS
-
-  pi_punt1 <- mean(data_exptreat$True) # E(T|Z=1)
-  pi_punt0 <- 1 - pi_punt1 # 1-E(T|Z=1)
-  pi_1punt <- mean(data_conttreat$True) # E(T|Z=0)
-  pi_0punt <- 1 - pi_1punt # 1 - E(T|Z=0)
-
-  if(Monotonicity==TRUE){
-    if (pi_punt0 > pi_0punt | pi_1punt > pi_punt1) {stop("\nThe monotonicity assumption is not compatible with the data")}
-  }  
-
-  count <- 0
+  #count <- 0
   R2_H_all <- R2_C_all <- PD_OK_all <- pi_00_all <- pi_01_all <- pi_10_all <- pi_11_all <- NULL
   G_rho_01_00_all <- G_rho_01_01_all <- G_rho_01_10_all <- G_rho_01_11_all <- NULL
   pi_Delta_T_min1_all <- pi_Delta_T_0_all <- pi_Delta_T_1_all <- NULL
@@ -67,29 +52,73 @@ ICA.BinCont <- function(Dataset, Surr, True, Treat,
 
   while (aantal < M){
     
-    count <- count+1
+    data_no_miss <- data_no_miss.original
+    
+    #count <- count+1
     voor_seed <- voor_seed + 1
-
-    G_rho_01_00_hier <- runif(1, min=G_rho_01_00[1], max=G_rho_01_00[2])
-    G_rho_01_01_hier <- runif(1, min=G_rho_01_01[1], max=G_rho_01_01[2])
-    G_rho_01_10_hier <- runif(1, min=G_rho_01_10[1], max=G_rho_01_10[2])
-    G_rho_01_11_hier <- runif(1, min=G_rho_01_11[1], max=G_rho_01_11[2])
+    set.seed(voor_seed)
+    
+    if (BS==TRUE) {
+      #Boot_Sample <- data_no_miss[sample(1:dim(data_no_miss)[1], replace = TRUE),]
+      A1 <- subset(data_no_miss,data_no_miss$Treat==-1)  # keep the number of treatment group the same
+      B1 <- subset(data_no_miss,data_no_miss$Treat==1)
+      A2 <- A1[sample(nrow(A1),replace=T),]
+      B2 <- B1[sample(nrow(B1),replace=T),]
+      data_no_miss <- as.data.frame(rbind(A2,B2))                        
+    }
+    
+    if (BS==FALSE) {
+      data_no_miss <- as.data.frame(data_no_miss)                        
+    }
+    
+    data_conttreat <- subset(data_no_miss, Treat=="-1")      
+    data_exptreat <- subset(data_no_miss, Treat=="1")      
+    S_0 <- data_conttreat$Surr
+    S_1 <- data_exptreat$Surr
+    
+    Surr <- na.exclude(Surr)   #LS
+    True <- na.exclude(True)   #LS
+    Treat <- na.exclude(Treat) #LS
+    
+    pi_punt1 <- mean(data_exptreat$True) # E(T|Z=1)
+    pi_punt0 <- 1 - pi_punt1 # 1-E(T|Z=1)
+    pi_1punt <- mean(data_conttreat$True) # E(T|Z=0)
+    pi_0punt <- 1 - pi_1punt # 1 - E(T|Z=0)
+    
+    if(Monotonicity==TRUE){
+      if (pi_punt0 > pi_0punt | pi_1punt > pi_punt1) {stop("\nThe monotonicity assumption is not compatible with the data")}
+    }  
+    
+    if(HAA==FALSE){
+      G_rho_01_00_hier <- runif(1, min=G_rho_01_00[1], max=G_rho_01_00[2])
+      G_rho_01_01_hier <- runif(1, min=G_rho_01_01[1], max=G_rho_01_01[2])
+      G_rho_01_10_hier <- runif(1, min=G_rho_01_10[1], max=G_rho_01_10[2])
+      G_rho_01_11_hier <- runif(1, min=G_rho_01_11[1], max=G_rho_01_11[2])
+    }
+    
+    if(HAA==TRUE){
+      G_rho_01_00_hier <- G_rho_01_01_hier <- G_rho_01_10_hier <- G_rho_01_11_hier <- runif(1, min=G_rho_01_00[1], max=G_rho_01_00[2])
+    }
+    
+    if(Cond_ind==TRUE){
+      G_rho_01_00_hier <- G_rho_01_01_hier <- G_rho_01_10_hier <- G_rho_01_11_hier <- 0
+    }
 
     if(Show.Details==TRUE){
       flush.console()
       cat("\n\nG_rho:", cbind(G_rho_01_00_hier, G_rho_01_01_hier, G_rho_01_10_hier, G_rho_01_11_hier), "\n")
     }
 
-    set.seed(count)
     if(Monotonicity==TRUE){
       G_pi_10 = c(0,0)
     }
     
     if(Independence==FALSE){
-      pi_10_hier <- runif(1, min=G_pi_10[1], max=G_pi_10[2])   
+      pi_10_hier <- runif(1, min=G_pi_10[1], max=G_pi_10[2])
+      #pi_10_hier <- runif(1, min=0, max=min(pi_1punt, pi_punt0))
       pi_00_hier <- pi_punt0 - pi_10_hier #UD
-      pi_01_hier <- pi_0punt -  pi_00_hier #UD
-      pi_11_hier <- pi_1punt -  pi_10_hier #UD
+      pi_01_hier <- pi_0punt - pi_00_hier #UD
+      pi_11_hier <- pi_1punt - pi_10_hier #UD
     }
     
     if(Independence==TRUE){
@@ -102,7 +131,9 @@ ICA.BinCont <- function(Dataset, Surr, True, Treat,
     
     if ((pi_00_hier >= 0 & pi_01_hier >= 0 & pi_10_hier >= 0 & pi_11_hier >= 0) & 
         (pi_00_hier <= 1 & pi_01_hier <= 1 & pi_10_hier <= 1 & pi_11_hier <= 1)){
-      
+    #if ((pi_00_hier > 0 & pi_01_hier > 0 & pi_10_hier > 0 & pi_11_hier > 0) & 
+    #      (pi_00_hier < 1 & pi_01_hier < 1 & pi_10_hier < 1 & pi_11_hier < 1)){
+     
       if(Show.Details==TRUE){
         flush.console()
         cat("\n\nPi's used here:", cbind(pi_00_hier, pi_01_hier, pi_10_hier, pi_11_hier), "\n")
@@ -388,7 +419,7 @@ ICA.BinCont <- function(Dataset, Surr, True, Treat,
           }
 
           # I_10
-          set.seed(1)
+          set.seed(1) # the fixed seed is to remove any tiny difference from the sampling procedure (e.g. in the situation where all parameters are identifiable)
           S1 <- rnorm(n=10000, mean = mu_s10, sd = sqrt(sigma_s10))
           I_10 <- mean(log(dnorm(S1, mu_s10, sd = sqrt(sigma_s10)) / f_Delta_S(S1)))
 
@@ -479,6 +510,8 @@ ICA.BinCont <- function(Dataset, Surr, True, Treat,
           var_Y_S1_all <- cbind(var_Y_S1_all, var_Y_S1)
           dev_S0_all <- cbind(dev_S0_all, dev_S0)
           dev_S1_all <- cbind(dev_S1_all, dev_S1)
+          
+          set.seed(NULL)
 
         } # min eigen and CN requirements 
       } # mixture distribution available
@@ -535,4 +568,3 @@ ICA.BinCont <- function(Dataset, Surr, True, Treat,
   fit
 
 } # end of function  
-
