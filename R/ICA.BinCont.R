@@ -34,7 +34,6 @@ ICA.BinCont <- function(Dataset, Surr, True, Treat,
   if (min(na.exclude(True))!=c(0)) {stop("\nThe true endpoint should be coded as 0=no response and 1=response.")}
   if (max(na.exclude(True))!=c(1))  {stop("\nThe true endpoint should be coded as 0=no response and 1=response.")}
   
-  #count <- 0
   R2_H_all <- R2_C_all <- PD_OK_all <- pi_00_all <- pi_01_all <- pi_10_all <- pi_11_all <- NULL
   G_rho_01_00_all <- G_rho_01_01_all <- G_rho_01_10_all <- G_rho_01_11_all <- NULL
   pi_Delta_T_min1_all <- pi_Delta_T_0_all <- pi_Delta_T_1_all <- NULL
@@ -47,6 +46,7 @@ ICA.BinCont <- function(Dataset, Surr, True, Treat,
   mean_Y_S0_all <- mean_Y_S1_all <- NULL
   var_Y_S0_all <- var_Y_S1_all <- NULL
   dev_S0_all <- dev_S1_all <- NULL
+  code_nlm_0_all <- code_nlm_1_all <- NULL
   aantal <- 0
   voor_seed <- Seed
 
@@ -54,7 +54,6 @@ ICA.BinCont <- function(Dataset, Surr, True, Treat,
     
     data_no_miss <- data_no_miss.original
     
-    #count <- count+1
     voor_seed <- voor_seed + 1
     set.seed(voor_seed)
     
@@ -128,12 +127,9 @@ ICA.BinCont <- function(Dataset, Surr, True, Treat,
       pi_11_hier <- pi_1punt*pi_punt1
     }
     
-    
     if ((pi_00_hier >= 0 & pi_01_hier >= 0 & pi_10_hier >= 0 & pi_11_hier >= 0) & 
         (pi_00_hier <= 1 & pi_01_hier <= 1 & pi_10_hier <= 1 & pi_11_hier <= 1)){
-    #if ((pi_00_hier > 0 & pi_01_hier > 0 & pi_10_hier > 0 & pi_11_hier > 0) & 
-    #      (pi_00_hier < 1 & pi_01_hier < 1 & pi_10_hier < 1 & pi_11_hier < 1)){
-     
+
       if(Show.Details==TRUE){
         flush.console()
         cat("\n\nPi's used here:", cbind(pi_00_hier, pi_01_hier, pi_10_hier, pi_11_hier), "\n")
@@ -206,7 +202,7 @@ ICA.BinCont <- function(Dataset, Surr, True, Treat,
       options(warn = 1)
 
       if (exists("mix1")==TRUE & exists("mix2")==TRUE & is.null(mix1)==FALSE & is.null(mix2)==FALSE &
-          mix1$code<=2 & mix2$code<=2){
+          mix1$code<=3 & mix2$code<=3){
         
         # S0
         mix.object <- mix1
@@ -321,6 +317,7 @@ ICA.BinCont <- function(Dataset, Surr, True, Treat,
           sigma_00_10 <- mix1$estimate[7]**2 
           sigma_00_11 <- mix1$estimate[8]**2} 
         if (Diff.Sigma==FALSE){sigma_00_00 <- sigma_00_01 <- sigma_00_10 <- sigma_00_11 <- mix1$estimate[5]**2} 
+        code_nlm_0 <- mix1$code
 
         # mixture components f(S_1)
         pi_1_00_e <- pi_00_hier 
@@ -337,6 +334,7 @@ ICA.BinCont <- function(Dataset, Surr, True, Treat,
           sigma_11_10 <- mix2$estimate[7]**2 
           sigma_11_11 <- mix2$estimate[8]**2}
         if (Diff.Sigma==FALSE){sigma_11_00 <- sigma_11_01 <- sigma_11_10 <- sigma_11_11 <- mix2$estimate[5]**2}
+        code_nlm_1 <- mix2$code
 
         # Check PD covariance matrices 
         mat_a <- matrix(c(sigma_00_00, 
@@ -510,6 +508,8 @@ ICA.BinCont <- function(Dataset, Surr, True, Treat,
           var_Y_S1_all <- cbind(var_Y_S1_all, var_Y_S1)
           dev_S0_all <- cbind(dev_S0_all, dev_S0)
           dev_S1_all <- cbind(dev_S1_all, dev_S1)
+          code_nlm_0_all <- cbind(code_nlm_0_all, code_nlm_0)
+          code_nlm_1_all <- cbind(code_nlm_1_all, code_nlm_1)
           
           set.seed(NULL)
 
@@ -558,6 +558,8 @@ ICA.BinCont <- function(Dataset, Surr, True, Treat,
               var_Y_S1=as.numeric(var_Y_S1_all),
               dev_S0=as.numeric(dev_S0_all),
               dev_S1=as.numeric(dev_S1_all),
+              code_nlm_0=as.numeric(code_nlm_0_all),
+              code_nlm_1=as.numeric(code_nlm_1_all),
               mean.S0=mean(S_0, na.rm=TRUE),
               var.S0=var(S_0, na.rm=TRUE),
               mean.S1=mean(S_1, na.rm=TRUE),

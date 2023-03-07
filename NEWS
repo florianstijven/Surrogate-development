@@ -1,5 +1,6 @@
-Changes 2.1-2.3
+Changes 2.1-2.8
   o Updated ICA.BinCont() and plot.ICA.BinCont()
+  o Added ica_SurvSurv_sens() and related subfunctions
 
 Changes in version 1.6 - 2.0
   o Added function BimixedCbCContCont

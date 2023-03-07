@@ -86,6 +86,8 @@ ICA.BinCont(Dataset, Surr, True, Treat,
 \item{var_Y_S1}{The vector of variance \eqn{\sigma_{11}} values of \eqn{f(S_1)}.}
 \item{dev_S0}{The vector of deviance values of the normal mixture for \eqn{f(S_0)}.}
 \item{dev_S1}{The vector of deviance values of the normal mixture for \eqn{f(S_1)}.}
+\item{code_nlm_0}{An integer indicating why the optimization process to estimate the mixture normal parameters of \eqn{f(S_0)} terminated: 1) relative gradient is close to zero, current iterate is probably solution; 2) successive iterates within tolerance, current iterate is probably solution; 3) last global step failed to locate a point lower than the estimate, the estimate might be an approximate local minimum of the function.}
+\item{code_nlm_1}{An integer indicating why the optimization process to estimate the mixture normal parameters of \eqn{f(S_1)} terminated: 1) relative gradient is close to zero, current iterate is probably solution; 2) successive iterates within tolerance, current iterate is probably solution; 3) last global step failed to locate a point lower than the estimate, the estimate might be an approximate local minimum of the function.}
 \item{mean.S0}{The mean of \eqn{S_0}.}
 \item{var.S0}{The variance of \eqn{S_0}.}
 \item{mean.S1}{The mean of \eqn{S_1}.}
