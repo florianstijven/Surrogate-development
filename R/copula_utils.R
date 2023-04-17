@@ -25,18 +25,18 @@ clayton_loglik_copula_scale <- function(theta, u, v, d1, d2){
   part1 <-
     ifelse(
       d1 * d2 == 1,
-      log(theta + 1) + (2 * theta + 1) * log_C - (theta + 1) * u * v,
+      log(theta + 1) + (2 * theta + 1) * log_C - (theta + 1) *(log(u) + log(v)),
       0
     )
   # Log likelihood contribution for second observation censored.
   part2 <-
     ifelse(d1 * (1 - d2) == 1,
-           (theta + 1) * log_C - (theta + 1) * u,
+           (theta + 1) * log_C - (theta + 1) * log(u),
            0)
   # Log likelihood contribution for first observation censored.
   part3 <-
     ifelse((1 - d1) * d2 == 1,
-           (theta + 1) * log_C - (theta + 1) * v,
+           (theta + 1) * log_C - (theta + 1) * log(v),
            0)
   # Log likelihood contribution for both observations censored.
   part4 <- ifelse((1 - d1) * (1 - d2) == 1, log_C, 0)
@@ -72,17 +72,17 @@ frank_loglik_copula_scale <- function(theta, u, v, d1, d2){
   # Log likelihood contribution for uncensored observations.
   part1 <-
     ifelse(d1 * d2 == 1,
-           log(theta) + theta * C + log(exp(theta * C) - 1) - log(A_u) - log(A_v),
+           log(theta) + theta * C + log(exp(theta * C) - 1) - log((exp(theta * u) - 1) * (exp(theta * v) - 1)),
            0)
   # Log likelihood contribution for second observation censored.
   part2 <-
     ifelse(d1 * (1 - d2) == 1,
-           log(1 - exp(theta * C) - log(A_u)),
+           log((1 - exp(theta * C)) / (1 - exp(theta * u))),
            0)
   # Log likelihood contribution for first observation censored.
   part3 <-
     ifelse((1 - d1) * d2 == 1,
-           log(1 - exp(theta * C) - log(A_v)),
+           log((1 - exp(theta * C)) / (1 - exp(theta * v))),
            0)
   # Log likelihood contribution for both observations censored.
   part4 <- ifelse((1 - d1) * (1 - d2) == 1, log(C), 0)
@@ -105,8 +105,8 @@ gumbel_loglik_copula_scale <- function(theta, u, v, d1, d2){
   # first precomputed. In this way, we do not waste resources on computing the
   # same quantity multiple times.
 
-  min_log_u = log(u)
-  min_log_v = log(v)
+  min_log_u = -log(u)
+  min_log_v = -log(v)
   # Log Copula evaluated in (u, v)
   log_C = -(min_log_u**theta + min_log_v**theta)**(1 / theta)
 
@@ -139,20 +139,20 @@ gumbel_loglik_copula_scale <- function(theta, u, v, d1, d2){
 
 #' Loglikelihood on the Copula Scale for the Gaussian Copula
 #'
-#' `normal_loglik_copula_scale()` computes the loglikelihood on the copula
+#' `gaussian_loglik_copula_scale()` computes the loglikelihood on the copula
 #' scale for the Gaussian copula which is parameterized by `theta` as follows:
 #' \deqn{C(u, v) = \Psi \left[ \Phi^{-1} (u), \Phi^{-1} (v) | \rho \right]}
 #'
 #' @inheritParams clayton_loglik_copula_scale
 #'
 #' @return Value of the copula loglikelihood evaluated in `theta`.
-normal_loglik_copula_scale <- function(theta, u, v, d1, d2){
+gaussian_loglik_copula_scale <- function(theta, u, v, d1, d2){
   # For efficiency purposes, some quantities that are needed multiple times are
   # first precomputed. In this way, we do not waste resources on computing the
   # same quantity multiple times.
 
   # Covariance matrix
-  Sigma = matrix(c(1, theta, 1, theta), nrow = 2)
+  Sigma = matrix(c(1, theta, theta, 1), nrow = 2)
 
   # Transform the variables on the copula scale to the standard normal scale.
   z_u = stats::qnorm(u)
@@ -163,14 +163,15 @@ normal_loglik_copula_scale <- function(theta, u, v, d1, d2){
   z_UV = matrix(c(z_u, z_v), byrow = FALSE, ncol = 2)
   # Evaluate the Gaussian copula in (uv).
   C = apply(
-    X = UV,
+    X = z_UV,
     FUN = function(x)
       mvtnorm::pmvnorm(
+        lower = c(-Inf, -Inf),
         upper = x,
         sigma = Sigma,
         keepAttr = FALSE
       ),
-    MARGIN = 2,
+    MARGIN = 1,
     simplify = TRUE
   )
 
@@ -183,7 +184,9 @@ normal_loglik_copula_scale <- function(theta, u, v, d1, d2){
   part2 <-
     ifelse(d1 * (1 - d2) == 1,
            pnorm(
-             q = (z_v - z_u * theta) / sqrt(1 - theta ** 2),
+             q = z_v,
+             mean = z_u * theta,
+             sd =  sqrt(1 - theta ** 2),
              log.p = TRUE
            ),
            0)
@@ -191,7 +194,9 @@ normal_loglik_copula_scale <- function(theta, u, v, d1, d2){
   part3 <-
     ifelse((1 - d1) * d2 == 1,
            pnorm(
-             q = (z_u - z_v * theta) / sqrt(1 - theta ** 2),
+             q = z_u,
+             mean = z_v * theta,
+             sd =  sqrt(1 - theta ** 2),
              log.p = TRUE
            ),
            0)
