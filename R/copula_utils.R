@@ -41,7 +41,7 @@ clayton_loglik_copula_scale <- function(theta, u, v, d1, d2){
   # Log likelihood contribution for both observations censored.
   part4 <- ifelse((1-d1)*(1-d2)==1,log_C,0)
 
-  loglik_copula <- sum(part1+part2+part3+part4)
+  loglik_copula <- part1 + part2 + part3 + part4
 
   return(loglik_copula)
 }
@@ -59,7 +59,7 @@ frank_loglik_copula_scale <- function(theta, u, v, d1, d2){
 
   # For efficiency purposes, some quantities that are needed multiple times are
   # first precomputed. In this way, we do not waste resources on computing the
-  # same quantity mutliple times.
+  # same quantity multiple times.
 
   A_u = 1 - exp(-theta * u)
   A_v = 1 - exp(-theta * v)
@@ -87,38 +87,53 @@ frank_loglik_copula_scale <- function(theta, u, v, d1, d2){
   # Log likelihood contribution for both observations censored.
   part4 <- ifelse((1 - d1) * (1 - d2) == 1, log(C), 0)
 
-  loglik_copula <- sum(part1+part2+part3+part4)
+  loglik_copula <- part1 + part2 + part3 + part4
 
   return(loglik_copula)
 }
 
-gumbel_loglik <- function(para, X, Y, d1, d2, k = 2, knotsx, knotsy){
-  #k is the number of knots in the model, this determines the length of para
-  gammax <- para[1:(k + 2)]
-  gammay <- para[(k + 3):(2*(k + 2))]
-  #last value in para is the association parameter
-  theta <- para[2*(k + 2) + 1]
+#' Loglikelihood on the Copula Scale for the Gumbel Copula
+#'
+#' `gumbel_loglik_copula_scale()` computes the loglikelihood on the copula
+#' scale for the Gumbel copula which is parameterized by `theta` as follows:
+#' \deqn{C(u, v) = \exp \left[ - \left\{ (-\log u)^{\theta} + (-\log v)^{\theta} \right\}^{\frac{1}{\theta}} \right]}
+#'
+#' @inheritParams clayton_loglik_copula_scale
+#' @return Value of the copula loglikelihood evaluated in `theta`.
+gumbel_loglik_copula_scale <- function(theta, u, v, d1, d2){
+  # For efficiency purposes, some quantities that are needed multiple times are
+  # first precomputed. In this way, we do not waste resources on computing the
+  # same quantity multiple times.
 
-  #survival probabilities
-  u = flexsurv::psurvspline(q = X, gamma = gammax, knots = knotsx, lower.tail = FALSE)
-  v = flexsurv::psurvspline(q = Y, gamma = gammay, knots = knotsy, lower.tail = FALSE)
-  #densities
-  du = flexsurv::dsurvspline(x = X, gamma = gammax, knots = knotsx)
-  dv = flexsurv::dsurvspline(x = Y, gamma = gammay, knots = knotsy)
+  min_log_u = log(u)
+  min_log_v = log(v)
+  # Log Copula evaluated in (u, v)
+  log_C = -(min_log_u**theta + min_log_v**theta)**(1 / theta)
 
-  #copula
-  C <- exp(-((-log(u))^(theta)+(-log(v))^(theta))^(1/theta))
+  # Log likelihood contribution for uncensored observations.
+  part1 <-
+    ifelse(
+      d1 * d2 == 1,
+      log_C + (theta - 1) * (log(min_log_u) + log(min_log_v)) +
+        log(theta - 1 - log_C) + min_log_u + min_log_v - (2 * theta - 1) * log(-log_C),
+      0
+    )
+  # Log likelihood contribution for second observation censored.
+  part2 <-
+    ifelse(d1 * (1 - d2) == 1,
+           log_C + (theta - 1) * log(min_log_u) + min_log_u - (theta - 1) * log(-log_C),
+           0)
+  # Log likelihood contribution for first observation censored.
+  part2 <-
+    ifelse(d1 * (1 - d2) == 1,
+           log_C + (theta - 1) * log(min_log_v) + min_log_v - (theta - 1) * log(-log_C),
+           0)
+  # Log likelihood contribution for both observations censored.
+  part4 <- ifelse((1 - d1) * (1 - d2) == 1, log_C, 0)
 
-  part1 <- ifelse(d1*d2==1,log(C)+(theta-1)*log(-log(u))+(theta-1)*log(-log(v))+
-                    log(theta-1-log(C))-log(u)-log(v)-(2*theta-1)*log(-log(C))+
-                    log(dv)+log(du),0)
-  part2 <- ifelse(d1*(1-d2)==1,log(C)+(theta-1)*log(-log(u))-log(u)-(theta-1)*log(-log(C))+log(du),0)
-  part3 <- ifelse(((1-d1)*(d2))==1,(log(C)+(theta-1)*log(-log(v))-log(v)-(theta-1)*log(-log(C))+log(dv)),0)
-  part4 <- ifelse(((1-d1)*(1-d2))==1,log(C),0)
+  loglik_copula <- part1 + part2 + part3 + part4
 
-  loglik <- sum(part1+part2+part3+part4)
-
-  return(loglik)
+  return(loglik_copula)
 }
 
 #' @importFrom stats pnorm qnorm
