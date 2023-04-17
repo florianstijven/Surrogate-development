@@ -17,37 +17,37 @@ fit_model_SurvSurv(
 \item{data}{A data frame in the correct format (See details).}
 
 \item{copula_family}{One of the following parametric copula families:
-`"clayton"`, `"frank"`, `"gaussian"`, or `"gumbel"`.}
+\code{"clayton"}, \code{"frank"}, \code{"gaussian"}, or \code{"gumbel"}.}
 
 \item{nknots}{Number of internal knots for the Royston-Parmar survival model.}
 
 \item{fitted_model}{Fitted model from which initial values are extracted. If
-`NULL` (default), standard initial values are used. This option intended
+\code{NULL} (default), standard initial values are used. This option intended
 for when a model is repeatedly fitted, e.g., in a bootstrap.}
 
 \item{hessian}{A boolean.
-* `TRUE` (default): Hessian is computed
-* `FALSE`: Hessian is not computed. This can save a small amount of time. This
-can be useful when a model is repeatedly fitted, e.g., in a bootstrap.}
+\itemize{
+\item \code{TRUE} (default): Hessian is computed
+\item \code{FALSE}: Hessian is not computed. This can save a small amount of time. This
+can be useful when a model is repeatedly fitted, e.g., in a bootstrap.
+}}
 
 \item{maxit}{Maximum number of iterations for the numeric optimization,
 defaults to 500.}
 }
 \value{
 Returns an S3 object that can be used to perform the sensitivity
-  analysis with [ica_SurvSurv_sens()].
+analysis with \code{\link[=ica_SurvSurv_sens]{ica_SurvSurv_sens()}}.
 }
 \description{
-The function `fit_model_SurvSurv()` fits the copula model for time-to-event
+The function \code{fit_model_SurvSurv()} fits the copula model for time-to-event
 surrogate and true endpoints (Stijven et al., 2022). Because the bivariate
 distributions of the surrogate-true endpoint pairs are functionally
 independent across treatment groups, a bivariate distribution is fitted in
 each treatment group separately. The marginal distributions are based on the Royston-Parmar
 survival model (Royston and Parmar, 2002).
 }
-\details{
-# Model
-
+\section{Model}{
 In the causal-inference approach to evaluating surrogate endpoints, the first
 step is to estimate the joint distribution of the relevant potential
 outcomes. Let \eqn{(T_0, S_0, S_1, T_1)'} denote the vector of potential
@@ -71,24 +71,27 @@ with unique copula parameters.
 
 Two modelling choices are made before estimating the two bivariate
 distributions described in the previous paragraph:
-* The number of internal knots for the Royston-Parmar survival models. This
-is specified through the `nknots` argument. The number of knots is assumed to
+\itemize{
+\item The number of internal knots for the Royston-Parmar survival models. This
+is specified through the \code{nknots} argument. The number of knots is assumed to
 be equal across the four margins.
-* The parametric family of the bivariate copulas. The parametric family is
+\item The parametric family of the bivariate copulas. The parametric family is
 assumed to be equal across treatment groups. This choice is specified through
-the `copula_family` argument.
+the \code{copula_family} argument.
+}
+}
 
-# Data Format
-
+\section{Data Format}{
 The data frame should have the semi-competing risks format. The columns must
 be ordered as follows:
-
-* time to surrogate event, true event, or independent censoring; whichever
+\itemize{
+\item time to surrogate event, true event, or independent censoring; whichever
 comes first
-* time to true event, or independent censoring; whichever comes first
-* treatment indicator: 0 or 1
-* surrogate event indicator: 1 if surrogate event is observed, 0 otherwise
-* true event indicator: 1 if true event is observed, 0 otherwise
+\item time to true event, or independent censoring; whichever comes first
+\item treatment indicator: 0 or 1
+\item surrogate event indicator: 1 if surrogate event is observed, 0 otherwise
+\item true event indicator: 1 if true event is observed, 0 otherwise
+}
 
 Note that according to the methodology in Stijven et al. (2022), the
 surrogate event must not be the composite event. For example, when the
@@ -96,6 +99,7 @@ surrogacy of progression-free survival for overall survival is evaluated. The
 surrogate event is progression, but not the composite event of progression or
 death.
 }
+
 \examples{
 if(require(Surrogate)) {
   data("Ovarian")
@@ -124,7 +128,7 @@ prognostic modelling and estimation of treatment effects. Statistics in
 medicine, 21(15), 2175-2197.
 }
 \seealso{
-[marginal_gof_scr()], [ica_SurvSurv_sens()]
+\code{\link[=marginal_gof_scr]{marginal_gof_scr()}}, \code{\link[=ica_SurvSurv_sens]{ica_SurvSurv_sens()}}
 }
 \author{
 Florian Stijven

@@ -15,18 +15,24 @@ clayton_loglik_copula_scale(theta, u, v, d1, d2)
 scale.}
 
 \item{d1}{An integer vector. Indicates whether first variable is observed or
- right-censored,
-* `d1[i] = 1` if `u[i]` corresponds to non-censored value
-* `d1[i] = 0` if `u[i]` corresponds to right-censored value}
+right-censored,
+\itemize{
+\item \code{d1[i] = 1} if \code{u[i]} corresponds to non-censored value
+\item \code{d1[i] = 0} if \code{u[i]} corresponds to right-censored value
+}}
 
 \item{d2}{An integer vector. Indicates whether first variable is observed or
- right-censored,
-* `d1[i] = 1` if `u[i]` corresponds to non-censored value
-* `d1[i] = 0` if `u[i]` corresponds to right-censored value}
+right-censored,
+\itemize{
+\item \code{d1[i] = 1} if \code{u[i]} corresponds to non-censored value
+\item \code{d1[i] = 0} if \code{u[i]} corresponds to right-censored value
+}}
 }
 \value{
-Value of the copula loglikelihood evaluated in `theta`.
+Value of the copula loglikelihood evaluated in \code{theta}.
 }
 \description{
-Loglikelihood on the Copula Scale for the Clayton Copula
+\code{clayton_loglik_copula_scale()} computes the loglikelihood on the copula
+scale for the Clayton copula which is parameterized by \code{theta} as follows:
+\deqn{C(u, v) = (u^{-\theta} + v^{-\theta} - 1)^{-\frac{1}{\theta}}}
 }

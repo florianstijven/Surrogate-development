@@ -1,5 +1,9 @@
 #' Loglikelihood on the Copula Scale for the Clayton Copula
 #'
+#' `clayton_loglik_copula_scale()` computes the loglikelihood on the copula
+#' scale for the Clayton copula which is parameterized by `theta` as follows:
+#' \deqn{C(u, v) = (u^{-\theta} + v^{-\theta} - 1)^{-\frac{1}{\theta}}}
+#'
 #' @param theta Copula parameter
 #' @param u A numeric vector. Corresponds to first variable on the copula scale.
 #' @param v A numeric vector. Corresponds to second variable on the copula
@@ -14,7 +18,6 @@
 #'  * `d1[i] = 0` if `u[i]` corresponds to right-censored value
 #'
 #' @return Value of the copula loglikelihood evaluated in `theta`.
-#'
 clayton_loglik_copula_scale <- function(theta, u, v, d1, d2){
   # Natural logarithm of copula evaluated in u and v.
   log_C = - (1 / theta) * log(u**(-theta) + v**(-theta) - 1)
@@ -43,30 +46,50 @@ clayton_loglik_copula_scale <- function(theta, u, v, d1, d2){
   return(loglik_copula)
 }
 
-#' Title
+#' Loglikelihood on the Copula Scale for the Frank Copula
 #'
-#' @param theta
-#' @param u
-#' @param v
-#' @param d1
-#' @param d2
+#' `frank_loglik_copula_scale()` computes the loglikelihood on the copula
+#' scale for the Frank copula which is parameterized by `theta` as follows:
+#' \deqn{ C(u, v) = - \frac{1}{\theta} \log \left[ 1 - \frac{(1 - e^{-\theta u})(1 - e^{-\theta v})}{1 - e^{-\theta}} \right]}
 #'
-#' @return
-#' @export
+#' @inheritParams clayton_loglik_copula_scale
 #'
-#' @examples
+#' @return Value of the copula loglikelihood evaluated in `theta`.
 frank_loglik_copula_scale <- function(theta, u, v, d1, d2){
-  #copula
-  C <- (-1/theta)*log(((1-exp(-theta)-(1-exp(-theta*u))*(1-exp(-theta*v))))/(1-exp(-theta)))
 
-  part1 <- ifelse(d1*d2==1,(log(theta)+theta*C+log(exp(theta*C)-1)-log(exp(theta*u)-1)-log(exp(theta*v)-1)+log(du)+log(dv)),0)
-  part2 <- ifelse(d1*(1-d2)==1,log((1-exp(theta*C))/(1-exp(theta*u)))+log(du),0)
-  part3 <- ifelse(((1-d1)*(d2))==1,(log((1-exp(theta*C))/(1-exp(theta*v)))+log(dv)),0)
-  part4 <- ifelse(((1-d1)*(1-d2))==1,log(C),0)
+  # For efficiency purposes, some quantities that are needed multiple times are
+  # first precomputed. In this way, we do not waste resources on computing the
+  # same quantity mutliple times.
 
-  loglik <- sum(part1+part2+part3+part4)
+  A_u = 1 - exp(-theta * u)
+  A_v = 1 - exp(-theta * v)
+  A_theta = 1 - exp(-theta)
 
-  return(loglik)
+  # Copula evaluated in (u, v)
+  C = (-1 / theta) * log(1 - ((A_u * A_v) / A_theta))
+
+
+  # Log likelihood contribution for uncensored observations.
+  part1 <-
+    ifelse(d1 * d2 == 1,
+           log(theta) + theta * C + log(exp(theta * C) - 1) - log(A_u) - log(A_v),
+           0)
+  # Log likelihood contribution for second observation censored.
+  part2 <-
+    ifelse(d1 * (1 - d2) == 1,
+           log(1 - exp(theta * C) - log(A_u)),
+           0)
+  # Log likelihood contribution for first observation censored.
+  part3 <-
+    ifelse(d1 * (1 - d2) == 1,
+           log(1 - exp(theta * C) - log(A_v)),
+           0)
+  # Log likelihood contribution for both observations censored.
+  part4 <- ifelse((1 - d1) * (1 - d2) == 1, log(C), 0)
+
+  loglik_copula <- sum(part1+part2+part3+part4)
+
+  return(loglik_copula)
 }
 
 gumbel_loglik <- function(para, X, Y, d1, d2, k = 2, knotsx, knotsy){
