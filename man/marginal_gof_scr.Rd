@@ -7,20 +7,20 @@
 marginal_gof_scr(fitted_model, data, grid, time_unit = "years")
 }
 \arguments{
-\item{fitted_model}{Returned value from \code{\link[=fit_model_SurvSurv]{fit_model_SurvSurv()}}. This object
+\item{fitted_model}{Returned value from [fit_model_SurvSurv()]. This object
 essentially contains the estimated identifiable part of the joint
 distribution for the potential outcomes.}
 
-\item{data}{data that was supplied to \code{\link[=fit_model_SurvSurv]{fit_model_SurvSurv()}}.}
+\item{data}{data that was supplied to [fit_model_SurvSurv()].}
 
 \item{grid}{grid of time-points for which to compute the estimated survival
 functions.}
 
 \item{time_unit}{character vector that reflects the time unit of the
-endpoints, defaults to \code{"years"}.}
+endpoints, defaults to `"years"`.}
 }
 \description{
-The \code{\link[=marginal_gof_scr]{marginal_gof_scr()}} function plots the estimated marginal survival
+The [marginal_gof_scr()] function plots the estimated marginal survival
 functions for the fitted model. This results in four plots of survival
 functions, one for each of \eqn{S_0}, \eqn{S_1}, \eqn{T_0}, \eqn{T_1}.
 }

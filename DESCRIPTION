@@ -13,7 +13,7 @@ Repository: CRAN
 NeedsCompilation: no
 Packaged: 2023-03-07 08:48:04 UTC; wim
 Date/Publication: 2023-03-07 09:30:02 UTC
-RoxygenNote: 7.2.2
+RoxygenNote: 7.2.3
 Encoding: UTF-8
 Suggests: 
     testthat (>= 3.0.0)

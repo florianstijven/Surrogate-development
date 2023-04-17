@@ -7,23 +7,22 @@
 model_fit_measures(fitted_model)
 }
 \arguments{
-\item{fitted_model}{returned value from \code{\link[=fit_model_SurvSurv]{fit_model_SurvSurv()}}.}
+\item{fitted_model}{returned value from [fit_model_SurvSurv()].}
 }
 \value{
 a named vector containing the goodness-of-fit measures
 }
 \description{
 This function returns several goodness-of-fit measures for a model fitted by
-\code{\link[=fit_model_SurvSurv]{fit_model_SurvSurv()}}. These are primarily intended for model selection.
+[fit_model_SurvSurv()]. These are primarily intended for model selection.
 }
 \details{
 The following goodness-of-fit measures are returned in a named vector:
-\itemize{
-\item \code{tau_0} and \code{tau_1}: (latent) value for Kendall's tau in the estimated
+
+* `tau_0` and `tau_1`: (latent) value for Kendall's tau in the estimated
 model.
-\item \code{log_lik}: the maximized log-likelihood value.
-\item \code{AIC}: the Aikaike information criterion of the fitted model.
-}
+* `log_lik`: the maximized log-likelihood value.
+* `AIC`: the Aikaike information criterion of the fitted model.
 }
 \examples{
 library(Surrogate)

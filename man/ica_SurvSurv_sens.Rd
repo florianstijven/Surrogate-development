@@ -17,83 +17,77 @@ ica_SurvSurv_sens(
 )
 }
 \arguments{
-\item{fitted_model}{Returned value from \code{\link[=fit_model_SurvSurv]{fit_model_SurvSurv()}}. This object
+\item{fitted_model}{Returned value from [fit_model_SurvSurv()]. This object
 contains the estimated identifiable part of the joint distribution for the
 potential outcomes.}
 
-\item{n_sim}{Number of replications in the \emph{sensitivity analysis}. This value
+\item{n_sim}{Number of replications in the *sensitivity analysis*. This value
 should be large enough to sufficiently explore all possible values of the
 ICA. The minimally sufficient number depends to a large extent on which
 inequality assumptions are subsequently imposed (see Additional
 Assumptions).}
 
-\item{n_prec}{Number of Monte-Carlo samples for the \emph{numerical approximation}
+\item{n_prec}{Number of Monte-Carlo samples for the *numerical approximation*
 of the ICA in each replication of the sensitivity analysis.}
 
 \item{minfo_prec}{Number of quasi Monte-Carlo samples for the numerical
 integration to obtain the mutual information. If this value is 0 (default),
-the mutual information is not computed and \code{NA} is returned for that column.}
+the mutual information is not computed and `NA` is returned for that column.}
 
 \item{restr}{Default value should not be modified by the user.}
 
 \item{copula_family2}{Parametric family of the unidentifiable copulas in the
 D-vine copula. One of the following parametric copula families:
-\code{"clayton"}, \code{"frank"}, \code{"gaussian"}, or \code{"gumbel"}.}
+`"clayton"`, `"frank"`, `"gaussian"`, or `"gumbel"`.}
 
 \item{ncores}{Number of cores used in the sensitivity analysis. The
 computations are computationally heavy, and this option can speed things
 up considerably.}
 
 \item{get_marg_tau}{Boolean.
-\itemize{
-\item \code{TRUE}: Return marginal association measures
-in each replication in terms of Spearman's rho. The proportion of harmed,
-protected, never diseased, and always diseased is also returned. See also
-Value.
-\item \code{FALSE} (default): No additional measures are returned.
-}}
+* `TRUE`: Return marginal association measures
+  in each replication in terms of Spearman's rho. The proportion of harmed,
+  protected, never diseased, and always diseased is also returned. See also
+  Value.
+* `FALSE` (default): No additional measures are returned.}
 
 \item{cond_ind}{Boolean.
-\itemize{
-\item \code{TRUE}: Assume conditional independence (see Additional Assumptions).
-\item \code{FALSE} (default): Conditional independence is not assumed.
-}}
+* `TRUE`: Assume conditional independence (see Additional Assumptions).
+* `FALSE` (default): Conditional independence is not assumed.}
 }
 \value{
 A data frame is returned. Each row represents one replication in the
-sensitivity analysis. The returned data frame always contains the following
-columns:
-\itemize{
-\item \code{kendall}, \code{sp_rho}, \code{minfo}: ICA as quantified by Kendall's \eqn{\tau},
+  sensitivity analysis. The returned data frame always contains the following
+  columns:
+* `kendall`, `sp_rho`, `minfo`: ICA as quantified by Kendall's \eqn{\tau},
 Spearman's \eqn{\rho}, and the mutual information, respectively.
-\item \code{c23}, \code{c13_2}, \code{c24_3}, \code{c14_23}: sampled copula parameters of the
+* `c23`, `c13_2`, `c24_3`, `c14_23`: sampled copula parameters of the
 unidentifiable copulas in the D-vine copula. The parameters correspond to the
-parameterization of the \code{copula_family2} copula as in the \code{copula} R-package.
-\item \code{r23}, \code{r13_2}, \code{r24_3}, \code{r14_23}: sampled rotation parameters of the
+parameterization of the `copula_family2` copula as in the `copula` R-package.
+* `r23`, `r13_2`, `r24_3`, `r14_23`: sampled rotation parameters of the
 unidentifiable copulas in the D-vine copula. These values are constant for
 the Gaussian copula family since that copula is invariant to rotations.
-}
 
-The returned data frame also contains the following columns when \code{get_marg_tau}
-is \code{TRUE}:
-\itemize{
-\item \code{sp_s0s1}, \code{sp_s0t0}, \code{sp_s0t1}, \code{sp_s1t0}, \code{sp_s1t1}, \code{sp_t0t1}:
+The returned data frame also contains the following columns when `get_marg_tau`
+is `TRUE`:
+* `sp_s0s1`, `sp_s0t0`, `sp_s0t1`, `sp_s1t0`, `sp_s1t1`, `sp_t0t1`:
 Spearman's \eqn{\rho} between the corresponding potential outcomes. Note
 that these associations refer to the potential time-to-composite events
 and/or time-to-true endpoint event. In contrary, the estimated association
-parameters from \code{\link[=fit_model_SurvSurv]{fit_model_SurvSurv()}} refer to associations between the
+parameters from [fit_model_SurvSurv()] refer to associations between the
 time-to-surrogate event and time-to true endpoint event.
-\item \code{prop_harmed}, \code{prop_protected}, \code{prop_always}, \code{prop_never}: proportions
+* `prop_harmed`, `prop_protected`, `prop_always`, `prop_never`: proportions
 of the corresponding population strata in each replication. These are defined
 in Nevo and Gorfine (2022).
 }
-}
 \description{
-The \code{\link[=ica_SurvSurv_sens]{ica_SurvSurv_sens()}} function performs the sensitivity analysis
+The [ica_SurvSurv_sens()] function performs the sensitivity analysis
 for the individual causal association (ICA) as described by Stijven et
 al. (2022).
 }
-\section{Quantifying Surrogacy}{
+\details{
+# Quantifying Surrogacy
+
 In the causal-inference framework to evaluate surrogate endpoints, the ICA is
 the measure of primary interest. This measure quantifies the association
 between the individual causal treatment effects on the surrogate (\eqn{\Delta
@@ -105,17 +99,17 @@ between \eqn{\Delta S} and \eqn{\Delta T}, \deqn{R^2_H = 1 - e^{-2 \cdot
 I(\Delta S; \Delta T)}.} By token of that transformation, \eqn{R^2_H} is
 restricted to the unit interval where 0 indicates independence, and 1 a
 functional relationship between \eqn{\Delta S} and \eqn{\Delta T}. The mutual
-information is returned by \code{\link[=ica_SurvSurv_sens]{ica_SurvSurv_sens()}} if a non-zero value is
-specified for \code{minfo_prec} (see Arguments).
+information is returned by [ica_SurvSurv_sens()] if a non-zero value is
+specified for `minfo_prec` (see Arguments).
 
 The association between \eqn{\Delta S} and \eqn{\Delta T} can also be
 quantified by Spearman's \eqn{\rho} (or Kendall's \eqn{\tau}). This quantity
 requires appreciably less computing time than the mutual information. This
 quantity is therefore always returned for every replication of the
 sensitivity analysis.
-}
 
-\section{Sensitivity Analysis}{
+# Sensitivity Analysis
+
 Because \eqn{S_0} and \eqn{S_1} are never simultaneously observed in the same
 patient, \eqn{\Delta S} is not observable, and analogously for \eqn{\Delta
 T}. Consequently, the ICA is unidentifiable. This is solved by considering a
@@ -123,31 +117,31 @@ T}. Consequently, the ICA is unidentifiable. This is solved by considering a
 \eqn{(T_0, S_0, S_1, T_1)'}. The identifiable parameters are estimated. The
 unidentifiable parameters are sampled from their parameters space in each
 replication of a sensitivity analysis. If the number of replications
-(\code{n_sim}) is sufficiently large, the entire parameter space for the
+(`n_sim`) is sufficiently large, the entire parameter space for the
 unidentifiable parameters will be explored/sampled. In each replication, all
 model parameters are "known" (either estimated or sampled). Consequently, the
 ICA can be computed in each replication of the sensitivity analysis.
 
 The sensitivity analysis thus results in a set of values for the ICA. This
-set can be interpreted as \emph{all values for the ICA that are compatible with
-the observed data}. However, the range of this set is often quite broad; this
+set can be interpreted as *all values for the ICA that are compatible with
+the observed data*. However, the range of this set is often quite broad; this
 means there remains too much uncertainty to make judgements regarding the
 worth of the surrogate. To address this unwieldy uncertainty, additional
 assumptions can be used that restrict the parameter space of the
 unidentifiable parameters. This in turn reduces the uncertainty regarding the
 ICA.
-}
 
-\section{Additional Assumptions}{
+# Additional Assumptions
+
 There are two possible types of assumptions that restrict the parameter space
-of the unidentifiable parameters: (i) \emph{equality} type of assumptions, and
-(ii) \emph{inequality} type of assumptions. These are discussed in turn in the
+of the unidentifiable parameters: (i) *equality* type of assumptions, and
+(ii) *inequality* type of assumptions. These are discussed in turn in the
 next two paragraphs.
 
 The equality assumptions have to be incorporated into the
 sensitivity analysis itself. Only one type of equality assumption has been
 implemented; this is the conditional independence assumption which can
-be specified to \code{\link[=ica_SurvSurv_sens]{ica_SurvSurv_sens()}} through the \code{cond_ind} argument:
+be specified to [ica_SurvSurv_sens()] through the `cond_ind` argument:
 \deqn{\tilde{S}_0 \perp \!\!\! \perp T_1 | \tilde{S}_1 \; \text{and} \;
 \tilde{S}_1 \perp \!\!\! \perp T_0 | \tilde{S}_0 .} This can informally be
 interpreted as ``what the control treatment does to the surrogate does not
@@ -156,16 +150,15 @@ already know what the experimental treatment does to the surrogate", and
 analogously when control and experimental treatment are interchanged.
 
 The inequality type of assumptions have to be imposed on the data frame that
-is returned by the \code{\link[=ica_SurvSurv_sens]{ica_SurvSurv_sens()}} function; those assumptions are thus
-imposed \emph{after} running the sensitivity analysis. If \code{get_marg_tau} is set to
-\code{TRUE}, the returned data frame contains two types of additional unverifiable
+is returned by the [ica_SurvSurv_sens()] function; those assumptions are thus
+imposed *after* running the sensitivity analysis. If `get_marg_tau` is set to
+`TRUE`, the returned data frame contains two types of additional unverifiable
 quantities that differ across replications of the sensitivity analysis: (i)
 the unconditional Spearman's \eqn{\rho} for all pairs of potential outcomes,
 and (ii) the proportions of the population strata as defined by Nevo and
 Gorfine (2022). More details on the interpretation and use of these
 assumptions can be found in Stijven et al. (2022).
 }
-
 \examples{
 library(Surrogate)
 data("Ovarian")
@@ -192,10 +185,10 @@ ica_SurvSurv_sens(ovarian_fitted,
 }
 \references{
 Stijven, F., Alonso, a., Molenberghs, G., Van Der Elst, W., Van
-Keilegom, I. (2022). An information-theoretic approach to the evaluation of
-time-to-event surrogates for time-to-event true endpoints based on causal
-inference.
+  Keilegom, I. (2022). An information-theoretic approach to the evaluation of
+  time-to-event surrogates for time-to-event true endpoints based on causal
+  inference.
 
-Nevo, D., & Gorfine, M. (2022). Causal inference for semi-competing risks
-data. Biostatistics, 23 (4), 1115-1132
+  Nevo, D., & Gorfine, M. (2022). Causal inference for semi-competing risks
+  data. Biostatistics, 23 (4), 1115-1132
 }

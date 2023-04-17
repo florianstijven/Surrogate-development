@@ -1,3 +1,20 @@
+#' Loglikelihood on the Copula Scale for the Clayton Copula
+#'
+#' @param theta Copula parameter
+#' @param u A numeric vector. Corresponds to first variable on the copula scale.
+#' @param v A numeric vector. Corresponds to second variable on the copula
+#'   scale.
+#' @param d1 An integer vector. Indicates whether first variable is observed or
+#'   right-censored,
+#'  * `d1[i] = 1` if `u[i]` corresponds to non-censored value
+#'  * `d1[i] = 0` if `u[i]` corresponds to right-censored value
+#' @param d2 An integer vector. Indicates whether first variable is observed or
+#'   right-censored,
+#'  * `d1[i] = 1` if `u[i]` corresponds to non-censored value
+#'  * `d1[i] = 0` if `u[i]` corresponds to right-censored value
+#'
+#' @return Value of the copula loglikelihood evaluated in `theta`.
+#'
 clayton_loglik_copula_scale <- function(theta, u, v, d1, d2){
   # Natural logarithm of copula evaluated in u and v.
   log_C = - (1 / theta) * log(u**(-theta) + v**(-theta) - 1)
@@ -26,20 +43,19 @@ clayton_loglik_copula_scale <- function(theta, u, v, d1, d2){
   return(loglik_copula)
 }
 
-frank_loglik <- function(para, X, Y, d1, d2, k = 2, knotsx, knotsy){
-  #k is the number of knots in the model, this determines the length of para
-  gammax <- para[1:(k + 2)]
-  gammay <- para[(k + 3):(2*(k + 2))]
-  #last value in para is the association parameter
-  theta <- para[2*(k + 2) + 1]
-
-  #survival probabilities
-  u = flexsurv::psurvspline(q = X, gamma = gammax, knots = knotsx, lower.tail = FALSE)
-  v = flexsurv::psurvspline(q = Y, gamma = gammay, knots = knotsy, lower.tail = FALSE)
-  #densities
-  du = flexsurv::dsurvspline(x = X, gamma = gammax, knots = knotsx)
-  dv = flexsurv::dsurvspline(x = Y, gamma = gammay, knots = knotsy)
-
+#' Title
+#'
+#' @param theta
+#' @param u
+#' @param v
+#' @param d1
+#' @param d2
+#'
+#' @return
+#' @export
+#'
+#' @examples
+frank_loglik_copula_scale <- function(theta, u, v, d1, d2){
   #copula
   C <- (-1/theta)*log(((1-exp(-theta)-(1-exp(-theta*u))*(1-exp(-theta*v))))/(1-exp(-theta)))
 
