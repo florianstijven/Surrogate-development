@@ -41,7 +41,7 @@ clayton_loglik_copula_scale <- function(theta, u, v, d1, d2){
   # Log likelihood contribution for both observations censored.
   part4 <- ifelse((1 - d1) * (1 - d2) == 1, log_C, 0)
 
-  loglik_copula <- part1 + part2 + part3 + part4
+  loglik_copula <- sum(part1 + part2 + part3 + part4)
 
   return(loglik_copula)
 }
@@ -87,7 +87,7 @@ frank_loglik_copula_scale <- function(theta, u, v, d1, d2){
   # Log likelihood contribution for both observations censored.
   part4 <- ifelse((1 - d1) * (1 - d2) == 1, log(C), 0)
 
-  loglik_copula <- part1 + part2 + part3 + part4
+  loglik_copula <- sum(part1 + part2 + part3 + part4)
 
   return(loglik_copula)
 }
@@ -131,7 +131,7 @@ gumbel_loglik_copula_scale <- function(theta, u, v, d1, d2){
   # Log likelihood contribution for both observations censored.
   part4 <- ifelse((1 - d1) * (1 - d2) == 1, log_C, 0)
 
-  loglik_copula <- part1 + part2 + part3 + part4
+  loglik_copula <- sum(part1 + part2 + part3 + part4)
 
   return(loglik_copula)
 }
@@ -201,7 +201,7 @@ normal_loglik_copula_scale <- function(theta, u, v, d1, d2){
            log(C),
            0)
 
-  loglik_copula <- part1 + part2 + part3 + part4
+  loglik_copula <- sum(part1 + part2 + part3 + part4)
 
   return(loglik_copula)
 }
