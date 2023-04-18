@@ -86,23 +86,50 @@ fit_model_BinCont = function(data,
 #' @param Y
 #' @param copula_family
 #' @param marginal_surrogate
-#' @param marginal_true
 #'
 #' @return
-#' @export
-#'
-#' @examples
-binary_continuous_loglik <- function(para, X, Y, copula_family,
-                                     marginal_surrogate, marginal_true){
+binary_continuous_loglik <- function(para, X, Y, copula_family, marginal_surrogate){
   # Vector with mean parameters of the marginal distribution.
   mean_S = para[1]
   mean_T = para[2]
   # Vector of additional parameters for marginal distributions of S.
   extra_par_S = para[3]
   # Vector of copula parameters.
-  copula_par = para[4]
+  theta = para[4]
 
-  log_likelihood_copula_model()
+  # Construct marginal distribution and density functions.
+  cdf_X = cdf_fun(mean = mean_S,
+                  extra_par = extra_par_S,
+                  family = marginal_surrogate)
+  pdf_X = pdf_fun(mean = mean_S,
+                  extra_par = extra_par_S,
+                  family = marginal_surrogate)
+
+  cdf_Y = cdf_fun(mean = mean_T,
+                  extra_par = 1,
+                  family = "normal")
+  pdf_Y = pdf_fun(mean = mean_T,
+                  extra_par = 1,
+                  family = "normal")
+
+  # Transform true endpoint variable to left/right-censoring indicator. d2 = 1
+  # indicates right-censoring and d2 = -1 indicates left-censoring.
+  d2 = (Y * 2) - 1
+
+  loglik = log_likelihood_copula_model(
+    theta = theta,
+    X = X,
+    Y = rep(0, length(x)),
+    d1 = rep(0, length(x)),
+    d2 = d2,
+    copula = copula_family,
+    cdf_X = cdf_X,
+    cdf_Y = cdf_Y,
+    pdf_X = pdf_X,
+    pdf_Y = pdf_Y
+  )
+
+  return(loglik)
 }
 
 
@@ -171,19 +198,6 @@ partial_deriv_copula = function(u, v, copula_par, family){
   }
   return(ifelse(is.nan(dC), 0, dC))
 }
-
-#helper function for the gaussian copula
-psi_dot_v = function(u, v, rho){
-  q_u = qnorm(p = u)
-  q_v = qnorm(p = v)
-  dens_q_v = dnorm(q_v)
-  cond_mean = rho*q_v
-  cond_var = 1 - rho^2
-  p_q_u = pnorm(q = q_u, mean = cond_mean, sd = sqrt(cond_var), lower.tail = TRUE)
-
-  return(dens_q_v*p_q_u)
-}
-
 
 
 
