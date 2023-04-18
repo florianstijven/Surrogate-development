@@ -19,13 +19,15 @@ right-censored,
 \itemize{
 \item \code{d1[i] = 1} if \code{u[i]} corresponds to non-censored value
 \item \code{d1[i] = 0} if \code{u[i]} corresponds to right-censored value
+\item \code{d1[i] = -1} if \code{u[i]} corresponds to left-censored value
 }}
 
 \item{d2}{An integer vector. Indicates whether first variable is observed or
 right-censored,
 \itemize{
-\item \code{d1[i] = 1} if \code{u[i]} corresponds to non-censored value
-\item \code{d1[i] = 0} if \code{u[i]} corresponds to right-censored value
+\item \code{d2[i] = 1} if \code{v[i]} corresponds to non-censored value
+\item \code{d2[i] = 0} if \code{v[i]} corresponds to right-censored value
+\item \code{d2[i] = -1} if \code{v[i]} corresponds to left-censored value
 }}
 
 \item{copula}{Copula family, one of the following:

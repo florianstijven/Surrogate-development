@@ -1,5 +1,86 @@
 #' Title
 #'
+#' @param data
+#' @inheritParams fit_model_SurvSurv
+#'
+#' @return
+#' @export
+#'
+#' @examples
+fit_model_BinCont = function(data,
+                             copula_family,
+                             fitted_model = NULL,
+                             hessian = TRUE,
+                             maxit = 500) {
+  # Column names are added to make the interpretation of the further code
+  # easier. surr refers to the surrogate, true refers to the true endpoint
+  colnames(data) = c("surr", "true", "Treat")
+
+  #choose correct log-likelihood function
+  #starting value for the association parameter is obtained by
+  #estimating the copula parameter through kendall's tau, ignoring censoring
+  tau_0 = cor(data$surr[data$Treat == 0], data$true[data$Treat == 0],
+              method = "kendall")
+  tau_1 = cor(data$surr[data$Treat == 1], data$true[data$Treat == 1],
+              method = "kendall")
+
+  if(copula_family == "gaussian"){
+    inv_tau_0 = iTau(copula = ellipCopula(family = "normal"),
+                     tau = tau_0)
+    inv_tau_0 = log(1 + inv_tau_0) - log(1 - inv_tau_0)
+    inv_tau_1 = iTau(copula = ellipCopula(family = "normal"),
+                     tau = tau_1)
+    inv_tau_1 = log(1 + inv_tau_1) - log(1 - inv_tau_1)
+  }
+  else if(copula_family == "clayton"){
+    inv_tau_0 = iTau(copula = claytonCopula(),
+                     tau = tau_0)
+    inv_tau_1 = iTau(copula = claytonCopula(),
+                     tau = tau_1)
+  }
+  else if(copula_family == "frank"){
+    inv_tau_0 = iTau(copula = frankCopula(),
+                     tau = tau_0)
+    inv_tau_1 = iTau(copula = frankCopula(),
+                     tau = tau_1)
+  }
+  else if(copula_family == "gumbel"){
+    inv_tau_0 = iTau(copula = gumbelCopula(),
+                     tau = tau_0)
+    inv_tau_1 = iTau(copula = gumbelCopula(),
+                     tau = tau_1)
+  }
+
+  #use partly data based starting values
+  inits_0 = c(mean(data$surr[data$Treat == 0]), 0,
+              sd(data$surr[data$Treat == 0]),
+              abs(inv_tau_0) + 0.1)
+  inits_1 = c(mean(data$surr[data$Treat == 1]), 0,
+              sd(data$surr[data$Treat == 1]),
+              abs(inv_tau_1) + 0.1)
+
+  fit_0 = optim(par = inits_0, fn = binary_continuous_loglik, method = "BFGS",
+                X = data$surr[data$Treat == 0], Y = data$true[data$Treat == 0],
+                marginal_true = marginal_true, marginal_surrogate = marginal_surrogate,
+                copula_family = copula_family,
+                control = list(maxit = maxit, fnscale = -1, reltol = 1e-8,
+                               ndeps = rep(1e-5, 4)),
+                hessian = TRUE)
+  fit_1 = optim(par = inits_1, fn = binary_continuous_loglik, method = "BFGS",
+                X = data$surr[data$Treat == 1], Y = data$true[data$Treat == 1],
+                marginal_true = marginal_true, marginal_surrogate = marginal_surrogate,
+                copula_family = copula_family,
+                control = list(maxit = maxit, fnscale = -1, reltol = 1e-8,
+                               ndeps = rep(1e-5, 4)),
+                hessian = TRUE)
+
+  #return an S3 object
+  return(new_vine_copula_bc_fit(fit_0, fit_1, copula_family,
+                                marginal_true, marginal_surrogate))
+}
+
+#' Title
+#'
 #' @param para
 #' @param X
 #' @param Y
@@ -13,29 +94,15 @@
 #' @examples
 binary_continuous_loglik <- function(para, X, Y, copula_family,
                                      marginal_surrogate, marginal_true){
-  #vector with means of marginal densities
-  mean_s = para[1]
-  mean_t = para[2]
-  #vector of additional parameters for marginal distributions of S
-  extra_par_s = para[3]
-  #vector of identifiable copula parameters
+  # Vector with mean parameters of the marginal distribution.
+  mean_S = para[1]
+  mean_T = para[2]
+  # Vector of additional parameters for marginal distributions of S.
+  extra_par_S = para[3]
+  # Vector of copula parameters.
   copula_par = para[4]
 
-  #evaluate u-values
-  u_t = vapply(X = rep(0, length(X)), FUN = cdf_T, FUN.VALUE = numeric(1),
-               mean = mean_t, family = marginal_true)
-  u_s = vapply(X = X, FUN = cdf_S, FUN.VALUE = numeric(1),
-               mean = mean_s, family = marginal_surrogate,
-               extra_par = extra_par_s)
-  #evaluate marginal density of S
-  density_s = vapply(X = X, FUN = pdf_S, FUN.VALUE = numeric(1),
-                     mean = mean_s, family = marginal_surrogate,
-                     extra_par = extra_par_s)
-  #evaluate partial derivative of copula
-  dC = purrr::map2_dbl(.x = u_t, .y = u_s, .f = partial_deriv_copula,
-                       copula_par = copula_par, family = copula_family)
-  #return log-likelihood
-  return(sum(log(density_s) + (1 - Y)*log(dC) + Y*log(1 - dC)))
+  log_likelihood_copula_model()
 }
 
 
@@ -119,77 +186,8 @@ psi_dot_v = function(u, v, rho){
 
 
 
-#data should be in the prespecified format
-#(S, T, treatment indicator)
-fit_model = function(data, copula_family, marginal_surrogate, marginal_true){
-  maxit = 500
-  #column names are added to make the interpretation of the further code easier
-  #surr refers to the surrogate, true refers to the true endpoint
-  colnames(data) = c("surr", "true", "Treat")
-  #choose correct log-likelihood function
-  #starting value for the association parameter is obtained by
-  #estimating the copula parameter through kendall's tau, ignoring censoring
-  tau_0 = cor(data$surr[data$Treat == 0], data$true[data$Treat == 0],
-              method = "kendall")
-  tau_1 = cor(data$surr[data$Treat == 1], data$true[data$Treat == 1],
-              method = "kendall")
 
-  if(copula_family == "gaussian"){
-    inv_tau_0 = iTau(copula = ellipCopula(family = "normal"),
-                     tau = tau_0)
-    inv_tau_0 = log(1 + inv_tau_0) - log(1 - inv_tau_0)
-    inv_tau_1 = iTau(copula = ellipCopula(family = "normal"),
-                     tau = tau_1)
-    inv_tau_1 = log(1 + inv_tau_1) - log(1 - inv_tau_1)
-  }
-  else if(copula_family == "clayton"){
-    inv_tau_0 = iTau(copula = claytonCopula(),
-                     tau = tau_0)
-    inv_tau_1 = iTau(copula = claytonCopula(),
-                     tau = tau_1)
-  }
-  else if(copula_family == "frank"){
-    inv_tau_0 = iTau(copula = frankCopula(),
-                     tau = tau_0)
-    inv_tau_1 = iTau(copula = frankCopula(),
-                     tau = tau_1)
-  }
-  else if(copula_family == "gumbel"){
-    inv_tau_0 = iTau(copula = gumbelCopula(),
-                     tau = tau_0)
-    inv_tau_1 = iTau(copula = gumbelCopula(),
-                     tau = tau_1)
-  }
-
-  #use partly data based starting values
-  inits_0 = c(mean(data$surr[data$Treat == 0]), 0,
-              sd(data$surr[data$Treat == 0]),
-              abs(inv_tau_0) + 0.1)
-  inits_1 = c(mean(data$surr[data$Treat == 1]), 0,
-              sd(data$surr[data$Treat == 1]),
-              abs(inv_tau_1) + 0.1)
-
-  fit_0 = optim(par = inits_0, fn = binary_continuous_loglik, method = "BFGS",
-                X = data$surr[data$Treat == 0], Y = data$true[data$Treat == 0],
-                marginal_true = marginal_true, marginal_surrogate = marginal_surrogate,
-                copula_family = copula_family,
-                control = list(maxit = maxit, fnscale = -1, reltol = 1e-8,
-                               ndeps = rep(1e-5, 4)),
-                hessian = TRUE)
-  fit_1 = optim(par = inits_1, fn = binary_continuous_loglik, method = "BFGS",
-                X = data$surr[data$Treat == 1], Y = data$true[data$Treat == 1],
-                marginal_true = marginal_true, marginal_surrogate = marginal_surrogate,
-                copula_family = copula_family,
-                control = list(maxit = maxit, fnscale = -1, reltol = 1e-8,
-                               ndeps = rep(1e-5, 4)),
-                hessian = TRUE)
-
-  #return an S3 object
-  return(new_vine_copula_bc_fit(fit_0, fit_1, copula_family,
-                                marginal_true, marginal_surrogate))
-}
-
-#define S3 object for fitted model
+# define S3 object for fitted model
 new_vine_copula_bc_fit = function(fit_0, fit_1, copula_family,
                                   marginal_true, marginal_surrogate){
   structure(

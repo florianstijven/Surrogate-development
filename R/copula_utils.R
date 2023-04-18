@@ -12,10 +12,12 @@
 #'   right-censored,
 #'  * `d1[i] = 1` if `u[i]` corresponds to non-censored value
 #'  * `d1[i] = 0` if `u[i]` corresponds to right-censored value
+#'  * `d1[i] = -1` if `u[i]` corresponds to left-censored value
 #' @param d2 An integer vector. Indicates whether first variable is observed or
 #'   right-censored,
-#'  * `d1[i] = 1` if `u[i]` corresponds to non-censored value
-#'  * `d1[i] = 0` if `u[i]` corresponds to right-censored value
+#'  * `d2[i] = 1` if `v[i]` corresponds to non-censored value
+#'  * `d2[i] = 0` if `v[i]` corresponds to right-censored value
+#'  * `d2[i] = -1` if `v[i]` corresponds to left-censored value
 #'
 #' @return Value of the copula loglikelihood evaluated in `theta`.
 clayton_loglik_copula_scale <- function(theta, u, v, d1, d2){
@@ -24,24 +26,29 @@ clayton_loglik_copula_scale <- function(theta, u, v, d1, d2){
   # Log likelihood contribution for uncensored observations.
   part1 <-
     ifelse(
-      d1 * d2 == 1,
+      (d1 == 1) & (d2 == 1),
       log(theta + 1) + (2 * theta + 1) * log_C - (theta + 1) *(log(u) + log(v)),
       0
     )
-  # Log likelihood contribution for second observation censored.
+  # Log likelihood contribution for second observation right-censored.
   part2 <-
-    ifelse(d1 * (1 - d2) == 1,
+    ifelse((d1 == 1) & (d2 == 0),
            (theta + 1) * log_C - (theta + 1) * log(u),
            0)
-  # Log likelihood contribution for first observation censored.
+  # Log likelihood contribution for first observation right-censored.
   part3 <-
-    ifelse((1 - d1) * d2 == 1,
+    ifelse((d1 == 0) & (d2 == 1),
            (theta + 1) * log_C - (theta + 1) * log(v),
            0)
-  # Log likelihood contribution for both observations censored.
-  part4 <- ifelse((1 - d1) * (1 - d2) == 1, log_C, 0)
+  # Log likelihood contribution for both observations right-censored.
+  part4 <- ifelse((d1 == 0) & (d2 == 0), log_C, 0)
 
-  loglik_copula <- sum(part1 + part2 + part3 + part4)
+  # Log likelihood contribution for second observation left-censored.
+  part5 <- ifelse((d1 == 1) & (d2 == -1),
+                  1 - ((theta + 1) * log_C - (theta + 1) * log(u)),
+                  0)
+
+  loglik_copula <- sum(part1 + part2 + part3 + part4 + part5)
 
   return(loglik_copula)
 }
@@ -86,8 +93,12 @@ frank_loglik_copula_scale <- function(theta, u, v, d1, d2){
            0)
   # Log likelihood contribution for both observations censored.
   part4 <- ifelse((1 - d1) * (1 - d2) == 1, log(C), 0)
+  # Log likelihood contribution for second observation left-censored.
+  part5 <- ifelse((d1 == 1) & (d2 == -1),
+                  1 - (log((1 - exp(theta * C)) / (1 - exp(theta * u)))),
+                  0)
 
-  loglik_copula <- sum(part1 + part2 + part3 + part4)
+  loglik_copula <- sum(part1 + part2 + part3 + part4 + part5)
 
   return(loglik_copula)
 }
@@ -130,8 +141,12 @@ gumbel_loglik_copula_scale <- function(theta, u, v, d1, d2){
            0)
   # Log likelihood contribution for both observations censored.
   part4 <- ifelse((1 - d1) * (1 - d2) == 1, log_C, 0)
+  # Log likelihood contribution for second observation left-censored.
+  part5 <- ifelse((d1 == 1) & (d2 == -1),
+                  1 - (log_C + (theta - 1) * log(min_log_u) + min_log_u - (theta - 1) * log(-log_C)),
+                  0)
 
-  loglik_copula <- sum(part1 + part2 + part3 + part4)
+  loglik_copula <- sum(part1 + part2 + part3 + part4 + part5)
 
   return(loglik_copula)
 }
@@ -205,8 +220,17 @@ gaussian_loglik_copula_scale <- function(theta, u, v, d1, d2){
     ifelse((1 - d1) * (1 - d2) == 1,
            log(C),
            0)
+  # Log likelihood contribution for second observation left-censored.
+  part5 <- ifelse((d1 == 1) & (d2 == -1),
+                  1 - (pnorm(
+                    q = z_v,
+                    mean = z_u * theta,
+                    sd =  sqrt(1 - theta ** 2),
+                    log.p = TRUE
+                  )),
+                  0)
 
-  loglik_copula <- sum(part1 + part2 + part3 + part4)
+  loglik_copula <- sum(part1 + part2 + part3 + part4 + part5)
 
   return(loglik_copula)
 }
