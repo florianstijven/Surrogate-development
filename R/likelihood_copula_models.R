@@ -6,16 +6,14 @@
 #'
 #' @param X Numeric vector corresponding to first outcome variable.
 #' @param Y Numeric vector corresponding to second outcome variable.
-#' @param cdf_X
-#' @param cdf_Y
-#' @param pdf_X
-#' @param pdf_Y
+#' @param cdf_X Distribution function for the first outcome variable.
+#' @param cdf_Y Distribution function for the second outcome variable.
+#' @param pdf_X Density function for the first outcome variable.
+#' @param pdf_Y Density function for the second outcome variable.
 #' @inheritParams loglik_copula_scale
 #'
-#' @return
-#' @export
-#'
-#' @examples
+#' @return Loglikelihood of the bivariate copula model evaluated in the observed
+#'   data.
 log_likelihood_copula_model = function(theta,
                                        X,
                                        Y,

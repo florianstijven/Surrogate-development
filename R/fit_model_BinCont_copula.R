@@ -38,37 +38,40 @@ binary_continuous_loglik <- function(para, X, Y, copula_family,
   return(sum(log(density_s) + (1 - Y)*log(dC) + Y*log(1 - dC)))
 }
 
-#' Title
+#' Function factory for distribution functions
 #'
-#' @param x
-#' @param mean
-#' @param family
+#' @param mean Mean parameter.
+#' @param extra_par Additional parameters. The specific meaning of these extra
+#'   parameters depends on `family`.
+#' @param family Distributional family, one of the following:
+#' * `"normal"`: normal distribution where `mean` is the mean and `extra_par` is
+#'   the standard deviation.
+#' * `"logistic"`: logistic distribution as parameterized in `stats::plogis()` where
+#'   `mean` and `extra_par` correspond to `location` and `scale`, respectively.
+#' * `"t"`: t distribution as parameterized in `stats::pt()` where `mean` and
+#'   `extra_par` correspond to `ncp` and `df`, respectively.
 #'
-#' @return
-#' @export
+#' @details
 #'
-#' @examples
-cdf_T = function(x, mean, family){
-  #this function computes the value of the cdf of the latent true value at x
-  #only two families of distributions are now allowed
-  if (family == "normal") u_t = pnorm(q = x, mean = mean, sd = 1)
-  else if (family == "logistic") u_t = plogis(q = x, location = mean, scale = 1)
-
-  return(u_t)
-}
-
-#' Title
-#'
-#' @param x
-#' @param mean
-#' @param extra_par
-#' @param family
-#'
-#' @return
-#' @export
-#'
-#' @examples
-cdf_S = function(x, mean, extra_par, family){
+#' @return A distribution function that has a single argument. This is the
+#'   vector of values in which the distribution function is evaluated.
+cdf_fun = function(x, mean, extra_par, family){
+  pdf_function = function(x){
+    # Distribution function evaluated in x.
+    cdf_x = switch(
+      family,
+      normal = pnorm(q = x, mean = mean, sd = extra_par),
+      logistic = plogis(
+        q = x,
+        location = mean,
+        scale = extra_par
+      ),
+      t = dt(q = x, ncp = mean, df = extra_par)
+    )
+    return(cdf_x)
+  }
+  # Return the appropriate pdf function.
+  return(pdf_function)
   #this function computes the value of the cdf of the surrogate at x
   if (family == "normal") u_s = pnorm(q = x, mean = mean, sd = extra_par)
   else if (family == "logistic") u_s = plogis(q = x, location = mean, scale = extra_par)
@@ -77,24 +80,29 @@ cdf_S = function(x, mean, extra_par, family){
   return(u_s)
 }
 
-#' Title
+#' Function factory for density functions
 #'
-#' @param x
-#' @param mean
-#' @param extra_par
-#' @param family
+#' @inheritParams cdf_fun
 #'
-#' @return
-#' @export
-#'
-#' @examples
-pdf_S = function(x, mean, extra_par, family){
-  #this function computes the value of the pdf of the surrogate at x
-  if (family == "normal") d_t = dnorm(x = x, mean = mean, sd = extra_par)
-  else if (family == "logistic") d_t = dlogis(x = x, location = mean, scale = extra_par)
-  else if (family == "t") d_t = dt(x = x, ncp = mean, df = extra_par)
-
-  return(d_t)
+#' @return A density function that has a single argument. This is the vector of
+#'   values in which the density function is evaluated.
+pdf_fun = function(mean, extra_par, family){
+  pdf_function = function(x){
+    # Density function evaluated in x.
+    pdf_x = switch(
+      family,
+      normal = dnorm(x = x, mean = mean, sd = extra_par),
+      logistic = dlogis(
+        x = x,
+        location = mean,
+        scale = extra_par
+      ),
+      t = dt(x = x, ncp = mean, df = extra_par)
+    )
+    return(pdf_x)
+  }
+  # Return the appropriate pdf function.
+  return(pdf_function)
 }
 
 #' Title

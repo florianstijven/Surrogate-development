@@ -48,6 +48,18 @@ right-censored,
 The parameterization of the respective copula families can be found in the
 help files of the dedicated functions named \code{copula_loglik_copula_scale()}.
 }}
+
+\item{cdf_X}{Distribution function for the first outcome variable.}
+
+\item{cdf_Y}{Distribution function for the second outcome variable.}
+
+\item{pdf_X}{Density function for the first outcome variable.}
+
+\item{pdf_Y}{Density function for the second outcome variable.}
+}
+\value{
+Loglikelihood of the bivariate copula model evaluated in the observed
+data.
 }
 \description{
 \code{log_likelihood_copula_model()} computes the loglikelihood for a given
