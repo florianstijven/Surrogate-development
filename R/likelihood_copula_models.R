@@ -1,15 +1,16 @@
-#' Title
+#' Computes loglikelihood for a given copula model
 #'
-#' @param theta
-#' @param X
-#' @param Y
-#' @param d1
-#' @param d2
-#' @param copula
+#' `log_likelihood_copula_model()` computes the loglikelihood for a given
+#' bivariate copula model and data set while allowin for right-censoring of both
+#' outcome variables.
+#'
+#' @param X Numeric vector corresponding to first outcome variable.
+#' @param Y Numeric vector corresponding to second outcome variable.
 #' @param cdf_X
 #' @param cdf_Y
 #' @param pdf_X
 #' @param pdf_Y
+#' @inheritParams loglik_copula_scale
 #'
 #' @return
 #' @export
