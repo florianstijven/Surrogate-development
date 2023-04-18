@@ -76,29 +76,23 @@ log_likelihood_copula_model = function(theta,
 #'
 #' @return A distribution function that has a single argument. This is the
 #'   vector of values in which the distribution function is evaluated.
-cdf_fun = function(x, mean, extra_par, family){
-  pdf_function = function(x){
+cdf_fun = function(mean, extra_par, family){
+  cdf_function = function(x){
     # Distribution function evaluated in x.
     cdf_x = switch(
       family,
-      normal = pnorm(q = x, mean = mean, sd = extra_par),
-      logistic = plogis(
+      normal = stats::pnorm(q = x, mean = mean, sd = extra_par),
+      logistic = stats::plogis(
         q = x,
         location = mean,
         scale = extra_par
       ),
-      t = dt(q = x, ncp = mean, df = extra_par)
+      t = stats::pt(q = x, ncp = mean, df = extra_par)
     )
     return(cdf_x)
   }
   # Return the appropriate pdf function.
-  return(pdf_function)
-  #this function computes the value of the cdf of the surrogate at x
-  if (family == "normal") u_s = pnorm(q = x, mean = mean, sd = extra_par)
-  else if (family == "logistic") u_s = plogis(q = x, location = mean, scale = extra_par)
-  else if (family == "t") u_s = pt(q = x, ncp = mean, df = extra_par)
-
-  return(u_s)
+  return(cdf_function)
 }
 
 #' Function factory for density functions
@@ -112,13 +106,13 @@ pdf_fun = function(mean, extra_par, family){
     # Density function evaluated in x.
     pdf_x = switch(
       family,
-      normal = dnorm(x = x, mean = mean, sd = extra_par),
-      logistic = dlogis(
+      normal = stats::dnorm(x = x, mean = mean, sd = extra_par),
+      logistic = stats::dlogis(
         x = x,
         location = mean,
         scale = extra_par
       ),
-      t = dt(x = x, ncp = mean, df = extra_par)
+      t = stats::dt(x = x, ncp = mean, df = extra_par)
     )
     return(pdf_x)
   }
