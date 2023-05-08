@@ -15,6 +15,7 @@
 #' @examples
 fit_copula_model_BinCont = function(data,
                              copula_family,
+                             marginal_surrogate,
                              fitted_model = NULL,
                              hessian = TRUE,
                              maxit = 500) {
@@ -85,9 +86,15 @@ fit_copula_model_BinCont = function(data,
                                 marginal_true, marginal_surrogate))
 }
 
+
+
 #' Loglikelihood function for binary-continuous copula model
 #'
-#' @param para Parameter vector
+#' @param para Parameter vector. The parameters are ordered as follows:
+#' * `para[1]`: mean (location) parameter for surrogate distribution
+#' * `para[2]`: mean parameter for latent true endpoint distribution
+#' * `para[3]`: additional parameter for surrogate distribution
+#' * `para[4]`: copula parameter
 #' @param X First variable (continuous)
 #' @param Y Second variable (binary, $0$ or $1$)
 #' @param marginal_surrogate Marginal distribution for the surrogate
