@@ -1,4 +1,10 @@
-#' Title
+#' Fit copula model for binary true endpoint and continuous surrogate endpoint
+#'
+#' The function `fit_copula_model_BinCont()` fits the copula model for a
+#' continuous surrogate endpoint and binary true endpoint. Because the bivariate
+#' distributions of the surrogate-true endpoint pairs are functionally
+#' independent across treatment groups, a bivariate distribution is fitted in
+#' each treatment group separately.
 #'
 #' @param data
 #' @inheritParams fit_model_SurvSurv
@@ -7,7 +13,7 @@
 #' @export
 #'
 #' @examples
-fit_model_BinCont = function(data,
+fit_copula_model_BinCont = function(data,
                              copula_family,
                              fitted_model = NULL,
                              hessian = TRUE,
@@ -79,13 +85,13 @@ fit_model_BinCont = function(data,
                                 marginal_true, marginal_surrogate))
 }
 
-#' Title
+#' Loglikelihood function for binary-continuous copula model
 #'
-#' @param para
-#' @param X
-#' @param Y
-#' @param copula_family
-#' @param marginal_surrogate
+#' @param para Parameter vector
+#' @param X First variable (continuous)
+#' @param Y Second variable (binary, $0$ or $1$)
+#' @param marginal_surrogate Marginal distribution for the surrogate
+#' @inheritParams loglik_copula_scale
 #'
 #' @return
 binary_continuous_loglik <- function(para, X, Y, copula_family, marginal_surrogate){

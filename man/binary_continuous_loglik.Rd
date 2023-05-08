@@ -2,20 +2,19 @@
 % Please edit documentation in R/fit_model_BinCont_copula.R
 \name{binary_continuous_loglik}
 \alias{binary_continuous_loglik}
-\title{Title}
+\title{Loglikelihood function for binary-continuous copula model}
 \usage{
-binary_continuous_loglik(
-  para,
-  X,
-  Y,
-  copula_family,
-  marginal_surrogate,
-  marginal_true
-)
+binary_continuous_loglik(para, X, Y, copula_family, marginal_surrogate)
 }
 \arguments{
-\item{marginal_true}{}
+\item{para}{Parameter vector}
+
+\item{X}{First variable (continuous)}
+
+\item{Y}{Second variable (binary, $0$ or $1$)}
+
+\item{marginal_surrogate}{Marginal distribution for the surrogate}
 }
 \description{
-Title
+Loglikelihood function for binary-continuous copula model
 }
