@@ -86,6 +86,57 @@ fit_copula_model_BinCont = function(data,
                                 marginal_true, marginal_surrogate))
 }
 
+fit_copula_submodel_BinCont = function(X, Y, copula_family, marginal_surrogate) {
+  # Determine starting values
+  starting_values = BinCont_starting_values(X, Y, copula_family, marginal_surrogate)
+  # Maximize likelihood
+  ml_fit = maxLik::maxLik(
+    logLik = binary_continuous_loglik,
+    start = starting_values,
+    X = X,
+    Y = Y,
+    copula_family = copula_family,
+    marginal_surrogate = marginal_surrogate
+  )
+}
+
+
+
+BinCont_starting_values = function(X, Y, copula_family, marginal_surrogate){
+  # The starting value for the association parameter is obtained by estimating
+  # the copula parameter through Kendall's tau, ignoring censoring. The
+  # estimated Kendall's tau is then converted to the copula parameter scale.
+  tau = cor(X, Y, method = "kendall")
+
+  # Kendall's tau is converted to the copula parameter scale.
+  if(copula_family == "gaussian"){
+    inv_tau = iTau(copula = ellipCopula(family = "normal"),
+                   tau = tau)
+  }
+  else if(copula_family == "clayton"){
+    inv_tau = iTau(copula = claytonCopula(),
+                     tau = tau)
+  }
+  else if(copula_family == "frank"){
+    inv_tau = iTau(copula = frankCopula(),
+                     tau = tau)
+  }
+  else if(copula_family == "gumbel"){
+    inv_tau = iTau(copula = gumbelCopula(),
+                     tau = tau)
+  }
+
+  # Compute mean of latent normal variable for the true endpoint.
+  mu_T = -1 * qnorm(mean(Y))
+  # Compute mean and standard deviation of surrogate endpoint.
+  mu_S = mean(X)
+  sd_S = sd(X)
+
+  # Return vector of informed starting values.
+  starting_values = c(mu_S = mu_S, mu_T = mu_T, add_param_S = sd_S, copula_param = inv_tau)
+  return(starting_values)
+}
+
 
 
 #' Loglikelihood function for binary-continuous copula model
