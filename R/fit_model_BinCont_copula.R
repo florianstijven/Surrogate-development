@@ -86,20 +86,64 @@ fit_copula_model_BinCont = function(data,
                                 marginal_true, marginal_surrogate))
 }
 
-fit_copula_submodel_BinCont = function(X, Y, copula_family, marginal_surrogate) {
+
+fit_copula_submodel_BinCont = function(X,
+                                       Y,
+                                       copula_family,
+                                       marginal_surrogate,
+                                       method = "BFGSR") {
   # Determine starting values
   starting_values = BinCont_starting_values(X, Y, copula_family, marginal_surrogate)
   # Maximize likelihood
+  log_lik_function = function(para) {
+    temp_fun = binary_continuous_loglik(
+      para = para,
+      X = X,
+      Y = Y,
+      copula_family = copula_family,
+      marginal_surrogate = marginal_surrogate
+    )
+    return(temp_fun)
+  }
+  # list of constraints
+  # if (copula_family == "clayton") {
+  #   A = matrix(c(0, 0, 0, 1), ncol = 4)
+  #   B = 0
+  # }
+
   ml_fit = maxLik::maxLik(
-    logLik = binary_continuous_loglik,
+    logLik = log_lik_function,
     start = starting_values,
-    X = X,
-    Y = Y,
-    copula_family = copula_family,
-    marginal_surrogate = marginal_surrogate
+    method = method,
+    fixed = 2
   )
+  return(ml_fit)
 }
 
+
+twostep_BinCont = function(X,
+                           Y,
+                           copula_family,
+                           marginal_surrogate) {
+  # Determine starting values
+  starting_values = BinCont_starting_values(X, Y, copula_family, marginal_surrogate)
+
+  # For some reason, this gives the MINUS loglikelihood?
+  log_lik_function = function(copula_par) {
+    para = starting_values
+    para[4] = copula_par
+    temp_fun = binary_continuous_loglik(
+      para = para,
+      X = X,
+      Y = Y,
+      copula_family = "frank",
+      marginal_surrogate = "normal"
+    )
+    return(temp_fun)
+  }
+  # Optimize for copula parameter
+  optimize(f = log_lik_function, interval = c(0, 1), maximum = TRUE)
+}
 
 
 BinCont_starting_values = function(X, Y, copula_family, marginal_surrogate){
@@ -107,22 +151,22 @@ BinCont_starting_values = function(X, Y, copula_family, marginal_surrogate){
   # the copula parameter through Kendall's tau, ignoring censoring. The
   # estimated Kendall's tau is then converted to the copula parameter scale.
   tau = cor(X, Y, method = "kendall")
-
+  # tau = 0.05
   # Kendall's tau is converted to the copula parameter scale.
   if(copula_family == "gaussian"){
-    inv_tau = iTau(copula = ellipCopula(family = "normal"),
+    inv_tau = copula::iTau(copula = copula::ellipCopula(family = "normal"),
                    tau = tau)
   }
   else if(copula_family == "clayton"){
-    inv_tau = iTau(copula = claytonCopula(),
+    inv_tau = copula::iTau(copula = copula::claytonCopula(),
                      tau = tau)
   }
   else if(copula_family == "frank"){
-    inv_tau = iTau(copula = frankCopula(),
+    inv_tau = copula::iTau(copula = copula::frankCopula(),
                      tau = tau)
   }
   else if(copula_family == "gumbel"){
-    inv_tau = iTau(copula = gumbelCopula(),
+    inv_tau = copula::iTau(copula = copula::gumbelCopula(),
                      tau = tau)
   }
 
@@ -176,15 +220,15 @@ binary_continuous_loglik <- function(para, X, Y, copula_family, marginal_surroga
                   extra_par = 1,
                   family = "normal")
 
-  # Transform true endpoint variable to left/right-censoring indicator. d2 = 1
+  # Transform true endpoint variable to left/right-censoring indicator. d2 = 0
   # indicates right-censoring and d2 = -1 indicates left-censoring.
-  d2 = (Y * 2) - 1
+  d2 = Y - 1
 
   loglik = log_likelihood_copula_model(
     theta = theta,
     X = X,
     Y = rep(0, length(x)),
-    d1 = rep(0, length(x)),
+    d1 = rep(1, length(x)),
     d2 = d2,
     copula = copula_family,
     cdf_X = cdf_X,

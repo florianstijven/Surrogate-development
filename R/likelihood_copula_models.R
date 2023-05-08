@@ -32,7 +32,6 @@ log_likelihood_copula_model = function(theta,
   # Transform observations on original scale to the copula scale.
   u = cdf_X(X)
   v = cdf_Y(Y)
-
   # loglikelihood contribution for the copula part.
   loglik_copula = loglik_copula_scale(theta, u, v, d1, d2, copula)
 
@@ -40,17 +39,17 @@ log_likelihood_copula_model = function(theta,
   # Log likelihood contribution for the marginal distribution part.
   # uncensored observations.
   part1 <-
-    ifelse((d1 != 0) & (d2 != 0),
+    ifelse((d1 == 1) & (d2 == 1),
            log(pdf_X(X)) + log(pdf_Y(Y)),
            0)
   # second observation censored.
   part2 <-
-    ifelse((d1 != 0) & (d2 == 0),
+    ifelse((d1 == 1) & (d2 != 1),
            log(pdf_X(X)),
            0)
   # first observation censored.
   part3 <-
-    ifelse((d1 == 0) & (d2 != 0),
+    ifelse((d1 != 1) & (d2 == 1),
            log(pdf_Y(Y)),
            0)
   # When both observations are censored the likelihood does not depend

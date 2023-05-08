@@ -98,6 +98,6 @@ test_that(
       pdf_X = pdf_fun(1, 1, marginal),
       pdf_Y = pdf_fun(1, 1, marginal)
     )
-    expect_equal(loglik, -11.122886, tolerance = 1e-5)
+    expect_equal(loglik, -9.691937, tolerance = 1e-5)
   }
 )
