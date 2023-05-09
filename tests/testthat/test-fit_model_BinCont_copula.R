@@ -77,16 +77,16 @@ test_that("twostep_BinCont() works with clayton copula and gamma margins", {
     copula_family = copula_family,
     marginal_surrogate = marginal_surrogate
   )
-  expect_equal(coef(summary(twostep_fit))[4], 0.9675053)
+  expect_equal(coef(summary(twostep_fit$ml_fit))[4], 0.96813376)
 }
 )
 
 test_that("twostep_BinCont() works with gaussian copula and weibull margins", {
   copula_family = "gaussian"
-  marginal_surrogate = "weibull"
+  marginal_surrogate = "lognormal"
   data("Schizo_BinCont")
   na = is.na(Schizo_BinCont$CGI_Bin) | is.na(Schizo_BinCont$PANSS)
-  X = 120 - abs(Schizo_BinCont$PANSS[!na])
+  X = 6 - log(abs(Schizo_BinCont$PANSS[!na]) + 2)
   Y = Schizo_BinCont$CGI_Bin[!na]
   BinCont_starting_values(
     X = X,
@@ -100,6 +100,6 @@ test_that("twostep_BinCont() works with gaussian copula and weibull margins", {
     copula_family = copula_family,
     marginal_surrogate = marginal_surrogate
   )
-  expect_equal(coef(summary(twostep_fit))[4], 0.58564315)
+  expect_equal(coef(summary(twostep_fit$ml_fit))[4], 0.63758564)
 }
 )

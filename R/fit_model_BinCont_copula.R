@@ -136,7 +136,8 @@ twostep_BinCont = function(X,
     # clarity, the parameters are given a clear name. The
     # marginal_distirbution() function returns a named vector, but we still add
     # an indicator to its name.
-    marginal_S = marginal_distribution(X, marginal_surrogate)
+    marginal_S_dist = marginal_distribution(X, marginal_surrogate)
+    marginal_S = coef(marginal_S_dist)
     names(marginal_S) = paste(names(marginal_S), "(S)")
   }
   else {
@@ -179,7 +180,15 @@ twostep_BinCont = function(X,
     method = method,
     fixed = 1:3
   )
-  return(ml_fit)
+
+  # Return a list with the marginal surrogate distribution, fit object for
+  # copula parameter, and element to indicate the copula family.
+  submodel_fit = list(
+    ml_fit = ml_fit,
+    marginal_S_dist = marginal_S_dist,
+    copula_family = copula_family
+  )
+  return(submodel_fit)
 }
 
 marginal_distribution = function(x, distribution) {
@@ -189,10 +198,10 @@ marginal_distribution = function(x, distribution) {
     logistic = fitdistrplus::fitdist(data = x, dis),
     t = fitdistrplus::fitdist(x, "t"),
     lognormal = fitdistrplus::fitdist(x, "lnorm"),
-    gamma = fitdistrplus::fitdist(x, "gamma"),
-    weibull = fitdistrplus::fitdist(x, "weibull")
+    gamma = fitdistrplus::fitdist(x, "gamma", start = list(shape = 1, rate = 1)),
+    weibull = fitdistrplus::fitdist(x, "weibull", start = list(shape = 1, scale = 1))
   )
-  return(coef(fitted_dist))
+  return(fitted_dist)
 }
 
 
