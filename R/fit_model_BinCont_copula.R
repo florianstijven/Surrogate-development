@@ -114,8 +114,7 @@ fit_copula_submodel_BinCont = function(X,
   ml_fit = maxLik::maxLik(
     logLik = log_lik_function,
     start = starting_values,
-    method = method,
-    fixed = 2
+    method = method
   )
   return(ml_fit)
 }
