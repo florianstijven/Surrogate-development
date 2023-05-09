@@ -1,12 +1,12 @@
 test_that("binary_continuous_loglik() works with clayton copula and logistic margins", {
   copula = "clayton"
   marginal = "logistic"
-  x = c(-0.6264538, 0.1836433,-0.8356286, 1.595280, 0.3295078)
-  y = c(0, 1, 0, 1, 0)
+  X = c(-0.6264538, 0.1836433,-0.8356286, 1.595280, 0.3295078)
+  Y = c(0, 1, 0, 1, 0)
   loglik = binary_continuous_loglik(
     para = c(0, 0, 2, 1.2),
-    X = x,
-    Y = y,
+    X = X,
+    Y = Y,
     copula_family = copula,
     marginal_surrogate = marginal
   )
@@ -58,12 +58,12 @@ test_that("binary_continuous_loglik() works with frank copula and logistic margi
   expect_equal(loglik, -13.9664643)
 })
 
-test_that("fit_copula_submodel_BinCont() works with gaussian copula and normal margins", {
-  copula_family = "gaussian"
-  marginal_surrogate = "normal"
+test_that("twostep_BinCont() works with clayton copula and gamma margins", {
+  copula_family = "clayton"
+  marginal_surrogate = "gamma"
   data("Schizo_BinCont")
-  na = is.na(Schizo_BinCont$CGI_Bin)
-  X = Schizo_BinCont$PANSS[!na]
+  na = is.na(Schizo_BinCont$CGI_Bin) | is.na(Schizo_BinCont$PANSS)
+  X = 120 - abs(Schizo_BinCont$PANSS[!na])
   Y = Schizo_BinCont$CGI_Bin[!na]
   BinCont_starting_values(
     X = X,
@@ -71,60 +71,35 @@ test_that("fit_copula_submodel_BinCont() works with gaussian copula and normal m
     copula_family = copula_family,
     marginal_surrogate = marginal_surrogate
   )
-  binary_continuous_loglik(
-    para = c(0, 0, 2, 0.7),
+  twostep_fit = twostep_BinCont(
     X = X,
     Y = Y,
-    copula_family = copula,
-    marginal_surrogate = marginal
+    copula_family = copula_family,
+    marginal_surrogate = marginal_surrogate
   )
-  ml_fit = fit_copula_submodel_BinCont(
-    X = x,
-    Y = y,
-    copula_family = copula,
-    marginal_surrogate = marginal
-  )
-  summary(ml_fit)
-  ml_fit$hessian
-  expect_equal(loglik, -5.75446910)
+  expect_equal(coef(summary(twostep_fit))[4], 0.9675053)
 }
 )
 
-test_that("Simulate data", {
-  data = copula::rCopula(copula = copula::claytonCopula(param = 3), n = 400)
-  data = qnorm(data)
-  X = data[, 1]
-  Y = ifelse(data[, 2] < 0, 0, 1)
-  copula_family = "clayton"
-  marginal_surrogate = "normal"
-  start = BinCont_starting_values(
+test_that("twostep_BinCont() works with gaussian copula and weibull margins", {
+  copula_family = "gaussian"
+  marginal_surrogate = "weibull"
+  data("Schizo_BinCont")
+  na = is.na(Schizo_BinCont$CGI_Bin) | is.na(Schizo_BinCont$PANSS)
+  X = 120 - abs(Schizo_BinCont$PANSS[!na])
+  Y = Schizo_BinCont$CGI_Bin[!na]
+  BinCont_starting_values(
     X = X,
     Y = Y,
     copula_family = copula_family,
     marginal_surrogate = marginal_surrogate
   )
-  binary_continuous_loglik(
-    para = start,
+  twostep_fit = twostep_BinCont(
     X = X,
     Y = Y,
     copula_family = copula_family,
     marginal_surrogate = marginal_surrogate
   )
-  binary_continuous_loglik(
-    para = c(0, 0, 1, 3),
-    X = X,
-    Y = Y,
-    copula_family = copula_family,
-    marginal_surrogate = marginal_surrogate
-  )
-  ml_fit = fit_copula_submodel_BinCont(
-    X = X,
-    Y = Y,
-    copula_family = copula_family,
-    marginal_surrogate = marginal_surrogate
-  )
-  summary(ml_fit)
-  ml_fit$hessian
-  expect_equal(loglik, -5.75446910)
+  expect_equal(coef(summary(twostep_fit))[4], 0.58564315)
 }
 )

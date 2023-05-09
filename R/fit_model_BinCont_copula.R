@@ -92,8 +92,8 @@ fit_copula_submodel_BinCont = function(X,
                                        copula_family,
                                        marginal_surrogate,
                                        method = "BFGSR") {
-  # Determine starting values
-  starting_values = BinCont_starting_values(X, Y, copula_family, marginal_surrogate)
+  # The starting values are determined by the two-step estimator.
+  starting_values = coef(twostep_BinCont(X, Y, copula_family, marginal_surrogate))
   # Maximize likelihood
   log_lik_function = function(para) {
     temp_fun = binary_continuous_loglik(
@@ -123,25 +123,76 @@ fit_copula_submodel_BinCont = function(X,
 twostep_BinCont = function(X,
                            Y,
                            copula_family,
-                           marginal_surrogate) {
-  # Determine starting values
-  starting_values = BinCont_starting_values(X, Y, copula_family, marginal_surrogate)
+                           marginal_surrogate,
+                           marginal_surrogate_estimator = NULL,
+                           method = "BFGSR") {
+  # Estimate marginal distribution parameters. For clarity, the parameters are
+  # named in the vector.
+  mu_T = c("mu (T)" = -1 * qnorm(mean(Y)))
+  # Estimate marginal surrogate distribution.
+  marginal_S = c()
+  if (is.null(marginal_surrogate_estimator)) {
+    # Estimate parameters for parametric marginal distribution. Again for
+    # clarity, the parameters are given a clear name. The
+    # marginal_distirbution() function returns a named vector, but we still add
+    # an indicator to its name.
+    marginal_S = marginal_distribution(X, marginal_surrogate)
+    names(marginal_S) = paste(names(marginal_S), "(S)")
+  }
+  else {
+    # Estimate marginal distribution non-parametrically.
+  }
 
-  # For some reason, this gives the MINUS loglikelihood?
-  log_lik_function = function(copula_par) {
-    para = starting_values
-    para[4] = copula_par
+  # Vector of marginal parameter estimates.
+  marginal_para = c(mu_T, marginal_S)
+
+
+
+  # Maximize likelihood
+  log_lik_function = function(para) {
     temp_fun = binary_continuous_loglik(
       para = para,
       X = X,
       Y = Y,
-      copula_family = "frank",
-      marginal_surrogate = "normal"
+      copula_family = copula_family,
+      marginal_surrogate = marginal_surrogate
     )
     return(temp_fun)
   }
-  # Optimize for copula parameter
-  optimize(f = log_lik_function, interval = c(0, 1), maximum = TRUE)
+  # list of constraints
+  # if (copula_family == "clayton") {
+  #   A = matrix(c(0, 0, 0, 1), ncol = 4)
+  #   B = 0
+  # }
+
+  # Starting values come from estimated marginal distribution parameters and an
+  # educated guess for the copula parameter.
+  copula_start = BinCont_starting_values(X, Y, copula_family, marginal_surrogate)
+  copula_start = copula_start[length(copula_start)]
+  unname(copula_start)
+  start = c(marginal_para,
+            "theta (copula)" = copula_start)
+
+  ml_fit = maxLik::maxLik(
+    logLik = log_lik_function,
+    start = start,
+    method = method,
+    fixed = 1:3
+  )
+  return(ml_fit)
+}
+
+marginal_distribution = function(x, distribution) {
+  fitted_dist = switch(
+    distribution,
+    normal = fitdistrplus::fitdist(data = x, "norm"),
+    logistic = fitdistrplus::fitdist(data = x, dis),
+    t = fitdistrplus::fitdist(x, "t"),
+    lognormal = fitdistrplus::fitdist(x, "lnorm"),
+    gamma = fitdistrplus::fitdist(x, "gamma"),
+    weibull = fitdistrplus::fitdist(x, "weibull")
+  )
+  return(coef(fitted_dist))
 }
 
 
@@ -196,27 +247,22 @@ BinCont_starting_values = function(X, Y, copula_family, marginal_surrogate){
 #'
 #' @return
 binary_continuous_loglik <- function(para, X, Y, copula_family, marginal_surrogate){
-  # Vector with mean parameters of the marginal distribution.
-  mean_S = para[1]
-  mean_T = para[2]
-  # Vector of additional parameters for marginal distributions of S.
-  extra_par_S = para[3]
+  # Parameter for true endpoint distribution.
+  para_T = c(para[1], 1)
+  # Parameter(s) for surrogate endpoint distribution.
+  para_S = para[2:(length(para) - 1)]
   # Vector of copula parameters.
-  theta = para[4]
+  theta = para[length(para)]
 
   # Construct marginal distribution and density functions.
-  cdf_X = cdf_fun(mean = mean_S,
-                  extra_par = extra_par_S,
+  cdf_X = cdf_fun(para = para_S,
                   family = marginal_surrogate)
-  pdf_X = pdf_fun(mean = mean_S,
-                  extra_par = extra_par_S,
+  pdf_X = pdf_fun(para = para_S,
                   family = marginal_surrogate)
 
-  cdf_Y = cdf_fun(mean = mean_T,
-                  extra_par = 1,
+  cdf_Y = cdf_fun(para = para_T,
                   family = "normal")
-  pdf_Y = pdf_fun(mean = mean_T,
-                  extra_par = 1,
+  pdf_Y = pdf_fun(para = para_T,
                   family = "normal")
 
   # Transform true endpoint variable to left/right-censoring indicator. d2 = 0
@@ -226,8 +272,8 @@ binary_continuous_loglik <- function(para, X, Y, copula_family, marginal_surroga
   loglik = log_likelihood_copula_model(
     theta = theta,
     X = X,
-    Y = rep(0, length(x)),
-    d1 = rep(1, length(x)),
+    Y = rep(0, length(X)),
+    d1 = rep(1, length(X)),
     d2 = d2,
     copula = copula_family,
     cdf_X = cdf_X,

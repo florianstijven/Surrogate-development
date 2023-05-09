@@ -75,18 +75,21 @@ log_likelihood_copula_model = function(theta,
 #'
 #' @return A distribution function that has a single argument. This is the
 #'   vector of values in which the distribution function is evaluated.
-cdf_fun = function(mean, extra_par, family){
+cdf_fun = function(para, family){
   cdf_function = function(x){
     # Distribution function evaluated in x.
     cdf_x = switch(
       family,
-      normal = stats::pnorm(q = x, mean = mean, sd = extra_par),
+      normal = stats::pnorm(q = x, mean = para[1], sd = para[2]),
       logistic = stats::plogis(
         q = x,
-        location = mean,
-        scale = extra_par
+        location = para[1],
+        scale = para[2]
       ),
-      t = stats::pt(q = x, ncp = mean, df = extra_par)
+      t = stats::pt(q = x, ncp = para[1], df = para[2]),
+      lognormal = stats::plnorm(q = x, meanlog = para[1], sdlog = para[2]),
+      weibull = stats::pweibull(q = x, shape = para[1], scale = para[2]),
+      gamma = stats::pgamma(q = x, shape = para[1], rate = para[2])
     )
     return(cdf_x)
   }
@@ -100,18 +103,21 @@ cdf_fun = function(mean, extra_par, family){
 #'
 #' @return A density function that has a single argument. This is the vector of
 #'   values in which the density function is evaluated.
-pdf_fun = function(mean, extra_par, family){
+pdf_fun = function(para, family){
   pdf_function = function(x){
     # Density function evaluated in x.
     pdf_x = switch(
       family,
-      normal = stats::dnorm(x = x, mean = mean, sd = extra_par),
+      normal = stats::dnorm(x = x, mean = para[1], sd = para[2]),
       logistic = stats::dlogis(
         x = x,
-        location = mean,
-        scale = extra_par
+        location = para[1],
+        scale = para[2]
       ),
-      t = stats::dt(x = x, ncp = mean, df = extra_par)
+      t = stats::dt(x = x, ncp = para[1], df = para[2]),
+      lognormal = stats::dlnorm(x = x, meanlog = para[1], sdlog = para[2]),
+      weibull = stats::dweibull(x = x, shape = para[1], scale = para[2]),
+      gamma = stats::dgamma(x = x, shape = para[1], rate = para[2])
     )
     return(pdf_x)
   }
