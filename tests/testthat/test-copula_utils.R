@@ -3,9 +3,9 @@ test_that("Clayton copula likelihood works with right-censoring", {
   v = c(0.54, 0.25, 0.01, 0.99, 0.5)
   d1 = c(0, 1, 0, 1, 0)
   d2 = c(0, 0, 1, 1, 0)
-  theta = 0.1
+  theta = 0.001
   log_lik = clayton_loglik_copula_scale(theta, u, v, d1, d2)
-  expect_equal(log_lik, -6.3848387)
+  expect_equal(log_lik, -6.2503256)
 })
 
 test_that("Frank copula likelihood works with right-censoring", {
@@ -13,9 +13,9 @@ test_that("Frank copula likelihood works with right-censoring", {
   v = c(0.54, 0.25, 0.01, 0.99, 0.5)
   d1 = c(0, 1, 0, 1, 0)
   d2 = c(0, 0, 1, 1, 0)
-  theta = 0.01
+  theta = 0.001
   log_lik = frank_loglik_copula_scale(theta, u, v, d1, d2)
-  expect_equal(log_lik, -5.5263822)
+  expect_equal(log_lik, -6.2492926)
 })
 
 test_that("Gumbel copula likelihood works with right-censoring", {
@@ -25,7 +25,7 @@ test_that("Gumbel copula likelihood works with right-censoring", {
   d2 = c(0, 0, 1, 1, 0)
   theta = 1
   log_lik = gumbel_loglik_copula_scale(theta, u, v, d1, d2)
-  expect_equal(log_lik, -5.5292411)
+  expect_equal(log_lik, -6.2491995)
 })
 
 test_that("Gaussian copula likelihood works with right-censoring", {
@@ -33,9 +33,9 @@ test_that("Gaussian copula likelihood works with right-censoring", {
   v = c(0.54, 0.25, 0.01, 0.99, 0.5)
   d1 = c(0, 1, 0, 1, 0)
   d2 = c(0, 0, 1, 1, 0)
-  theta = 0.01
+  theta = 0
   log_lik = gaussian_loglik_copula_scale(theta, u, v, d1, d2)
-  expect_equal(log_lik, -2.2763668)
+  expect_equal(log_lik, -6.2491995)
 })
 
 test_that("Clayton copula likelihood works with left-censoring of second variable", {
@@ -43,9 +43,9 @@ test_that("Clayton copula likelihood works with left-censoring of second variabl
   v = c(0.54, 0.25, 0.01, 0.99, 0.5)
   d1 = c(0, 1, 0, 1, 0)
   d2 = c(0, 0, 1, -1, 0)
-  theta = 0.1
+  theta = 0.001
   log_lik = clayton_loglik_copula_scale(theta, u, v, d1, d2)
-  expect_equal(log_lik, -4.1218954)
+  expect_equal(log_lik, -6.2599892)
 })
 
 test_that("Frank copula likelihood works with left-censoring of second variable", {
@@ -53,9 +53,9 @@ test_that("Frank copula likelihood works with left-censoring of second variable"
   v = c(0.54, 0.25, 0.01, 0.99, 0.5)
   d1 = c(0, 1, 0, 1, 0)
   d2 = c(0, 0, 1, -1, 0)
-  theta = 0.1
+  theta = 0.001
   log_lik = frank_loglik_copula_scale(theta, u, v, d1, d2)
-  expect_equal(log_lik, -4.46695107)
+  expect_equal(log_lik, -6.2590954)
 })
 
 test_that("Gumbel copula likelihood works with left-censoring of second variable", {
@@ -65,7 +65,7 @@ test_that("Gumbel copula likelihood works with left-censoring of second variable
   d2 = c(0, 0, 1, -1, 0)
   theta = 1
   log_lik = gumbel_loglik_copula_scale(theta, u, v, d1, d2)
-  expect_equal(log_lik, -4.5191908)
+  expect_equal(log_lik, -6.2592499)
 })
 
 test_that("Gaussian copula likelihood works with left-censoring of second variable", {
@@ -73,28 +73,8 @@ test_that("Gaussian copula likelihood works with left-censoring of second variab
   v = c(0.54, 0.25, 0.01, 0.99, 0.5)
   d1 = c(0, 1, 0, 1, 0)
   d2 = c(0, 0, 1, -1, 0)
-  theta = 0.1
+  theta = 0
   log_lik = gaussian_loglik_copula_scale(theta, u, v, d1, d2)
-  expect_equal(log_lik, -0.86892952)
+  expect_equal(log_lik, -6.2592499)
 })
 
-
-# DELETE LATER
-library(copula)
-u = c(0.2, 0.5, 0.3, 0.25, 0.98)
-v = c(0.54, 0.25, 0.01, 0.99, 0.5)
-d1 = c(0, 1, 0, 1, 0)
-d2 = c(0, 0, 1, -1, 0)
-
-u = c(0.2)
-v = c(0.54)
-d1 = c(1)
-d2 = c(1)
-clayton_loglik_copula_scale(0.0001, u, v, d1, d2)
-
-iTau(copula = frankCopula(), tau = 0)
-frank_loglik_copula_scale(0.001, u, v, d1, d2)
-iTau(copula = gumbelCopula(), tau = 0)
-gumbel_loglik_copula_scale(1, u, v, d1, d2)
-iTau(copula = normalCopula(), tau = 0)
-gaussian_loglik_copula_scale(0, u, v, d1, d2)

@@ -167,29 +167,48 @@ gumbel_loglik_copula_scale <- function(theta, u, v, d1, d2){
   # Log likelihood contribution for uncensored observations.
   part1 <-
     ifelse(
-      d1 * d2 == 1,
+      (d1 == 1) & (d2 == 1),
       log_C + (theta - 1) * (log(min_log_u) + log(min_log_v)) +
         log(theta - 1 - log_C) + min_log_u + min_log_v - (2 * theta - 1) * log(-log_C),
       0
     )
-  # Log likelihood contribution for second observation censored.
+  # Log likelihood contribution for second observation left-censored.
   part2 <-
-    ifelse(d1 * (1 - d2) == 1,
+    ifelse((d1 == 1) & (d2 == -1),
            log_C + (theta - 1) * log(min_log_u) + min_log_u - (theta - 1) * log(-log_C),
            0)
-  # Log likelihood contribution for first observation censored.
+  # Log likelihood contribution for first observation left-censored.
   part3 <-
-    ifelse((1 - d1) * d2 == 1,
+    ifelse((d1 == -1) & (d2 == 1),
            log_C + (theta - 1) * log(min_log_v) + min_log_v - (theta - 1) * log(-log_C),
            0)
-  # Log likelihood contribution for both observations censored.
-  part4 <- ifelse((1 - d1) * (1 - d2) == 1, log_C, 0)
-  # Log likelihood contribution for second observation left-censored.
-  part5 <- ifelse((d1 == 1) & (d2 == -1),
-                  1 - (log_C + (theta - 1) * log(min_log_u) + min_log_u - (theta - 1) * log(-log_C)),
+  # Log likelihood contribution for both observations left-censored.
+  part4 <- ifelse((d1 == -1) & (d2 == -1), log_C, 0)
+  # Log likelihood contribution for second observation right-censored.
+  part5 <- ifelse((d1 == 1) & (d2 == 0),
+                  log(1 - (exp(log_C) / u) * (log(u - exp(log_C)) ** (theta - 1))),
+                  0)
+  # Log likelihood contribution for first observation right-censored.
+  part6 <- ifelse((d1 == 0) & (d2 == 1),
+                  log(1 - (exp(log_C) / v) * (log(v - exp(log_C)) ** (theta - 1))),
+                  0)
+  # Log likelihood contribution for both observations right-censored.
+  part7 <- ifelse((d1 == 0) & (d2 == 0),
+                  log(1 + exp(log_C) - u - v),
+                  0)
+  # Log likelihood contribution for first observation left-censored and second
+  # observation right-censored.
+  part8 <- ifelse((d1 == -1) & (d2 == 0),
+                  log(u - exp(log_C)),
+                  0)
+  # Log likelihood contribution for first observation right-censored and second
+  # observation left-censored.
+  part9 <- ifelse((d1 == 0) & (d2 == -1),
+                  log(v - exp(log_C)),
                   0)
 
-  loglik_copula <- sum(part1 + part2 + part3 + part4 + part5)
+  loglik_copula <-
+    sum(part1 + part2 + part3 + part4 + part5 + part6 + part7 + part8 + part9)
 
   return(loglik_copula)
 }
@@ -235,12 +254,15 @@ gaussian_loglik_copula_scale <- function(theta, u, v, d1, d2){
 
   # Log likelihood contribution for uncensored observations.
   part1 <-
-    ifelse((1 - d1) * (1 - d2) == 1,
-           log(C) - dnorm(z_u, log = TRUE) - dnorm(z_v, log = TRUE),
-           0)
-  # Log likelihood contribution for second observation censored.
+    ifelse((d1 == 1) & (d2 == 1),
+           mvtnorm::dmvnorm(x = z_UV, sigma = Sigma, log = TRUE) -
+             dnorm(z_u, log = TRUE) -
+             dnorm(z_v, log = TRUE),
+           0
+    )
+  # Log likelihood contribution for second observation left-censored.
   part2 <-
-    ifelse(d1 * (1 - d2) == 1,
+    ifelse((d1 == 1) & (d2 == -1),
            pnorm(
              q = z_v,
              mean = z_u * theta,
@@ -248,9 +270,9 @@ gaussian_loglik_copula_scale <- function(theta, u, v, d1, d2){
              log.p = TRUE
            ),
            0)
-  # Log likelihood contribution for first observation censored.
+  # Log likelihood contribution for first observation left-censored.
   part3 <-
-    ifelse((1 - d1) * d2 == 1,
+    ifelse((d1 == -1) & (d2 == 1),
            pnorm(
              q = z_u,
              mean = z_v * theta,
@@ -258,22 +280,54 @@ gaussian_loglik_copula_scale <- function(theta, u, v, d1, d2){
              log.p = TRUE
            ),
            0)
-  # Log likelihood contribution for both observations censored.
+  # Log likelihood contribution for both observations left-censored.
   part4 <-
-    ifelse((1 - d1) * (1 - d2) == 1,
+    ifelse((d1 == -1) & (d2 == -1),
            log(C),
            0)
-  # Log likelihood contribution for second observation left-censored.
-  part5 <- ifelse((d1 == 1) & (d2 == -1),
-                  1 - (pnorm(
-                    q = z_v,
-                    mean = z_u * theta,
-                    sd =  sqrt(1 - theta ** 2),
-                    log.p = TRUE
-                  )),
+  # Log likelihood contribution for second observation right-censored.
+  part5 <- ifelse((d1 == 1) & (d2 == 0),
+                  log(
+                    1 - pnorm(
+                      q = z_v,
+                      mean = z_u * theta,
+                      sd =  sqrt(1 - theta ** 2),
+                      lower.tail = TRUE,
+                      log.p = FALSE
+                    )
+                  ),
+                  0)
+  # Log likelihood contribution for first observation right-censored.
+  part6 <- ifelse((d1 == 0) & (d2 == 1),
+                  log(
+                    1 - pnorm(
+                      q = z_u,
+                      mean = z_v * theta,
+                      sd =  sqrt(1 - theta ** 2),
+                      lower.tail = TRUE,
+                      log.p = FALSE
+                    )
+                  ),
+                  0)
+  # Log likelihood contribution for both observations right-censored.
+  part7 <- ifelse((d1 == 0) & (d2 == 0),
+                  log(1 + C - u - v),
                   0)
 
-  loglik_copula <- sum(part1 + part2 + part3 + part4 + part5)
+  # Log likelihood contribution for first observation left-censored and second
+  # observation right-censored.
+  part8 <- ifelse((d1 == -1) & (d2 == 0),
+                  log(u - C),
+                  0)
+
+  # Log likelihood contribution for first observation right-censored and second
+  # observation left-censored.
+  part9 <- ifelse((d1 == 0) & (d2 == -1),
+                  log(v - C),
+                  0)
+
+  loglik_copula <-
+    sum(part1 + part2 + part3 + part4 + part5 + part6 + part7 + part8 + part9)
 
   return(loglik_copula)
 }
