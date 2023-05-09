@@ -30,25 +30,48 @@ clayton_loglik_copula_scale <- function(theta, u, v, d1, d2){
       log(theta + 1) + (2 * theta + 1) * log_C - (theta + 1) *(log(u) + log(v)),
       0
     )
-  # Log likelihood contribution for second observation right-censored.
+  # Log likelihood contribution for second observation left-censored.
   part2 <-
-    ifelse((d1 == 1) & (d2 == 0),
+    ifelse((d1 == 1) & (d2 == -1),
            (theta + 1) * log_C - (theta + 1) * log(u),
            0)
-  # Log likelihood contribution for first observation right-censored.
+  # Log likelihood contribution for first observation left-censored.
   part3 <-
-    ifelse((d1 == 0) & (d2 == 1),
+    ifelse((d1 == -1) & (d2 == 1),
            (theta + 1) * log_C - (theta + 1) * log(v),
            0)
-  # Log likelihood contribution for both observations right-censored.
-  part4 <- ifelse((d1 == 0) & (d2 == 0), log_C, 0)
+  # Log likelihood contribution for both observations left-censored.
+  part4 <- ifelse((d1 == -1) & (d2 == -1), log_C, 0)
 
-  # Log likelihood contribution for second observation left-censored.
-  part5 <- ifelse((d1 == 1) & (d2 == -1),
-                  1 - ((theta + 1) * log_C - (theta + 1) * log(u)),
+  # Log likelihood contribution for second observation right-censored.
+  part5 <- ifelse((d1 == 1) & (d2 == 0),
+                  log(1 - (exp(log_C) / u)**(theta + 1)),
                   0)
 
-  loglik_copula <- sum(part1 + part2 + part3 + part4 + part5)
+  # Log likelihood contribution for first observation right-censored.
+  part6 <- ifelse((d1 == 0) & (d2 == 1),
+                  log(1 - (exp(log_C) / v)**(theta + 1)),
+                  0)
+
+  # Log likelihood contribution for both observations right-censored.
+  part7 <- ifelse((d1 == 0) & (d2 == 0),
+                  log(1 + exp(log_C) - u - v),
+                  0)
+
+  # Log likelihood contribution for first observation left-censored and second
+  # observation right-censored.
+  part8 <- ifelse((d1 == -1) & (d2 == 0),
+                  log(u - exp(log_C)),
+                  0)
+
+  # Log likelihood contribution for first observation right-censored and second
+  # observation left-censored.
+  part9 <- ifelse((d1 == 0) & (d2 == -1),
+                  log(v - exp(log_C)),
+                  0)
+
+  loglik_copula <-
+    sum(part1 + part2 + part3 + part4 + part5 + part6 + part7 + part8 + part9)
 
   return(loglik_copula)
 }
@@ -78,27 +101,47 @@ frank_loglik_copula_scale <- function(theta, u, v, d1, d2){
 
   # Log likelihood contribution for uncensored observations.
   part1 <-
-    ifelse(d1 * d2 == 1,
-           log(theta) + theta * C + log(exp(theta * C) - 1) - log((exp(theta * u) - 1) * (exp(theta * v) - 1)),
-           0)
-  # Log likelihood contribution for second observation censored.
+    ifelse(
+      (d1 == 1) & (d2 == 1),
+      log(theta) + theta * C + log(exp(theta * C) - 1) - log((exp(theta * u) - 1) * (exp(theta * v) - 1)),
+      0)
+  # Log likelihood contribution for second observation left-censored.
   part2 <-
-    ifelse(d1 * (1 - d2) == 1,
+    ifelse((d1 == 1) & (d2 == -1),
            log((1 - exp(theta * C)) / (1 - exp(theta * u))),
            0)
-  # Log likelihood contribution for first observation censored.
+  # Log likelihood contribution for first observation left-censored.
   part3 <-
-    ifelse((1 - d1) * d2 == 1,
+    ifelse((d1 == -1) & (d2 == 1),
            log((1 - exp(theta * C)) / (1 - exp(theta * v))),
            0)
-  # Log likelihood contribution for both observations censored.
-  part4 <- ifelse((1 - d1) * (1 - d2) == 1, log(C), 0)
-  # Log likelihood contribution for second observation left-censored.
-  part5 <- ifelse((d1 == 1) & (d2 == -1),
-                  1 - (log((1 - exp(theta * C)) / (1 - exp(theta * u)))),
+  # Log likelihood contribution for both observations left-censored.
+  part4 <- ifelse((d1 == -1) & (d2 == -1), log(C), 0)
+  # Log likelihood contribution for second observation right-censored.
+  part5 <- ifelse((d1 == 1) & (d2 == 0),
+                  log(1 - ((1 - exp(theta * C)) / (1 - exp(theta * u)))),
+                  0)
+  # Log likelihood contribution for first observation right-censored.
+  part6 <- ifelse((d1 == 0) & (d2 == 1),
+                  log(1 - ((1 - exp(theta * C)) / (1 - exp(theta * v)))),
+                  0)
+  # Log likelihood contribution for both observations right-censored.
+  part7 <- ifelse((d1 == 0) & (d2 == 0),
+                  log(1 + C - u - v),
+                  0)
+  # Log likelihood contribution for first observation left-censored and second
+  # observation right-censored.
+  part8 <- ifelse((d1 == -1) & (d2 == 0),
+                  log(u - C),
+                  0)
+  # Log likelihood contribution for first observation right-censored and second
+  # observation left-censored.
+  part9 <- ifelse((d1 == 0) & (d2 == -1),
+                  log(v - C),
                   0)
 
-  loglik_copula <- sum(part1 + part2 + part3 + part4 + part5)
+  loglik_copula <-
+    sum(part1 + part2 + part3 + part4 + part5 + part6 + part7 + part8 + part9)
 
   return(loglik_copula)
 }
