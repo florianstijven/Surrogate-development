@@ -4,7 +4,7 @@
 \alias{loglik_copula_scale}
 \title{Loglikelihood on the Copula Scale}
 \usage{
-loglik_copula_scale(theta, u, v, d1, d2, copula)
+loglik_copula_scale(theta, u, v, d1, d2, copula_family)
 }
 \arguments{
 \item{theta}{Copula parameter}
@@ -30,7 +30,7 @@ right-censored,
 \item \code{d2[i] = -1} if \code{v[i]} corresponds to left-censored value
 }}
 
-\item{copula}{Copula family, one of the following:
+\item{copula_family}{Copula family, one of the following:
 \itemize{
 \item \code{"clayton"}
 \item \code{"frank"}

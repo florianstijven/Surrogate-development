@@ -339,7 +339,7 @@ gaussian_loglik_copula_scale <- function(theta, u, v, d1, d2){
 #' possibly right-censored data.
 #'
 #' @inheritParams clayton_loglik_copula_scale
-#' @param copula Copula family, one of the following:
+#' @param copula_family Copula family, one of the following:
 #' * `"clayton"`
 #' * `"frank"`
 #' * `"gumbel"`
@@ -349,9 +349,9 @@ gaussian_loglik_copula_scale <- function(theta, u, v, d1, d2){
 #'   help files of the dedicated functions named `copula_loglik_copula_scale()`.
 #'
 #' @return Value of the copula loglikelihood evaluated in `theta`.
-loglik_copula_scale <- function(theta, u, v, d1, d2, copula){
+loglik_copula_scale <- function(theta, u, v, d1, d2, copula_family){
   loglik_copula = switch(
-    copula,
+    copula_family,
     "clayton" = clayton_loglik_copula_scale(theta, u, v, d1, d2),
     "frank" = frank_loglik_copula_scale(theta, u, v, d1, d2),
     "gumbel" = gumbel_loglik_copula_scale(theta, u, v, d1, d2),

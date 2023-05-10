@@ -87,6 +87,16 @@ fit_copula_model_BinCont = function(data,
 }
 
 
+#' Fit binary-continuous copula submodel
+#'
+#' The `fit_copula_submodel_BinCont()` function fits the copula (sub)model fir a
+#' continuous surrogate and binary true endpoint with maximum likelihood.
+#'
+#' @inheritParams twostep_BinCont
+#' @inherit twostep_BinCont param return
+#'
+#'
+#' @examples
 fit_copula_submodel_BinCont = function(X,
                                        Y,
                                        copula_family,
@@ -120,6 +130,32 @@ fit_copula_submodel_BinCont = function(X,
 }
 
 
+#' Fit binary-continuous copula submodel with two-step estimator
+#'
+#' The `twostep_BinCont()` function fits the copula (sub)model fir a continuous
+#' surrogate and binary true endpoint with a two-step estimator. In the first
+#' step, the marginal distribution parameters are estimated through maximum
+#' likelihood. In the second step, the copula parameter is estimate while
+#' holding the marginal distribution parameters fixed.
+#'
+#' @param X (numeric) Continuous surrogate variable
+#' @param Y (integer) Binary true endpoint variable (\eqn{T_k \, \in \, \{0, 1\}})
+#' @param marginal_surrogate_estimator Not yet implemented
+#' @param method Optimization algorithm for maximizing the objective function.
+#'   For all options, see `?maxLik::maxLik`. Defaults to `"BFGRS"`.
+#'
+#' @inheritParams loglik_copula_scale
+#' @inheritParams binary_continuous_loglik
+#'
+#' @return A list with three elements:
+#' * ml_fit: object of class `maxLik::maxLik` that contains the estimated copula
+#'  model.
+#' * marginal_S_dist: object of class `fitdistrplus::fitdist` that represents the
+#'  marginal surrogate distribution.
+#' * copula_family: string that indicates the copula family
+#' @export
+#'
+#' @examples
 twostep_BinCont = function(X,
                            Y,
                            copula_family,
@@ -160,11 +196,6 @@ twostep_BinCont = function(X,
     )
     return(temp_fun)
   }
-  # list of constraints
-  # if (copula_family == "clayton") {
-  #   A = matrix(c(0, 0, 0, 1), ncol = 4)
-  #   B = 0
-  # }
 
   # Starting values come from estimated marginal distribution parameters and an
   # educated guess for the copula parameter.
@@ -191,6 +222,25 @@ twostep_BinCont = function(X,
   return(submodel_fit)
 }
 
+#' Fit marginal distribution
+#'
+#' The `marginal_distribution()` function is a wrapper for
+#' `fitdistrplus::fitdist()` that fits a univariate distribution to a data
+#' vector.
+#'
+#' @param x (numeric) data vector
+#' @param distribution Distributional family. One of the follwing:
+#' * `"normal"`: normal distribution
+#' * `"logistic`: logistic distribution as parameterized in `dlogis()`
+#' * `"t"`: student t distribution is parameterized in `dt()`
+#' * `"lognormal"`: lognormal distribution as parameterized in `dlnorm()`
+#' * `"gamma"`: gamma distribution as parameterized in `dgamma()`
+#' * `"weibull"`: weibull distribution as parameterized in `dweibull()`
+#'
+#' @return Object of class `fitdistrplus::fitdist` that represents the
+#'  marginal surrogate distribution.
+#'
+#' @examples
 marginal_distribution = function(x, distribution) {
   fitted_dist = switch(
     distribution,
@@ -245,13 +295,14 @@ BinCont_starting_values = function(X, Y, copula_family, marginal_surrogate){
 #' Loglikelihood function for binary-continuous copula model
 #'
 #' @param para Parameter vector. The parameters are ordered as follows:
-#' * `para[1]`: mean (location) parameter for surrogate distribution
-#' * `para[2]`: mean parameter for latent true endpoint distribution
-#' * `para[3]`: additional parameter for surrogate distribution
-#' * `para[4]`: copula parameter
+#' * `para[1]`: mean parameter for latent true endpoint distribution
+#' * `para[2:p]`: Parameters for surrogate distribution, more details in
+#'  `?Surrogate::cdf_fun` for the specific implementations.
+#' * `para[p + 1]`: copula parameter
 #' @param X First variable (continuous)
 #' @param Y Second variable (binary, $0$ or $1$)
-#' @param marginal_surrogate Marginal distribution for the surrogate
+#' @param marginal_surrogate Marginal distribution for the surrogate. For all
+#'   available options, see `?Surrogate::cdf_fun`.
 #' @inheritParams loglik_copula_scale
 #'
 #' @return

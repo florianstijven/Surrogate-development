@@ -7,13 +7,31 @@
 binary_continuous_loglik(para, X, Y, copula_family, marginal_surrogate)
 }
 \arguments{
-\item{para}{Parameter vector}
+\item{para}{Parameter vector. The parameters are ordered as follows:
+\itemize{
+\item \code{para[1]}: mean parameter for latent true endpoint distribution
+\item \code{para[2:p]}: Parameters for surrogate distribution, more details in
+\code{?Surrogate::cdf_fun} for the specific implementations.
+\item \code{para[p + 1]}: copula parameter
+}}
 
 \item{X}{First variable (continuous)}
 
 \item{Y}{Second variable (binary, $0$ or $1$)}
 
-\item{marginal_surrogate}{Marginal distribution for the surrogate}
+\item{copula_family}{Copula family, one of the following:
+\itemize{
+\item \code{"clayton"}
+\item \code{"frank"}
+\item \code{"gumbel"}
+\item \code{"gaussian"}
+
+The parameterization of the respective copula families can be found in the
+help files of the dedicated functions named \code{copula_loglik_copula_scale()}.
+}}
+
+\item{marginal_surrogate}{Marginal distribution for the surrogate. For all
+available options, see \code{?Surrogate::cdf_fun}.}
 }
 \description{
 Loglikelihood function for binary-continuous copula model

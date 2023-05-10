@@ -7,6 +7,7 @@
 fit_copula_model_BinCont(
   data,
   copula_family,
+  marginal_surrogate,
   fitted_model = NULL,
   hessian = TRUE,
   maxit = 500

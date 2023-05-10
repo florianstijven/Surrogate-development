@@ -60,16 +60,14 @@ log_likelihood_copula_model = function(theta,
 
 #' Function factory for distribution functions
 #'
-#' @param mean Mean parameter.
-#' @param extra_par Additional parameters. The specific meaning of these extra
-#'   parameters depends on `family`.
+#' @param para Parameter vector.
 #' @param family Distributional family, one of the following:
-#' * `"normal"`: normal distribution where `mean` is the mean and `extra_par` is
+#' * `"normal"`: normal distribution where `para[1]` is the mean and `para[2]` is
 #'   the standard deviation.
 #' * `"logistic"`: logistic distribution as parameterized in `stats::plogis()` where
-#'   `mean` and `extra_par` correspond to `location` and `scale`, respectively.
-#' * `"t"`: t distribution as parameterized in `stats::pt()` where `mean` and
-#'   `extra_par` correspond to `ncp` and `df`, respectively.
+#'   `para[1]` and `para[2]` correspond to `location` and `scale`, respectively.
+#' * `"t"`: t distribution as parameterized in `stats::pt()` where `para[1]` and
+#'   `para[2]` correspond to `ncp` and `df`, respectively.
 #'
 #' @details
 #'

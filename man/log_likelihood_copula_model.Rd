@@ -40,17 +40,6 @@ right-censored,
 \item \code{d2[i] = -1} if \code{v[i]} corresponds to left-censored value
 }}
 
-\item{copula}{Copula family, one of the following:
-\itemize{
-\item \code{"clayton"}
-\item \code{"frank"}
-\item \code{"gumbel"}
-\item \code{"gaussian"}
-
-The parameterization of the respective copula families can be found in the
-help files of the dedicated functions named \code{copula_loglik_copula_scale()}.
-}}
-
 \item{cdf_X}{Distribution function for the first outcome variable.}
 
 \item{cdf_Y}{Distribution function for the second outcome variable.}

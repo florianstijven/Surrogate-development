@@ -4,22 +4,19 @@
 \alias{cdf_fun}
 \title{Function factory for distribution functions}
 \usage{
-cdf_fun(mean, extra_par, family)
+cdf_fun(para, family)
 }
 \arguments{
-\item{mean}{Mean parameter.}
-
-\item{extra_par}{Additional parameters. The specific meaning of these extra
-parameters depends on \code{family}.}
+\item{para}{Parameter vector.}
 
 \item{family}{Distributional family, one of the following:
 \itemize{
-\item \code{"normal"}: normal distribution where \code{mean} is the mean and \code{extra_par} is
+\item \code{"normal"}: normal distribution where \code{para[1]} is the mean and \code{para[2]} is
 the standard deviation.
 \item \code{"logistic"}: logistic distribution as parameterized in \code{stats::plogis()} where
-\code{mean} and \code{extra_par} correspond to \code{location} and \code{scale}, respectively.
-\item \code{"t"}: t distribution as parameterized in \code{stats::pt()} where \code{mean} and
-\code{extra_par} correspond to \code{ncp} and \code{df}, respectively.
+\code{para[1]} and \code{para[2]} correspond to \code{location} and \code{scale}, respectively.
+\item \code{"t"}: t distribution as parameterized in \code{stats::pt()} where \code{para[1]} and
+\code{para[2]} correspond to \code{ncp} and \code{df}, respectively.
 }}
 }
 \value{
