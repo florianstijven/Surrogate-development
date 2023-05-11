@@ -167,3 +167,24 @@ test_that("fit_model_binCont_copula() works with clayton copula and lognormal ma
   expect_equal(coef(full_model$submodel0$ml_fit), coefs_check, ignore_attr = TRUE)
 }
 )
+
+test_that("fit_model_binCont_copula() works with clayton copula and normal margins and full ML estimator", {
+  copula_family = "clayton"
+  marginal_surrogate = "normal"
+  data("Schizo_BinCont")
+  na = is.na(Schizo_BinCont$CGI_Bin) | is.na(Schizo_BinCont$PANSS)
+  X = Schizo_BinCont$PANSS[!na]
+  Y = Schizo_BinCont$CGI_Bin[!na]
+  Treat = Schizo_BinCont$Treat[!na]
+  Treat = ifelse(Treat == 1, 1, 0)
+  data = data.frame(
+    X,
+    Y,
+    Treat
+  )
+  full_model = fit_copula_model_BinCont(data, copula_family, marginal_surrogate, twostep = FALSE)
+  coef(full_model$submodel0$ml_fit)
+  coefs_check = c(-0.0840252 , -17.4157626, 28.1428341, 3.1337715)
+  expect_equal(coef(full_model$submodel0$ml_fit), coefs_check, ignore_attr = TRUE)
+}
+)
