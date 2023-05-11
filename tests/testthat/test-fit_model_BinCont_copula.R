@@ -104,6 +104,28 @@ test_that("twostep_BinCont() works with gaussian copula and weibull margins", {
 }
 )
 
+test_that("fit_copula_submodel_BinCont() works with clayton copula and lognormal margins", {
+  copula_family = "clayton"
+  marginal_surrogate = "weibull"
+  data("Schizo_BinCont")
+  na = is.na(Schizo_BinCont$CGI_Bin) | is.na(Schizo_BinCont$PANSS)
+  X = 6 - log(abs(Schizo_BinCont$PANSS[!na]) + 2)
+  Y = Schizo_BinCont$CGI_Bin[!na]
+  fit = fit_copula_submodel_BinCont(
+    X = X,
+    Y = Y,
+    copula_family = copula_family,
+    marginal_surrogate = marginal_surrogate
+  )
+  # Reference vector
+  check_values = c(-792.960659610961  , 3.33714281655191  , 3.23769831227565)
+  # Values from running the functions
+  output_values = c(fit$ml_fit$maximum,
+                    fit$marginal_S_dist$estimate)
+  expect_equal(output_values, check_values, ignore_attr = TRUE)
+}
+)
+
 test_that("fit_model_binCont_copula() works with clayton copula and lognormal margins and twostep estimator", {
   copula_family = "clayton"
   marginal_surrogate = "lognormal"
@@ -118,13 +140,30 @@ test_that("fit_model_binCont_copula() works with clayton copula and lognormal ma
     Y,
     Treat
   )
-  twostep_BinCont(
-    X = X,
-    Y = Y,
-    copula_family = copula_family,
-    marginal_surrogate = marginal_surrogate
+  full_model = fit_copula_model_BinCont(data, copula_family, marginal_surrogate, twostep = TRUE)
+  coef(full_model$submodel0$ml_fit)
+  coefs_check = c(0.01958429, 1.08101496, 0.31669380, 1.86680543)
+  expect_equal(coef(full_model$submodel0$ml_fit), coefs_check, ignore_attr = TRUE)
+}
+)
+
+test_that("fit_model_binCont_copula() works with clayton copula and lognormal margins and full ML estimator", {
+  copula_family = "clayton"
+  marginal_surrogate = "lognormal"
+  data("Schizo_BinCont")
+  na = is.na(Schizo_BinCont$CGI_Bin) | is.na(Schizo_BinCont$PANSS)
+  X = 6 - log(abs(Schizo_BinCont$PANSS[!na]) + 2)
+  Y = Schizo_BinCont$CGI_Bin[!na]
+  Treat = Schizo_BinCont$Treat[!na]
+  Treat = ifelse(Treat == 1, 1, 0)
+  data = data.frame(
+    X,
+    Y,
+    Treat
   )
-  fit_copula_model_BinCont(data, copula_family, marginal_surrogate, twostep = TRUE)
-  expect_equal(coef(summary(twostep_fit$ml_fit))[4], 0.63758564)
+  full_model = fit_copula_model_BinCont(data, copula_family, marginal_surrogate, twostep = FALSE)
+  coef(full_model$submodel0$ml_fit)
+  coefs_check = c(0.00817475, 1.08575070, 0.32072379, 1.87215963)
+  expect_equal(coef(full_model$submodel0$ml_fit), coefs_check, ignore_attr = TRUE)
 }
 )

@@ -90,7 +90,8 @@ fit_copula_submodel_BinCont = function(X,
                                        marginal_surrogate,
                                        method = "BFGSR") {
   # The starting values are determined by the two-step estimator.
-  starting_values = coef(twostep_BinCont(X, Y, copula_family, marginal_surrogate))
+  twostep_fit = twostep_BinCont(X, Y, copula_family, marginal_surrogate)
+  starting_values = coef(twostep_fit$ml_fit)
   # Maximize likelihood
   log_lik_function = function(para) {
     temp_fun = binary_continuous_loglik(
@@ -102,18 +103,34 @@ fit_copula_submodel_BinCont = function(X,
     )
     return(temp_fun)
   }
-  # list of constraints
-  # if (copula_family == "clayton") {
-  #   A = matrix(c(0, 0, 0, 1), ncol = 4)
-  #   B = 0
-  # }
+  suppressWarnings({
+    ml_fit = maxLik::maxLik(logLik = log_lik_function,
+                            start = starting_values,
+                            method = method)
+  })
 
-  ml_fit = maxLik::maxLik(
-    logLik = log_lik_function,
-    start = starting_values,
-    method = method
+
+  # Construct fitdistrplus::fitdist object from maximum likelihood estimates. To
+  # do this, we first extract the estimated marginal surrogate distribution
+  # parameters. The names of these parameters should correspond to the marginal
+  # distribution arguments.
+  fix.arg = coef(ml_fit)[c(-1, -length(coef(ml_fit)))]
+  names(fix.arg) = stringr::str_sub(names(fix.arg),
+                                    start = 1L, end = -5L)
+  marginal_S_dist = marginal_distribution(
+    x = X,
+    distribution = marginal_surrogate,
+    fix.arg = as.list(fix.arg)
   )
-  return(ml_fit)
+
+  # Return a list with the marginal surrogate distribution, fit object for
+  # copula parameter, and element to indicate the copula family.
+  submodel_fit = list(
+    ml_fit = ml_fit,
+    marginal_S_dist = marginal_S_dist,
+    copula_family = copula_family
+  )
+  return(submodel_fit)
 }
 
 
@@ -191,13 +208,15 @@ twostep_BinCont = function(X,
   unname(copula_start)
   start = c(marginal_para,
             "theta (copula)" = copula_start)
+  suppressWarnings({
+    ml_fit = maxLik::maxLik(
+      logLik = log_lik_function,
+      start = start,
+      method = method,
+      fixed = 1:3
+    )
+  })
 
-  ml_fit = maxLik::maxLik(
-    logLik = log_lik_function,
-    start = start,
-    method = method,
-    fixed = 1:3
-  )
 
   # Return a list with the marginal surrogate distribution, fit object for
   # copula parameter, and element to indicate the copula family.
@@ -223,21 +242,79 @@ twostep_BinCont = function(X,
 #' * `"lognormal"`: lognormal distribution as parameterized in `dlnorm()`
 #' * `"gamma"`: gamma distribution as parameterized in `dgamma()`
 #' * `"weibull"`: weibull distribution as parameterized in `dweibull()`
+#' @param fix.arg An optional named list giving the values of fixed parameters
+#'   of the named distribution or a function of data computing (fixed) parameter
+#'   values and returning a named list. Parameters with fixed value are thus NOT
+#'   estimated by this maximum likelihood procedure.
 #'
-#' @return Object of class `fitdistrplus::fitdist` that represents the
-#'  marginal surrogate distribution.
+#' @return Object of class `fitdistrplus::fitdist` that represents the marginal
+#'   surrogate distribution.
 #'
 #' @examples
-marginal_distribution = function(x, distribution) {
-  fitted_dist = switch(
-    distribution,
-    normal = fitdistrplus::fitdist(data = x, "norm"),
-    logistic = fitdistrplus::fitdist(data = x, dis),
-    t = fitdistrplus::fitdist(x, "t"),
-    lognormal = fitdistrplus::fitdist(x, "lnorm"),
-    gamma = fitdistrplus::fitdist(x, "gamma", start = list(shape = 1, rate = 1)),
-    weibull = fitdistrplus::fitdist(x, "weibull", start = list(shape = 1, scale = 1))
-  )
+marginal_distribution = function(x, distribution, fix.arg = NULL) {
+  # No fixed arguments are provided.
+  if (is.null(fix.arg)) {
+    fitted_dist = switch(
+      distribution,
+      normal = fitdistrplus::fitdist(data = x, "norm", fix.arg = fix.arg),
+      logistic = fitdistrplus::fitdist(data = x, "logis", fix.arg = fix.arg),
+      t = fitdistrplus::fitdist(x, "t", fix.arg = fix.arg),
+      lognormal = fitdistrplus::fitdist(x, "lnorm", fix.arg = fix.arg),
+      gamma = fitdistrplus::fitdist(x, "gamma", start = list(shape = 1, rate = 1), fix.arg = fix.arg),
+      weibull = fitdistrplus::fitdist(x, "weibull", start = list(shape = 1, scale = 1), fix.arg = fix.arg)
+    )
+  }
+  # Fixed arguments are provided. In this case, we give the fixed arguments as
+  # starting values and use a "custom" optimisation function that does not
+  # iterate. Hence, the starting values are just returned.
+  else {
+    fitted_dist = switch(
+      distribution,
+      normal = fitdistrplus::fitdist(
+        data = x,
+        "norm",
+        start = fix.arg,
+        optim.method = "SANN",
+        control = list(maxit = 0)
+      ),
+      logistic = fitdistrplus::fitdist(
+        data = x,
+        "logis",
+        start = fix.arg,
+        optim.method = "SANN",
+        control = list(maxit = 0)
+      ),
+      t = fitdistrplus::fitdist(
+        x,
+        "t",
+        start = fix.arg,
+        optim.method = "SANN",
+        control = list(maxit = 0)
+      ),
+      lognormal = fitdistrplus::fitdist(
+        x,
+        "lnorm",
+        start = fix.arg,
+        optim.method = "SANN",
+        control = list(maxit = 0)
+      ),
+      gamma = fitdistrplus::fitdist(
+        x,
+        "gamma",
+        start = fix.arg,
+        optim.method = "SANN",
+        control = list(maxit = 0)
+      ),
+      weibull = fitdistrplus::fitdist(
+        x,
+        "weibull",
+        start = fix.arg,
+        optim.method = "SANN",
+        control = list(maxit = 0)
+      )
+    )
+  }
+
   return(fitted_dist)
 }
 
