@@ -8,6 +8,8 @@ fit_copula_model_BinCont(
   data,
   copula_family,
   marginal_surrogate,
+  marginal_surrogate_estimator = NULL,
+  twostep = FALSE,
   fitted_model = NULL,
   hessian = TRUE,
   maxit = 500
@@ -18,6 +20,9 @@ fit_copula_model_BinCont(
 
 \item{copula_family}{One of the following parametric copula families:
 \code{"clayton"}, \code{"frank"}, \code{"gaussian"}, or \code{"gumbel"}.}
+
+\item{marginal_surrogate}{Marginal distribution for the surrogate. For all
+available options, see \code{?Surrogate::cdf_fun}.}
 
 \item{fitted_model}{Fitted model from which initial values are extracted. If
 \code{NULL} (default), standard initial values are used. This option intended

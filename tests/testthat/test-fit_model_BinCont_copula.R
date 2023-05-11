@@ -103,3 +103,28 @@ test_that("twostep_BinCont() works with gaussian copula and weibull margins", {
   expect_equal(coef(summary(twostep_fit$ml_fit))[4], 0.63758564)
 }
 )
+
+test_that("fit_model_binCont_copula() works with clayton copula and lognormal margins and twostep estimator", {
+  copula_family = "clayton"
+  marginal_surrogate = "lognormal"
+  data("Schizo_BinCont")
+  na = is.na(Schizo_BinCont$CGI_Bin) | is.na(Schizo_BinCont$PANSS)
+  X = 6 - log(abs(Schizo_BinCont$PANSS[!na]) + 2)
+  Y = Schizo_BinCont$CGI_Bin[!na]
+  Treat = Schizo_BinCont$Treat[!na]
+  Treat = ifelse(Treat == 1, 1, 0)
+  data = data.frame(
+    X,
+    Y,
+    Treat
+  )
+  twostep_BinCont(
+    X = X,
+    Y = Y,
+    copula_family = copula_family,
+    marginal_surrogate = marginal_surrogate
+  )
+  fit_copula_model_BinCont(data, copula_family, marginal_surrogate, twostep = TRUE)
+  expect_equal(coef(summary(twostep_fit$ml_fit))[4], 0.63758564)
+}
+)
