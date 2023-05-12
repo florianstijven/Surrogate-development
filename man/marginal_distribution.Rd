@@ -4,7 +4,7 @@
 \alias{marginal_distribution}
 \title{Fit marginal distribution}
 \usage{
-marginal_distribution(x, distribution)
+marginal_distribution(x, distribution, fix.arg = NULL)
 }
 \arguments{
 \item{x}{(numeric) data vector}
@@ -18,10 +18,15 @@ marginal_distribution(x, distribution)
 \item \code{"gamma"}: gamma distribution as parameterized in \code{dgamma()}
 \item \code{"weibull"}: weibull distribution as parameterized in \code{dweibull()}
 }}
+
+\item{fix.arg}{An optional named list giving the values of fixed parameters
+of the named distribution or a function of data computing (fixed) parameter
+values and returning a named list. Parameters with fixed value are thus NOT
+estimated by this maximum likelihood procedure.}
 }
 \value{
-Object of class \code{fitdistrplus::fitdist} that represents the
-marginal surrogate distribution.
+Object of class \code{fitdistrplus::fitdist} that represents the marginal
+surrogate distribution.
 }
 \description{
 The \code{marginal_distribution()} function is a wrapper for

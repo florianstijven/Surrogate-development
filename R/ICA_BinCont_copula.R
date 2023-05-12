@@ -103,14 +103,44 @@ compute_ICA_BinCont = function(delta_S, delta_T) {
 
 #' Sample copula data from a given four-dimensional D-vine copula
 #'
-#' @param copula_par
-#' @param rotation_par
-#' @param copula_family1
-#' @param copula_family2
-#' @param n
+#' `sample_dvine()` is a helper function that samples copula data from a given
+#' D-vine copula. See details for more information on the parameterization of
+#' the D-vine copula.
 #'
-#' @return
-#' @export
+#' @details
+#'
+#' # D-vine Copula
+#'
+#' Let \eqn{\boldsymbol{U} = (U_1, U_2, U_3, U_4)'} be a random vector with
+#' uniform margins. The corresponding distribution function is then a
+#' 4-dimensional copula. A D-vine copula as a family of \eqn{k}-dimensional
+#' copulas. Indeed, a D-vine copula is a \eqn{k}-dimensional copula that is
+#' constructed from a particular product of bivariate copula densities. In this
+#' function, only 4-dimensional copula densities are considered. Under the
+#' simplifying assumption, the 4-dimensional D-vine copula density is the
+#' product of the following bivariate copula densities:
+#' * \eqn{c_{12}}, \eqn{c_{23}}, and \eqn{c_{34}}
+#' * \eqn{c_{13;2}} and \eqn{c_{24;3}}
+#' * \eqn{c_{14;23}}
+#'
+#'
+#' @param copula_par Parameter vector for the sequence of bivariate copulas that
+#'   define the D-vine copula. The elements of `copula_par` correspond to
+#'   \eqn{(c_{12}, c_{23}, c_{34}, c_{13;2}, c_{24;3}, c_{14;23})}.
+#' @param rotation_par Vector of rotation parameters for the sequence of
+#'   bivariate copulas that define the D-vine copula. The elements of
+#'   `rotation_par` correspond to \eqn{(c_{12}, c_{23}, c_{34}, c_{13;2},
+#'   c_{24;3}, c_{14;23})}.
+#' @param copula_family1 Copula family of \eqn{c_{12}} and \eqn{c_{34}}. For the
+#'   possible options, see `loglik_copula_scale()`.
+#' @param copula_family2 Copula family of the other bivariate copulas. For the
+#'   possible options, see `loglik_copula_scale()`.
+#' @param n Number of samples to be taken from the D-vine copula.
+#'
+#'
+#' @return A \eqn{n \times 4} matrix where each row corresponds to one sampled
+#'   vector and the columns correspond to \eqn{U_1}, \eqn{U_2}, \eqn{U_3}, and
+#'   \eqn{U_4}.
 #'
 #' @examples
 sample_dvine = function(copula_par,
