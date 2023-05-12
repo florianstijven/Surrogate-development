@@ -210,3 +210,42 @@ sample_dvine = function(copula_par,
 
   return(U)
 }
+
+#' Sample individual casual treatment effects from given D-vine copula model in
+#' binary continuous setting
+#'
+#' @param q_S0 Quantile function for the distribution of \eqn{S_0}.
+#' @param q_S1 Quantile function for the distribution of \eqn{S_1}.
+#' @inheritParams sample_dvine
+#'
+#' @return A data frame
+sample_deltas_BinCont = function(copula_par,
+                                 rotation_par,
+                                 copula_family1,
+                                 copula_family2 = copula_family1,
+                                 n,
+                                 q_S0,
+                                 q_S1){
+  # Sample data on the copula scale.
+  U = sample_dvine(copula_par,
+                   rotation_par,
+                   copula_family1,
+                   copula_family2,
+                   n)
+  # Convert copula data to the original scale. For the true endpoints, we
+  # convert from to the copula scale to the latent standard normal scale to the
+  # binary scale. For the surrogate endpoint, we convert from the copula scale
+  # to the continuous scale, as defined by the corresponding marginal
+  # distributions.
+  T0 = ifelse(qnorm(U[, 1]) < 0, 0L, 1L)
+  T1 = ifelse(qnorm(U[, 4]) < 0, 0L, 1L)
+  S0 = q_S0(U[, 2])
+  S1 = q_S1(U[, 3])
+
+  return(
+    data.frame(
+      DeltaS = S1 - S0,
+      DeltaT = T1 - T0
+    )
+  )
+}
