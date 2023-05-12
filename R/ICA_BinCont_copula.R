@@ -167,7 +167,7 @@ sample_dvine = function(copula_par,
   pair_copulas = list(
     list(
       rvinecopulib::bicop_dist(
-        family = fitted_model$copula_family,
+        family = copula_family1,
         rotation = r12,
         parameters = c12
       ),
@@ -177,7 +177,7 @@ sample_dvine = function(copula_par,
         parameters = c23
       ),
       rvinecopulib::bicop_dist(
-        family = fitted_model$copula_family,
+        family = copula_family1,
         rotation = r34,
         parameters = c34
       )
