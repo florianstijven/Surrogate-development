@@ -2,7 +2,7 @@ compute_entropy = function(probs) {
   return(-1 * sum(probs * log(probs)))
 }
 
-compute_mutual_information_BinCont = function(delta_S, delta_T) {
+estimate_mutual_information_BinCont = function(delta_S, delta_T) {
   # Estimate three conditional densities for the three possible values of delta
   # T.
   lower_S = min(delta_S)
@@ -89,13 +89,29 @@ compute_mutual_information_BinCont = function(delta_S, delta_T) {
   return(mutual_information)
 }
 
-compute_ICA_BinCont = function(delta_S, delta_T) {
+#' Estimate ICA in Binary-Continuous Setting
+#'
+#' `estimate_ICA_BinCont()` estimates the individual causal association (ICA)
+#' for a sample of individual causal treatment effects with a continuous
+#' surrogate and a binary true endpoint. The ICA in this setting is defined as
+#' follows, \deqn{R^2_H = \frac{I(\Delta S; \Delta T)}{H(\Delta T)}} where
+#' \eqn{I(\Delta S; \Delta T)} is the mutual information and \eqn{H(\Delta T)}
+#' the entropy.
+#'
+#' @param delta_S (numeric) Vector of individual causal treatment effects on the
+#'   surrogate.
+#' @param delta_T (integer) Vector of individual causal treatment effects on the true
+#'   endpoint. Should take on one of the following values: `-1L`, `0L`, or `1L`.
+#'
+#' @return (numeric) Estimated ICA
+
+estimate_ICA_BinCont = function(delta_S, delta_T) {
   # Compute marginal probabilities for distribution of Delta T.
   pi_min1 = mean(delta_T == -1)
   pi_0 = mean(delta_T == 0)
   pi_plus1 = 1 - pi_min1 - pi_0
   # Compute ICA
-  ICA = compute_mutual_information_BinCont(delta_S, delta_T) /
+  ICA = estimate_mutual_information_BinCont(delta_S, delta_T) /
     compute_entropy(c(pi_min1, pi_0, pi_plus1))
   return(ICA)
 }
