@@ -2,6 +2,7 @@ compute_entropy = function(probs) {
   return(-1 * sum(probs * log(probs)))
 }
 
+
 estimate_mutual_information_BinCont = function(delta_S, delta_T) {
   # Estimate three conditional densities for the three possible values of delta
   # T.
@@ -264,4 +265,39 @@ sample_deltas_BinCont = function(copula_par,
       DeltaT = T1 - T0
     )
   )
+}
+
+#' Compute Individual Causal Association for a given D-vine copula model in the
+#' Binary-Continuous Setting
+#'
+#' The [compute_ICA_BinCont()] function computes the individual causal
+#' association for a fully identified D-vine copula model in the setting with a
+#' continuous surrogate endpoint and a binary true endpoint.
+#'
+#' @param minfo_prec Number of Monte Carlo samples for the computation of the
+#'   mutual information.
+#' @inheritParams sample_deltas_BinCont
+#'
+#' @return (numeric) the computed ICA
+#'
+#' @examples
+compute_ICA_BinCont = function(copula_par,
+                               rotation_par,
+                               copula_family1,
+                               copula_family2 = copula_family1,
+                               minfo_prec,
+                               q_S0,
+                               q_S1)
+{
+  delta_df = sample_deltas_BinCont(
+    copula_par,
+    rotation_par,
+    copula_family1,
+    copula_family2 = copula_family1,
+    n = minfo_prec,
+    q_S0,
+    q_S1
+  )
+  ICA = estimate_ICA_BinCont(delta_df$DeltaS, delta_df$DeltaT)
+  return(ICA)
 }
