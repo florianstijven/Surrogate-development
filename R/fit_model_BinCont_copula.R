@@ -1,6 +1,6 @@
 #' Fit copula model for binary true endpoint and continuous surrogate endpoint
 #'
-#' The function `fit_copula_model_BinCont()` fits the copula model for a
+#' The function [fit_copula_model_BinCont()] fits the copula model for a
 #' continuous surrogate endpoint and binary true endpoint. Because the bivariate
 #' distributions of the surrogate-true endpoint pairs are functionally
 #' independent across treatment groups, a bivariate distribution is fitted in

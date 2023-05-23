@@ -39,7 +39,7 @@ can be useful when a model is repeatedly fitted, e.g., in a bootstrap.
 defaults to 500.}
 }
 \description{
-The function \code{fit_copula_model_BinCont()} fits the copula model for a
+The function \code{\link[=fit_copula_model_BinCont]{fit_copula_model_BinCont()}} fits the copula model for a
 continuous surrogate endpoint and binary true endpoint. Because the bivariate
 distributions of the surrogate-true endpoint pairs are functionally
 independent across treatment groups, a bivariate distribution is fitted in

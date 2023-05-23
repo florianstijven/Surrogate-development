@@ -278,7 +278,14 @@ sample_deltas_BinCont = function(copula_par,
 #'   mutual information.
 #' @inheritParams sample_deltas_BinCont
 #'
-#' @return (numeric) the computed ICA
+#' @return (numeric) A Named vector with the following elements:
+#'  * ICA
+#'  * Spearman's rho, \eqn{\rho_s (\Delta S, \Delta T)} (if asked)
+#'  * Kendall's tau, \eqn{\tau (\Delta S, \Delta T)} (if asked)
+#'  * Marginal association parameters in terms of Spearman's rho:
+#'  \deqn{(\rho_s(S_0, S_1), \rho_s(S_0, S_T_0), \rho_s(S_0, T_1),
+#'  \rho_s(S_1, T_0), \rho_s(S_0, S_1),
+#'  \rho_s(T_0, T_1)}
 #'
 #' @examples
 compute_ICA_BinCont = function(copula_par,
@@ -298,6 +305,16 @@ compute_ICA_BinCont = function(copula_par,
     q_S0,
     q_S1
   )
-  ICA = estimate_ICA_BinCont(delta_df$DeltaS, delta_df$DeltaT)
-  return(ICA)
+  # Compute mutual information between Delta S and Delta T.
+  mutual_information = estimate_mutual_information_BinCont(delta_df$DeltaS, delta_df$DeltaT)
+  # Compute marginal probabilities for distribution of Delta T.
+  pi_min1 = mean(delta_df$DeltaT == -1)
+  pi_0 = mean(delta_df$DeltaT == 0)
+  pi_plus1 = 1 - pi_min1 - pi_0
+  entropy_DeltaT = compute_entropy(c(pi_min1, pi_0, pi_plus1))
+  # Compute ICA
+  ICA = mutual_information / entropy_DeltaT
+  sp_rho = cor(delta_df$DeltaS, delta_df$DeltaT, method = "spearman")
+  kendall_tau = cor(delta_df$DeltaS, delta_df$DeltaT, method = "kendall")
+  return(c(ICA = ICA, sp_rho = sp_rho))
 }
