@@ -244,23 +244,10 @@ sensitivity_analysis_BinCont_copula = function(fitted_model,
   }
 
   measures_df = t(as.data.frame(temp))
-  if(get_marg_tau){
-    colnames(measures_df) = c("kendall", "sp_rho", "minfo",
-                              "sp_s0s1", "sp_s0t0", "sp_s0t1",
-                              "sp_s1t0", "sp_s1t1",
-                              "sp_t0t1",
-                              "prop_harmed", "prop_protected",
-                              "prop_always", "prop_never")
-  }
-  else{
-    colnames(measures_df) = c("kendall", "sp_rho", "minfo")
-  }
   rownames(measures_df) = NULL
 
-  c = as.data.frame(x = c_matrix)
-  colnames(c) = c("c23", "c13_2", "c24_3", "c14_23")
-  r = as.data.frame(x = r_matrix)
-  colnames(r) = c("r23", "r13_2", "r24_3", "r14_23")
+  colnames(c) = c("c_12", "c_34", "c23", "c13_2", "c24_3", "c14_23")
+  colnames(r) = c("r_12", "r_34", "r23", "r13_2", "r24_3", "r14_23")
   return(dplyr::bind_cols(as.data.frame(measures_df), c, r))
 
   # Return a data frame with the results of the sensiviity analysis.
