@@ -173,7 +173,8 @@ sensitivity_analysis_BinCont_copula = function(fitted_model,
                                                cond_ind,
                                                lower = c(-1, -1, -1, -1),
                                                upper = c(1, 1, 1, 1),
-                                               minfo_prec = 1e4) {
+                                               minfo_prec = 1e4,
+                                               ncores = 1) {
   # Extract relevant estimated parameters/objects for the fitted copula model.
   copula_family = fitted_model$copula_family
   copula_family2 = fitted_model$copula_family
