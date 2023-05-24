@@ -29,7 +29,7 @@ test_that("sample_deltas_BinCont() works with clayton copula", {
     n = 1e2,
     q_S0 = q_S0,
     q_S1 = q_S1
-  )
+  )$Delta_dataframe
   expected_values = c(1.03557703, 1.07562675, 1L, 0L)
   output_values = c(Delta$DeltaS[1:2], Delta$DeltaT[3:4])
   expect_equal(output_values,
@@ -56,10 +56,46 @@ test_that("estimate_ICA_BinCont() works in a sample example", {
     n = 1e2,
     q_S0 = q_S0,
     q_S1 = q_S1
-  )
+  )$Delta_dataframe
   ICA = estimate_ICA_BinCont(Delta$DeltaS, Delta$DeltaT)
   expected_values = c(1.03557703, 1.07562675, 1L, 0L)
   output_values = c(Delta$DeltaS[1:2], Delta$DeltaT[3:4])
   expect_equal(output_values,
                expected_values)
+})
+
+test_that("compute_ICA_BinCont() works in a sample example", {
+  copula_par = 1:6
+  rotation_par = rep(0, 6)
+  copula_family = "clayton"
+  # Quantile functions.
+  q_S0 = function(x) {
+    qnorm(x)
+  }
+  q_S1 = function(x) {
+    qnorm(x, mean = 1)
+  }
+  set.seed(1)
+  Delta = sample_deltas_BinCont(
+    copula_par,
+    rotation_par,
+    copula_family,
+    n = 1e2,
+    q_S0 = q_S0,
+    q_S1 = q_S1
+  )$Delta_dataframe
+  ICA = compute_ICA_BinCont(
+    copula_par = copula_par,
+    rotation_par = rotation_par,
+    copula_family1 = copula_family,
+    copula_family2 = copula_family,
+    n_prec = 1e3,
+    q_S0 = q_S0,
+    q_S1 = q_S1
+  )
+  expected_values = c(0.311324054, -0.647419321, 0.438204297, 0.737260951)
+  output_values = ICA[1:4]
+  expect_equal(output_values,
+               expected_values,
+               ignore_attr = "names")
 })
