@@ -274,7 +274,7 @@ sample_deltas_BinCont = function(copula_par,
 #' association for a fully identified D-vine copula model in the setting with a
 #' continuous surrogate endpoint and a binary true endpoint.
 #'
-#' @param minfo_prec Number of Monte Carlo samples for the computation of the
+#' @param n_prec Number of Monte Carlo samples for the computation of the
 #'   mutual information.
 #' @inheritParams sample_deltas_BinCont
 #'
@@ -292,7 +292,7 @@ compute_ICA_BinCont = function(copula_par,
                                rotation_par,
                                copula_family1,
                                copula_family2 = copula_family1,
-                               minfo_prec,
+                               n_prec,
                                q_S0,
                                q_S1)
 {
@@ -301,7 +301,7 @@ compute_ICA_BinCont = function(copula_par,
     rotation_par,
     copula_family1,
     copula_family2 = copula_family1,
-    n = minfo_prec,
+    n = n_prec,
     q_S0,
     q_S1
   )

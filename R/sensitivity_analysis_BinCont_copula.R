@@ -168,12 +168,57 @@ sample_rotation_parameters = function(n_sim, degrees = c(0, 90, 180, 270)) {
   return(r)
 }
 
+#' Perform Sensitivity Analysis for the Individual Causal Association with a
+#' Continuous Surrogate and Binary True Endpoint
+#'
+#'
+#' @details
+#' # Quantifying Surrogacy
+#'
+#' In the information-theoretic causal-inference (ITCI) framework to evaluate
+#' surrogate endpoints, the ICA is the measure of primary interest. This measure
+#' quantifies how much information the individual causal treatment effect on the
+#' surrogate (\eqn{\Delta S}) provides on the individual causal treatment effect
+#' on the true endpoint (\eqn{\Delta T}). The mutual information between
+#' \eqn{\Delta S} and \eqn{\Delta T}, denoted by \eqn{I(\Delta S; \Delta T)} is
+#' a natural candidate to quantify this amount of shared information. However,
+#' the mutual information is difficult to interpret as there does not exist a
+#' general upper bound. Alonso et al. (na) therfore proposed to quantify the ICA
+#' thorugh a transformation of the mutual information that is guaranteed to lie
+#' in the unit interval. It is the following measure, \deqn{R^2_H =
+#' \frac{I(\Delta S; \Delta T)}{H(\Delta T)}} where \eqn{H(\Delta T)} is the
+#' entropy of \eqn{\Delta T}. By token of that transformation of the mutual
+#' information, \eqn{R^2_H} is restricted to the unit interval where 0 indicates
+#' independence, and 1 a functional relationship between \eqn{\Delta S} and
+#' \eqn{\Delta T}.
+#'
+#' The association between \eqn{\Delta S} and \eqn{\Delta T} can also be
+#' quantified by Spearman's \eqn{\rho} (or Kendall's \eqn{\tau}). This quantity
+#' requires appreciably less computing time than the mutual information. This
+#' quantity is therefore always returned for every replication of the
+#' sensitivity analysis.
+#'
+#' @inheritSection ica_SurvSurv_sens Sensitivity Analysis
+#' @inheritSection ica_SurvSurv_sens Additional Assumptions
+#'
+#'
+#' @param fitted_model Returned value from [fit_model_BinCont()]. This object
+#'   contains the estimated identifiable part of the joint distribution for the
+#'   potential outcomes.
+#' @inheritParams ica_SurvSurv_sens
+#' @inheritParams sample_copula_parameters
+#'
+#' @return
+#' @export
+#'
+#' @examples
 sensitivity_analysis_BinCont_copula = function(fitted_model,
                                                n_sim,
                                                cond_ind,
                                                lower = c(-1, -1, -1, -1),
                                                upper = c(1, 1, 1, 1),
-                                               minfo_prec = 1e4,
+                                               marg_association = TRUE,
+                                               n_prec = 1e4,
                                                ncores = 1) {
   # Extract relevant estimated parameters/objects for the fitted copula model.
   copula_family = fitted_model$copula_family
@@ -214,7 +259,7 @@ sensitivity_analysis_BinCont_copula = function(fitted_model,
   MoreArgs = list(
     copula_family1 = copula_family,
     copula_family2 = copula_family2,
-    minfo_prec = minfo_prec,
+    n_prec = n_prec,
     q_S0 = q_S0,
     q_S1 = q_S1
   )

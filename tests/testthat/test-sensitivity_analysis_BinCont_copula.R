@@ -21,7 +21,7 @@ test_that("sensitivity_analysis_BinCont_copula() works in a simplified setting",
               cond_ind = TRUE,
               lower = c(-1,-1,-1,-1),
               upper = c(1, 1, 1, 1),
-              minfo_prec = 1e3
+              n_prec = 1e3
             )
             expect_equal(
               sens_results[,1],

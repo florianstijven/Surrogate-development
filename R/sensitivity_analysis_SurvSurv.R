@@ -58,26 +58,29 @@
 #' (ii) *inequality* type of assumptions. These are discussed in turn in the
 #' next two paragraphs.
 #'
-#' The equality assumptions have to be incorporated into the
-#' sensitivity analysis itself. Only one type of equality assumption has been
-#' implemented; this is the conditional independence assumption which can
-#' be specified to [ica_SurvSurv_sens()] through the `cond_ind` argument:
+#' The equality assumptions have to be incorporated into the sensitivity
+#' analysis itself. Only one type of equality assumption has been implemented;
+#' this is the conditional independence assumption which can be specified
+#' through the `cond_ind` argument:
 #' \deqn{\tilde{S}_0 \perp \!\!\! \perp T_1 | \tilde{S}_1 \; \text{and} \;
 #' \tilde{S}_1 \perp \!\!\! \perp T_0 | \tilde{S}_0 .} This can informally be
 #' interpreted as ``what the control treatment does to the surrogate does not
-#' provide information on the survival time under experimental treatment if we
+#' provide information on the true endpoint under experimental treatment if we
 #' already know what the experimental treatment does to the surrogate", and
-#' analogously when control and experimental treatment are interchanged.
+#' analogously when control and experimental treatment are interchanged. Note
+#' that \eqn{\tilde{S}_z} refers to either the actual potential surrogate
+#' outcome, or a latent version. This depends on the content of `fitted_model`.
 #'
 #' The inequality type of assumptions have to be imposed on the data frame that
-#' is returned by the [ica_SurvSurv_sens()] function; those assumptions are thus
-#' imposed *after* running the sensitivity analysis. If `get_marg_tau` is set to
-#' `TRUE`, the returned data frame contains two types of additional unverifiable
-#' quantities that differ across replications of the sensitivity analysis: (i)
-#' the unconditional Spearman's \eqn{\rho} for all pairs of potential outcomes,
-#' and (ii) the proportions of the population strata as defined by Nevo and
-#' Gorfine (2022). More details on the interpretation and use of these
-#' assumptions can be found in Stijven et al. (2022).
+#' is returned by the current function; those assumptions are thus imposed
+#' *after* running the sensitivity analysis. If `marginal_association` is set to
+#' `TRUE`, the returned data frame contains additional unverifiable quantities
+#' that differ across replications of the sensitivity analysis: (i) the
+#' unconditional Spearman's \eqn{\rho} for all pairs of (observable/non-latent)
+#' potential outcomes, and (ii) the proportions of the population strata as
+#' defined by Nevo and Gorfine (2022) if semi-competing risks are present. More
+#' details on the interpretation and use of these assumptions can be found in
+#' Stijven et al. (2022).
 #'
 #'
 #' @param fitted_model Returned value from [fit_model_SurvSurv()]. This object
