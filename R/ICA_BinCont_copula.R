@@ -233,16 +233,24 @@ sample_dvine = function(copula_par,
 #'
 #' @param q_S0 Quantile function for the distribution of \eqn{S_0}.
 #' @param q_S1 Quantile function for the distribution of \eqn{S_1}.
+#' @param marginal_sp_rho (boolean) Compute the sample Spearman correlation
+#'   matrix? Defaults to `TRUE`.
 #' @inheritParams sample_dvine
 #'
-#' @return A data frame
+#' @return A list with two elements:
+#' * `Delta_dataframe`: a dataframe containing the sampled individual causal
+#'   treatment effects
+#' * `marginal_sp_rho_matrix`: a matrix containing the marginal pairwise Spearman's rho
+#'   parameters estimated from the sample. If `marginal_sp_rho = FALSE`, this
+#'   matrix is not computed and `NULL` is returned for this element of the list.
 sample_deltas_BinCont = function(copula_par,
                                  rotation_par,
                                  copula_family1,
                                  copula_family2 = copula_family1,
                                  n,
                                  q_S0,
-                                 q_S1){
+                                 q_S1,
+                                 marginal_sp_rho){
   # Sample data on the copula scale.
   U = sample_dvine(copula_par,
                    rotation_par,
@@ -258,12 +266,15 @@ sample_deltas_BinCont = function(copula_par,
   T1 = ifelse(qnorm(U[, 4]) < 0, 0L, 1L)
   S0 = q_S0(U[, 2])
   S1 = q_S1(U[, 3])
+  Delta_dataframe = data.frame(DeltaS = S1 - S0,
+                               DeltaT = T1 - T0)
 
+  # Compute the pairwise marginal Spearman's rho values from the sample.
+  sp_rho_matrix = NULL
+  sp_rho_matrix = cor(data.frame(T0, S0, S1, T1), method = "spearman")
   return(
-    data.frame(
-      DeltaS = S1 - S0,
-      DeltaT = T1 - T0
-    )
+    list(Delta_dataframe = Delta_dataframe,
+         marginal_sp_rho_matrix = sp_rho_matrix)
   )
 }
 
@@ -274,8 +285,10 @@ sample_deltas_BinCont = function(copula_par,
 #' association for a fully identified D-vine copula model in the setting with a
 #' continuous surrogate endpoint and a binary true endpoint.
 #'
-#' @param n_prec Number of Monte Carlo samples for the computation of the
-#'   mutual information.
+#' @param n_prec Number of Monte Carlo samples for the computation of the mutual
+#'   information.
+#' @seed Seed for Monte Carlo sampling. This seed does not affect the global
+#'   environment.
 #' @inheritParams sample_deltas_BinCont
 #'
 #' @return (numeric) A Named vector with the following elements:
@@ -294,17 +307,26 @@ compute_ICA_BinCont = function(copula_par,
                                copula_family2 = copula_family1,
                                n_prec,
                                q_S0,
-                               q_S1)
+                               q_S1,
+                               marginal_sp_rho = TRUE,
+                               seed = 1)
 {
-  delta_df = sample_deltas_BinCont(
+  withr::local_seed(seed)
+  # Sample individual causal treatment effects from the given model. If
+  # marginal_sp_rho = TRUE, then the Spearman's correlation matrix is also
+  # computed for the 4d joint distribution of potential outcomes.
+  delta_list = sample_deltas_BinCont(
     copula_par,
     rotation_par,
     copula_family1,
     copula_family2 = copula_family1,
     n = n_prec,
     q_S0,
-    q_S1
+    q_S1,
+    marginal_sp_rho = marginal_sp_rho
   )
+  delta_df = delta_list$Delta_dataframe
+  sp_rho_matrix = delta_list$marginal_sp_rho_matrix
   # Compute mutual information between Delta S and Delta T.
   mutual_information = estimate_mutual_information_BinCont(delta_df$DeltaS, delta_df$DeltaT)
   # Compute marginal probabilities for distribution of Delta T.
@@ -315,6 +337,9 @@ compute_ICA_BinCont = function(copula_par,
   # Compute ICA
   ICA = mutual_information / entropy_DeltaT
   sp_rho = cor(delta_df$DeltaS, delta_df$DeltaT, method = "spearman")
-  kendall_tau = cor(delta_df$DeltaS, delta_df$DeltaT, method = "kendall")
-  return(c(ICA = ICA, sp_rho = sp_rho))
+  # kendall_tau = cor(delta_df$DeltaS, delta_df$DeltaT, method = "kendall")
+  return(c(ICA = ICA, sp_rho = sp_rho,
+           sp_rho_t0s0 = sp_rho_matrix[1, 2], sp_rho_t0s1 = sp_rho_matrix[1, 3], sp_rho_t0t1 = sp_rho_matrix[1, 4],
+           sp_rho_s0s1 = sp_rho_matrix[2, 3], sp_rho_s0t1 = sp_rho_matrix[2, 3],
+           sp_rho_s1t1 = sp_rho_matrix[3, 4]))
 }

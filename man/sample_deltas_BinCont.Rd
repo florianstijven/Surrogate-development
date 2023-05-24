@@ -12,7 +12,8 @@ sample_deltas_BinCont(
   copula_family2 = copula_family1,
   n,
   q_S0,
-  q_S1
+  q_S1,
+  marginal_sp_rho
 )
 }
 \arguments{
@@ -36,9 +37,19 @@ possible options, see \code{loglik_copula_scale()}.}
 \item{q_S0}{Quantile function for the distribution of \eqn{S_0}.}
 
 \item{q_S1}{Quantile function for the distribution of \eqn{S_1}.}
+
+\item{marginal_sp_rho}{(boolean) Compute the sample Spearman correlation
+matrix? Defaults to \code{TRUE}.}
 }
 \value{
-A data frame
+A list with two elements:
+\itemize{
+\item \code{Delta_dataframe}: a dataframe containing the sampled individual causal
+treatment effects
+\item \code{marginal_sp_rho_matrix}: a matrix containing the marginal pairwise Spearman's rho
+parameters estimated from the sample. If \code{marginal_sp_rho = FALSE}, this
+matrix is not computed and \code{NULL} is returned for this element of the list.
+}
 }
 \description{
 Sample individual casual treatment effects from given D-vine copula model in

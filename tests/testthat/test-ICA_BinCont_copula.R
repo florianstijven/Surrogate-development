@@ -91,9 +91,10 @@ test_that("compute_ICA_BinCont() works in a sample example", {
     copula_family2 = copula_family,
     n_prec = 1e3,
     q_S0 = q_S0,
-    q_S1 = q_S1
+    q_S1 = q_S1,
+    seed = 1
   )
-  expected_values = c(0.311324054, -0.647419321, 0.438204297, 0.737260951)
+  expected_values = c(0.318961395, -0.650202419, 0.396666309, 0.710023540)
   output_values = ICA[1:4]
   expect_equal(output_values,
                expected_values,
