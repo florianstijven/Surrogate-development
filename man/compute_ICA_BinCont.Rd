@@ -10,7 +10,7 @@ compute_ICA_BinCont(
   rotation_par,
   copula_family1,
   copula_family2 = copula_family1,
-  minfo_prec,
+  n_prec,
   q_S0,
   q_S1
 )
@@ -31,7 +31,7 @@ possible options, see \code{loglik_copula_scale()}.}
 \item{copula_family2}{Copula family of the other bivariate copulas. For the
 possible options, see \code{loglik_copula_scale()}.}
 
-\item{minfo_prec}{Number of Monte Carlo samples for the computation of the
+\item{n_prec}{Number of Monte Carlo samples for the computation of the
 mutual information.}
 
 \item{q_S0}{Quantile function for the distribution of \eqn{S_0}.}

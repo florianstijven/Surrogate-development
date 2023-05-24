@@ -208,8 +208,28 @@ sample_rotation_parameters = function(n_sim, degrees = c(0, 90, 180, 270)) {
 #' @inheritParams ica_SurvSurv_sens
 #' @inheritParams sample_copula_parameters
 #'
-#' @return
-#' @export
+#' @return A data frame is returned. Each row represents one replication in the
+#'   sensitivity analysis. The returned data frame always contains the following
+#'   columns:
+#' * `R2H`, `sp_rho`, `minfo`: ICA as quantified by \eqn{R^2_H}, Spearman's rho, and
+#'   Kendall's tau, respectively.
+#' * `c12`, `c34`: estimated copula parameters.
+#' * `c23`, `c13_2`, `c24_3`, `c14_23`: sampled copula parameters of the
+#'   unidentifiable copulas in the D-vine copula. The parameters correspond to
+#'   the parameterization of the `copula_family2` copula as in the `copula`
+#'   R-package.
+#' * `r12`, `r34`: Fixed rotation parameters for the two identifiable copulas.
+#' * `r23`, `r13_2`, `r24_3`, `r14_23`: Sampled rotation parameters of the
+#'   unidentifiable copulas in the D-vine copula. These values are constant for
+#'   the Gaussian copula family since that copula is invariant to rotations.
+#'
+#' The returned data frame also contains the following columns when
+#' `marg_association` is `TRUE`:
+#' * `sp_s0s1`, `sp_s0t0`, `sp_s0t1`, `sp_s1t0`, `sp_s1t1`, `sp_t0t1`:
+#' Spearman's rho between the corresponding potential outcomes. Note that these
+#' associations refer to the observable potential outcomes. In contrary, the
+#' estimated association parameters from [fit_model_BinCont()] refer to
+#' associations on a latent scale.
 #'
 #' @examples
 sensitivity_analysis_BinCont_copula = function(fitted_model,

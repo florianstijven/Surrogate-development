@@ -12,7 +12,7 @@ sensitivity_analysis_BinCont_copula(
   lower = c(-1, -1, -1, -1),
   upper = c(1, 1, 1, 1),
   marg_association = TRUE,
-  minfo_prec = 10000,
+  n_prec = 10000,
   ncores = 1
 )
 }
@@ -43,13 +43,40 @@ copula family's lowest possible value is used instead.}
 \eqn{\boldsymbol{b} = (b_{23}, b_{13;2}, b_{24;3},
   b_{14;23})'}. Defaults to \code{c(1, 1, 1, 1)}.}
 
-\item{minfo_prec}{Number of quasi Monte-Carlo samples for the numerical
-integration to obtain the mutual information. If this value is 0 (default),
-the mutual information is not computed and \code{NA} is returned for that column.}
+\item{n_prec}{Number of Monte-Carlo samples for the \emph{numerical approximation}
+of the ICA in each replication of the sensitivity analysis.}
 
 \item{ncores}{Number of cores used in the sensitivity analysis. The
 computations are computationally heavy, and this option can speed things
 up considerably.}
+}
+\value{
+A data frame is returned. Each row represents one replication in the
+sensitivity analysis. The returned data frame always contains the following
+columns:
+\itemize{
+\item \code{R2H}, \code{sp_rho}, \code{minfo}: ICA as quantified by \eqn{R^2_H}, Spearman's rho, and
+Kendall's tau, respectively.
+\item \code{c12}, \code{c34}: estimated copula parameters.
+\item \code{c23}, \code{c13_2}, \code{c24_3}, \code{c14_23}: sampled copula parameters of the
+unidentifiable copulas in the D-vine copula. The parameters correspond to
+the parameterization of the \code{copula_family2} copula as in the \code{copula}
+R-package.
+\item \code{r12}, \code{r34}: Fixed rotation parameters for the two identifiable copulas.
+\item \code{r23}, \code{r13_2}, \code{r24_3}, \code{r14_23}: Sampled rotation parameters of the
+unidentifiable copulas in the D-vine copula. These values are constant for
+the Gaussian copula family since that copula is invariant to rotations.
+}
+
+The returned data frame also contains the following columns when
+\code{marg_association} is \code{TRUE}:
+\itemize{
+\item \code{sp_s0s1}, \code{sp_s0t0}, \code{sp_s0t1}, \code{sp_s1t0}, \code{sp_s1t1}, \code{sp_t0t1}:
+Spearman's rho between the corresponding potential outcomes. Note that these
+associations refer to the observable potential outcomes. In contrary, the
+estimated association parameters from \code{\link[=fit_model_BinCont]{fit_model_BinCont()}} refer to
+associations on a latent scale.
+}
 }
 \description{
 Perform Sensitivity Analysis for the Individual Causal Association with a
