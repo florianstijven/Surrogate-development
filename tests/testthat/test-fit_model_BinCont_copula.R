@@ -77,7 +77,7 @@ test_that("twostep_BinCont() works with clayton copula and gamma margins", {
     copula_family = copula_family,
     marginal_surrogate = marginal_surrogate
   )
-  expect_equal(coef(summary(twostep_fit$ml_fit))[4], 0.96813376)
+  expect_equal(coef(summary(twostep_fit$ml_fit))[4], 0.96837258)
 }
 )
 
@@ -100,7 +100,7 @@ test_that("twostep_BinCont() works with gaussian copula and weibull margins", {
     copula_family = copula_family,
     marginal_surrogate = marginal_surrogate
   )
-  expect_equal(coef(summary(twostep_fit$ml_fit))[4], 0.63758564)
+  expect_equal(coef(summary(twostep_fit$ml_fit))[4], 0.63754401)
 }
 )
 
@@ -115,10 +115,11 @@ test_that("fit_copula_submodel_BinCont() works with clayton copula and lognormal
     X = X,
     Y = Y,
     copula_family = copula_family,
-    marginal_surrogate = marginal_surrogate
+    marginal_surrogate = marginal_surrogate,
+    method = "BFGS"
   )
   # Reference vector
-  check_values = c(-792.960659610961  , 3.33714281655191  , 3.23769831227565)
+  check_values = c(-792.949260, 3.328630, 3.235286)
   # Values from running the functions
   output_values = c(fit$ml_fit$maximum,
                     fit$marginal_S_dist$estimate)
@@ -135,14 +136,16 @@ test_that("fit_model_binCont_copula() works with clayton copula and lognormal ma
   Y = Schizo_BinCont$CGI_Bin[!na]
   Treat = Schizo_BinCont$Treat[!na]
   Treat = ifelse(Treat == 1, 1, 0)
-  data = data.frame(
-    X,
-    Y,
-    Treat
-  )
-  full_model = fit_copula_model_BinCont(data, copula_family, marginal_surrogate, twostep = TRUE)
+  data = data.frame(X,
+                    Y,
+                    Treat)
+  full_model = fit_copula_model_BinCont(data,
+                                        copula_family,
+                                        marginal_surrogate,
+                                        twostep = TRUE,
+                                        method = "BFGS")
   coef(full_model$submodel0$ml_fit)
-  coefs_check = c(0.01958429, 1.08101496, 0.31669380, 1.86680543)
+  coefs_check = c(0.01958429, 1.08101496, 0.31669380, 1.86676923)
   expect_equal(coef(full_model$submodel0$ml_fit), coefs_check, ignore_attr = TRUE)
 }
 )
@@ -156,14 +159,16 @@ test_that("fit_model_binCont_copula() works with clayton copula and lognormal ma
   Y = Schizo_BinCont$CGI_Bin[!na]
   Treat = Schizo_BinCont$Treat[!na]
   Treat = ifelse(Treat == 1, 1, 0)
-  data = data.frame(
-    X,
-    Y,
-    Treat
-  )
-  full_model = fit_copula_model_BinCont(data, copula_family, marginal_surrogate, twostep = FALSE)
+  data = data.frame(X,
+                    Y,
+                    Treat)
+  full_model = fit_copula_model_BinCont(data,
+                                        copula_family,
+                                        marginal_surrogate,
+                                        twostep = FALSE,
+                                        method = "BFGS")
   coef(full_model$submodel0$ml_fit)
-  coefs_check = c(0.00817475, 1.08575070, 0.32072379, 1.87215963)
+  coefs_check = c(0.00773068, 1.08557400, 0.32093667, 1.88178947)
   expect_equal(coef(full_model$submodel0$ml_fit), coefs_check, ignore_attr = TRUE)
 }
 )
@@ -177,14 +182,16 @@ test_that("fit_model_binCont_copula() works with clayton copula and normal margi
   Y = Schizo_BinCont$CGI_Bin[!na]
   Treat = Schizo_BinCont$Treat[!na]
   Treat = ifelse(Treat == 1, 1, 0)
-  data = data.frame(
-    X,
-    Y,
-    Treat
-  )
-  full_model = fit_copula_model_BinCont(data, copula_family, marginal_surrogate, twostep = FALSE)
+  data = data.frame(X,
+                    Y,
+                    Treat)
+  full_model = fit_copula_model_BinCont(data,
+                                        copula_family,
+                                        marginal_surrogate,
+                                        twostep = FALSE,
+                                        method = "BFGS")
   coef(full_model$submodel0$ml_fit)
-  coefs_check = c(-0.0840252 , -17.4157626, 28.1428341, 3.1337715)
+  coefs_check = c(-0.04323186 ,-16.63365493, 28.63091060, 3.14363815)
   expect_equal(coef(full_model$submodel0$ml_fit), coefs_check, ignore_attr = TRUE)
 }
 )

@@ -21,7 +21,8 @@ fit_copula_model_BinCont = function(data,
                              twostep = FALSE,
                              fitted_model = NULL,
                              hessian = TRUE,
-                             maxit = 500) {
+                             maxit = 500,
+                             method = "BFGS") {
   # Column names are added to make the interpretation of the further code
   # easier. surr refers to the surrogate, true refers to the true endpoint.
   colnames(data) = c("surr", "true", "Treat")
@@ -39,14 +40,16 @@ fit_copula_model_BinCont = function(data,
       Y = data0$true,
       copula_family = copula_family,
       marginal_surrogate = marginal_surrogate,
-      marginal_surrogate_estimator = marginal_surrogate_estimator
+      marginal_surrogate_estimator = marginal_surrogate_estimator,
+      method = method
     )
     fit1 = twostep_BinCont(
       X = data1$surr,
       Y = data1$true,
       copula_family = copula_family,
       marginal_surrogate = marginal_surrogate,
-      marginal_surrogate_estimator = marginal_surrogate_estimator
+      marginal_surrogate_estimator = marginal_surrogate_estimator,
+      method = method
     )
   }
   else {
@@ -54,13 +57,15 @@ fit_copula_model_BinCont = function(data,
       X = data0$surr,
       Y = data0$true,
       copula_family = copula_family,
-      marginal_surrogate = marginal_surrogate
+      marginal_surrogate = marginal_surrogate,
+      method = method
     )
     fit1 = fit_copula_submodel_BinCont(
       X = data1$surr,
       Y = data1$true,
       copula_family = copula_family,
-      marginal_surrogate = marginal_surrogate
+      marginal_surrogate = marginal_surrogate,
+      method = method
     )
   }
 
@@ -88,7 +93,7 @@ fit_copula_submodel_BinCont = function(X,
                                        Y,
                                        copula_family,
                                        marginal_surrogate,
-                                       method = "BFGSR") {
+                                       method = "BFGS") {
   # The starting values are determined by the two-step estimator.
   twostep_fit = twostep_BinCont(X, Y, copula_family, marginal_surrogate)
   starting_values = coef(twostep_fit$ml_fit)
@@ -165,7 +170,7 @@ twostep_BinCont = function(X,
                            copula_family,
                            marginal_surrogate,
                            marginal_surrogate_estimator = NULL,
-                           method = "BFGSR") {
+                           method = "BFGS") {
   # Estimate marginal distribution parameters. For clarity, the parameters are
   # named in the vector.
   mu_T = c("mu (T)" = -1 * qnorm(mean(Y)))
