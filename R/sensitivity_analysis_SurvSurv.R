@@ -264,6 +264,10 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
   )
   if (ncores > 1) {
     cl  <- parallel::makeCluster(ncores)
+    on.exit(expr = {
+      parallel::stopCluster(cl)
+      rm("cl")
+    })
     #helper function
     # surrogacy_sample_sens <- surrogacy_sample_sens
     print("Starting parallel simulations")
@@ -278,10 +282,6 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
       r = r_list,
       MoreArgs = MoreArgs
     )
-    on.exit(expr = {
-      parallel::stopCluster(cl)
-      rm("cl")
-    })
   }
   else if (ncores == 1){
     temp = mapply(FUN = compute_ICA_SurvSurv,

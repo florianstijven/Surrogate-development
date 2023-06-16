@@ -89,7 +89,6 @@ export(AA.MultS, BifixedContCont, BimixedCbCContCont,
        SPF.BinBin)
 export(MICA.ContCont)
 export(fit_model_SurvSurv)
-export(ica_SurvSurv_sens)
 export(marginal_gof_scr)
 export(model_fit_measures)
 
