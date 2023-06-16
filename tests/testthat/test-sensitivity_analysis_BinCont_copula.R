@@ -25,6 +25,6 @@ test_that("sensitivity_analysis_BinCont_copula() works in a simplified setting",
             )
             expect_equal(
               sens_results[,1],
-              c(0.437248455, 0.310597887)
+              c(0.43943873, 0.3104864)
             )
           })

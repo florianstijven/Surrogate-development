@@ -248,9 +248,13 @@ sample_deltas_BinCont = function(copula_par,
                                  copula_family1,
                                  copula_family2 = copula_family1,
                                  n,
-                                 q_S0,
-                                 q_S1,
-                                 marginal_sp_rho){
+                                 q_S0 = NULL,
+                                 q_S1 = NULL,
+                                 q_T0 = NULL,
+                                 q_T1 = NULL,
+                                 marginal_sp_rho = TRUE,
+                                 setting = "BinCont",
+                                 composite = FALSE){
   # Sample data on the copula scale.
   U = sample_dvine(copula_par,
                    rotation_par,
@@ -262,19 +266,53 @@ sample_deltas_BinCont = function(copula_par,
   # binary scale. For the surrogate endpoint, we convert from the copula scale
   # to the continuous scale, as defined by the corresponding marginal
   # distributions.
-  T0 = ifelse(qnorm(U[, 1]) < 0, 0L, 1L)
-  T1 = ifelse(qnorm(U[, 4]) < 0, 0L, 1L)
+  if (setting == "BinCont") {
+    T0 = ifelse(qnorm(U[, 1]) < 0, 0L, 1L)
+    T1 = ifelse(qnorm(U[, 4]) < 0, 0L, 1L)
+  }
+  else if (setting == "SurvSurv"){
+    T0 = q_T0(U[, 1])
+    T1 = q_T1(U[, 4])
+  }
   S0 = q_S0(U[, 2])
   S1 = q_S1(U[, 3])
+  if (composite) {
+    # If the composite argument is true, then the surrogate endpoint is a
+    # composite of both a "pure" surrogate endpoint and the true endpoint, e.g.,
+    # progression-free survival is the minimum of time-to-progression and
+    # time-to-death.
+    S0 = pmin(S0, T0)
+    S1 = pmin(S1, T1)
+  }
   Delta_dataframe = data.frame(DeltaS = S1 - S0,
                                DeltaT = T1 - T0)
 
+
   # Compute the pairwise marginal Spearman's rho values from the sample.
-  sp_rho_matrix = NULL
-  sp_rho_matrix = cor(data.frame(T0, S0, S1, T1), method = "spearman")
+  if (marginal_sp_rho) {
+    sp_rho_matrix = NULL
+    sp_rho_matrix = cor(data.frame(T0, S0, S1, T1), method = "spearman")
+    # If we're in the survival-survival setting, then the 2x2 survival
+    # classification is also computed.
+    survival_classification = NULL
+    if (setting == "SurvSurv") {
+      prop_harmed = mean((S0 == T0) &
+                           (S1 < T1))
+      prop_protected = mean((S0 < T0) &
+                              (S1 == T1))
+      prop_always = mean((S0 < T0) &
+                           (S1 < T1))
+      prop_never = 1 - prop_harmed - prop_protected - prop_always
+      survival_classification = c(prop_harmed = prop_harmed,
+                                  prop_protected = prop_protected,
+                                  prop_always = prop_always,
+                                  prop_never = prop_never)
+    }
+  }
   return(
     list(Delta_dataframe = Delta_dataframe,
-         marginal_sp_rho_matrix = sp_rho_matrix)
+         marginal_sp_rho_matrix = sp_rho_matrix,
+         survival_classification = survival_classification)
   )
 }
 

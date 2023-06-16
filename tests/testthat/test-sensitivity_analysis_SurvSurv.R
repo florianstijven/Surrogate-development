@@ -15,16 +15,16 @@ test_that("ica_SurvSurv_sens() works", {
                          nknots = 1)
   # Illustration with small number of replications and low precision
   set.seed(1)
-  sens_results = ica_SurvSurv_sens(
+  sens_results = sensitivity_analysis_SurvSurv_copula(
     ovarian_fitted,
+    composite = TRUE,
+    cond_ind = TRUE,
     n_sim = 5,
     n_prec = 500,
-    copula_family2 = "clayton",
     minfo_prec = 2e3
   )
-  output_vector = c(sens_results$kendall[1],
-                    sens_results$minfo[2],
+  output_vector = c(sens_results$ICA[1],
                     sens_results$c23[3])
-  check_vector = c(0.93848497, 2.21133646, 1.66162051)
+  check_vector = c(0.980305711475212, 1.37491794289595)
   expect_equal(output_vector, check_vector)
 })
