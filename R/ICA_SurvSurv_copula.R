@@ -75,6 +75,7 @@ estimate_mutual_information_SurvSurv = function(delta_S, delta_T, minfo_prec) {
       seed = 1
     )
   })
+
   return(minfo)
 }
 

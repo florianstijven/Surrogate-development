@@ -10,7 +10,7 @@ twostep_BinCont(
   copula_family,
   marginal_surrogate,
   marginal_surrogate_estimator = NULL,
-  method = "BFGSR"
+  method = "BFGS"
 )
 }
 \arguments{

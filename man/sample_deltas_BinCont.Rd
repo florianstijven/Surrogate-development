@@ -11,9 +11,13 @@ sample_deltas_BinCont(
   copula_family1,
   copula_family2 = copula_family1,
   n,
-  q_S0,
-  q_S1,
-  marginal_sp_rho
+  q_S0 = NULL,
+  q_S1 = NULL,
+  q_T0 = NULL,
+  q_T1 = NULL,
+  marginal_sp_rho = TRUE,
+  setting = "BinCont",
+  composite = FALSE
 )
 }
 \arguments{

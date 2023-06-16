@@ -262,7 +262,7 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
     marginal_sp_rho = marg_association,
     seed = 1
   )
-  if(ncores > 1){
+  if (ncores > 1) {
     cl  <- parallel::makeCluster(ncores)
     #helper function
     # surrogacy_sample_sens <- surrogacy_sample_sens
@@ -271,10 +271,17 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
     # parallel::clusterExport(cl = cl, varlist = "surrogacy_sample_sens", )
     # parallel::clusterEvalQ(cl = cl, expr = library(flexsurv))
     # parallel::clusterEvalQ(cl = cl, expr = library(rvinecopulib))
-    temp = parallel::clusterMap(cl = cl, fun = compute_ICA_SurvSurv,
-                                c = c_list, r = r_list, seed = 1:n_sim, MoreArgs = MoreArgs)
-    on.exit(expr = {parallel::stopCluster(cl)
-      rm("cl")})
+    temp = parallel::clusterMap(
+      cl = cl,
+      fun = compute_ICA_SurvSurv,
+      c = c_list,
+      r = r_list,
+      MoreArgs = MoreArgs
+    )
+    on.exit(expr = {
+      parallel::stopCluster(cl)
+      rm("cl")
+    })
   }
   else if (ncores == 1){
     temp = mapply(FUN = compute_ICA_SurvSurv,

@@ -12,7 +12,8 @@ fit_copula_model_BinCont(
   twostep = FALSE,
   fitted_model = NULL,
   hessian = TRUE,
-  maxit = 500
+  maxit = 500,
+  method = "BFGS"
 )
 }
 \arguments{
