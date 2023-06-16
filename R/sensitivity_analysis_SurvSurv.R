@@ -173,14 +173,12 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
                                                 composite = TRUE,
                                                 n_sim,
                                                 cond_ind,
-                                                lower = c(-1,-1,-1,-1),
+                                                lower = c(-1, -1, -1, -1),
                                                 upper = c(1, 1, 1, 1),
                                                 marg_association = TRUE,
                                                 n_prec = 5e3,
                                                 minfo_prec = 0,
-                                                ncores = 1
-
-){
+                                                ncores = 1) {
   # Extract relevant estimated parameters/objects for the fitted copula model.
   copula_family = fitted_model$copula_family
   copula_family2 = fitted_model$copula_family
@@ -197,32 +195,24 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
   knott1 = force(fitted_model$knott1)
 
   q_S0 = function(p) {
-    flexsurv::qsurvspline(
-      p = p,
-      gamma = gammas0,
-      knots = knots0
-    )
+    flexsurv::qsurvspline(p = p,
+                          gamma = gammas0,
+                          knots = knots0)
   }
   q_S1 = function(p) {
-    flexsurv::qsurvspline(
-      p = p,
-      gamma = gammas1,
-      knots = knott1
-    )
+    flexsurv::qsurvspline(p = p,
+                          gamma = gammas1,
+                          knots = knott1)
   }
   q_T0 = function(p) {
-    flexsurv::qsurvspline(
-      p = p,
-      gamma = gammat0,
-      knots = knott0
-    )
+    flexsurv::qsurvspline(p = p,
+                          gamma = gammat0,
+                          knots = knott0)
   }
   q_T1 = function(p) {
-    flexsurv::qsurvspline(
-      p = p,
-      gamma = gammat1,
-      knots = knott1
-    )
+    flexsurv::qsurvspline(p = p,
+                          gamma = gammat1,
+                          knots = knott1)
   }
 
   #number of parameters
@@ -279,7 +269,11 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
     # surrogacy_sample_sens <- surrogacy_sample_sens
     print("Starting parallel simulations")
     # surrogacy_sample_sens
-    parallel::clusterExport(cl = cl, varlist = c("fitted_model", "k"), envir = environment())
+    parallel::clusterExport(
+      cl = cl,
+      varlist = c("fitted_model", "k"),
+      envir = environment()
+    )
     # parallel::clusterEvalQ(cl = cl, expr = library(flexsurv))
     # parallel::clusterEvalQ(cl = cl, expr = library(rvinecopulib))
     temp = parallel::clusterMap(
@@ -295,20 +289,32 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
       rm("cl")
     })
   }
-  else if (ncores == 1){
-    temp = mapply(FUN = compute_ICA_SurvSurv,
-                  copula_par = c_list, rotation_par = r_list, MoreArgs = MoreArgs,
-                  SIMPLIFY = FALSE)
+  else if (ncores == 1) {
+    temp = mapply(
+      FUN = compute_ICA_SurvSurv,
+      copula_par = c_list,
+      rotation_par = r_list,
+      MoreArgs = MoreArgs,
+      SIMPLIFY = FALSE
+    )
   }
 
   measures_df = t(as.data.frame(temp))
-  if(marg_association){
-    colnames(measures_df) = c("ICA", "sp_rho",
-                              "sp_s0s1", "sp_s0t0", "sp_s0t1",
-                              "sp_s1t0", "sp_s1t1",
-                              "sp_t0t1",
-                              "prop_harmed", "prop_protected",
-                              "prop_always", "prop_never")
+  if (marg_association) {
+    colnames(measures_df) = c(
+      "ICA",
+      "sp_rho",
+      "sp_s0s1",
+      "sp_s0t0",
+      "sp_s0t1",
+      "sp_s1t0",
+      "sp_s1t1",
+      "sp_t0t1",
+      "prop_harmed",
+      "prop_protected",
+      "prop_always",
+      "prop_never"
+    )
   }
   else{
     colnames(measures_df) = c("ICA", "sp_rho")
@@ -320,160 +326,3 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
   return(dplyr::bind_cols(as.data.frame(measures_df), c, r))
 
 }
-
-
-
-#
-# surrogacy_sample_sens = function(fitted_model,
-#                                  n_prec,
-#                                  c_unid,
-#                                  r_unid,
-#                                  restr = TRUE,
-#                                  copula_family2,
-#                                  get_marg_tau = FALSE
-# ){
-#   #number of knots k
-#   n_k = (length(coef(fitted_model$fit_0)) - 1)/2
-#   if (fitted_model$copula_family == "gaussian"){
-#     c12 = (exp(coef(fitted_model$fit_0)[n_k*2 + 1]) - 1)/(exp(coef(fitted_model$fit_0)[n_k*2 + 1]) + 1)
-#     c34 = (exp(coef(fitted_model$fit_1)[n_k*2 + 1]) - 1)/(exp(coef(fitted_model$fit_1)[n_k*2 + 1]) + 1)
-#   }
-#   else{
-#     c12 = coef(fitted_model$fit_0)[n_k*2 + 1]
-#     c34 = coef(fitted_model$fit_1)[n_k*2 + 1]
-#   }
-#   c23 = c_unid[1]
-#   c13_2 = c_unid[2]
-#   c24_3 = c_unid[3]
-#   c14_23 = c_unid[4]
-#   #survival copula rotation
-#   if(fitted_model$copula_family %in% c("clayton", "gumbel")){
-#     rotation = 180
-#   }
-#   else{
-#     rotation = 0
-#   }
-#
-#   pair_copulas = list(
-#     list(
-#       rvinecopulib::bicop_dist(
-#         family = fitted_model$copula_family,
-#         rotation = rotation,
-#         parameters = c12
-#       ),
-#       rvinecopulib::bicop_dist(
-#         family = copula_family2,
-#         rotation = r_unid[1],
-#         parameters = c23
-#       ),
-#       rvinecopulib::bicop_dist(
-#         family = fitted_model$copula_family,
-#         rotation = rotation,
-#         parameters = c34
-#       )
-#     ),
-#     list(
-#       rvinecopulib::bicop_dist(
-#         family = copula_family2,
-#         rotation = r_unid[2],
-#         parameters = c13_2
-#       ),
-#       rvinecopulib::bicop_dist(
-#         family = copula_family2,
-#         rotation = r_unid[3],
-#         parameters = c24_3
-#       )
-#     ),
-#     list(
-#       rvinecopulib::bicop_dist(
-#         family = copula_family2,
-#         rotation = r_unid[4],
-#         parameters = c14_23
-#       )
-#     )
-#   )
-#   copula_structure = rvinecopulib::dvine_structure(order = 1:4)
-#   vine_cop = rvinecopulib::vinecop_dist(pair_copulas = pair_copulas, structure = copula_structure)
-#
-#   u_vec = rvinecopulib::rvinecop(n = n_prec, vinecop = vine_cop, cores = 1)
-#   s0 = flexsurv::qsurvspline(p = u_vec[, 2],
-#                              gamma = coef(fitted_model$fit_0)[1:n_k],
-#                              knots = fitted_model$knots0)
-#   t0 = flexsurv::qsurvspline(p = u_vec[, 1],
-#                              gamma = coef(fitted_model$fit_0)[(n_k + 1):(2 * n_k)],
-#                              knots = fitted_model$knott0)
-#   s1 = flexsurv::qsurvspline(p = u_vec[, 3],
-#                              gamma = coef(fitted_model$fit_1)[1:n_k],
-#                              knots = fitted_model$knots1)
-#   t1 = flexsurv::qsurvspline(p = u_vec[, 4],
-#                              gamma = coef(fitted_model$fit_1)[(n_k + 1):(2 * n_k)],
-#                              knots = fitted_model$knott1)
-#   if (restr) {
-#     pfs0 = pmin(s0, t0)
-#     pfs1 = pmin(s1, t1)
-#   }
-#   else{
-#     pfs0 = s0
-#     pfs1 = s1
-#   }
-#   deltaS = pfs1 - pfs0
-#   deltaT = t1 - t0
-#   if (get_marg_tau) {
-#     return(data.frame(
-#       deltaS = deltaS,
-#       deltaT = deltaT,
-#       s0 = pfs0,
-#       s1 = pfs1,
-#       t0 = t0,
-#       t1 = t1
-#     ))
-#   }
-#   else{
-#     return(data.frame(deltaS = deltaS, deltaT = deltaT))
-#   }
-#
-# }
-
-#
-# unid_cop_sample = function(copula_family2, n_sim, cond_ind){
-#   #sample uniformly parameters from spearman's correlation
-#   if(copula_family2 == "frank"){
-#     u = runif(n = 4*n_sim, min = -1, max = 1)
-#     if (cond_ind) {
-#       u[(1:(4*n_sim) %% 4) == 2] = 0
-#       u[(1:(4*n_sim) %% 4) == 3] = 0
-#     }
-#     c = sapply(X = u, FUN = copula::iRho, copula = copula::frankCopula())
-#     #functions for frank copula cannot handle parameter larger than abs(35)
-#     c = ifelse(abs(c) > 35, sign(c)*35, c)
-#   }
-#   else if(copula_family2 == "gaussian"){
-#     u = runif(n = 4*n_sim, min = -1, max = 1)
-#     if (cond_ind) {
-#       u[(1:(4*n_sim) %% 4) == 2] = 0
-#       u[(1:(4*n_sim) %% 4) == 3] = 0
-#     }
-#     c = sapply(X = u, FUN = copula::iRho, copula = copula::ellipCopula(family = "normal"))
-#   }
-#   else if(copula_family2 == "clayton"){
-#     u = runif(n = 4*n_sim, min = 0, max = 1)
-#     if (cond_ind) {
-#       u[(1:(4*n_sim) %% 4) == 2] = 0
-#       u[(1:(4*n_sim) %% 4) == 3] = 0
-#     }
-#     c = sapply(X = u, FUN = copula::iRho, copula = copula::claytonCopula())
-#     #functions for clayton copula cannot handle parameter larger than 28
-#     c = ifelse(c > 28, 28, c)
-#   }
-#   else if(copula_family2 == "gumbel"){
-#     u = runif(n = 4*n_sim, min = 0, max = 1)
-#     if (cond_ind) {
-#       u[(1:(4*n_sim) %% 4) == 2] = 0
-#       u[(1:(4*n_sim) %% 4) == 3] = 0
-#     }
-#     c = sapply(X = u, FUN = copula::iRho, copula = copula::gumbelCopula())
-#     #functions for gumbel copula cannot handle parameter values larger than 50
-#     c = ifelse(c > 50, 50, c)
-#   }
-#   return(c)
-# }
