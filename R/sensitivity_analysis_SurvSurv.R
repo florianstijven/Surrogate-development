@@ -185,32 +185,43 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
   copula_family = fitted_model$copula_family
   copula_family2 = fitted_model$copula_family
   k = length(fitted_model$knots0)
+
+  gammas0 = force(coef(fitted_model$fit_0)[1:k])
+  knots0 = force(fitted_model$knots0)
+  gammas1 = force(coef(fitted_model$fit_1)[1:k])
+  knots1 = force(fitted_model$knots1)
+
+  gammat0 = force(coef(fitted_model$fit_0)[(k + 1):(2 * k)])
+  knott0 = force(fitted_model$knott0)
+  gammat1 = force(coef(fitted_model$fit_1)[(k + 1):(2 * k)])
+  knott1 = force(fitted_model$knott1)
+
   q_S0 = function(p) {
     flexsurv::qsurvspline(
       p = p,
-      gamma = coef(fitted_model$fit_0)[1:k],
-      knots = fitted_model$knots0
+      gamma = gammas0,
+      knots = knots0
     )
   }
   q_S1 = function(p) {
     flexsurv::qsurvspline(
       p = p,
-      gamma = coef(fitted_model$fit_1)[1:k],
-      knots = fitted_model$knots1
+      gamma = gammas1,
+      knots = knott1
     )
   }
   q_T0 = function(p) {
     flexsurv::qsurvspline(
       p = p,
-      gamma = coef(fitted_model$fit_0)[(k + 1):(2 * k)],
-      knots = fitted_model$knott0
+      gamma = gammat0,
+      knots = knott0
     )
   }
   q_T1 = function(p) {
     flexsurv::qsurvspline(
       p = p,
-      gamma = coef(fitted_model$fit_1)[(k + 1):(2 * k)],
-      knots = fitted_model$knott1
+      gamma = gammat1,
+      knots = knott1
     )
   }
 
@@ -254,34 +265,35 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
     copula_family2 = copula_family2,
     n_prec = n_prec,
     minfo_prec = minfo_prec,
-    q_S0,
-    q_T0,
-    q_S1,
-    q_T1,
+    q_S0 = q_S0,
+    q_T0 = q_T0,
+    q_S1 = q_S1,
+    q_T1 = q_T1,
     composite = composite,
     marginal_sp_rho = marg_association,
     seed = 1
   )
   if (ncores > 1) {
     cl  <- parallel::makeCluster(ncores)
-    on.exit(expr = {
-      parallel::stopCluster(cl)
-      rm("cl")
-    })
     #helper function
     # surrogacy_sample_sens <- surrogacy_sample_sens
     print("Starting parallel simulations")
     # surrogacy_sample_sens
-    # parallel::clusterExport(cl = cl, varlist = "surrogacy_sample_sens", )
+    parallel::clusterExport(cl = cl, varlist = c("fitted_model", "k"), envir = environment())
     # parallel::clusterEvalQ(cl = cl, expr = library(flexsurv))
     # parallel::clusterEvalQ(cl = cl, expr = library(rvinecopulib))
     temp = parallel::clusterMap(
       cl = cl,
       fun = compute_ICA_SurvSurv,
-      c = c_list,
-      r = r_list,
+      copula_par = c_list,
+      rotation_par = r_list,
       MoreArgs = MoreArgs
     )
+    print("Finishing parallel simulations")
+    on.exit(expr = {
+      parallel::stopCluster(cl)
+      rm("cl")
+    })
   }
   else if (ncores == 1){
     temp = mapply(FUN = compute_ICA_SurvSurv,

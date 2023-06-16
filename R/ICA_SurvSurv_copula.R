@@ -16,44 +16,44 @@ compute_ICA_SurvSurv = function(copula_par,
   # marginal_sp_rho = TRUE, then the Spearman's correlation matrix is also
   # computed for the 4d joint distribution of potential outcomes.
   delta_list = sample_deltas_BinCont(
-    copula_par,
-    rotation_par,
-    copula_family1,
+    copula_par = copula_par,
+    rotation_par = rotation_par,
+    copula_family1 = copula_family1,
     copula_family2 = copula_family1,
     n = n_prec,
-    q_S0,
-    q_T0,
-    q_S1,
-    q_T1,
+    q_S0 = q_S0,
+    q_S1 = q_S1,
+    q_T0 = q_T0,
+    q_T1 = q_T1,
     marginal_sp_rho = marginal_sp_rho,
     setting = "SurvSurv",
     composite = composite
   )
 
-  delta_df = delta_list$Delta_dataframe
-  sp_rho_matrix = delta_list$marginal_sp_rho_matrix
-  # Compute mutual information between Delta S and Delta T.
-  mutual_information = estimate_mutual_information_SurvSurv(delta_df$DeltaS, delta_df$DeltaT, minfo_prec)
-  # Compute ICA
-  ICA = 1 - exp(-2 * mutual_information)
-  sp_rho = cor(delta_df$DeltaS, delta_df$DeltaT, method = "spearman")
+delta_df = delta_list$Delta_dataframe
+sp_rho_matrix = delta_list$marginal_sp_rho_matrix
+# Compute mutual information between Delta S and Delta T.
+mutual_information = estimate_mutual_information_SurvSurv(delta_df$DeltaS, delta_df$DeltaT, minfo_prec)
+# Compute ICA
+ICA = 1 - exp(-2 * mutual_information)
+sp_rho = stats::cor(delta_df$DeltaS, delta_df$DeltaT, method = "spearman")
 
-  return(
-    c(
-      ICA = ICA,
-      sp_rho = sp_rho,
-      sp_rho_t0s0 = sp_rho_matrix[1, 2],
-      sp_rho_t0s1 = sp_rho_matrix[1, 3],
-      sp_rho_t0t1 = sp_rho_matrix[1, 4],
-      sp_rho_s0s1 = sp_rho_matrix[2, 3],
-      sp_rho_s0t1 = sp_rho_matrix[2, 3],
-      sp_rho_s1t1 = sp_rho_matrix[3, 4],
-      prop_harmed = delta_list$survival_classification["prop_harmed"],
-      prop_protected = delta_list$survival_classification["prop_protected"],
-      prop_always = delta_list$survival_classification["prop_always"],
-      prop_never = delta_list$survival_classification["prop_never"]
-    )
+return(
+  c(
+    ICA = ICA,
+    sp_rho = sp_rho,
+    sp_rho_t0s0 = sp_rho_matrix[1, 2],
+    sp_rho_t0s1 = sp_rho_matrix[1, 3],
+    sp_rho_t0t1 = sp_rho_matrix[1, 4],
+    sp_rho_s0s1 = sp_rho_matrix[2, 3],
+    sp_rho_s0t1 = sp_rho_matrix[2, 3],
+    sp_rho_s1t1 = sp_rho_matrix[3, 4],
+    prop_harmed = delta_list$survival_classification["prop_harmed"],
+    prop_protected = delta_list$survival_classification["prop_protected"],
+    prop_always = delta_list$survival_classification["prop_always"],
+    prop_never = delta_list$survival_classification["prop_never"]
   )
+)
 }
 
 estimate_mutual_information_SurvSurv = function(delta_S, delta_T, minfo_prec) {

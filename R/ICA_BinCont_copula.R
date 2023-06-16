@@ -267,8 +267,8 @@ sample_deltas_BinCont = function(copula_par,
   # to the continuous scale, as defined by the corresponding marginal
   # distributions.
   if (setting == "BinCont") {
-    T0 = ifelse(qnorm(U[, 1]) < 0, 0L, 1L)
-    T1 = ifelse(qnorm(U[, 4]) < 0, 0L, 1L)
+    T0 = ifelse(stats::qnorm(U[, 1]) < 0, 0L, 1L)
+    T1 = ifelse(stats::qnorm(U[, 4]) < 0, 0L, 1L)
   }
   else if (setting == "SurvSurv"){
     T0 = q_T0(U[, 1])
@@ -291,7 +291,7 @@ sample_deltas_BinCont = function(copula_par,
   # Compute the pairwise marginal Spearman's rho values from the sample.
   if (marginal_sp_rho) {
     sp_rho_matrix = NULL
-    sp_rho_matrix = cor(data.frame(T0, S0, S1, T1), method = "spearman")
+    sp_rho_matrix = stats::cor(data.frame(T0, S0, S1, T1), method = "spearman")
     # If we're in the survival-survival setting, then the 2x2 survival
     # classification is also computed.
     survival_classification = NULL
