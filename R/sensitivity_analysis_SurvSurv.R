@@ -176,15 +176,15 @@ ica_SurvSurv_sens = function(fitted_model,
                                    ncores = 1, get_marg_tau = FALSE,
                                    cond_ind = FALSE){
   #number of parameters
-  k = length(fitted_model$parameters0)
+  k = length(coef(fitted_model$fit_0))
 
   #initialize vectors to store measures of surrogacy in
   kendall <- sp_rho <- minfo <- 1:n_sim
 
   #pull association parameters from estimated parameter vectors
   #the association parameter is always the last one in the corresponding vector
-  c12 = fitted_model$parameters0[k]
-  c34 = fitted_model$parameters1[k]
+  c12 = coef(fitted_model$fit_0)[k]
+  c34 = coef(fitted_model$fit_1)[k]
   #"strongest" association parameter
   max_grid = max(c12, c34)
 
@@ -303,14 +303,14 @@ surrogacy_sample_sens = function(fitted_model, n_prec, c_unid, r_unid,
                                  restr = TRUE, copula_family2,
                                  get_marg_tau = FALSE){
   #number of knots k
-  n_k = (length(fitted_model$parameters0) - 1)/2
+  n_k = (length(coef(fitted_model$fit_0)) - 1)/2
   if (fitted_model$copula_family == "gaussian"){
-    c12 = (exp(fitted_model$parameters0[n_k*2 + 1]) - 1)/(exp(fitted_model$parameters0[n_k*2 + 1]) + 1)
-    c34 = (exp(fitted_model$parameters1[n_k*2 + 1]) - 1)/(exp(fitted_model$parameters1[n_k*2 + 1]) + 1)
+    c12 = (exp(coef(fitted_model$fit_0)[n_k*2 + 1]) - 1)/(exp(coef(fitted_model$fit_0)[n_k*2 + 1]) + 1)
+    c34 = (exp(coef(fitted_model$fit_1)[n_k*2 + 1]) - 1)/(exp(coef(fitted_model$fit_1)[n_k*2 + 1]) + 1)
   }
   else{
-    c12 = fitted_model$parameters0[n_k*2 + 1]
-    c34 = fitted_model$parameters1[n_k*2 + 1]
+    c12 = coef(fitted_model$fit_0)[n_k*2 + 1]
+    c34 = coef(fitted_model$fit_1)[n_k*2 + 1]
   }
   c23 = c_unid[1]
   c13_2 = c_unid[2]
@@ -367,16 +367,16 @@ surrogacy_sample_sens = function(fitted_model, n_prec, c_unid, r_unid,
 
   u_vec = rvinecopulib::rvinecop(n = n_prec, vinecop = vine_cop, cores = 1)
   s0 = flexsurv::qsurvspline(p = u_vec[, 2],
-                             gamma = fitted_model$parameters0[1:n_k],
+                             gamma = coef(fitted_model$fit_0)[1:n_k],
                              knots = fitted_model$knots0)
   t0 = flexsurv::qsurvspline(p = u_vec[, 1],
-                             gamma = fitted_model$parameters0[(n_k + 1):(2 * n_k)],
+                             gamma = coef(fitted_model$fit_0)[(n_k + 1):(2 * n_k)],
                              knots = fitted_model$knott0)
   s1 = flexsurv::qsurvspline(p = u_vec[, 3],
-                             gamma = fitted_model$parameters1[1:n_k],
+                             gamma = coef(fitted_model$fit_1)[1:n_k],
                              knots = fitted_model$knots1)
   t1 = flexsurv::qsurvspline(p = u_vec[, 4],
-                             gamma = fitted_model$parameters1[(n_k + 1):(2 * n_k)],
+                             gamma = coef(fitted_model$fit_1)[(n_k + 1):(2 * n_k)],
                              knots = fitted_model$knott1)
   if (restr) {
     pfs0 = pmin(s0, t0)

@@ -25,6 +25,6 @@ test_that("ica_SurvSurv_sens() works", {
   output_vector = c(sens_results$kendall[1],
                     sens_results$minfo[2],
                     sens_results$c23[3])
-  check_vector = c(0.93851703, 2.21175778, 1.66162051)
+  check_vector = c(0.93848497, 2.21133646, 1.66162051)
   expect_equal(output_vector, check_vector)
 })
