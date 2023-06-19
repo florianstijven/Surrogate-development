@@ -47,12 +47,30 @@ information and derived quantities.}
 
 \item{q_S0}{Quantile function for the distribution of \eqn{S_0}.}
 
+\item{q_T0}{Quantile function for the distribution of \eqn{T_0}.}
+
 \item{q_S1}{Quantile function for the distribution of \eqn{S_1}.}
+
+\item{q_T1}{Quantile function for the distribution of \eqn{T_1}.}
 
 \item{marginal_sp_rho}{(boolean) Compute the sample Spearman correlation
 matrix? Defaults to \code{TRUE}.}
 
-\item{seed}{}
+\item{seed}{Seed for Monte Carlo sampling. This seed does not affect the global
+environment.}
+}
+\value{
+(numeric) A Named vector with the following elements:
+\itemize{
+\item ICA
+\item Spearman's rho, \eqn{\rho_s (\Delta S, \Delta T)} (if asked)
+\item Marginal association parameters in terms of Spearman's rho (if asked):
+\deqn{\rho_{s}(T_0, S_0), \rho_{s}(T_0, S_1), \rho_{s}(T_0, T_1),
+ \rho_{s}(S_0, S_1), \rho_{s}(S_0, T_1),
+ \rho_{s}(S_1, T_1)}
+\item Survival classification proportions (if asked):
+\deqn{\pi_{harmed}, \pi_{protected}, \pi_{always}, \pi_{never}}
+}
 }
 \description{
 The \code{\link[=compute_ICA_SurvSurv]{compute_ICA_SurvSurv()}} function computes the individual causal

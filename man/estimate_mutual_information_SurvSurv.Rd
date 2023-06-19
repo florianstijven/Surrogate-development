@@ -10,8 +10,8 @@ estimate_mutual_information_SurvSurv(delta_S, delta_T, minfo_prec)
 \item{delta_S}{(numeric) Vector of individual causal treatment effects on the
 surrogate.}
 
-\item{delta_T}{(integer) Vector of individual causal treatment effects on the true
-endpoint. Should take on one of the following values: \code{-1L}, \code{0L}, or \code{1L}.}
+\item{delta_T}{(numeric) Vector of individual causal treatment effects on the
+true endpoint.}
 
 \item{minfo_prec}{Number of quasi Monte-Carlo samples for the numerical
 integration to obtain the mutual information. If this value is 0 (default),

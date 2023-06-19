@@ -39,6 +39,9 @@ can be useful when a model is repeatedly fitted, e.g., in a bootstrap.
 \item{maxit}{Maximum number of iterations for the numeric optimization,
 defaults to 500.}
 }
+\value{
+WIP
+}
 \description{
 The function \code{\link[=fit_copula_model_BinCont]{fit_copula_model_BinCont()}} fits the copula model for a
 continuous surrogate endpoint and binary true endpoint. Because the bivariate

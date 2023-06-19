@@ -158,8 +158,6 @@ estimate_ICA_BinCont = function(delta_S, delta_T) {
 #' @return A \eqn{n \times 4} matrix where each row corresponds to one sampled
 #'   vector and the columns correspond to \eqn{U_1}, \eqn{U_2}, \eqn{U_3}, and
 #'   \eqn{U_4}.
-#'
-#' @examples
 sample_dvine = function(copula_par,
                         rotation_par,
                         copula_family1,
@@ -325,7 +323,7 @@ sample_deltas_BinCont = function(copula_par,
 #'
 #' @param n_prec Number of Monte Carlo samples for the computation of the mutual
 #'   information.
-#' @seed Seed for Monte Carlo sampling. This seed does not affect the global
+#' @param seed Seed for Monte Carlo sampling. This seed does not affect the global
 #'   environment.
 #' @inheritParams sample_deltas_BinCont
 #'
@@ -337,8 +335,6 @@ sample_deltas_BinCont = function(copula_par,
 #'  \deqn{(\rho_s(S_0, S_1), \rho_s(S_0, S_T_0), \rho_s(S_0, T_1),
 #'  \rho_s(S_1, T_0), \rho_s(S_0, S_1),
 #'  \rho_s(T_0, T_1)}
-#'
-#' @examples
 compute_ICA_BinCont = function(copula_par,
                                rotation_par,
                                copula_family1,

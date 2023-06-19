@@ -42,6 +42,9 @@ information.}
 
 \item{marginal_sp_rho}{(boolean) Compute the sample Spearman correlation
 matrix? Defaults to \code{TRUE}.}
+
+\item{seed}{Seed for Monte Carlo sampling. This seed does not affect the global
+environment.}
 }
 \value{
 (numeric) A Named vector with the following elements:

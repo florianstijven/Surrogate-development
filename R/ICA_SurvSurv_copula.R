@@ -5,17 +5,23 @@
 #' association (and associated quantities) for a fully identified D-vine copula
 #' model in the survival-survival setting.
 #'
-#' @param q_T0
-#' @param q_T1
-#' @param seed
+#' @param q_T0 Quantile function for the distribution of \eqn{T_0}.
+#' @param q_T1 Quantile function for the distribution of \eqn{T_1}.
 #'
 #' @inheritParams compute_ICA_BinCont
 #' @inheritParams estimate_mutual_information_SurvSurv
 #'
-#' @return
-#' @export
+#' @return (numeric) A Named vector with the following elements:
+#'  * ICA
+#'  * Spearman's rho, \eqn{\rho_s (\Delta S, \Delta T)} (if asked)
+#'  * Marginal association parameters in terms of Spearman's rho (if asked):
+#'  \deqn{\rho_{s}(T_0, S_0), \rho_{s}(T_0, S_1), \rho_{s}(T_0, T_1),
+#'  \rho_{s}(S_0, S_1), \rho_{s}(S_0, T_1),
+#'  \rho_{s}(S_1, T_1)}
+#'  * Survival classification proportions (if asked):
+#'  \deqn{\pi_{harmed}, \pi_{protected}, \pi_{always}, \pi_{never}}
 #'
-#' @examples
+#' @importFrom withr local_seed
 compute_ICA_SurvSurv = function(copula_par,
                                 rotation_par,
                                 copula_family1,
@@ -82,6 +88,8 @@ compute_ICA_SurvSurv = function(copula_par,
 #' estimated by first estimating the bivariate density and then computing the
 #' mutual information for the estimated density.
 #'
+#' @param delta_T (numeric) Vector of individual causal treatment effects on the
+#'   true endpoint.
 #' @inheritParams estimate_ICA_BinCont
 #' @param minfo_prec Number of quasi Monte-Carlo samples for the numerical
 #'   integration to obtain the mutual information. If this value is 0 (default),

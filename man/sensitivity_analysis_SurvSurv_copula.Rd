@@ -66,8 +66,8 @@ A data frame is returned. Each row represents one replication in the
 sensitivity analysis. The returned data frame always contains the following
 columns:
 \itemize{
-\item \code{kendall}, \code{sp_rho}, \code{minfo}: ICA as quantified by Kendall's \eqn{\tau},
-Spearman's \eqn{\rho}, and the mutual information, respectively.
+\item \code{ICA}, \code{sp_rho}: ICA as quantified by \eqn{R^2_h(\Delta S, \Delta T)} and
+\eqn{\rho_s(\Delta S, \Delta T)}.
 \item \code{c23}, \code{c13_2}, \code{c24_3}, \code{c14_23}: sampled copula parameters of the
 unidentifiable copulas in the D-vine copula. The parameters correspond to the
 parameterization of the \code{copula_family2} copula as in the \code{copula} R-package.

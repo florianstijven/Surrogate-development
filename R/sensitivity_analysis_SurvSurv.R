@@ -114,8 +114,8 @@
 #' @return A data frame is returned. Each row represents one replication in the
 #'   sensitivity analysis. The returned data frame always contains the following
 #'   columns:
-#' * `kendall`, `sp_rho`, `minfo`: ICA as quantified by Kendall's \eqn{\tau},
-#' Spearman's \eqn{\rho}, and the mutual information, respectively.
+#' * `ICA`, `sp_rho`: ICA as quantified by \eqn{R^2_h(\Delta S, \Delta T)} and
+#' \eqn{\rho_s(\Delta S, \Delta T)}.
 #' * `c23`, `c13_2`, `c24_3`, `c14_23`: sampled copula parameters of the
 #' unidentifiable copulas in the D-vine copula. The parameters correspond to the
 #' parameterization of the `copula_family2` copula as in the `copula` R-package.
@@ -302,12 +302,12 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
     colnames(measures_df) = c(
       "ICA",
       "sp_rho",
-      "sp_s0s1",
-      "sp_s0t0",
-      "sp_s0t1",
-      "sp_s1t0",
-      "sp_s1t1",
-      "sp_t0t1",
+      "sp_rho_t0s0",
+      "sp_rho_t0s1",
+      "sp_rho_t0t1",
+      "sp_rho_s0s1",
+      "sp_rho_s0t1",
+      "sp_rho_s1t1",
       "prop_harmed",
       "prop_protected",
       "prop_always",

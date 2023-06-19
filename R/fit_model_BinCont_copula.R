@@ -6,14 +6,12 @@
 #' independent across treatment groups, a bivariate distribution is fitted in
 #' each treatment group separately.
 #'
-#' @param data
 #' @inheritParams fit_model_SurvSurv
 #' @inheritParams binary_continuous_loglik
+#' @inheritParams fit_model_SurvSurv
 #'
-#' @return
+#' @return WIP
 #' @export
-#'
-#' @examples
 fit_copula_model_BinCont = function(data,
                              copula_family,
                              marginal_surrogate,
@@ -85,10 +83,7 @@ fit_copula_model_BinCont = function(data,
 #' continuous surrogate and binary true endpoint with maximum likelihood.
 #'
 #' @inheritParams twostep_BinCont
-#' @inherit twostep_BinCont param return
-#'
-#'
-#' @examples
+#' @inherit twostep_BinCont params return
 fit_copula_submodel_BinCont = function(X,
                                        Y,
                                        copula_family,
@@ -163,8 +158,6 @@ fit_copula_submodel_BinCont = function(X,
 #'  marginal surrogate distribution.
 #' * copula_family: string that indicates the copula family
 #' @export
-#'
-#' @examples
 twostep_BinCont = function(X,
                            Y,
                            copula_family,
@@ -254,8 +247,6 @@ twostep_BinCont = function(X,
 #'
 #' @return Object of class `fitdistrplus::fitdist` that represents the marginal
 #'   surrogate distribution.
-#'
-#' @examples
 marginal_distribution = function(x, distribution, fix.arg = NULL) {
   # No fixed arguments are provided.
   if (is.null(fix.arg)) {
