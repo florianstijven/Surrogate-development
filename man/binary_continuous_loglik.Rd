@@ -33,6 +33,9 @@ help files of the dedicated functions named \code{copula_loglik_copula_scale()}.
 \item{marginal_surrogate}{Marginal distribution for the surrogate. For all
 available options, see \code{?Surrogate::cdf_fun}.}
 }
+\value{
+(numeric) loglikelihood value evaluated in \code{para}.
+}
 \description{
 Loglikelihood function for binary-continuous copula model
 }

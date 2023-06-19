@@ -365,7 +365,7 @@ BinCont_starting_values = function(X, Y, copula_family, marginal_surrogate){
 #'   available options, see `?Surrogate::cdf_fun`.
 #' @inheritParams loglik_copula_scale
 #'
-#' @return
+#' @return (numeric) loglikelihood value evaluated in `para`.
 binary_continuous_loglik <- function(para, X, Y, copula_family, marginal_surrogate){
   # Parameter for true endpoint distribution.
   para_T = c(para[1], 1)
@@ -403,73 +403,6 @@ binary_continuous_loglik <- function(para, X, Y, copula_family, marginal_surroga
   )
 
   return(loglik)
-}
-
-
-
-#' Title
-#'
-#' @param u
-#' @param v
-#' @param copula_par
-#' @param family
-#'
-#' @return
-#' @export
-#'
-#' @examples
-partial_deriv_copula = function(u, v, copula_par, family){
-  #This function return the value for the partial derivative of the copula
-  #wrt v, evaluated in (u,v)
-
-  if (family == "gaussian"){
-    dC = ifelse(
-      pmin(u,v) == 0,
-      0,
-      {
-        correlation_scale = (exp(copula_par) - 1)/(exp(copula_par) + 1)
-        numerator = psi_dot_v(u, v, correlation_scale)
-        denominator = dnorm(qnorm(v))
-        dC = numerator/denominator
-      }
-    )
-  }
-  else if (family == "clayton"){
-    dC = ifelse(
-      pmin(u,v) == 0,
-      0,
-      {
-        C = (u^(-copula_par) + v^(-copula_par) - 1)^(-1/copula_par)
-        dC = (C^(copula_par + 1)) / (v^(copula_par + 1))
-      }
-    )
-  }
-  else if (family == "frank"){
-    dC = ifelse(
-      pmin(u,v) == 0,
-      0,
-      {
-        C = (-1/copula_par) *
-          log(
-            (1/(1 - exp(-copula_par))) *
-              ((1 - exp(-copula_par)) - (1 - exp(-copula_par*u))*(1 - exp(-copula_par*v)))
-          )
-        (1 - exp(copula_par*C))/(1 - exp(copula_par*v))
-      }
-    )
-  }
-  else if (family == "gumbel"){
-    dC = ifelse(
-      pmin(u,v) == 0,
-      0,
-      {
-        C = exp(-( ((-log(u))^copula_par) + ((-log(v))^copula_par) ))
-        dC = C*(-log(v))^(copula_par - 1) / v*(-log(C))^(copula_par - 1)
-      }
-    )
-
-  }
-  return(ifelse(is.nan(dC), 0, dC))
 }
 
 
