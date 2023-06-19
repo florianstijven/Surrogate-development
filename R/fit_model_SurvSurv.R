@@ -436,6 +436,8 @@ SurvSurv_starting_values = function(X, delta_X, Y, delta_Y, copula_family, nknot
   if(copula_family == "gaussian"){
     inv_tau = copula::iTau(copula = copula::ellipCopula(family = "normal"),
                            tau = tau)
+    inv_tau = 0.5 * log((1 + inv_tau) / (1 - inv_tau))
+    warning("Fisher transformation is used for copula parameter.")
   }
   else if(copula_family == "clayton"){
     inv_tau = copula::iTau(copula = copula::claytonCopula(),
@@ -480,8 +482,8 @@ print.vine_copula_SurvSurv_fit = function(fitted_model) {
   cat("Number of Internal Knots: "); cat(length(fitted_model$knots0) - 2)
   cat("\n\n")
   cat("Summary of Maximum Likelihood fit for Treat = 0:\n")
-  summary(fitted_model$fit_0)
+  print(summary(fitted_model$fit_0))
   cat("Summary of Maximum Likelihood fit for Treat = 1:\n")
-  summary(fitted_model$fit_1)
+  print(summary(fitted_model$fit_1))
 }
 

@@ -213,17 +213,22 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
                           knots = knott1)
   }
 
-  #number of parameters
+  # number of parameters
   n_par = length(coef(fitted_model$fit_0))
 
-  #initialize vectors to store measures of surrogacy in
+  # initialize vectors to store measures of surrogacy in
   kendall <- sp_rho <- minfo <- 1:n_sim
 
-  #pull association parameters from estimated parameter vectors
-  #the association parameter is always the last one in the corresponding vector
+  # Pull association parameters from estimated parameter vectors. The
+  # association parameter is always the last one in the corresponding vector
   c_12 = coef(fitted_model$fit_0)[n_par]
   c_34 = coef(fitted_model$fit_1)[n_par]
-
+  # For the Gaussian copula, fisher's Z transformation was applied. We have to
+  # backtransform to the correlation scale in that case.
+  if (copula_family == "gaussian") {
+    c_12 = 0.5 * log((c_12 + 1) / (c_12 - 1))
+    c_34 = 0.5 * log((c_34 + 1) / (c_34 - 1))
+  }
   c = sample_copula_parameters(
     copula_family2 = copula_family2,
     n_sim = n_sim,
