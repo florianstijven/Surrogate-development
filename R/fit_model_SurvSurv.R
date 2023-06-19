@@ -90,7 +90,7 @@
 #'
 #' @author Florian Stijven
 #'
-#' @seealso [marginal_gof_scr()], [ica_SurvSurv_sens()]
+#' @seealso [marginal_gof_scr()], [sensitivity_analysis_SurvSurv_copula()]
 #'
 #' @examples
 #' if(require(Surrogate)) {
@@ -252,7 +252,7 @@ new_vine_copula_ss_fit = function(fit_0, fit_1, copula_family,
       knott0 = knott0,
       knott1 = knott1
     ),
-    class = "vine_copula_bc_fit"
+    class = "vine_copula_SurvSurv_fit"
   )
 }
 
@@ -295,11 +295,11 @@ model_fit_measures = function(fitted_model){
   #number of internal knots
   nknots = length(fitted_model$knots0) - 2
   #total number of parameters
-  n_parameters = length(fitted_model$parameters0) + length(fitted_model$parameters1)
+  n_parameters = length(coef(fitted_model$fit_0)) + length(coef(fitted_model$fit_1))
 
   #get fitted copula parameters
-  copula_par0 = fitted_model$parameters0[2*(nknots + 2) + 1]
-  copula_par1 = fitted_model$parameters1[2*(nknots + 2) + 1]
+  copula_par0 = coef(fitted_model$fit_0)[2*(nknots + 2) + 1]
+  copula_par1 = coef(fitted_model$fit_1)[2*(nknots + 2) + 1]
   #convert fitted copula parameters to kendall's tau scale
   tau_0 = conversion_copula_tau(copula_par = copula_par0,
                                 copula_family = fitted_model$copula_family)
@@ -378,6 +378,10 @@ twostep_SurvSurv = function(X,
   # educated guess for the copula parameter.
   copula_start = starting_values_list$inv_tau
   start = c(marg_coef_x, marg_coef_y, copula_start)
+  # Add informative names to the starting values.
+  names(start) = c(paste(names(start)[1:(n_knots + 2)], "(S)"),
+                   paste(names(start)[1:(n_knots + 2)], "(T)"),
+                   "theta (copula)")
   suppressWarnings({
     ml_fit = maxLik::maxLik(
       logLik = log_lik_function,
@@ -468,5 +472,16 @@ SurvSurv_starting_values = function(X, delta_X, Y, delta_Y, copula_family, nknot
   # Return vector of informed starting values.
   starting_values = list(fit_s = fit_s, fit_t = fit_t, inv_tau = inv_tau)
   return(starting_values)
+}
+
+print.vine_copula_SurvSurv_fit = function(fitted_model) {
+  cat("Maximum Likelihood Estimate for Vine Copula Model (Survival-Survival)\n")
+  cat("Copula Family: "); cat(fitted_model$copula_family); cat("\n")
+  cat("Number of Internal Knots: "); cat(length(fitted_model$knots0) - 2)
+  cat("\n\n")
+  cat("Summary of Maximum Likelihood fit for Treat = 0:\n")
+  summary(fitted_model$fit_0)
+  cat("Summary of Maximum Likelihood fit for Treat = 1:\n")
+  summary(fitted_model$fit_1)
 }
 

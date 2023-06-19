@@ -128,7 +128,7 @@ prognostic modelling and estimation of treatment effects. Statistics in
 medicine, 21(15), 2175-2197.
 }
 \seealso{
-\code{\link[=marginal_gof_scr]{marginal_gof_scr()}}, \code{\link[=ica_SurvSurv_sens]{ica_SurvSurv_sens()}}
+\code{\link[=marginal_gof_scr]{marginal_gof_scr()}}, \code{\link[=sensitivity_analysis_SurvSurv_copula]{sensitivity_analysis_SurvSurv_copula()}}
 }
 \author{
 Florian Stijven
