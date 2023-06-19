@@ -337,8 +337,6 @@ model_fit_measures = function(fitted_model){
 #'  marginal surrogate distribution.
 #' * copula_family: string that indicates the copula family
 #' @export
-#'
-#' @examples
 twostep_SurvSurv = function(X,
                             delta_X,
                             Y,
