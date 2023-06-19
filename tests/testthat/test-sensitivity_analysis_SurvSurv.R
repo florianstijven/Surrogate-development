@@ -89,6 +89,6 @@ test_that("sensitivity_analysis_SurvSurv_copula() works on a single core with Ga
   )
   output_vector = c(sens_results$ICA[1],
                     sens_results$c23[3])
-  check_vector = c(0.67243684, 0.15243575)
+  check_vector = c(0.93654753, 0.15243575)
   expect_equal(output_vector, check_vector)
 })

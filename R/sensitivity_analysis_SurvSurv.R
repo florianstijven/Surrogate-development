@@ -226,8 +226,8 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
   # For the Gaussian copula, fisher's Z transformation was applied. We have to
   # backtransform to the correlation scale in that case.
   if (copula_family == "gaussian") {
-    c_12 = 0.5 * log((c_12 + 1) / (c_12 - 1))
-    c_34 = 0.5 * log((c_34 + 1) / (c_34 - 1))
+    c_12 = (exp(2 * c_12) - 1) / (exp(2 * c_12) + 1)
+    c_34 = (exp(2 * c_34) - 1) / (exp(2 * c_34) + 1)
   }
   c = sample_copula_parameters(
     copula_family2 = copula_family2,
