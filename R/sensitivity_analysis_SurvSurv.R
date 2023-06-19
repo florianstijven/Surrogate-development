@@ -242,7 +242,15 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
   }
   # Add rotation parameters for identifiable copulas. Rotation parameters are
   # 180 because survival copulas were fitted.
-  r = cbind(rep(180, n_sim), rep(180, n_sim), r)
+  rotation_identifiable = 180
+  # The Gaussian copula is invariant to rotations and a non-zero rotation
+  # parameter for the Gaussian copula will give errors. The rotation parameters
+  # are therefore set to zero for the Gaussian copula.
+  if (copula_family == "gaussian") rotation_identifiable = 0
+  r = cbind(rep(rotation_identifiable, n_sim),
+            rep(rotation_identifiable
+                , n_sim),
+            r)
   r_list = purrr::map(.x = split(r, seq(nrow(r))), .f = as.double)
   # For every set of sampled unidentifiable parameters, compute the
   # required quantities.

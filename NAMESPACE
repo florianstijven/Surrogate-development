@@ -88,9 +88,8 @@ export(AA.MultS, BifixedContCont, BimixedCbCContCont,
        TrialLevelMA, TwoStageSurvSurv, UnifixedContCont, UnimixedContCont,
        SPF.BinBin)
 export(MICA.ContCont)
-export(fit_model_SurvSurv)
-export(marginal_gof_scr)
-export(model_fit_measures)
+export(sensitivity_analysis_SurvSurv_copula, model_fit_measures,
+       marginal_gof_scr, fit_model_SurvSurv)
 
 
 S3method(plot, Fano.BinBin)
