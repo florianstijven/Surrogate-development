@@ -62,19 +62,19 @@ sample_copula_parameters = function(copula_family2,
     copula_family2,
     frank = {
       lower = ifelse(lower > -1, lower, -1)
-      upper = ifelse(upper < 1, lower, 1)
+      upper = ifelse(upper < 1, upper, 1)
     },
     gaussian = {
       lower = ifelse(lower > -1, lower, -1)
-      upper = ifelse(upper < 1, lower, 1)
+      upper = ifelse(upper < 1, upper, 1)
     },
     clayton = {
       lower = ifelse(lower > 0, lower, 0)
-      upper = ifelse(upper < 1, lower, 1)
+      upper = ifelse(upper < 1, upper, 1)
     },
     gumbel = {
       lower = ifelse(lower > 0, lower, 0)
-      upper = ifelse(upper < 1, lower, 1)
+      upper = ifelse(upper < 1, upper, 1)
     }
   )
   # Sample Spearman's rho parameters from the specified uniform distributions.
