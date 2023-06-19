@@ -1,3 +1,21 @@
+#' Compute Individual Causal Association for a given D-vine copula model in the
+#' Survival-Survival Setting
+#'
+#' The [compute_ICA_SurvSurv()] function computes the individual causal
+#' association (and associated quantities) for a fully identified D-vine copula
+#' model in the survival-survival setting.
+#'
+#' @param q_T0
+#' @param q_T1
+#' @param seed
+#'
+#' @inheritParams compute_ICA_BinCont
+#' @inheritParams estimate_mutual_information_SurvSurv
+#'
+#' @return
+#' @export
+#'
+#' @examples
 compute_ICA_SurvSurv = function(copula_par,
                                 rotation_par,
                                 copula_family1,
@@ -56,6 +74,22 @@ compute_ICA_SurvSurv = function(copula_par,
   )
 }
 
+#' Estimate the Mutual Information in the Survival-Survival Setting
+#'
+#' [estimate_mutual_information_SurvSurv()] estimates the mutual information for
+#' a sample of individual causal treatment effects with a time-to-event
+#' surrogate and a time-to-event true endpoint. The mutual information is
+#' estimated by first estimating the bivariate density and then computing the
+#' mutual information for the estimated density.
+#'
+#' @inheritParams estimate_ICA_BinCont
+#' @param minfo_prec Number of quasi Monte-Carlo samples for the numerical
+#'   integration to obtain the mutual information. If this value is 0 (default),
+#'   the mutual information is not computed and `NA` is returned for the mutual
+#'   information and derived quantities.
+#'
+#' @return (numeric) estimated mutual information.
+#' @importFrom kdecopula kdecop dep_measures
 estimate_mutual_information_SurvSurv = function(delta_S, delta_T, minfo_prec) {
   # When minfo = 0, we do not want to compute the mutual information. Therefore,
   # a NA is returned in that case.

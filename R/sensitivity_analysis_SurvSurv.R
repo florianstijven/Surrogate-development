@@ -93,9 +93,6 @@
 #'   Assumptions).
 #' @param n_prec Number of Monte-Carlo samples for the *numerical approximation*
 #'   of the ICA in each replication of the sensitivity analysis.
-#' @param minfo_prec Number of quasi Monte-Carlo samples for the numerical
-#'   integration to obtain the mutual information. If this value is 0 (default),
-#'   the mutual information is not computed and `NA` is returned for that column.
 #' @param restr Default value should not be modified by the user.
 #' @param copula_family2 Parametric family of the unidentifiable copulas in the
 #'   D-vine copula. One of the following parametric copula families:
@@ -112,6 +109,7 @@
 #' @param cond_ind Boolean.
 #' * `TRUE`: Assume conditional independence (see Additional Assumptions).
 #' * `FALSE` (default): Conditional independence is not assumed.
+#' @inheritParams estimate_mutual_information_SurvSurv
 #'
 #' @return A data frame is returned. Each row represents one replication in the
 #'   sensitivity analysis. The returned data frame always contains the following

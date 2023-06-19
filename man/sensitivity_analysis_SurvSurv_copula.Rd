@@ -39,7 +39,8 @@ of the ICA in each replication of the sensitivity analysis.}
 
 \item{minfo_prec}{Number of quasi Monte-Carlo samples for the numerical
 integration to obtain the mutual information. If this value is 0 (default),
-the mutual information is not computed and \code{NA} is returned for that column.}
+the mutual information is not computed and \code{NA} is returned for the mutual
+information and derived quantities.}
 
 \item{ncores}{Number of cores used in the sensitivity analysis. The
 computations are computationally heavy, and this option can speed things
