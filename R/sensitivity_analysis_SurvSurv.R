@@ -93,14 +93,10 @@
 #'   Assumptions).
 #' @param n_prec Number of Monte-Carlo samples for the *numerical approximation*
 #'   of the ICA in each replication of the sensitivity analysis.
-#' @param restr Default value should not be modified by the user.
-#' @param copula_family2 Parametric family of the unidentifiable copulas in the
-#'   D-vine copula. One of the following parametric copula families:
-#'   `"clayton"`, `"frank"`, `"gaussian"`, or `"gumbel"`.
 #' @param ncores Number of cores used in the sensitivity analysis. The
 #'   computations are computationally heavy, and this option can speed things
 #'   up considerably.
-#' @param get_marg_tau Boolean.
+#' @param marg_association Boolean.
 #' * `TRUE`: Return marginal association measures
 #'   in each replication in terms of Spearman's rho. The proportion of harmed,
 #'   protected, never diseased, and always diseased is also returned. See also
@@ -110,6 +106,7 @@
 #' * `TRUE`: Assume conditional independence (see Additional Assumptions).
 #' * `FALSE` (default): Conditional independence is not assumed.
 #' @inheritParams estimate_mutual_information_SurvSurv
+#' @inheritParams sample_copula_parameters
 #'
 #' @return A data frame is returned. Each row represents one replication in the
 #'   sensitivity analysis. The returned data frame always contains the following

@@ -198,14 +198,14 @@ sample_rotation_parameters = function(n_sim, degrees = c(0, 90, 180, 270)) {
 #' quantity is therefore always returned for every replication of the
 #' sensitivity analysis.
 #'
-#' @inheritSection ica_SurvSurv_sens Sensitivity Analysis
-#' @inheritSection ica_SurvSurv_sens Additional Assumptions
+#' @inheritSection sensitivity_analysis_SurvSurv_copula Sensitivity Analysis
+#' @inheritSection sensitivity_analysis_SurvSurv_copula Additional Assumptions
 #'
 #'
 #' @param fitted_model Returned value from [fit_model_BinCont()]. This object
 #'   contains the estimated identifiable part of the joint distribution for the
 #'   potential outcomes.
-#' @inheritParams ica_SurvSurv_sens
+#' @inheritParams sensitivity_analysis_SurvSurv_copula
 #' @inheritParams sample_copula_parameters
 #'
 #' @return A data frame is returned. Each row represents one replication in the

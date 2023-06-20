@@ -426,6 +426,18 @@ survival_survival_loglik =  function(para,
   )
 }
 
+#' Title
+#'
+#' @param X
+#' @param delta_X
+#' @param Y
+#' @param delta_Y
+#' @param copula_family
+#' @param nknots
+#'
+#' @return
+#' @importFrom flexsurv flexsurvpline
+#' @importFrom survival Surv
 SurvSurv_starting_values = function(X, delta_X, Y, delta_Y, copula_family, nknots){
   # The starting value for the association parameter is obtained by estimating
   # the copula parameter through Kendall's tau, ignoring censoring. The

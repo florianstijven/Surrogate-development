@@ -21,10 +21,17 @@ sensitivity_analysis_BinCont_copula(
 contains the estimated identifiable part of the joint distribution for the
 potential outcomes.}
 
-\item{n_sim}{Number of copula parameter vectors to be sampled.}
+\item{n_sim}{Number of replications in the \emph{sensitivity analysis}. This value
+should be large enough to sufficiently explore all possible values of the
+ICA. The minimally sufficient number depends to a large extent on which
+inequality assumptions are subsequently imposed (see Additional
+Assumptions).}
 
-\item{cond_ind}{(boolean) Indicates whether conditional independence is
-assumed, see Conditional Independence. Defaults to \code{FALSE}.}
+\item{cond_ind}{Boolean.
+\itemize{
+\item \code{TRUE}: Assume conditional independence (see Additional Assumptions).
+\item \code{FALSE} (default): Conditional independence is not assumed.
+}}
 
 \item{lower}{(numeric) Vector of length 4 that provides the lower limit,
 \eqn{\boldsymbol{a} = (a_{23}, a_{13;2}, a_{24;3},
@@ -35,6 +42,22 @@ copula family's lowest possible value is used instead.}
 \item{upper}{(numeric) Vector of length 4 that provides the upper limit,
 \eqn{\boldsymbol{b} = (b_{23}, b_{13;2}, b_{24;3},
   b_{14;23})'}. Defaults to \code{c(1, 1, 1, 1)}.}
+
+\item{marg_association}{Boolean.
+\itemize{
+\item \code{TRUE}: Return marginal association measures
+in each replication in terms of Spearman's rho. The proportion of harmed,
+protected, never diseased, and always diseased is also returned. See also
+Value.
+\item \code{FALSE} (default): No additional measures are returned.
+}}
+
+\item{n_prec}{Number of Monte-Carlo samples for the \emph{numerical approximation}
+of the ICA in each replication of the sensitivity analysis.}
+
+\item{ncores}{Number of cores used in the sensitivity analysis. The
+computations are computationally heavy, and this option can speed things
+up considerably.}
 }
 \value{
 A data frame is returned. Each row represents one replication in the
@@ -91,5 +114,59 @@ quantified by Spearman's \eqn{\rho} (or Kendall's \eqn{\tau}). This quantity
 requires appreciably less computing time than the mutual information. This
 quantity is therefore always returned for every replication of the
 sensitivity analysis.
+}
+
+\section{Sensitivity Analysis}{
+Because \eqn{S_0} and \eqn{S_1} are never simultaneously observed in the same
+patient, \eqn{\Delta S} is not observable, and analogously for \eqn{\Delta
+T}. Consequently, the ICA is unidentifiable. This is solved by considering a
+(partly identifiable) model for the full vector of potential outcomes,
+\eqn{(T_0, S_0, S_1, T_1)'}. The identifiable parameters are estimated. The
+unidentifiable parameters are sampled from their parameters space in each
+replication of a sensitivity analysis. If the number of replications
+(\code{n_sim}) is sufficiently large, the entire parameter space for the
+unidentifiable parameters will be explored/sampled. In each replication, all
+model parameters are "known" (either estimated or sampled). Consequently, the
+ICA can be computed in each replication of the sensitivity analysis.
+
+The sensitivity analysis thus results in a set of values for the ICA. This
+set can be interpreted as \emph{all values for the ICA that are compatible with
+the observed data}. However, the range of this set is often quite broad; this
+means there remains too much uncertainty to make judgements regarding the
+worth of the surrogate. To address this unwieldy uncertainty, additional
+assumptions can be used that restrict the parameter space of the
+unidentifiable parameters. This in turn reduces the uncertainty regarding the
+ICA.
+}
+
+\section{Additional Assumptions}{
+There are two possible types of assumptions that restrict the parameter space
+of the unidentifiable parameters: (i) \emph{equality} type of assumptions, and
+(ii) \emph{inequality} type of assumptions. These are discussed in turn in the
+next two paragraphs.
+
+The equality assumptions have to be incorporated into the sensitivity
+analysis itself. Only one type of equality assumption has been implemented;
+this is the conditional independence assumption which can be specified
+through the \code{cond_ind} argument:
+\deqn{\tilde{S}_0 \perp \!\!\! \perp T_1 | \tilde{S}_1 \; \text{and} \;
+\tilde{S}_1 \perp \!\!\! \perp T_0 | \tilde{S}_0 .} This can informally be
+interpreted as ``what the control treatment does to the surrogate does not
+provide information on the true endpoint under experimental treatment if we
+already know what the experimental treatment does to the surrogate", and
+analogously when control and experimental treatment are interchanged. Note
+that \eqn{\tilde{S}_z} refers to either the actual potential surrogate
+outcome, or a latent version. This depends on the content of \code{fitted_model}.
+
+The inequality type of assumptions have to be imposed on the data frame that
+is returned by the current function; those assumptions are thus imposed
+\emph{after} running the sensitivity analysis. If \code{marginal_association} is set to
+\code{TRUE}, the returned data frame contains additional unverifiable quantities
+that differ across replications of the sensitivity analysis: (i) the
+unconditional Spearman's \eqn{\rho} for all pairs of (observable/non-latent)
+potential outcomes, and (ii) the proportions of the population strata as
+defined by Nevo and Gorfine (2022) if semi-competing risks are present. More
+details on the interpretation and use of these assumptions can be found in
+Stijven et al. (2022).
 }
 

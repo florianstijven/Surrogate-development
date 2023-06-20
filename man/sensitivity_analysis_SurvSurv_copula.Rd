@@ -34,6 +34,25 @@ Assumptions).}
 \item \code{FALSE} (default): Conditional independence is not assumed.
 }}
 
+\item{lower}{(numeric) Vector of length 4 that provides the lower limit,
+\eqn{\boldsymbol{a} = (a_{23}, a_{13;2}, a_{24;3},
+  a_{14;23})'}. Defaults to \code{c(-1, -1, -1, -1)}. If the provided lower limit
+is smaller than what is allowed for a particular copula family, then the
+copula family's lowest possible value is used instead.}
+
+\item{upper}{(numeric) Vector of length 4 that provides the upper limit,
+\eqn{\boldsymbol{b} = (b_{23}, b_{13;2}, b_{24;3},
+  b_{14;23})'}. Defaults to \code{c(1, 1, 1, 1)}.}
+
+\item{marg_association}{Boolean.
+\itemize{
+\item \code{TRUE}: Return marginal association measures
+in each replication in terms of Spearman's rho. The proportion of harmed,
+protected, never diseased, and always diseased is also returned. See also
+Value.
+\item \code{FALSE} (default): No additional measures are returned.
+}}
+
 \item{n_prec}{Number of Monte-Carlo samples for the \emph{numerical approximation}
 of the ICA in each replication of the sensitivity analysis.}
 
@@ -45,21 +64,6 @@ information and derived quantities.}
 \item{ncores}{Number of cores used in the sensitivity analysis. The
 computations are computationally heavy, and this option can speed things
 up considerably.}
-
-\item{restr}{Default value should not be modified by the user.}
-
-\item{copula_family2}{Parametric family of the unidentifiable copulas in the
-D-vine copula. One of the following parametric copula families:
-\code{"clayton"}, \code{"frank"}, \code{"gaussian"}, or \code{"gumbel"}.}
-
-\item{get_marg_tau}{Boolean.
-\itemize{
-\item \code{TRUE}: Return marginal association measures
-in each replication in terms of Spearman's rho. The proportion of harmed,
-protected, never diseased, and always diseased is also returned. See also
-Value.
-\item \code{FALSE} (default): No additional measures are returned.
-}}
 }
 \value{
 A data frame is returned. Each row represents one replication in the
