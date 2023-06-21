@@ -156,7 +156,7 @@ sample_copula_parameters = function(copula_family2,
     }
   )
   # Convert list to a data frame.
-  c = as.data.frame(c, col.names = c("theta_23", "theta_13;2", "theta_24;3", "theta_14;23"))
+  c = as.data.frame(c, col.names = c("c23", "c13_2", "c24_3", "c14_23"))
 
   return(c)
 }
@@ -164,7 +164,7 @@ sample_copula_parameters = function(copula_family2,
 sample_rotation_parameters = function(n_sim, degrees = c(0, 90, 180, 270)) {
   r = sample(x = degrees, size = 4 * n_sim, replace = TRUE)
   r = matrix(r, ncol = 4)
-  r = as.data.frame(r, col.names = c("r_23", "r_13;2", "r_24;3", "r_14;23"))
+  r = as.data.frame(r, col.names = c("r23", "r13_2", "r24_3", "r14_23"))
   return(r)
 }
 
@@ -253,6 +253,12 @@ sensitivity_analysis_BinCont_copula = function(fitted_model,
   }
   c12 = coef(fitted_model$submodel0$ml_fit)[length(coef(fitted_model$submodel0$ml_fit))]
   c34 = coef(fitted_model$submodel1$ml_fit)[length(coef(fitted_model$submodel0$ml_fit))]
+  # For the Gaussian copula, fisher's Z transformation was applied. We have to
+  # backtransform to the correlation scale in that case.
+  if (copula_family == "gaussian") {
+    c12 = (exp(2 * c12) - 1) / (exp(2 * c12) + 1)
+    c34 = (exp(2 * c34) - 1) / (exp(2 * c34) + 1)
+  }
   # Sample unidentifiable copula parameters.
   c = sample_copula_parameters(copula_family2 = copula_family2,
                                n_sim = n_sim,
@@ -269,8 +275,17 @@ sensitivity_analysis_BinCont_copula = function(fitted_model,
   } else {
     r = sample_rotation_parameters(n_sim, degrees = 0)
   }
-  # Add rotation parameters for identifiable copulas.
-  r = cbind(rep(0, n_sim), r[, 1], rep(0, n_sim), r[, 2:4])
+  # Add rotation parameters for identifiable copulas. Rotation parameters are
+  # 180 because survival copulas were fitted.
+  rotation_identifiable = 180
+  # The Gaussian copula is invariant to rotations and a non-zero rotation
+  # parameter for the Gaussian copula will give errors. The rotation parameters
+  # are therefore set to zero for the Gaussian copula.
+  if (copula_family == "gaussian") rotation_identifiable = 0
+  r = cbind(rep(rotation_identifiable, n_sim),
+            r[, 1],
+            rep(rotation_identifiable, n_sim),
+            r[, 2:4])
   r_list = purrr::map(.x = split(r, seq(nrow(r))), .f = as.double)
   # For every set of sampled unidentifiable parameters, compute the
   # required quantities.

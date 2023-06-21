@@ -123,11 +123,13 @@
 #' The returned data frame also contains the following columns when `get_marg_tau`
 #' is `TRUE`:
 #' * `sp_s0s1`, `sp_s0t0`, `sp_s0t1`, `sp_s1t0`, `sp_s1t1`, `sp_t0t1`:
-#' Spearman's \eqn{\rho} between the corresponding potential outcomes. Note
-#' that these associations refer to the potential time-to-composite events
-#' and/or time-to-true endpoint event. In contrary, the estimated association
+#' Spearman's \eqn{\rho} between the corresponding potential outcomes. Note that
+#' these associations refer to the potential time-to-composite events and/or
+#' time-to-true endpoint event. In contrary, the estimated association
 #' parameters from [fit_model_SurvSurv()] refer to associations between the
-#' time-to-surrogate event and time-to true endpoint event.
+#' time-to-surrogate event and time-to true endpoint event. Also note that
+#' `sp_s1t1` is constant whereas `sp_s0t0` is not. This is a particularity of
+#' the MC procedure to calculate both measures and thus not a bug.
 #' * `prop_harmed`, `prop_protected`, `prop_always`, `prop_never`: proportions
 #' of the corresponding population strata in each replication. These are defined
 #' in Nevo and Gorfine (2022).
@@ -218,13 +220,13 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
 
   # Pull association parameters from estimated parameter vectors. The
   # association parameter is always the last one in the corresponding vector
-  c_12 = coef(fitted_model$fit_0)[n_par]
-  c_34 = coef(fitted_model$fit_1)[n_par]
+  c12 = coef(fitted_model$fit_0)[n_par]
+  c34 = coef(fitted_model$fit_1)[n_par]
   # For the Gaussian copula, fisher's Z transformation was applied. We have to
   # backtransform to the correlation scale in that case.
   if (copula_family == "gaussian") {
-    c_12 = (exp(2 * c_12) - 1) / (exp(2 * c_12) + 1)
-    c_34 = (exp(2 * c_34) - 1) / (exp(2 * c_34) + 1)
+    c12 = (exp(2 * c12) - 1) / (exp(2 * c12) + 1)
+    c34 = (exp(2 * c34) - 1) / (exp(2 * c34) + 1)
   }
   c = sample_copula_parameters(
     copula_family2 = copula_family2,
@@ -233,7 +235,7 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
     lower = lower,
     upper = upper
   )
-  c = cbind(rep(c_12, n_sim), c[, 1], rep(c_34, n_sim), c[, 2:4])
+  c = cbind(rep(c12, n_sim), c[, 1], rep(c34, n_sim), c[, 2:4])
   c_list = purrr::map(.x = split(c, seq(nrow(c))), .f = as.double)
   # Sample rotation parameters of the unidentifiable copula's family does not
   # allow for negative associations.
@@ -250,9 +252,9 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
   # are therefore set to zero for the Gaussian copula.
   if (copula_family == "gaussian") rotation_identifiable = 0
   r = cbind(rep(rotation_identifiable, n_sim),
-            rep(rotation_identifiable
-                , n_sim),
-            r)
+            r[, 1],
+            rep(rotation_identifiable, n_sim),
+            r[, 2:4])
   r_list = purrr::map(.x = split(r, seq(nrow(r))), .f = as.double)
   # For every set of sampled unidentifiable parameters, compute the
   # required quantities.

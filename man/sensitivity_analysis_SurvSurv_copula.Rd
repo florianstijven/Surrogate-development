@@ -84,11 +84,13 @@ The returned data frame also contains the following columns when \code{get_marg_
 is \code{TRUE}:
 \itemize{
 \item \code{sp_s0s1}, \code{sp_s0t0}, \code{sp_s0t1}, \code{sp_s1t0}, \code{sp_s1t1}, \code{sp_t0t1}:
-Spearman's \eqn{\rho} between the corresponding potential outcomes. Note
-that these associations refer to the potential time-to-composite events
-and/or time-to-true endpoint event. In contrary, the estimated association
+Spearman's \eqn{\rho} between the corresponding potential outcomes. Note that
+these associations refer to the potential time-to-composite events and/or
+time-to-true endpoint event. In contrary, the estimated association
 parameters from \code{\link[=fit_model_SurvSurv]{fit_model_SurvSurv()}} refer to associations between the
-time-to-surrogate event and time-to true endpoint event.
+time-to-surrogate event and time-to true endpoint event. Also note that
+\code{sp_s1t1} is constant whereas \code{sp_s0t0} is not. This is a particularity of
+the MC procedure to calculate both measures and thus not a bug.
 \item \code{prop_harmed}, \code{prop_protected}, \code{prop_always}, \code{prop_never}: proportions
 of the corresponding population strata in each replication. These are defined
 in Nevo and Gorfine (2022).

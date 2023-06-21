@@ -4,7 +4,7 @@ test_that("sample_dvine() works with clayton copula", {
   copula_family = "clayton"
   set.seed(1)
   U = sample_dvine(copula_par, rotation_par, copula_family, n = 1e2)
-  expected_values = c(0.98379818, 0.02441270, 0.44578131, 0.06633612)
+  expected_values = c(0.99152565, 0.02532641, 0.52018781, 0.06633612)
   output_values = c(U[1, 1], U[2, 2], U[3, 3], U[4, 4])
   expect_equal(output_values,
                expected_values)
@@ -30,7 +30,7 @@ test_that("sample_deltas_BinCont() works with clayton copula", {
     q_S0 = q_S0,
     q_S1 = q_S1
   )$Delta_dataframe
-  expected_values = c(1.03557703, 1.07562675, 1L, 0L)
+  expected_values = c(1.20168104, 0.99663129, 0L, 0L)
   output_values = c(Delta$DeltaS[1:2], Delta$DeltaT[3:4])
   expect_equal(output_values,
                expected_values)
@@ -58,7 +58,7 @@ test_that("estimate_ICA_BinCont() works in a sample example", {
     q_S1 = q_S1
   )$Delta_dataframe
   ICA = estimate_ICA_BinCont(Delta$DeltaS, Delta$DeltaT)
-  expected_values = c(1.03557703, 1.07562675, 1L, 0L)
+  expected_values = c(1.20168104, 0.99663129, 0L, 0L)
   output_values = c(Delta$DeltaS[1:2], Delta$DeltaT[3:4])
   expect_equal(output_values,
                expected_values)
@@ -94,7 +94,7 @@ test_that("compute_ICA_BinCont() works in a sample example", {
     q_S1 = q_S1,
     seed = 1
   )
-  expected_values = c(0.318961395, -0.650202419, 0.396666309, 0.710023540)
+  expected_values = c(0.25048788, -0.53843674, 0.3952069, 0.74461876)
   output_values = ICA[1:4]
   expect_equal(output_values,
                expected_values,

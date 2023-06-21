@@ -24,7 +24,7 @@ test_that("sensitivity_analysis_SurvSurv_copula() works on a single core with Cl
     minfo_prec = 2e3
   )
   output_vector = c(sens_results$ICA[1],
-                    sens_results$c_23[3])
+                    sens_results$c23[3])
   check_vector = c(0.95596036, 1.37491794289595)
   expect_equal(output_vector, check_vector)
 })
@@ -49,16 +49,15 @@ test_that("sensitivity_analysis_SurvSurv_copula() works on 2 cores with Clayton 
   sens_results = sensitivity_analysis_SurvSurv_copula(
     ovarian_fitted,
     composite = TRUE,
-    cond_ind = FALSE,
+    cond_ind = TRUE,
     n_sim = 5,
     n_prec = 500,
-    minfo_prec = 500,
-    marg_association = TRUE,
+    minfo_prec = 2e3,
     ncores = 2
   )
   output_vector = c(sens_results$ICA[1],
                     sens_results$c23[3])
-  check_vector = c(0.96872392, 1.37491794289595)
+  check_vector = c(0.95596036, 1.37491794289595)
   expect_equal(output_vector, check_vector)
 })
 

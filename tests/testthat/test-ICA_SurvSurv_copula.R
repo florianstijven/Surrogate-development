@@ -26,6 +26,6 @@ test_that("compute_ICA_SurvSurv works", {
                        marginal_sp_rho,
                        seed)
   output_vector = unname(output_vector[1:4])
-  check_vector = c(0.46076498, 0.57390746, 0.80508611, 0.69431985)
+  check_vector = c(0.32682675, 0.03547048, 0.79898241 , 0.80199475)
   expect_equal(output_vector, check_vector)
 })
