@@ -277,13 +277,18 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
     # surrogacy_sample_sens <- surrogacy_sample_sens
     print("Starting parallel simulations")
     # surrogacy_sample_sens
+
+    # Get current search path and set the same search path in the new instances
+    # of R. Usually, this would not be necessary, but if the user changed the
+    # search path before running this function, there could be an issue.
+    search_path = .libPaths()
+    force(search_path)
     parallel::clusterExport(
       cl = cl,
-      varlist = c("fitted_model", "k"),
+      varlist = c("fitted_model", "k", "search_path"),
       envir = environment()
     )
-    # parallel::clusterEvalQ(cl = cl, expr = library(flexsurv))
-    # parallel::clusterEvalQ(cl = cl, expr = library(rvinecopulib))
+    parallel::clusterEvalQ(cl = cl, expr = .libPaths(new = search_path))
     temp = parallel::clusterMap(
       cl = cl,
       fun = compute_ICA_SurvSurv,

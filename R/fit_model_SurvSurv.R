@@ -337,6 +337,7 @@ model_fit_measures = function(fitted_model){
 #'  marginal surrogate distribution.
 #' * copula_family: string that indicates the copula family
 #' @export
+#' @importFrom maxLik maxLik
 twostep_SurvSurv = function(X,
                             delta_X,
                             Y,
@@ -426,30 +427,17 @@ survival_survival_loglik =  function(para,
   )
 }
 
-#' Title
-#'
-#' @param X
-#' @param delta_X
-#' @param Y
-#' @param delta_Y
-#' @param copula_family
-#' @param nknots
-#'
-#' @return
-#' @importFrom flexsurv flexsurvpline
-#' @importFrom survival Surv
 SurvSurv_starting_values = function(X, delta_X, Y, delta_Y, copula_family, nknots){
   # The starting value for the association parameter is obtained by estimating
   # the copula parameter through Kendall's tau, ignoring censoring. The
   # estimated Kendall's tau is then converted to the copula parameter scale.
-  tau = cor(X, Y, method = "kendall")
+  tau = stats::cor(X, Y, method = "kendall")
   # tau = 0.05
   # Kendall's tau is converted to the copula parameter scale.
   if(copula_family == "gaussian"){
     inv_tau = copula::iTau(copula = copula::ellipCopula(family = "normal"),
                            tau = tau)
     inv_tau = 0.5 * log((1 + inv_tau) / (1 - inv_tau))
-    warning("Fisher transformation is used for copula parameter.")
   }
   else if(copula_family == "clayton"){
     inv_tau = copula::iTau(copula = copula::claytonCopula(),
