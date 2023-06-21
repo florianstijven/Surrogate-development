@@ -251,8 +251,8 @@ sensitivity_analysis_BinCont_copula = function(fitted_model,
     q = quantile(fitted_model$submodel1$marginal_S_dist, probs = p)
     q = as.numeric(t(q$quantiles))
   }
-  c_12 = coef(fitted_model$submodel0$ml_fit)[length(coef(fitted_model$submodel0$ml_fit))]
-  c_34 = coef(fitted_model$submodel1$ml_fit)[length(coef(fitted_model$submodel0$ml_fit))]
+  c12 = coef(fitted_model$submodel0$ml_fit)[length(coef(fitted_model$submodel0$ml_fit))]
+  c34 = coef(fitted_model$submodel1$ml_fit)[length(coef(fitted_model$submodel0$ml_fit))]
   # Sample unidentifiable copula parameters.
   c = sample_copula_parameters(copula_family2 = copula_family2,
                                n_sim = n_sim,
@@ -260,7 +260,7 @@ sensitivity_analysis_BinCont_copula = function(fitted_model,
                                lower = lower,
                                upper = upper
                                )
-  c = cbind(rep(c_12, n_sim), rep(c_34, n_sim), c)
+  c = cbind(rep(c12, n_sim), c[, 1], rep(c34, n_sim), c[, 2:4])
   c_list = purrr::map(.x = split(c, seq(nrow(c))), .f = as.double)
   # Sample rotation parameters of the unidentifiable copula's family does not
   # allow for negative associations.
@@ -270,7 +270,7 @@ sensitivity_analysis_BinCont_copula = function(fitted_model,
     r = sample_rotation_parameters(n_sim, degrees = 0)
   }
   # Add rotation parameters for identifiable copulas.
-  r = cbind(rep(0, n_sim), rep(0, n_sim), r)
+  r = cbind(rep(0, n_sim), r[, 1], rep(0, n_sim), r[, 2:4])
   r_list = purrr::map(.x = split(r, seq(nrow(r))), .f = as.double)
   # For every set of sampled unidentifiable parameters, compute the
   # required quantities.
@@ -312,8 +312,8 @@ sensitivity_analysis_BinCont_copula = function(fitted_model,
   measures_df = t(as.data.frame(temp))
   rownames(measures_df) = NULL
 
-  colnames(c) = c("c_12", "c_34", "c23", "c13_2", "c24_3", "c14_23")
-  colnames(r) = c("r_12", "r_34", "r23", "r13_2", "r24_3", "r14_23")
+  colnames(c) = c("c12", "c23", "c34", "c13_2", "c24_3", "c14_23")
+  colnames(r) = c("r12", "r23", "r34", "r13_2", "r24_3", "r14_23")
   return(dplyr::bind_cols(as.data.frame(measures_df), c, r))
 
   # Return a data frame with the results of the sensiviity analysis.

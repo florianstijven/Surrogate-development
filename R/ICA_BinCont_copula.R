@@ -165,16 +165,16 @@ sample_dvine = function(copula_par,
                         n) {
   # D-vine copula parameters
   c12 = copula_par[1]
-  c34 = copula_par[2]
-  c23 = copula_par[3]
+  c23 = copula_par[2]
+  c34 = copula_par[3]
   c13_2 = copula_par[4]
   c24_3 = copula_par[5]
   c14_23 = copula_par[6]
 
   # D-vine copula rotations
   r12 = rotation_par[1]
-  r34 = rotation_par[2]
-  r23 = rotation_par[3]
+  r23 = rotation_par[2]
+  r34 = rotation_par[3]
   r13_2 = rotation_par[4]
   r24_3 = rotation_par[5]
   r14_23 = rotation_par[6]
@@ -374,6 +374,6 @@ compute_ICA_BinCont = function(copula_par,
   # kendall_tau = cor(delta_df$DeltaS, delta_df$DeltaT, method = "kendall")
   return(c(ICA = ICA, sp_rho = sp_rho,
            sp_rho_t0s0 = sp_rho_matrix[1, 2], sp_rho_t0s1 = sp_rho_matrix[1, 3], sp_rho_t0t1 = sp_rho_matrix[1, 4],
-           sp_rho_s0s1 = sp_rho_matrix[2, 3], sp_rho_s0t1 = sp_rho_matrix[2, 3],
+           sp_rho_s0s1 = sp_rho_matrix[2, 3], sp_rho_s0t1 = sp_rho_matrix[2, 4],
            sp_rho_s1t1 = sp_rho_matrix[3, 4]))
 }

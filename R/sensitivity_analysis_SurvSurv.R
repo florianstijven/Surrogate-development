@@ -233,7 +233,7 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
     lower = lower,
     upper = upper
   )
-  c = cbind(rep(c_12, n_sim), rep(c_34, n_sim), c)
+  c = cbind(rep(c_12, n_sim), c[, 1], rep(c_34, n_sim), c[, 2:4])
   c_list = purrr::map(.x = split(c, seq(nrow(c))), .f = as.double)
   # Sample rotation parameters of the unidentifiable copula's family does not
   # allow for negative associations.
@@ -334,8 +334,8 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
   }
   rownames(measures_df) = NULL
 
-  colnames(c) = c("c_12", "c_34", "c23", "c13_2", "c24_3", "c14_23")
-  colnames(r) = c("r_12", "r_34", "r23", "r13_2", "r24_3", "r14_23")
+  colnames(c) = c("c12", "c23", "c34",  "c13_2", "c24_3", "c14_23")
+  colnames(r) = c("r12", "r23", "r34",  "r13_2", "r24_3", "r14_23")
   return(dplyr::bind_cols(as.data.frame(measures_df), c, r))
 
 }
