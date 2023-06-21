@@ -250,7 +250,7 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
   # The Gaussian copula is invariant to rotations and a non-zero rotation
   # parameter for the Gaussian copula will give errors. The rotation parameters
   # are therefore set to zero for the Gaussian copula.
-  if (copula_family == "gaussian") rotation_identifiable = 0
+  if (copula_family %in% c("gaussian", "frank")) rotation_identifiable = 0
   r = cbind(rep(rotation_identifiable, n_sim),
             r[, 1],
             rep(rotation_identifiable, n_sim),
