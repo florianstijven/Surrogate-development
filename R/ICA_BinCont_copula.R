@@ -284,8 +284,6 @@ sample_deltas_BinCont = function(copula_par,
   }
   Delta_dataframe = data.frame(DeltaS = S1 - S0,
                                DeltaT = T1 - T0)
-
-
   # Compute the pairwise marginal Spearman's rho values from the sample.
   if (marginal_sp_rho) {
     sp_rho_matrix = NULL

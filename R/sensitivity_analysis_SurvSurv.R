@@ -199,7 +199,7 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
   q_S1 = function(p) {
     flexsurv::qsurvspline(p = p,
                           gamma = gammas1,
-                          knots = knott1)
+                          knots = knots1)
   }
   q_T0 = function(p) {
     flexsurv::qsurvspline(p = p,
@@ -214,9 +214,6 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
 
   # number of parameters
   n_par = length(coef(fitted_model$fit_0))
-
-  # initialize vectors to store measures of surrogacy in
-  kendall <- sp_rho <- minfo <- 1:n_sim
 
   # Pull association parameters from estimated parameter vectors. The
   # association parameter is always the last one in the corresponding vector
