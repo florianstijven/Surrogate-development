@@ -86,6 +86,10 @@
 #' @param fitted_model Returned value from [fit_model_SurvSurv()]. This object
 #'   contains the estimated identifiable part of the joint distribution for the
 #'   potential outcomes.
+#' @param degrees (numeric) vector with copula rotation degrees. Defaults to
+#'   `c(0, 90, 180, 270)`. This argument is not used for the Gaussian and Frank
+#'   copulas since they already allow for positive and negative associations.
+#' @param copula_family2
 #' @param n_sim Number of replications in the *sensitivity analysis*. This value
 #'   should be large enough to sufficiently explore all possible values of the
 #'   ICA. The minimally sufficient number depends to a large extent on which
@@ -107,6 +111,7 @@
 #' * `FALSE` (default): Conditional independence is not assumed.
 #' @inheritParams estimate_mutual_information_SurvSurv
 #' @inheritParams sample_copula_parameters
+#' @inheritParams compute_ICA_BinCont
 #'
 #' @return A data frame is returned. Each row represents one replication in the
 #'   sensitivity analysis. The returned data frame always contains the following
@@ -160,7 +165,7 @@
 #'                        copula_family = "clayton",
 #'                        nknots = 1)
 #' # Illustration with small number of replications and low precision
-#' ica_SurvSurv_sens(ovarian_fitted,
+#' sensitivity_analysis_SurvSurv_copula(ovarian_fitted,
 #'                   n_sim = 5,
 #'                   n_prec = 2000,
 #'                   copula_family2 = "clayton")
@@ -172,13 +177,14 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
                                                 cond_ind,
                                                 lower = c(-1, -1, -1, -1),
                                                 upper = c(1, 1, 1, 1),
+                                                degrees = c(0, 90, 180, 270),
                                                 marg_association = TRUE,
+                                                copula_family2 = fitted_model$copula_family,
                                                 n_prec = 5e3,
                                                 minfo_prec = 0,
                                                 ncores = 1) {
   # Extract relevant estimated parameters/objects for the fitted copula model.
   copula_family = fitted_model$copula_family
-  copula_family2 = fitted_model$copula_family
   k = length(fitted_model$knots0)
 
   gammas0 = force(coef(fitted_model$fit_0)[1:k])
@@ -237,9 +243,9 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
   # Sample rotation parameters of the unidentifiable copula's family does not
   # allow for negative associations.
   if (copula_family2 %in% c("gumbel", "clayton")) {
-    r = sample_rotation_parameters(n_sim)
+    r = sample_rotation_parameters(n_sim, degrees)
   } else {
-    r = sample_rotation_parameters(n_sim, degrees = 0)
+    r = sample_rotation_parameters(n_sim, 0)
   }
   # Add rotation parameters for identifiable copulas. Rotation parameters are
   # 180 because survival copulas were fitted.

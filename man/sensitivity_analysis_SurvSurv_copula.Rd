@@ -11,7 +11,9 @@ sensitivity_analysis_SurvSurv_copula(
   cond_ind,
   lower = c(-1, -1, -1, -1),
   upper = c(1, 1, 1, 1),
+  degrees = c(0, 90, 180, 270),
   marg_association = TRUE,
+  copula_family2 = fitted_model$copula_family,
   n_prec = 5000,
   minfo_prec = 0,
   ncores = 1
@@ -44,6 +46,10 @@ copula family's lowest possible value is used instead.}
 \eqn{\boldsymbol{b} = (b_{23}, b_{13;2}, b_{24;3},
   b_{14;23})'}. Defaults to \code{c(1, 1, 1, 1)}.}
 
+\item{degrees}{(numeric) vector with copula rotation degrees. Defaults to
+\code{c(0, 90, 180, 270)}. This argument is not used for the Gaussian and Frank
+copulas since they already allow for positive and negative associations.}
+
 \item{marg_association}{Boolean.
 \itemize{
 \item \code{TRUE}: Return marginal association measures
@@ -52,6 +58,9 @@ protected, never diseased, and always diseased is also returned. See also
 Value.
 \item \code{FALSE} (default): No additional measures are returned.
 }}
+
+\item{copula_family2}{Copula family of the unidentifiable bivariate copulas.
+For the possible options, see \code{\link[=loglik_copula_scale]{loglik_copula_scale()}}.}
 
 \item{n_prec}{Number of Monte-Carlo samples for the \emph{numerical approximation}
 of the ICA in each replication of the sensitivity analysis.}
@@ -194,7 +203,7 @@ ovarian_fitted =
                        copula_family = "clayton",
                        nknots = 1)
 # Illustration with small number of replications and low precision
-ica_SurvSurv_sens(ovarian_fitted,
+sensitivity_analysis_SurvSurv_copula(ovarian_fitted,
                   n_sim = 5,
                   n_prec = 2000,
                   copula_family2 = "clayton")
