@@ -69,7 +69,7 @@ plot.PPE.BinBin, plot.comb27.BinBin, summary.PPE.BinBin, summary.ECT,
 summary.Bootstrap.MEP.BinBin, plot.ISTE.ContCont, summary.ISTE.ContCont,
 summary.BimixedCbCContCont)
 export(AA.MultS, BifixedContCont, BimixedCbCContCont,
-       BimixedContCont, ICA.BinBin.Grid.Sample,
+       BimixedContCont, ICA.BinBin.Grid.Sample, ICA.BinBin, 
        CausalDiagramContCont, comb27.BinBin, Fano.BinBin, FixedBinBinIT,
        FixedBinContIT, FixedContBinIT, FixedContContIT, FixedDiscrDiscrIT,
        CausalDiagramBinBin, ECT, Fano.BinBin, ICA.BinBin.Grid.Full,
