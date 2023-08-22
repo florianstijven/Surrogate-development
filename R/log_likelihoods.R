@@ -85,8 +85,8 @@ normal_loglik <- function(para, X, Y, d1, d2, k = 2, knotsx, knotsy){
   #k is the number of knots in the model, this determines the length of para
   gammax <- para[1:(k + 2)]
   gammay <- para[(k + 3):(2*(k + 2))]
-  #last value in para is rho
-  rho <- (exp(para[2*(k + 2) + 1]) - 1)/(exp(para[2*(k + 2) + 1]) + 1)
+  # Last value in para is rho. We use the inverse Fisher transformation.
+  rho <- (exp(2 * para[2*(k + 2) + 1]) - 1)/(exp(2 * para[2*(k + 2) + 1]) + 1)
 
   df.1 <- d1 & d2     #case part 1
   df.2 <- d1 & (!d2)  #case part 2

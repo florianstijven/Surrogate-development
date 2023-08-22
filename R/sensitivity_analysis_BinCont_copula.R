@@ -1,0 +1,336 @@
+#' Sample Unidentifiable Copula Parameters
+#'
+#' The [sample_copula_parameters()] function samples the unidentifiable copula
+#' parameters for the partly identifiable D-vine copula model, see for example
+#' [fit_copula_model_BinCont()] and [fit_model_SurvSurv()] for more information
+#' regarding the D-vine copula model.
+#'
+#' @details # Sampling
+#'
+#'   In the D-vine copula model in the Information-Theoretic Causal Inference
+#'   (ITCI) framework, the following copulas are not identifiable: \eqn{c_{23}},
+#'   \eqn{c_{13;2}}, \eqn{c_{24;3}}, \eqn{c_{14;23}}. Let the corresponding
+#'   copula
+#' parameters be \deqn{\boldsymbol{\theta}_{unid} = (\theta_{23}, \theta_{13;2},
+#' \theta_{24;3}, \theta_{14;23})'.}
+#'   The allowable range for this parameter vector depends on the corresponding
+#'   copula families. For parsimony and comparability across different copula
+#'   families, the sampling procedure consists of two steps:
+#'  1. Sample Spearman's rho parameters from a uniform distribution,
+#'   \deqn{\boldsymbol{\rho}_{unid} = (\rho_{23}, \rho_{13;2}, \rho_{24;3},
+#'   \rho_{14;23})' \sim U(\boldsymbol{a}, \boldsymbol{b}).}
+#'  1. Transform the sampled Spearman's rho parameters to the copula parameter
+#'  scale, \eqn{\boldsymbol{\theta}_{unid}}.
+#'
+#'  These two steps are repeated `n_sim` times.
+#'
+#'   # Conditional Independence
+#'
+#' In addition to range restrictions through the `lower` and `upper` arguments,
+#' we allow for so-called conditional independence assumptions.
+#' These assumptions entail that \eqn{\rho_{13;2} = 0} and \eqn{\rho_{24;3} =
+#' 0}. Or in other words, \eqn{U_1 \perp U_3 \, | \, U_2} and \eqn{U_2 \perp U_4 \, | \, U_3}.
+#' In the context of a surrogate evaluation trial (where \eqn{(U_1, U_2, U_3,
+#' U_4)'} corresponds to the probability integral transformation of \eqn{(T_0,
+#' S_0, S_1, T_1)'}) this assumption could be justified by subject-matter knowledge.
+#'
+#'
+#' @param copula_family2 Copula family of the unidentifiable bivariate copulas.
+#'   For the possible options, see [loglik_copula_scale()].
+#' @param n_sim Number of copula parameter vectors to be sampled.
+#' @param cond_ind (boolean) Indicates whether conditional independence is
+#'   assumed, see Conditional Independence. Defaults to `FALSE`.
+#' @param lower (numeric) Vector of length 4 that provides the lower limit,
+#'   \eqn{\boldsymbol{a} = (a_{23}, a_{13;2}, a_{24;3},
+#'   a_{14;23})'}. Defaults to `c(-1, -1, -1, -1)`. If the provided lower limit
+#'   is smaller than what is allowed for a particular copula family, then the
+#'   copula family's lowest possible value is used instead.
+#' @param upper (numeric) Vector of length 4 that provides the upper limit,
+#'   \eqn{\boldsymbol{b} = (b_{23}, b_{13;2}, b_{24;3},
+#'   b_{14;23})'}. Defaults to `c(1, 1, 1, 1)`.
+#'
+#' @return A `n_sim` by `4` numeric matrix where each row corresponds to a
+#'   sample for \eqn{\boldsymbol{\theta}_{unid}}.
+sample_copula_parameters = function(copula_family2,
+                                    n_sim,
+                                    cond_ind = FALSE,
+                                    lower = c(-1,-1,-1,-1),
+                                    upper = c(1, 1, 1, 1)) {
+  # Enforce restrictions of copula family on lower and upper limits that were
+  # provided by the user.
+  switch(
+    copula_family2,
+    frank = {
+      lower = ifelse(lower > -1, lower, -1)
+      upper = ifelse(upper < 1, upper, 1)
+    },
+    gaussian = {
+      lower = ifelse(lower > -1, lower, -1)
+      upper = ifelse(upper < 1, upper, 1)
+    },
+    clayton = {
+      lower = ifelse(lower > 0, lower, 0)
+      upper = ifelse(upper < 1, upper, 1)
+    },
+    gumbel = {
+      lower = ifelse(lower > 0, lower, 0)
+      upper = ifelse(upper < 1, upper, 1)
+    }
+  )
+  # Sample Spearman's rho parameters from the specified uniform distributions.
+  # This code chunk returns a list.
+  u = purrr::map2(
+    .x = lower,
+    .y = upper,
+    .f = function(x, y)
+      runif(n = n_sim, min = x, max = y)
+  )
+  # Impose conditional independence assumption if necessary.
+  if (cond_ind) {
+    u[[2]] = rep(0, n_sim)
+    u[[3]] = rep(0, n_sim)
+  }
+  # Convert sampled Spearman's rho parameter to the copula parameter scale.
+  switch(
+    copula_family2,
+    frank = {
+      c = purrr::map(
+        .x = u,
+        .f = function(x) {
+          purrr::map_dbl(
+            .x = x,
+            .f = function(x) {
+              c_vec = copula::iRho(copula::frankCopula(), rho = x)
+              # Functions for the frank copula cannot handle parameters larger
+              # than abs(35).
+              ifelse(abs(c_vec) > 35 | is.na(c_vec), sign(c_vec) * 35, c_vec)
+            }
+          )
+        }
+      )
+    },
+    gaussian = {
+      c = purrr::map(
+        .x = u,
+        .f = function(x) {
+          purrr::map_dbl(
+            .x = x,
+            .f = function(x) {
+              copula::iRho(copula::ellipCopula(family = "normal"), rho = x)
+            }
+          )
+        }
+      )
+    },
+    clayton = {
+      c = purrr::map(
+        .x = u,
+        .f = function(x) {
+          purrr::map_dbl(
+            .x = x,
+            .f = function(x) {
+              c_vec = ifelse(x != 0, copula::iRho(copula::claytonCopula(), rho = x), 1e-5)
+              # Functions for the Clayton copula cannot handle parameter values
+              # larger than 28.
+              c_vec = ifelse(c_vec > 28 | is.na(c_vec), 28, c_vec)
+            }
+          )
+        }
+      )
+    },
+    gumbel = {
+      c = purrr::map(
+        .x = u,
+        .f = function(x) {
+          purrr::map_dbl(
+            .x = x,
+            .f = function(x) {
+              c_vec = copula::iRho(copula::gumbelCopula(), rho = x)
+              # Functions for the Gumbel copula cannot handle parameter values
+              # larger than 50.
+              c_vec = ifelse(c_vec > 50 | is.na(c_vec), 50, c_vec)
+            }
+          )
+        }
+      )
+    }
+  )
+  # Convert list to a data frame.
+  c = as.data.frame(c, col.names = c("c23", "c13_2", "c24_3", "c14_23"))
+
+  return(c)
+}
+
+sample_rotation_parameters = function(n_sim, degrees = c(0, 90, 180, 270)) {
+  r = sample(x = degrees, size = 4 * n_sim, replace = TRUE)
+  r = matrix(r, ncol = 4)
+  r = as.data.frame(r, col.names = c("r23", "r13_2", "r24_3", "r14_23"))
+  return(r)
+}
+
+#' Perform Sensitivity Analysis for the Individual Causal Association with a
+#' Continuous Surrogate and Binary True Endpoint
+#'
+#'
+#' @details
+#' # Quantifying Surrogacy
+#'
+#' In the information-theoretic causal-inference (ITCI) framework to evaluate
+#' surrogate endpoints, the ICA is the measure of primary interest. This measure
+#' quantifies how much information the individual causal treatment effect on the
+#' surrogate (\eqn{\Delta S}) provides on the individual causal treatment effect
+#' on the true endpoint (\eqn{\Delta T}). The mutual information between
+#' \eqn{\Delta S} and \eqn{\Delta T}, denoted by \eqn{I(\Delta S; \Delta T)} is
+#' a natural candidate to quantify this amount of shared information. However,
+#' the mutual information is difficult to interpret as there does not exist a
+#' general upper bound. Alonso et al. (na) therfore proposed to quantify the ICA
+#' thorugh a transformation of the mutual information that is guaranteed to lie
+#' in the unit interval. It is the following measure, \deqn{R^2_H =
+#' \frac{I(\Delta S; \Delta T)}{H(\Delta T)}} where \eqn{H(\Delta T)} is the
+#' entropy of \eqn{\Delta T}. By token of that transformation of the mutual
+#' information, \eqn{R^2_H} is restricted to the unit interval where 0 indicates
+#' independence, and 1 a functional relationship between \eqn{\Delta S} and
+#' \eqn{\Delta T}.
+#'
+#' The association between \eqn{\Delta S} and \eqn{\Delta T} can also be
+#' quantified by Spearman's \eqn{\rho} (or Kendall's \eqn{\tau}). This quantity
+#' requires appreciably less computing time than the mutual information. This
+#' quantity is therefore always returned for every replication of the
+#' sensitivity analysis.
+#'
+#' @inheritSection sensitivity_analysis_SurvSurv_copula Sensitivity Analysis
+#' @inheritSection sensitivity_analysis_SurvSurv_copula Additional Assumptions
+#'
+#'
+#' @param fitted_model Returned value from [fit_model_BinCont()]. This object
+#'   contains the estimated identifiable part of the joint distribution for the
+#'   potential outcomes.
+#' @inheritParams sensitivity_analysis_SurvSurv_copula
+#' @inheritParams sample_copula_parameters
+#'
+#' @return A data frame is returned. Each row represents one replication in the
+#'   sensitivity analysis. The returned data frame always contains the following
+#'   columns:
+#' * `R2H`, `sp_rho`, `minfo`: ICA as quantified by \eqn{R^2_H}, Spearman's rho, and
+#'   Kendall's tau, respectively.
+#' * `c12`, `c34`: estimated copula parameters.
+#' * `c23`, `c13_2`, `c24_3`, `c14_23`: sampled copula parameters of the
+#'   unidentifiable copulas in the D-vine copula. The parameters correspond to
+#'   the parameterization of the `copula_family2` copula as in the `copula`
+#'   R-package.
+#' * `r12`, `r34`: Fixed rotation parameters for the two identifiable copulas.
+#' * `r23`, `r13_2`, `r24_3`, `r14_23`: Sampled rotation parameters of the
+#'   unidentifiable copulas in the D-vine copula. These values are constant for
+#'   the Gaussian copula family since that copula is invariant to rotations.
+#'
+#' The returned data frame also contains the following columns when
+#' `marg_association` is `TRUE`:
+#' * `sp_s0s1`, `sp_s0t0`, `sp_s0t1`, `sp_s1t0`, `sp_s1t1`, `sp_t0t1`:
+#' Spearman's rho between the corresponding potential outcomes. Note that these
+#' associations refer to the observable potential outcomes. In contrary, the
+#' estimated association parameters from [fit_model_BinCont()] refer to
+#' associations on a latent scale.
+#'
+#' @examples
+sensitivity_analysis_BinCont_copula = function(fitted_model,
+                                               n_sim,
+                                               cond_ind,
+                                               lower = c(-1, -1, -1, -1),
+                                               upper = c(1, 1, 1, 1),
+                                               marg_association = TRUE,
+                                               n_prec = 1e4,
+                                               ncores = 1) {
+  # Extract relevant estimated parameters/objects for the fitted copula model.
+  copula_family = fitted_model$copula_family
+  copula_family2 = fitted_model$copula_family
+  q_S0 = function(p) {
+    q = quantile(fitted_model$submodel0$marginal_S_dist, probs = p)
+    q = as.numeric(t(q$quantiles))
+  }
+  q_S1 = function(p) {
+    q = quantile(fitted_model$submodel1$marginal_S_dist, probs = p)
+    q = as.numeric(t(q$quantiles))
+  }
+  c12 = coef(fitted_model$submodel0$ml_fit)[length(coef(fitted_model$submodel0$ml_fit))]
+  c34 = coef(fitted_model$submodel1$ml_fit)[length(coef(fitted_model$submodel0$ml_fit))]
+  # For the Gaussian copula, fisher's Z transformation was applied. We have to
+  # backtransform to the correlation scale in that case.
+  if (copula_family == "gaussian") {
+    c12 = (exp(2 * c12) - 1) / (exp(2 * c12) + 1)
+    c34 = (exp(2 * c34) - 1) / (exp(2 * c34) + 1)
+  }
+  # Sample unidentifiable copula parameters.
+  c = sample_copula_parameters(copula_family2 = copula_family2,
+                               n_sim = n_sim,
+                               cond_ind = cond_ind,
+                               lower = lower,
+                               upper = upper
+                               )
+  c = cbind(rep(c12, n_sim), c[, 1], rep(c34, n_sim), c[, 2:4])
+  c_list = purrr::map(.x = split(c, seq(nrow(c))), .f = as.double)
+  # Sample rotation parameters of the unidentifiable copula's family does not
+  # allow for negative associations.
+  if (copula_family2 %in% c("gumbel", "clayton")) {
+    r = sample_rotation_parameters(n_sim)
+  } else {
+    r = sample_rotation_parameters(n_sim, degrees = 0)
+  }
+  # Add rotation parameters for identifiable copulas. Rotation parameters are
+  # 180 because survival copulas were fitted.
+  rotation_identifiable = 180
+  # The Gaussian copula is invariant to rotations and a non-zero rotation
+  # parameter for the Gaussian copula will give errors. The rotation parameters
+  # are therefore set to zero for the Gaussian copula.
+  if (copula_family %in% c("gaussian", "frank")) rotation_identifiable = 0
+  r = cbind(rep(rotation_identifiable, n_sim),
+            r[, 1],
+            rep(rotation_identifiable, n_sim),
+            r[, 2:4])
+  r_list = purrr::map(.x = split(r, seq(nrow(r))), .f = as.double)
+  # For every set of sampled unidentifiable parameters, compute the
+  # required quantities.
+
+  # Put all other arguments in a list for the apply function.
+  MoreArgs = list(
+    copula_family1 = copula_family,
+    copula_family2 = copula_family2,
+    n_prec = n_prec,
+    q_S0 = q_S0,
+    q_S1 = q_S1
+  )
+
+  # Use multicore computing if asked.
+  if(ncores > 1){
+    cl  <- parallel::makeCluster(ncores)
+    print("Starting parallel simulations")
+    temp = parallel::clusterMap(
+      cl = cl,
+      fun = compute_ICA_BinCont,
+      copula_par = c_list,
+      rotation_par = r_list,
+      seed = 1:n_sim,
+      MoreArgs = MoreArgs
+    )
+    on.exit(expr = {parallel::stopCluster(cl)
+      rm("cl")})
+  }
+  else if (ncores == 1){
+    temp = mapply(
+      FUN = compute_ICA_BinCont,
+      c = c_list,
+      r = r_list,
+      MoreArgs = MoreArgs,
+      SIMPLIFY = FALSE
+    )
+  }
+
+  measures_df = t(as.data.frame(temp))
+  rownames(measures_df) = NULL
+
+  colnames(c) = c("c12", "c23", "c34", "c13_2", "c24_3", "c14_23")
+  colnames(r) = c("r12", "r23", "r34", "r13_2", "r24_3", "r14_23")
+  return(dplyr::bind_cols(as.data.frame(measures_df), c, r))
+
+  # Return a data frame with the results of the sensiviity analysis.
+
+}

@@ -69,7 +69,7 @@ plot.PPE.BinBin, plot.comb27.BinBin, summary.PPE.BinBin, summary.ECT,
 summary.Bootstrap.MEP.BinBin, plot.ISTE.ContCont, summary.ISTE.ContCont,
 summary.BimixedCbCContCont)
 export(AA.MultS, BifixedContCont, BimixedCbCContCont,
-       BimixedContCont, ICA.BinBin.Grid.Sample, ICA.BinBin, 
+       BimixedContCont, ICA.BinBin.Grid.Sample,
        CausalDiagramContCont, comb27.BinBin, Fano.BinBin, FixedBinBinIT,
        FixedBinContIT, FixedContBinIT, FixedContContIT, FixedDiscrDiscrIT,
        CausalDiagramBinBin, ECT, Fano.BinBin, ICA.BinBin.Grid.Full,
@@ -88,10 +88,8 @@ export(AA.MultS, BifixedContCont, BimixedCbCContCont,
        TrialLevelMA, TwoStageSurvSurv, UnifixedContCont, UnimixedContCont,
        SPF.BinBin)
 export(MICA.ContCont)
-export(fit_model_SurvSurv)
-export(ica_SurvSurv_sens)
-export(marginal_gof_scr)
-export(model_fit_measures)
+export(sensitivity_analysis_SurvSurv_copula, model_fit_measures,
+       marginal_gof_scr, fit_model_SurvSurv)
 
 
 S3method(plot, Fano.BinBin)
@@ -161,3 +159,5 @@ S3method(summary, ECT)
 S3method(summary, Bootstrap.MEP.BinBin)
 S3method(summary, ISTE.ContCont)
 S3method(summary, BimixedCbCContCont)
+
+S3method(print, vine_copula_SurvSurv_fit)
