@@ -19,7 +19,7 @@ log_likelihood_copula_model = function(theta,
                                        Y,
                                        d1,
                                        d2,
-                                       copula,
+                                       copula_family,
                                        cdf_X,
                                        cdf_Y,
                                        pdf_X,
@@ -33,7 +33,7 @@ log_likelihood_copula_model = function(theta,
   u = cdf_X(X)
   v = cdf_Y(Y)
   # loglikelihood contribution for the copula part.
-  loglik_copula = loglik_copula_scale(theta, u, v, d1, d2, copula)
+  loglik_copula = loglik_copula_scale(theta, u, v, d1, d2, copula_family)
 
 
   # Log likelihood contribution for the marginal distribution part.

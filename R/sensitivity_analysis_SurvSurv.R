@@ -19,7 +19,7 @@
 #' I(\Delta S; \Delta T)}.} By token of that transformation, \eqn{R^2_H} is
 #' restricted to the unit interval where 0 indicates independence, and 1 a
 #' functional relationship between \eqn{\Delta S} and \eqn{\Delta T}. The mutual
-#' information is returned by [ica_SurvSurv_sens()] if a non-zero value is
+#' information is returned by [sensitivity_analysis_SurvSurv_copula()] if a non-zero value is
 #' specified for `minfo_prec` (see Arguments).
 #'
 #' The association between \eqn{\Delta S} and \eqn{\Delta T} can also be
@@ -89,7 +89,6 @@
 #' @param degrees (numeric) vector with copula rotation degrees. Defaults to
 #'   `c(0, 90, 180, 270)`. This argument is not used for the Gaussian and Frank
 #'   copulas since they already allow for positive and negative associations.
-#' @param copula_family2
 #' @param n_sim Number of replications in the *sensitivity analysis*. This value
 #'   should be large enough to sufficiently explore all possible values of the
 #'   ICA. The minimally sufficient number depends to a large extent on which
@@ -112,6 +111,7 @@
 #' @inheritParams estimate_mutual_information_SurvSurv
 #' @inheritParams sample_copula_parameters
 #' @inheritParams compute_ICA_BinCont
+#' @inheritParams compute_ICA_SurvSurv
 #'
 #' @return A data frame is returned. Each row represents one replication in the
 #'   sensitivity analysis. The returned data frame always contains the following
@@ -163,12 +163,13 @@
 #' ovarian_fitted =
 #'     fit_model_SurvSurv(data = data,
 #'                        copula_family = "clayton",
-#'                        nknots = 1)
+#'                        n_knots = 1)
 #' # Illustration with small number of replications and low precision
 #' sensitivity_analysis_SurvSurv_copula(ovarian_fitted,
 #'                   n_sim = 5,
 #'                   n_prec = 2000,
-#'                   copula_family2 = "clayton")
+#'                   copula_family2 = "clayton",
+#'                   cond_ind = TRUE)
 #'
 #'
 sensitivity_analysis_SurvSurv_copula = function(fitted_model,

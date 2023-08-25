@@ -30,7 +30,7 @@
 #' ovarian_fitted =
 #'   fit_model_SurvSurv(data = data,
 #'                      copula_family = "clayton",
-#'                      nknots = 1)
+#'                      n_knots = 1)
 #' grid = seq(from = 0, to = 2, length.out = 200)
 #' marginal_gof_scr(ovarian_fitted, data, grid)
 #'
@@ -40,7 +40,7 @@
 #' @importFrom copula pcopula
 marginal_gof_scr = function(fitted_model,
                             data, grid, time_unit = "years"){
-  nknots = length(fitted_model$knots0)
+  n_knots = length(fitted_model$knots0)
   colnames(data) = c("Pfs", "Surv", "Treat", "PfsInd", "SurvInd")
   #time unit label for x-axis
   label_time_unit = paste0("Time (", time_unit, ")")
@@ -48,7 +48,7 @@ marginal_gof_scr = function(fitted_model,
   #goodness of fit of marginal survival function of OS
   Surv_t0 = 1 - flexsurv::psurvspline(
     q = grid,
-    gamma = coef(fitted_model$fit_0)[(nknots + 1):(2 * nknots)],
+    gamma = coef(fitted_model$fit_0)[(n_knots + 1):(2 * n_knots)],
     knots = fitted_model$knott0
   )
   plot(
@@ -66,7 +66,7 @@ marginal_gof_scr = function(fitted_model,
 
   Surv_t1 = 1 - flexsurv::psurvspline(
     q = grid,
-    gamma = coef(fitted_model$fit_1)[(nknots + 1):(2 * nknots)],
+    gamma = coef(fitted_model$fit_1)[(n_knots + 1):(2 * n_knots)],
     knots = fitted_model$knott1
   )
   plot(
@@ -120,11 +120,11 @@ marginal_gof_scr = function(fitted_model,
   }
 
   probs0 = pfs_surv(s = grid,
-                    gammas = coef(fitted_model$fit_0)[1:nknots],
-                    gammat = coef(fitted_model$fit_0)[(nknots + 1):(2 * nknots)],
+                    gammas = coef(fitted_model$fit_0)[1:n_knots],
+                    gammat = coef(fitted_model$fit_0)[(n_knots + 1):(2 * n_knots)],
                     knots = fitted_model$knots0,
                     knott = fitted_model$knott0,
-                    theta = coef(fitted_model$fit_0)[2 * nknots + 1],
+                    theta = coef(fitted_model$fit_0)[2 * n_knots + 1],
                     copula_family = fitted_model$copula_family)
 
   plot(
@@ -141,21 +141,21 @@ marginal_gof_scr = function(fitted_model,
   lines(grid, probs0, col = "red")
 
   probs1 = pfs_surv(s = grid,
-                    gammas = coef(fitted_model$fit_1)[1:nknots],
-                    gammat = coef(fitted_model$fit_1)[(nknots + 1):(2 * nknots)],
+                    gammas = coef(fitted_model$fit_1)[1:n_knots],
+                    gammat = coef(fitted_model$fit_1)[(n_knots + 1):(2 * n_knots)],
                     knots = fitted_model$knots1,
                     knott = fitted_model$knott1,
-                    theta = coef(fitted_model$fit_1)[2 * nknots + 1],
+                    theta = coef(fitted_model$fit_1)[2 * n_knots + 1],
                     copula_family = fitted_model$copula_family)
 
   # probs1 = sapply(
   #   grid,
   #   pfs_surv,
-  #   gammas = fitted_model$parameters1[1:nknots],
-  #   gammat = fitted_model$parameters1[(nknots + 1):(2 * nknots)],
+  #   gammas = fitted_model$parameters1[1:n_knots],
+  #   gammat = fitted_model$parameters1[(n_knots + 1):(2 * n_knots)],
   #   knots = fitted_model$knots1,
   #   knott = fitted_model$knott1,
-  #   theta = fitted_model$parameters1[2 * nknots + 1],
+  #   theta = fitted_model$parameters1[2 * n_knots + 1],
   #   copula_family = fitted_model$copula_family
   # )
   plot(

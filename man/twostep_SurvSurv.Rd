@@ -17,7 +17,19 @@ twostep_SurvSurv(
 \arguments{
 \item{X}{(numeric) Possibly right-censored time-to-surrogate event}
 
+\item{delta_X}{(integer) Surrogate event indicator:
+\itemize{
+\item \code{1L} if surrogate event ocurred.
+\item \code{0L} if censored.
+}}
+
 \item{Y}{(numeric) Possibly right-censored time-to-true endpoint event}
+
+\item{delta_Y}{(integer) True endpoint event indicator:
+\itemize{
+\item \code{1L} if true endpoint event ocurred.
+\item \code{0L} if censored.
+}}
 
 \item{copula_family}{Copula family, one of the following:
 \itemize{
@@ -30,10 +42,10 @@ The parameterization of the respective copula families can be found in the
 help files of the dedicated functions named \code{copula_loglik_copula_scale()}.
 }}
 
+\item{n_knots}{Number of internal knots for the Royston-Parmar survival model.}
+
 \item{method}{Optimization algorithm for maximizing the objective function.
 For all options, see \code{?maxLik::maxLik}. Defaults to \code{"BFGRS"}.}
-
-\item{marginal_surrogate_estimator}{Not yet implemented}
 }
 \value{
 A list with three elements:

@@ -12,7 +12,7 @@ test_that("sensitivity_analysis_SurvSurv_copula() works on a single core with Cl
   ovarian_fitted =
       fit_model_SurvSurv(data = data,
                          copula_family = "clayton",
-                         nknots = 1)
+                         n_knots = 1)
   # Illustration with small number of replications and low precision
   set.seed(1)
   sens_results = sensitivity_analysis_SurvSurv_copula(
@@ -43,7 +43,7 @@ test_that("sensitivity_analysis_SurvSurv_copula() works on 2 cores with Clayton 
   ovarian_fitted =
     fit_model_SurvSurv(data = data,
                        copula_family = "clayton",
-                       nknots = 1)
+                       n_knots = 1)
   # Illustration with small number of replications and low precision
   set.seed(1)
   sens_results = sensitivity_analysis_SurvSurv_copula(
@@ -75,7 +75,7 @@ test_that("sensitivity_analysis_SurvSurv_copula() works on a single core with Ga
   ovarian_fitted =
     fit_model_SurvSurv(data = data,
                        copula_family = "gaussian",
-                       nknots = 1)
+                       n_knots = 1)
   # Illustration with small number of replications and low precision
   set.seed(1)
   sens_results = sensitivity_analysis_SurvSurv_copula(
@@ -106,7 +106,7 @@ test_that("sensitivity_analysis_SurvSurv_copula() works on a single core with Fr
   ovarian_fitted =
     fit_model_SurvSurv(data = data,
                        copula_family = "frank",
-                       nknots = 1)
+                       n_knots = 1)
   # Illustration with small number of replications and low precision
   set.seed(1)
   sens_results = sensitivity_analysis_SurvSurv_copula(

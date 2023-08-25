@@ -40,6 +40,6 @@ data = data.frame(
 ovarian_fitted =
     fit_model_SurvSurv(data = data,
                        copula_family = "clayton",
-                       nknots = 1)
+                       n_knots = 1)
 model_fit_measures(ovarian_fitted)
 }

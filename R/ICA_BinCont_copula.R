@@ -231,9 +231,22 @@ sample_dvine = function(copula_par,
 #'
 #' @param q_S0 Quantile function for the distribution of \eqn{S_0}.
 #' @param q_S1 Quantile function for the distribution of \eqn{S_1}.
+#' @param q_T0 Quantile function for the distribution of \eqn{T_0}. This should be
+#' `NULL` if \eqn{T_0} is binary.
+#' @param q_T1 Quantile function for the distribution of \eqn{T_1}. This should be
+#' `NULL` if \eqn{T_1} is binary.
 #' @param marginal_sp_rho (boolean) Compute the sample Spearman correlation
 #'   matrix? Defaults to `TRUE`.
+#' @param composite (boolean)  If `composite` is `TRUE`, then the surrogate
+#'    endpoint is a composite of both a "pure" surrogate endpoint and the true
+#'    endpoint, e.g., progression-free survival is the minimum of time-to-progression
+#'    and time-to-death.
+#' @param setting Should be one of the following two:
+#' * `"BinCont"`: for when \eqn{S} is continuous and \eqn{T} is binary.
+#' * `"SurvSurv"`: for when both \eqn{S} and \eqn{T} are time-to-event variables.
+#'
 #' @inheritParams sample_dvine
+#'
 #'
 #' @return A list with two elements:
 #' * `Delta_dataframe`: a dataframe containing the sampled individual causal

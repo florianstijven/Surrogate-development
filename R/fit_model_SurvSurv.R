@@ -35,7 +35,7 @@
 #' Two modelling choices are made before estimating the two bivariate
 #' distributions described in the previous paragraph:
 #' * The number of internal knots for the Royston-Parmar survival models. This
-#' is specified through the `nknots` argument. The number of knots is assumed to
+#' is specified through the `n_knots` argument. The number of knots is assumed to
 #' be equal across the four margins.
 #' * The parametric family of the bivariate copulas. The parametric family is
 #' assumed to be equal across treatment groups. This choice is specified through
@@ -73,19 +73,17 @@
 #' @param data A data frame in the correct format (See details).
 #' @param copula_family One of the following parametric copula families:
 #'   `"clayton"`, `"frank"`, `"gaussian"`, or `"gumbel"`.
-#' @param nknots Number of internal knots for the Royston-Parmar survival model.
+#' @param n_knots Number of internal knots for the Royston-Parmar survival model.
 #' @param fitted_model Fitted model from which initial values are extracted. If
 #'   `NULL` (default), standard initial values are used. This option intended
 #'   for when a model is repeatedly fitted, e.g., in a bootstrap.
-#' @param hessian A boolean.
-#' * `TRUE` (default): Hessian is computed
-#' * `FALSE`: Hessian is not computed. This can save a small amount of time. This
-#' can be useful when a model is repeatedly fitted, e.g., in a bootstrap.
 #' @param maxit Maximum number of iterations for the numeric optimization,
 #'   defaults to 500.
 #'
+#' @inheritParams twostep_SurvSurv
+#'
 #' @return Returns an S3 object that can be used to perform the sensitivity
-#'   analysis with [ica_SurvSurv_sens()].
+#'   analysis with [sensitivity_analysis_SurvSurv_copula()].
 #' @export
 #'
 #' @author Florian Stijven
@@ -104,13 +102,13 @@
 #'                     Ovarian$SurvInd)
 #'   Surrogate::fit_model_SurvSurv(data = data,
 #'                                 copula_family = "clayton",
-#'                                 nknots = 1)
+#'                                 n_knots = 1)
 #' }
 #'
 #' @importFrom stats cor optim
 fit_model_SurvSurv = function(data,
                               copula_family,
-                              nknots = 2,
+                              n_knots = 2,
                               fitted_model = NULL,
                               method = "BFGS",
                               maxit = 500) {
@@ -131,7 +129,7 @@ fit_model_SurvSurv = function(data,
     Y = data0$Surv,
     delta_Y = data0$SurvInd,
     copula_family = copula_family,
-    n_knots = nknots,
+    n_knots = n_knots,
     method = method
   )
   twostep_fit1 = twostep_SurvSurv(
@@ -140,7 +138,7 @@ fit_model_SurvSurv = function(data,
     Y = data1$Surv,
     delta_Y = data1$SurvInd,
     copula_family = copula_family,
-    n_knots = nknots,
+    n_knots = n_knots,
     method = method
   )
 
@@ -289,17 +287,17 @@ new_vine_copula_ss_fit = function(fit_0, fit_1, copula_family,
 #' ovarian_fitted =
 #'     fit_model_SurvSurv(data = data,
 #'                        copula_family = "clayton",
-#'                        nknots = 1)
+#'                        n_knots = 1)
 #' model_fit_measures(ovarian_fitted)
 model_fit_measures = function(fitted_model){
   #number of internal knots
-  nknots = length(fitted_model$knots0) - 2
+  n_knots = length(fitted_model$knots0) - 2
   #total number of parameters
   n_parameters = length(coef(fitted_model$fit_0)) + length(coef(fitted_model$fit_1))
 
   #get fitted copula parameters
-  copula_par0 = coef(fitted_model$fit_0)[2*(nknots + 2) + 1]
-  copula_par1 = coef(fitted_model$fit_1)[2*(nknots + 2) + 1]
+  copula_par0 = coef(fitted_model$fit_0)[2*(n_knots + 2) + 1]
+  copula_par1 = coef(fitted_model$fit_1)[2*(n_knots + 2) + 1]
   #convert fitted copula parameters to kendall's tau scale
   tau_0 = conversion_copula_tau(copula_par = copula_par0,
                                 copula_family = fitted_model$copula_family)
@@ -322,12 +320,18 @@ model_fit_measures = function(fitted_model){
 #' while holding the marginal distribution parameters fixed.
 #'
 #' @param X (numeric) Possibly right-censored time-to-surrogate event
+#' @param delta_X (integer) Surrogate event indicator:
+#' * `1L` if surrogate event ocurred.
+#' * `0L` if censored.
 #' @param Y (numeric) Possibly right-censored time-to-true endpoint event
-#' @param marginal_surrogate_estimator Not yet implemented
+#' @param delta_Y (integer) True endpoint event indicator:
+#' * `1L` if true endpoint event ocurred.
+#' * `0L` if censored.
 #' @param method Optimization algorithm for maximizing the objective function.
 #'   For all options, see `?maxLik::maxLik`. Defaults to `"BFGRS"`.
 #'
 #' @inheritParams loglik_copula_scale
+#' @inheritParams fit_model_SurvSurv
 #' @inheritParams survival_survival_loglik
 #'
 #' @return A list with three elements:
@@ -404,10 +408,6 @@ twostep_SurvSurv = function(X,
   return(submodel_fit)
 }
 
-#' Loglikelihood function for survival-continuous copula model
-#'
-#'
-#' @return
 survival_survival_loglik =  function(para,
                                      X,
                                      delta_X,
@@ -427,7 +427,7 @@ survival_survival_loglik =  function(para,
   )
 }
 
-SurvSurv_starting_values = function(X, delta_X, Y, delta_Y, copula_family, nknots){
+SurvSurv_starting_values = function(X, delta_X, Y, delta_Y, copula_family, n_knots){
   # The starting value for the association parameter is obtained by estimating
   # the copula parameter through Kendall's tau, ignoring censoring. The
   # estimated Kendall's tau is then converted to the copula parameter scale.
@@ -461,13 +461,13 @@ SurvSurv_starting_values = function(X, delta_X, Y, delta_Y, copula_family, nknot
   fit_s = flexsurv::flexsurvspline(
     formula = survival::Surv(X, delta_X) ~ 1,
     data = data,
-    k = nknots,
+    k = n_knots,
     scale = "hazard"
   )
   fit_t = flexsurv::flexsurvspline(
     formula = survival::Surv(Y, delta_Y) ~ 1,
     data = data,
-    k = nknots,
+    k = n_knots,
     scale = "hazard"
   )
 

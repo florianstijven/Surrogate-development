@@ -50,6 +50,14 @@ importFrom("utils", "flush.console")
 importFrom("stats", "uniroot")
 importFrom("graphics", "arrows")
 importFrom("stats", "weighted.mean")
+importFrom("stats", "approxfun")
+import(cubature)
+import(fitdistrplus)
+import(maxLik)
+import(purrr)
+import(stringr)
+import(withr)
+
 
 export(plot.UnifixedContCont, plot.UnimixedContCont, plot.BifixedContCont, plot.BimixedContCont,
 plot.FixedContContIT, plot.ICA.ContCont, plot.MICA.ContCont, plot.MinSurrContCont, plot.SPF.BinBin,
@@ -160,4 +168,3 @@ S3method(summary, Bootstrap.MEP.BinBin)
 S3method(summary, ISTE.ContCont)
 S3method(summary, BimixedCbCContCont)
 
-S3method(print, vine_copula_SurvSurv_fit)

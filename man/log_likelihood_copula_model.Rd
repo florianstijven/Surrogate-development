@@ -10,7 +10,7 @@ log_likelihood_copula_model(
   Y,
   d1,
   d2,
-  copula,
+  copula_family,
   cdf_X,
   cdf_Y,
   pdf_X,
@@ -38,6 +38,17 @@ right-censored,
 \item \code{d2[i] = 1} if \code{v[i]} corresponds to non-censored value
 \item \code{d2[i] = 0} if \code{v[i]} corresponds to right-censored value
 \item \code{d2[i] = -1} if \code{v[i]} corresponds to left-censored value
+}}
+
+\item{copula_family}{Copula family, one of the following:
+\itemize{
+\item \code{"clayton"}
+\item \code{"frank"}
+\item \code{"gumbel"}
+\item \code{"gaussian"}
+
+The parameterization of the respective copula families can be found in the
+help files of the dedicated functions named \code{copula_loglik_copula_scale()}.
 }}
 
 \item{cdf_X}{Distribution function for the first outcome variable.}

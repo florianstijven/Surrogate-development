@@ -10,6 +10,7 @@
 #'
 #' @inheritParams compute_ICA_BinCont
 #' @inheritParams estimate_mutual_information_SurvSurv
+#' @inheritParams sample_deltas_BinCont
 #'
 #' @return (numeric) A Named vector with the following elements:
 #'  * ICA

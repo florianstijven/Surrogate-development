@@ -17,7 +17,7 @@ sensitivity_analysis_BinCont_copula(
 )
 }
 \arguments{
-\item{fitted_model}{Returned value from \code{\link[=fit_model_BinCont]{fit_model_BinCont()}}. This object
+\item{fitted_model}{Returned value from \code{\link[=fit_copula_model_BinCont]{fit_copula_model_BinCont()}}. This object
 contains the estimated identifiable part of the joint distribution for the
 potential outcomes.}
 
@@ -83,7 +83,7 @@ The returned data frame also contains the following columns when
 \item \code{sp_s0s1}, \code{sp_s0t0}, \code{sp_s0t1}, \code{sp_s1t0}, \code{sp_s1t1}, \code{sp_t0t1}:
 Spearman's rho between the corresponding potential outcomes. Note that these
 associations refer to the observable potential outcomes. In contrary, the
-estimated association parameters from \code{\link[=fit_model_BinCont]{fit_model_BinCont()}} refer to
+estimated association parameters from \code{\link[=fit_copula_model_BinCont]{fit_copula_model_BinCont()}} refer to
 associations on a latent scale.
 }
 }

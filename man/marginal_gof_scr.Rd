@@ -39,7 +39,7 @@ data = data.frame(
 ovarian_fitted =
   fit_model_SurvSurv(data = data,
                      copula_family = "clayton",
-                     nknots = 1)
+                     n_knots = 1)
 grid = seq(from = 0, to = 2, length.out = 200)
 marginal_gof_scr(ovarian_fitted, data, grid)
 

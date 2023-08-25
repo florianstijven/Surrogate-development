@@ -53,6 +53,11 @@ information and derived quantities.}
 
 \item{q_T1}{Quantile function for the distribution of \eqn{T_1}.}
 
+\item{composite}{(boolean)  If \code{composite} is \code{TRUE}, then the surrogate
+endpoint is a composite of both a "pure" surrogate endpoint and the true
+endpoint, e.g., progression-free survival is the minimum of time-to-progression
+and time-to-death.}
+
 \item{marginal_sp_rho}{(boolean) Compute the sample Spearman correlation
 matrix? Defaults to \code{TRUE}.}
 

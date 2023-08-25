@@ -11,7 +11,6 @@ fit_copula_model_BinCont(
   marginal_surrogate_estimator = NULL,
   twostep = FALSE,
   fitted_model = NULL,
-  hessian = TRUE,
   maxit = 500,
   method = "BFGS"
 )
@@ -25,19 +24,20 @@ fit_copula_model_BinCont(
 \item{marginal_surrogate}{Marginal distribution for the surrogate. For all
 available options, see \code{?Surrogate::cdf_fun}.}
 
+\item{marginal_surrogate_estimator}{Not yet implemented}
+
+\item{twostep}{(boolean) if \code{TRUE}, the two step estimator implemented in
+\code{\link[=twostep_BinCont]{twostep_BinCont()}} is used for estimation.}
+
 \item{fitted_model}{Fitted model from which initial values are extracted. If
 \code{NULL} (default), standard initial values are used. This option intended
 for when a model is repeatedly fitted, e.g., in a bootstrap.}
 
-\item{hessian}{A boolean.
-\itemize{
-\item \code{TRUE} (default): Hessian is computed
-\item \code{FALSE}: Hessian is not computed. This can save a small amount of time. This
-can be useful when a model is repeatedly fitted, e.g., in a bootstrap.
-}}
-
 \item{maxit}{Maximum number of iterations for the numeric optimization,
 defaults to 500.}
+
+\item{method}{Optimization algorithm for maximizing the objective function.
+For all options, see \code{?maxLik::maxLik}. Defaults to \code{"BFGRS"}.}
 }
 \value{
 WIP

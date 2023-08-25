@@ -202,7 +202,7 @@ sample_rotation_parameters = function(n_sim, degrees = c(0, 90, 180, 270)) {
 #' @inheritSection sensitivity_analysis_SurvSurv_copula Additional Assumptions
 #'
 #'
-#' @param fitted_model Returned value from [fit_model_BinCont()]. This object
+#' @param fitted_model Returned value from [fit_copula_model_BinCont()]. This object
 #'   contains the estimated identifiable part of the joint distribution for the
 #'   potential outcomes.
 #' @inheritParams sensitivity_analysis_SurvSurv_copula
@@ -228,7 +228,7 @@ sample_rotation_parameters = function(n_sim, degrees = c(0, 90, 180, 270)) {
 #' * `sp_s0s1`, `sp_s0t0`, `sp_s0t1`, `sp_s1t0`, `sp_s1t1`, `sp_t0t1`:
 #' Spearman's rho between the corresponding potential outcomes. Note that these
 #' associations refer to the observable potential outcomes. In contrary, the
-#' estimated association parameters from [fit_model_BinCont()] refer to
+#' estimated association parameters from [fit_copula_model_BinCont()] refer to
 #' associations on a latent scale.
 #'
 #' @examples

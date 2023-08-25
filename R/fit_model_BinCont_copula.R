@@ -6,9 +6,12 @@
 #' independent across treatment groups, a bivariate distribution is fitted in
 #' each treatment group separately.
 #'
+#' @param twostep (boolean) if `TRUE`, the two step estimator implemented in
+#' [twostep_BinCont()] is used for estimation.
+#'
 #' @inheritParams fit_model_SurvSurv
 #' @inheritParams binary_continuous_loglik
-#' @inheritParams fit_model_SurvSurv
+#' @inheritParams twostep_BinCont
 #'
 #' @return WIP
 #' @export
@@ -18,7 +21,6 @@ fit_copula_model_BinCont = function(data,
                              marginal_surrogate_estimator = NULL,
                              twostep = FALSE,
                              fitted_model = NULL,
-                             hessian = TRUE,
                              maxit = 500,
                              method = "BFGS") {
   # Column names are added to make the interpretation of the further code
@@ -395,7 +397,7 @@ binary_continuous_loglik <- function(para, X, Y, copula_family, marginal_surroga
     Y = rep(0, length(X)),
     d1 = rep(1, length(X)),
     d2 = d2,
-    copula = copula_family,
+    copula_family = copula_family,
     cdf_X = cdf_X,
     cdf_Y = cdf_Y,
     pdf_X = pdf_X,

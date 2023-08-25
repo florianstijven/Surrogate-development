@@ -24,6 +24,11 @@ sensitivity_analysis_SurvSurv_copula(
 contains the estimated identifiable part of the joint distribution for the
 potential outcomes.}
 
+\item{composite}{(boolean)  If \code{composite} is \code{TRUE}, then the surrogate
+endpoint is a composite of both a "pure" surrogate endpoint and the true
+endpoint, e.g., progression-free survival is the minimum of time-to-progression
+and time-to-death.}
+
 \item{n_sim}{Number of replications in the \emph{sensitivity analysis}. This value
 should be large enough to sufficiently explore all possible values of the
 ICA. The minimally sufficient number depends to a large extent on which
@@ -122,7 +127,7 @@ between \eqn{\Delta S} and \eqn{\Delta T}, \deqn{R^2_H = 1 - e^{-2 \cdot
 I(\Delta S; \Delta T)}.} By token of that transformation, \eqn{R^2_H} is
 restricted to the unit interval where 0 indicates independence, and 1 a
 functional relationship between \eqn{\Delta S} and \eqn{\Delta T}. The mutual
-information is returned by \code{\link[=ica_SurvSurv_sens]{ica_SurvSurv_sens()}} if a non-zero value is
+information is returned by \code{\link[=sensitivity_analysis_SurvSurv_copula]{sensitivity_analysis_SurvSurv_copula()}} if a non-zero value is
 specified for \code{minfo_prec} (see Arguments).
 
 The association between \eqn{\Delta S} and \eqn{\Delta T} can also be
@@ -201,12 +206,13 @@ data = data.frame(
 ovarian_fitted =
     fit_model_SurvSurv(data = data,
                        copula_family = "clayton",
-                       nknots = 1)
+                       n_knots = 1)
 # Illustration with small number of replications and low precision
 sensitivity_analysis_SurvSurv_copula(ovarian_fitted,
                   n_sim = 5,
                   n_prec = 2000,
-                  copula_family2 = "clayton")
+                  copula_family2 = "clayton",
+                  cond_ind = TRUE)
 
 
 }

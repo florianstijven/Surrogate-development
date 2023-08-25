@@ -10,7 +10,7 @@ test_that("SurvivalSurvival model works with Clayton copula for Ovarian data",
                               Ovarian$SurvInd)
             fitted_model = fit_model_SurvSurv(data = data,
                                               copula_family = "clayton",
-                                              nknots = 1)
+                                              n_knots = 1)
             log_lik_fitted = c(logLik(fitted_model$fit_0), logLik(fitted_model$fit_1))
             expect_equal(log_lik_fitted, c(362.79316, 283.69633), ignore_attr = "df")
           })
@@ -27,7 +27,7 @@ test_that("SurvivalSurvival model works with Gaussian copula for Ovarian data",
                               Ovarian$SurvInd)
             fitted_model = fit_model_SurvSurv(data = data,
                                               copula_family = "gaussian",
-                                              nknots = 2)
+                                              n_knots = 2)
             log_lik_fitted = c(logLik(fitted_model$fit_0), logLik(fitted_model$fit_1))
             expect_equal(log_lik_fitted, c(336.84319, 274.04324), ignore_attr = "df")
           })
@@ -44,7 +44,7 @@ test_that("SurvivalSurvival model works with Frank copula for Ovarian data",
                               Ovarian$SurvInd)
             fitted_model = fit_model_SurvSurv(data = data,
                                               copula_family = "frank",
-                                              nknots = 1)
+                                              n_knots = 1)
             log_lik_fitted = c(logLik(fitted_model$fit_0), logLik(fitted_model$fit_1))
             expect_equal(log_lik_fitted, c(355.93244, 288.48185), ignore_attr = "df")
           })
@@ -61,7 +61,7 @@ test_that("SurvivalSurvival model works with Gumbel copula for Ovarian data",
                               Ovarian$SurvInd)
             fitted_model = fit_model_SurvSurv(data = data,
                                               copula_family = "gumbel",
-                                              nknots = 1)
+                                              n_knots = 1)
             log_lik_fitted = c(logLik(fitted_model$fit_0), logLik(fitted_model$fit_1))
             expect_equal(log_lik_fitted, c(338.562039, 274.257801), ignore_attr = "df")
           })
