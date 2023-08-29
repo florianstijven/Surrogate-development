@@ -53,7 +53,7 @@ environment.}
 \item Spearman's rho, \eqn{\rho_s (\Delta S, \Delta T)} (if asked)
 \item Kendall's tau, \eqn{\tau (\Delta S, \Delta T)} (if asked)
 \item Marginal association parameters in terms of Spearman's rho:
-\deqn{(\rho_s(S_0, S_1), \rho_s(S_0, S_T_0), \rho_s(S_0, T_1),
+\deqn{(\rho_s(S_0, S_1), \rho_s(S_0, T_0), \rho_s(S_0, T_1),
  \rho_s(S_1, T_0), \rho_s(S_0, S_1),
  \rho_s(T_0, T_1)}
 }
