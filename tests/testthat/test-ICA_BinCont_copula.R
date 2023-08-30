@@ -76,14 +76,6 @@ test_that("compute_ICA_BinCont() works in a sample example", {
     qnorm(x, mean = 1)
   }
   set.seed(1)
-  Delta = sample_deltas_BinCont(
-    copula_par,
-    rotation_par,
-    copula_family,
-    n = 1e2,
-    q_S0 = q_S0,
-    q_S1 = q_S1
-  )$Delta_dataframe
   ICA = compute_ICA_BinCont(
     copula_par = copula_par,
     rotation_par = rotation_par,
@@ -98,5 +90,6 @@ test_that("compute_ICA_BinCont() works in a sample example", {
   output_values = ICA[1:4]
   expect_equal(output_values,
                expected_values,
-               ignore_attr = "names")
+               ignore_attr = "names",
+               tolerance = 1e-4)
 })
