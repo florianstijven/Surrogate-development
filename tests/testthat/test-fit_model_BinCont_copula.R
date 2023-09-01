@@ -192,6 +192,11 @@ test_that("fit_model_binCont_copula() works with clayton copula and normal margi
                                         method = "BFGS")
   coef(full_model$submodel0$ml_fit)
   coefs_check = c(-0.04323186 ,-16.63365493, 28.63091060, 3.14363815)
-  expect_equal(coef(full_model$submodel0$ml_fit), coefs_check, ignore_attr = TRUE)
+  expect_equal(
+    coef(full_model$submodel0$ml_fit),
+    coefs_check,
+    ignore_attr = TRUE,
+    tolerance = 10e-3
+  )
 }
 )

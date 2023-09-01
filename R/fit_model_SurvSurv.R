@@ -476,14 +476,14 @@ SurvSurv_starting_values = function(X, delta_X, Y, delta_Y, copula_family, n_kno
   return(starting_values)
 }
 
-print.vine_copula_SurvSurv_fit = function(fitted_model) {
+print.vine_copula_SurvSurv_fit = function(x, ...) {
   cat("Maximum Likelihood Estimate for Vine Copula Model (Survival-Survival)\n")
-  cat("Copula Family: "); cat(fitted_model$copula_family); cat("\n")
-  cat("Number of Internal Knots: "); cat(length(fitted_model$knots0) - 2)
+  cat("Copula Family: "); cat(x$copula_family); cat("\n")
+  cat("Number of Internal Knots: "); cat(length(x$knots0) - 2)
   cat("\n\n")
   cat("Summary of Maximum Likelihood fit for Treat = 0:\n")
-  print(summary(fitted_model$fit_0))
+  print(summary(x$fit_0))
   cat("Summary of Maximum Likelihood fit for Treat = 1:\n")
-  print(summary(fitted_model$fit_1))
+  print(summary(x$fit_1))
 }
 
