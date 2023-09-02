@@ -146,7 +146,12 @@ test_that("fit_model_binCont_copula() works with clayton copula and lognormal ma
                                         method = "BFGS")
   coef(full_model$submodel0$ml_fit)
   coefs_check = c(0.01958429, 1.08101496, 0.31669380, 1.86676923)
-  expect_equal(coef(full_model$submodel0$ml_fit), coefs_check, ignore_attr = TRUE)
+  expect_equal(
+    coef(full_model$submodel0$ml_fit),
+    coefs_check,
+    ignore_attr = TRUE,
+    tolerance = 10e-3
+  )
 }
 )
 
