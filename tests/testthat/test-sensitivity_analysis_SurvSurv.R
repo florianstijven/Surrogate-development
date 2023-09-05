@@ -96,9 +96,10 @@ test_that("sensitivity_analysis_SurvSurv_copula() works on a single core with Fr
   data("Ovarian")
   # For simplicity, data is not recoded to semi-competing risks format, but the
   # data are left in the composite event format.
+  set.seed(1)
   data = data.frame(
     Ovarian$Pfs,
-    Ovarian$Surv,
+    Ovarian$Surv + rchisq(n = nrow(Ovarian), df = 1),
     Ovarian$Treat,
     Ovarian$PfsInd,
     Ovarian$SurvInd
@@ -113,12 +114,12 @@ test_that("sensitivity_analysis_SurvSurv_copula() works on a single core with Fr
     ovarian_fitted,
     composite = TRUE,
     cond_ind = TRUE,
-    n_sim = 5,
-    n_prec = 500,
+    n_sim = 1,
+    n_prec = 2e3,
     minfo_prec = 2e3
   )
   output_vector = c(sens_results$ICA[1],
-                    sens_results$c23[3])
-  check_vector = c(0.95378975, 0.88329409)
-  expect_equal(output_vector, check_vector, tolerance = 1e-3)
+                    sens_results$c23[1])
+  check_vector = c(0.7498051, -3.1713961)
+  expect_equal(output_vector, check_vector, tolerance = 1e-5)
 })

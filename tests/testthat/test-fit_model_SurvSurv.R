@@ -37,22 +37,21 @@ test_that("SurvivalSurvival model works with Frank copula for Ovarian data",
             data("Ovarian")
             #For simplicity, data is not recoded to semi-competing risks format, but is
             #left in the composite event format.
-            data = data.frame(Ovarian$Pfs,
-                              Ovarian$Surv,
-                              Ovarian$Treat,
-                              Ovarian$PfsInd,
-                              Ovarian$SurvInd)
+            set.seed(1)
+            data = data.frame(
+              Ovarian$Pfs,
+              Ovarian$Surv + rchisq(n = nrow(Ovarian), df = 1),
+              Ovarian$Treat,
+              Ovarian$PfsInd,
+              Ovarian$SurvInd
+            )
             fitted_model = fit_model_SurvSurv(data = data,
                                               copula_family = "frank",
                                               n_knots = 1,
                                               method = "BFGS")
             log_lik_fitted = c(logLik(fitted_model$fit_0), logLik(fitted_model$fit_1))
-            expect_equal(log_lik_fitted, c(355.93244, 288.48185),
-                         ignore_attr = "df",
-                         # Tolerance is very high at the moment. This is because
-                         # there are non-trivial numerical differences depending
-                         # on in which environment the tests are run.
-                         tolerance = 1)
+            expect_equal(log_lik_fitted, c(-773.393369372, -788.634180506),
+                         ignore_attr = "df", tolerance = 1e-5)
           })
 
 test_that("SurvivalSurvival model works with Gumbel copula for Ovarian data",

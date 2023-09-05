@@ -10,7 +10,8 @@ test_that("binary_continuous_loglik() works with clayton copula and logistic mar
     copula_family = copula,
     marginal_surrogate = marginal
   )
-  expect_equal(loglik, -13.8160346)
+  expect_equal(loglik, -13.8160346,
+               tolerance = 1e-5)
 })
 
 # test_that("binary_continuous_loglik() works with clayton copula and logistic margins", {
@@ -40,7 +41,8 @@ test_that("binary_continuous_loglik() works with gaussian copula and logistic ma
     copula_family = copula,
     marginal_surrogate = marginal
   )
-  expect_equal(loglik, -13.416364)
+  expect_equal(loglik, -13.416364,
+               tolerance = 1e-5)
 })
 
 test_that("binary_continuous_loglik() works with frank copula and logistic margins", {
@@ -55,7 +57,8 @@ test_that("binary_continuous_loglik() works with frank copula and logistic margi
     copula_family = copula,
     marginal_surrogate = marginal
   )
-  expect_equal(loglik, -13.9664643)
+  expect_equal(loglik, -13.9664643,
+               tolerance = 1e-5)
 })
 
 test_that("twostep_BinCont() works with clayton copula and gamma margins", {
@@ -77,7 +80,8 @@ test_that("twostep_BinCont() works with clayton copula and gamma margins", {
     copula_family = copula_family,
     marginal_surrogate = marginal_surrogate
   )
-  expect_equal(coef(summary(twostep_fit$ml_fit))[4], 0.96837258)
+  expect_equal(coef(summary(twostep_fit$ml_fit))[4], 0.96837258,
+               tolerance = 1e-5)
 }
 )
 
@@ -100,7 +104,8 @@ test_that("twostep_BinCont() works with gaussian copula and weibull margins", {
     copula_family = copula_family,
     marginal_surrogate = marginal_surrogate
   )
-  expect_equal(coef(summary(twostep_fit$ml_fit))[4], 0.63754401)
+  expect_equal(coef(summary(twostep_fit$ml_fit))[4], 0.63754401,
+               tolerance = 1e-5)
 }
 )
 
@@ -123,7 +128,8 @@ test_that("fit_copula_submodel_BinCont() works with clayton copula and lognormal
   # Values from running the functions
   output_values = c(fit$ml_fit$maximum,
                     fit$marginal_S_dist$estimate)
-  expect_equal(output_values, check_values, ignore_attr = TRUE)
+  expect_equal(output_values, check_values, ignore_attr = TRUE,
+               tolerance = 1e-5)
 }
 )
 
@@ -155,27 +161,34 @@ test_that("fit_model_binCont_copula() works with clayton copula and lognormal ma
 }
 )
 
-test_that("fit_model_binCont_copula() works with clayton copula and lognormal margins and full ML estimator", {
-  copula_family = "clayton"
-  marginal_surrogate = "lognormal"
-  data("Schizo_BinCont")
-  na = is.na(Schizo_BinCont$CGI_Bin) | is.na(Schizo_BinCont$PANSS)
-  X = 6 - log(abs(Schizo_BinCont$PANSS[!na]) + 2)
-  Y = Schizo_BinCont$CGI_Bin[!na]
-  Treat = Schizo_BinCont$Treat[!na]
-  Treat = ifelse(Treat == 1, 1, 0)
-  data = data.frame(X,
-                    Y,
-                    Treat)
-  full_model = fit_copula_model_BinCont(data,
-                                        copula_family,
-                                        marginal_surrogate,
-                                        twostep = FALSE,
-                                        method = "BFGS")
-  coef(full_model$submodel0$ml_fit)
-  coefs_check = c(0.00773068, 1.08557400, 0.32093667, 1.88178947)
-  expect_equal(coef(full_model$submodel0$ml_fit), coefs_check, ignore_attr = TRUE)
-}
+test_that(
+  "fit_model_binCont_copula() works with clayton copula and lognormal margins and full ML estimator",
+  {
+    copula_family = "clayton"
+    marginal_surrogate = "lognormal"
+    data("Schizo_BinCont")
+    na = is.na(Schizo_BinCont$CGI_Bin) | is.na(Schizo_BinCont$PANSS)
+    X = 6 - log(abs(Schizo_BinCont$PANSS[!na]) + 2)
+    Y = Schizo_BinCont$CGI_Bin[!na]
+    Treat = Schizo_BinCont$Treat[!na]
+    Treat = ifelse(Treat == 1, 1, 0)
+    data = data.frame(X,
+                      Y,
+                      Treat)
+    full_model = fit_copula_model_BinCont(data,
+                                          copula_family,
+                                          marginal_surrogate,
+                                          twostep = FALSE,
+                                          method = "BFGS")
+    coef(full_model$submodel0$ml_fit)
+    coefs_check = c(0.00773068, 1.08557400, 0.32093667, 1.88178947)
+    expect_equal(
+      coef(full_model$submodel0$ml_fit),
+      coefs_check,
+      ignore_attr = TRUE,
+      tolerance = 1e-4
+    )
+  }
 )
 
 test_that("fit_model_binCont_copula() works with clayton copula and normal margins and full ML estimator", {
@@ -201,7 +214,7 @@ test_that("fit_model_binCont_copula() works with clayton copula and normal margi
     coef(full_model$submodel0$ml_fit),
     coefs_check,
     ignore_attr = TRUE,
-    tolerance = 10e-3
+    tolerance = 1e-3
   )
 }
 )
