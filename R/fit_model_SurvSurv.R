@@ -180,7 +180,7 @@ fit_model_SurvSurv = function(data,
     ml_fit_0 = maxLik::maxLik(
       logLik = log_lik_function_0,
       start = inits_0,
-      method = method,
+      method = method
     )
   })
 
@@ -205,7 +205,7 @@ fit_model_SurvSurv = function(data,
     ml_fit_1 = maxLik::maxLik(
       logLik = log_lik_function_1,
       start = inits_1,
-      method = method,
+      method = method
     )
   })
 
