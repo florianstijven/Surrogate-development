@@ -61,7 +61,8 @@ import(withr)
 
 export(plot.UnifixedContCont, plot.UnimixedContCont, plot.BifixedContCont, plot.BimixedContCont,
 plot.FixedContContIT, plot.ICA.ContCont, plot.MICA.ContCont, plot.MinSurrContCont, plot.SPF.BinBin,
-plot.Single.Trial.RE.AA, plot.MixedContContIT, plot.ICA.BinBin, plot.TrialLevelMA, plot.FixedBinBinIT, summary.UnifixedContCont,
+plot.Single.Trial.RE.AA, plot.MixedContContIT, plot.ICA.BinBin, plot.TrialLevelMA, plot.FixedBinBinIT,
+plot.TwoStageSurvSurv, summary.UnifixedContCont,
 summary.UnimixedContCont, summary.BifixedContCont, summary.BimixedContCont,
 summary.FixedContContIT, summary.FixedContContIT, summary.ICA.BinBin, summary.ICA.ContCont,
 summary.MICA.ContCont, summary.MinSurrContCont, summary.SPF.BinBin, summary.Single.Trial.RE.AA,
@@ -77,13 +78,14 @@ plot.PPE.BinBin, plot.comb27.BinBin, summary.PPE.BinBin, summary.ECT,
 summary.Bootstrap.MEP.BinBin, plot.ISTE.ContCont, summary.ISTE.ContCont,
 summary.BimixedCbCContCont)
 export(AA.MultS, BifixedContCont, BimixedCbCContCont,
-       BimixedContCont, ICA.BinBin.Grid.Sample,
+       BimixedContCont, Bootstrap.MEP.BinBin, ICA.BinBin, ICA.BinBin.Grid.Sample,
+       ICA.BinBin.CounterAssum, MaxEntContCont,
        CausalDiagramContCont, comb27.BinBin, Fano.BinBin, FixedBinBinIT,
        FixedBinContIT, FixedContBinIT, FixedContContIT, FixedDiscrDiscrIT,
        CausalDiagramBinBin, ECT, Fano.BinBin, ICA.BinBin.Grid.Full,
        ICA.BinBin.Grid.Sample, ICA.BinBin.Grid.Sample.Uncert, ICA.BinCont, ICA.ContCont,
        ICA.ContCont.MultS.MPC, ICA.ContCont.MultS.PC,
-       ICA.ContCont.MultS, ICA.Sample.ContCont,
+       ICA.ContCont.MultS, ICA.ContCont.MultS_alt, ICA.Sample.ContCont,
        ISTE.ContCont,
        LongToWide, MarginalProbs, MaxEntICABinBin,
        MaxEntSPFBinBin, MICA.Sample.ContCont,
@@ -94,10 +96,11 @@ export(AA.MultS, BifixedContCont, BimixedCbCContCont,
        Sim.Data.STS, Sim.Data.STSBinBin, Single.Trial.RE.AA,
        SurvSurv, Test.Mono, TrialLevelIT,
        TrialLevelMA, TwoStageSurvSurv, UnifixedContCont, UnimixedContCont,
-       SPF.BinBin)
+       SPF.BinBin, SPF.BinCont)
 export(MICA.ContCont)
 export(sensitivity_analysis_SurvSurv_copula, model_fit_measures,
        marginal_gof_scr, fit_model_SurvSurv)
+export(sensitivity_analysis_BinCont_copula, fit_copula_model_BinCont)
 
 
 S3method(plot, Fano.BinBin)
