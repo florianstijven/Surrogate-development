@@ -12,8 +12,6 @@ Imports: MASS, lattice, latticeExtra, survival, nlme, lme4, msm,
 License: GPL (>= 2)
 Repository: CRAN
 NeedsCompilation: no
-Packaged: 2023-06-22 04:39:53 UTC; wim
-Date/Publication: 2023-06-22 06:20:02 UTC
 RoxygenNote: 7.2.3
 Encoding: UTF-8
 Suggests: 
