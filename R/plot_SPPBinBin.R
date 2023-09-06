@@ -12,7 +12,8 @@ plot.SPF.BinBin <- function(x, Type="All.Histograms", Specific.Pi="r_0_0", Col="
     if ((length(unique(Object$r_min1_min1))> 1) & (length(unique(Object$r_0_min1))> 1) &
       (length(unique(Object$r_min1_0))> 1)){
     
-    plot(0:100, 0:100, axes=F, xlab="", ylab="", type="n", ..., xlim=c(0, 1))  
+    plot(0:100, 0:100, axes=F, xlab="", ylab="", type="n", ..., 
+         xlim=c(0, 1))  
     par(mfrow=c(3, 3), mar = c(4.5, 7, 4, 1), oma=rep(0, times=4))  
     
     # T = -1, S = -1
@@ -231,12 +232,7 @@ plot.SPF.BinBin <- function(x, Type="All.Histograms", Specific.Pi="r_0_0", Col="
       
     }   
     
-    
-    
-    
-    
-    
-    par(mfrow=c(1, 1), c(5, 4, 4, 2) + 0.1)
+    par(mfrow=c(1, 1), mar=c(5, 4, 4, 2) + 0.1)
   }
   
   if (Type=="All.Densities"){
@@ -246,7 +242,8 @@ plot.SPF.BinBin <- function(x, Type="All.Histograms", Specific.Pi="r_0_0", Col="
     
     # T = -1, S = -1
     if (length(unique(Object$r_min1_min1)) > 1){
-      plot(density(Object$r_min1_min1, na.rm=T), main=" ", col=Col, cex.lab=1.3, ..., xlim=c(0, 1),
+      plot(density(Object$r_min1_min1, na.rm=T), main=" ", col=Col, cex.lab=1.3, ..., 
+           xlim=c(0, 1),
            xlab=expression(r(-1,-1)))
     }
     if (length(unique(Object$r_min1_min1)) <= 1){
@@ -320,14 +317,14 @@ plot.SPF.BinBin <- function(x, Type="All.Histograms", Specific.Pi="r_0_0", Col="
     if (length(unique(Object$r_1_1)) <= 1){
       plot(x=0, col=0, axes=F, xlab="", ylab= " ", ...)}
     
-    par(mfrow=c(1, 1), c(5, 4, 4, 2) + 0.1)
+    par(mfrow=c(1, 1), mar=c(5, 4, 4, 2) + 0.1)
     
   }
   
 
   if (Type=="Histogram"){
     
-    par(mfrow=c(1, 1), c(5, 4, 4, 2) + 0.1)
+    par(mfrow=c(1, 1), mar=c(5, 4, 4, 2) + 0.1)
     
     if (Specific.Pi == "r_min1_min1"){
       # T = -1, S = -1
@@ -413,7 +410,7 @@ plot.SPF.BinBin <- function(x, Type="All.Histograms", Specific.Pi="r_0_0", Col="
   
   if (Type=="Density"){
     
-    par(mfrow=c(1, 1), c(5, 4, 4, 2) + 0.1)
+    par(mfrow=c(1, 1), mar=c(5, 4, 4, 2) + 0.1)
     
     if (Specific.Pi == "r_min1_min1"){
       # T = -1, S = -1
@@ -500,7 +497,7 @@ plot.SPF.BinBin <- function(x, Type="All.Histograms", Specific.Pi="r_0_0", Col="
   
   if (Type=="Box.Plot"){
     
-    par(mfrow=c(1, 1), c(5, 4, 4, 2) + 0.1)
+    par(mfrow=c(1, 1), mar=c(5, 4, 4, 2) + 0.1)
         
     # T = -1, S = -1
     if (length(unique(Object$r_min1_min1)) > 1){
@@ -560,7 +557,7 @@ plot.SPF.BinBin <- function(x, Type="All.Histograms", Specific.Pi="r_0_0", Col="
     
     as.numeric.factor <- function(x) {as.numeric(levels(x))[x]}
     
-    boxplot(as.numeric.factor(data$X1) ~ data$X2, col=rep(c(2, 3, 4), times=3), names=rep(c(-1, 0, 1), each=3), 
+    boxplot(as.numeric(as.character(data$X1)) ~ data$X2, col=rep(c(2, 3, 4), times=3), names=rep(c(-1, 0, 1), each=3), 
             outline = Box.Plot.Outliers, xlab=expression(paste(Delta, S)), ...)
     
     abline(v = c(3.5, 6.5), col="blue", lty=3)
