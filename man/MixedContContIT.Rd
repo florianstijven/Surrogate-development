@@ -94,18 +94,7 @@ Wim Van der Elst, Ariel Alonso, & Geert Molenberghs
 \code{\link{FixedContContIT}}, \code{\link{plot Information-Theoretic}}
 }
 \examples{
-# Example 1
-# Based on the ARMD data:
-data(ARMD)
-# Assess surrogacy based on a full mixed-effect model
-# in the information-theoretic framework:
-Sur <- MixedContContIT(Dataset=ARMD, Surr=Diff24, True=Diff52, Treat=Treat, Trial.ID=Center,
-Pat.ID=Id, Model="Full")
-# Obtain a summary of the results:
-summary(Sur)
-
 \dontrun{ # Time consuming (>5sec) code part
-# Example 2
 # Conduct an analysis based on a simulated dataset with 2000 patients, 200 trials,
 # and Rindiv=Rtrial=.8
 # Simulate the data:
