@@ -35,6 +35,10 @@
 \alias{summary.Bootstrap.MEP.BinBin}
 \alias{summary.ISTE.ContCont}
 \alias{summary.BimixedCbCContCont}
+\alias{summary.MufixedContCont.MultS}
+\alias{summary.MumixedContCont.MultS}
+
+
 \title{Summary}
 \description{summary}
 \usage{
@@ -73,5 +77,7 @@
 \method{summary}{Bootstrap.MEP.BinBin}(object, ..., Object)
 \method{summary}{ISTE.ContCont}(object, ..., Object)
 \method{summary}{BimixedCbCContCont}(object, ..., Object)
+\method{summary}{MufixedContCont.MultS}(object, ..., Object)
+\method{summary}{MumixedContCont.MultS}(object, ..., Object)
 }
 \keyword{internal}
