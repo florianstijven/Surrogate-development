@@ -11,14 +11,14 @@ compute_ICA_SurvSurv(
   copula_family1,
   copula_family2 = copula_family1,
   n_prec,
-  minfo_prec,
   q_S0,
   q_T0,
   q_S1,
   q_T1,
   composite,
   marginal_sp_rho = TRUE,
-  seed = 1
+  seed = 1,
+  mutinfo_estimator = FNN::mutinfo
 )
 }
 \arguments{
@@ -40,11 +40,6 @@ possible options, see \code{loglik_copula_scale()}.}
 \item{n_prec}{Number of Monte Carlo samples for the computation of the mutual
 information.}
 
-\item{minfo_prec}{Number of quasi Monte-Carlo samples for the numerical
-integration to obtain the mutual information. If this value is 0 (default),
-the mutual information is not computed and \code{NA} is returned for the mutual
-information and derived quantities.}
-
 \item{q_S0}{Quantile function for the distribution of \eqn{S_0}.}
 
 \item{q_T0}{Quantile function for the distribution of \eqn{T_0}.}
@@ -63,6 +58,9 @@ matrix? Defaults to \code{TRUE}.}
 
 \item{seed}{Seed for Monte Carlo sampling. This seed does not affect the global
 environment.}
+
+\item{mutinfo_estimator}{Function that estimates the mutual information
+between the first two arguments which are numeric vectors.}
 }
 \value{
 (numeric) A Named vector with the following elements:

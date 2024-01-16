@@ -182,7 +182,6 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
                                                 marg_association = TRUE,
                                                 copula_family2 = fitted_model$copula_family,
                                                 n_prec = 5e3,
-                                                minfo_prec = 0,
                                                 ncores = 1) {
   # Extract relevant estimated parameters/objects for the fitted copula model.
   copula_family = fitted_model$copula_family
@@ -268,7 +267,6 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
     copula_family1 = copula_family,
     copula_family2 = copula_family2,
     n_prec = n_prec,
-    minfo_prec = minfo_prec,
     q_S0 = q_S0,
     q_T0 = q_T0,
     q_S1 = q_S1,

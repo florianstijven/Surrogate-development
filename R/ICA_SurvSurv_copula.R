@@ -7,6 +7,8 @@
 #'
 #' @param q_T0 Quantile function for the distribution of \eqn{T_0}.
 #' @param q_T1 Quantile function for the distribution of \eqn{T_1}.
+#' @param mutinfo_estimator Function that estimates the mutual information
+#'  between the first two arguments which are numeric vectors.
 #'
 #' @inheritParams compute_ICA_BinCont
 #' @inheritParams estimate_mutual_information_SurvSurv
@@ -28,14 +30,14 @@ compute_ICA_SurvSurv = function(copula_par,
                                 copula_family1,
                                 copula_family2 = copula_family1,
                                 n_prec,
-                                minfo_prec,
                                 q_S0,
                                 q_T0,
                                 q_S1,
                                 q_T1,
                                 composite,
                                 marginal_sp_rho = TRUE,
-                                seed = 1) {
+                                seed = 1,
+                                mutinfo_estimator = FNN::mutinfo) {
   withr::local_seed(seed)
   # Sample individual causal treatment effects from the given model. If
   # marginal_sp_rho = TRUE, then the Spearman's correlation matrix is also
@@ -58,7 +60,7 @@ compute_ICA_SurvSurv = function(copula_par,
   delta_df = delta_list$Delta_dataframe
   sp_rho_matrix = delta_list$marginal_sp_rho_matrix
   # Compute mutual information between Delta S and Delta T.
-  mutual_information = estimate_mutual_information_SurvSurv(delta_df$DeltaS, delta_df$DeltaT, minfo_prec)
+  mutual_information = mutinfo_estimator(delta_df$DeltaS, delta_df$DeltaT)
   # Compute ICA
   ICA = 1 - exp(-2 * mutual_information)
   sp_rho = stats::cor(delta_df$DeltaS, delta_df$DeltaT, method = "spearman")

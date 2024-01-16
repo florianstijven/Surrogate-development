@@ -15,7 +15,6 @@ sensitivity_analysis_SurvSurv_copula(
   marg_association = TRUE,
   copula_family2 = fitted_model$copula_family,
   n_prec = 5000,
-  minfo_prec = 0,
   ncores = 1
 )
 }
@@ -69,11 +68,6 @@ For the possible options, see \code{\link[=loglik_copula_scale]{loglik_copula_sc
 
 \item{n_prec}{Number of Monte-Carlo samples for the \emph{numerical approximation}
 of the ICA in each replication of the sensitivity analysis.}
-
-\item{minfo_prec}{Number of quasi Monte-Carlo samples for the numerical
-integration to obtain the mutual information. If this value is 0 (default),
-the mutual information is not computed and \code{NA} is returned for the mutual
-information and derived quantities.}
 
 \item{ncores}{Number of cores used in the sensitivity analysis. The
 computations are computationally heavy, and this option can speed things

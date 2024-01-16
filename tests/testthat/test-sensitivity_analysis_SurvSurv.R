@@ -20,12 +20,11 @@ test_that("sensitivity_analysis_SurvSurv_copula() works on a single core with Cl
     composite = TRUE,
     cond_ind = TRUE,
     n_sim = 5,
-    n_prec = 500,
-    minfo_prec = 2e3
+    n_prec = 500
   )
   output_vector = c(sens_results$ICA[1],
                     sens_results$c23[3])
-  check_vector = c(0.98262113, 1.37491794289595)
+  check_vector = c(0.987833035047, 1.374917942896)
   expect_equal(output_vector, check_vector)
 })
 
@@ -52,12 +51,11 @@ test_that("sensitivity_analysis_SurvSurv_copula() works on 2 cores with Clayton 
     cond_ind = TRUE,
     n_sim = 5,
     n_prec = 500,
-    minfo_prec = 2e3,
     ncores = 2
   )
   output_vector = c(sens_results$ICA[1],
                     sens_results$c23[3])
-  check_vector = c(0.98262113, 1.37491794289595)
+  check_vector = c(0.987833035047, 1.374917942896)
   expect_equal(output_vector, check_vector)
 })
 
@@ -83,12 +81,11 @@ test_that("sensitivity_analysis_SurvSurv_copula() works on a single core with Ga
     composite = TRUE,
     cond_ind = TRUE,
     n_sim = 5,
-    n_prec = 500,
-    minfo_prec = 2e3
+    n_prec = 500
   )
   output_vector = c(sens_results$ICA[1],
                     sens_results$c23[3])
-  check_vector = c(0.94952722, 0.15243575)
+  check_vector = c(0.957439366743, 0.152435752847)
   expect_equal(output_vector, check_vector)
 })
 
@@ -115,11 +112,10 @@ test_that("sensitivity_analysis_SurvSurv_copula() works on a single core with Fr
     composite = TRUE,
     cond_ind = TRUE,
     n_sim = 1,
-    n_prec = 2e3,
-    minfo_prec = 2e3
+    n_prec = 2e3
   )
   output_vector = c(sens_results$ICA[1],
                     sens_results$c23[1])
-  check_vector = c(0.7498051, -3.1713961)
+  check_vector = c(0.817704460703, -3.171396109739)
   expect_equal(output_vector, check_vector, tolerance = 1e-5)
 })
