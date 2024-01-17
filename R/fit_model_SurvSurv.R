@@ -209,6 +209,15 @@ fit_model_SurvSurv = function(data,
     )
   })
 
+  # We fit survival copulas in the above functions. This corresponds to 180
+  # degree rotated copulas.
+  copula_rotations = c(180, 180)
+  # The Gaussian copula is invariant to rotations and a non-zero rotation
+  # parameter for the Gaussian copula will give errors. The rotation parameters
+  # are therefore set to zero for the Gaussian copula. Equivalently for the
+  # Frank copula.
+  if (copula_family %in% c("gaussian", "frank")) copula_rotations = c(0, 0)
+
 
   return(
     new_vine_copula_ss_fit(
@@ -218,7 +227,8 @@ fit_model_SurvSurv = function(data,
       knots0 = knots0,
       knots1 = knots1,
       knott0 = knott0,
-      knott1 = knott1
+      knott1 = knott1,
+      copula_rotations = copula_rotations
     )
   )
 }
@@ -238,8 +248,14 @@ fit_model_SurvSurv = function(data,
 #'
 #' @examples
 #' #should not be used be the user
-new_vine_copula_ss_fit = function(fit_0, fit_1, copula_family,
-                                  knots0, knots1, knott0, knott1){
+new_vine_copula_ss_fit = function(fit_0,
+                                  fit_1,
+                                  copula_family,
+                                  knots0,
+                                  knots1,
+                                  knott0,
+                                  knott1,
+                                  copula_rotations) {
   structure(
     .Data = list(
       fit_0 = fit_0,
@@ -248,7 +264,8 @@ new_vine_copula_ss_fit = function(fit_0, fit_1, copula_family,
       knots0 = knots0,
       knots1 = knots1,
       knott0 = knott0,
-      knott1 = knott1
+      knott1 = knott1,
+      copula_rotations = copula_rotations
     ),
     class = "vine_copula_SurvSurv_fit"
   )

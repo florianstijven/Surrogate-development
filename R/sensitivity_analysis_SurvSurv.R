@@ -197,6 +197,8 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
   gammat1 = force(coef(fitted_model$fit_1)[(k + 1):(2 * k)])
   knott1 = force(fitted_model$knott1)
 
+  copula_rotations = force(fitted_model$copula_rotations)
+
   q_S0 = function(p) {
     flexsurv::qsurvspline(p = p,
                           gamma = gammas0,
@@ -247,16 +249,9 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
   } else {
     r = sample_rotation_parameters(n_sim, 0)
   }
-  # Add rotation parameters for identifiable copulas. Rotation parameters are
-  # 180 because survival copulas were fitted.
-  rotation_identifiable = 180
-  # The Gaussian copula is invariant to rotations and a non-zero rotation
-  # parameter for the Gaussian copula will give errors. The rotation parameters
-  # are therefore set to zero for the Gaussian copula.
-  if (copula_family %in% c("gaussian", "frank")) rotation_identifiable = 0
-  r = cbind(rep(rotation_identifiable, n_sim),
+  r = cbind(rep(copula_rotations[1], n_sim),
             r[, 1],
-            rep(rotation_identifiable, n_sim),
+            rep(copula_rotations[2], n_sim),
             r[, 2:4])
   r_list = purrr::map(.x = split(r, seq(nrow(r))), .f = as.double)
   # For every set of sampled unidentifiable parameters, compute the

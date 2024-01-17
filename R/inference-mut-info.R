@@ -1,6 +1,6 @@
 delta_method_log_mutinfo = function(fitted_model,
-                                    rotation_par_id,
                                     copula_par_unid,
+                                    copula_family2,
                                     rotation_par_unid,
                                     n_prec,
                                     mutinfo_estimator = NULL,
@@ -9,30 +9,18 @@ delta_method_log_mutinfo = function(fitted_model,
                                     eps = 1e-3) {
   # Number of knots
   k = length(fitted_model$knots1)
-  # Location of the knots
-  knots0 = fitted_model$knots0
-  knots1 = fitted_model$knots1
-  knott0 = fitted_model$knott0
-  knott1 = fitted_model$knott1
-  # Copula Families
-  copula_family1 = fitted_model$copula_family
-  copula_family2 = fitted_model$copula_family
 
   ICA_given_model = ICA_given_model_constructor(
-    knots0 = knots0,
-    knots1 = knots1,
-    knott0 = knott0,
-    knott1 = knott1,
+    fitted_model = fitted_model,
     copula_par_unid = copula_par_unid,
-    copula_family1 = copula_family1,
     copula_family2 = copula_family2,
-    rotation_par_id = rotation_par_id,
     rotation_par_unid = rotation_par_unid,
     n_prec = n_prec,
     mutinfo_estimator = mutinfo_estimator,
     composite = composite,
     seed = seed
   )
+
   # Compute gradient of the ICA as a function of the model parameters, evaluated
   # at the maximum likelihood estimates.
   gradient_vec = maxLik::numericGradient(
@@ -48,14 +36,15 @@ delta_method_log_mutinfo = function(fitted_model,
   zeros_matrix = matrix(rep(0, (2 * k + 1) ** 2), ncol = (2 * k + 1))
   vcov_matrix = rbind(cbind(vcov(fitted_model$fit_0), zeros_matrix),
                       cbind(zeros_matrix, vcov(fitted_model$fit_1)))
+
   variance_log_mutinfo = t(gradient_vec) %*% vcov_matrix %*% gradient_vec
 
   return(variance_log_mutinfo)
 }
 
 summary_level_bootstrap_ICA = function(fitted_model,
-                                       rotation_par_id,
                                        copula_par_unid,
+                                       copula_family2,
                                        rotation_par_unid,
                                        n_prec,
                                        B,
@@ -64,16 +53,8 @@ summary_level_bootstrap_ICA = function(fitted_model,
                                        seed) {
   # Number of knots
   k = length(fitted_model$knots1)
-  # Location of the knots
-  knots0 = fitted_model$knots0
-  knots1 = fitted_model$knots1
-  knott0 = fitted_model$knott0
-  knott1 = fitted_model$knott1
-  # Copula Families
-  copula_family1 = fitted_model$copula_family
-  copula_family2 = fitted_model$copula_family
 
-  # Parameter estimates
+    # Parameter estimates
   theta_hat = c(coef(fitted_model$fit_0), coef(fitted_model$fit_1))
 
   # Compute covariance matrix of the sampling distribution.
@@ -82,14 +63,9 @@ summary_level_bootstrap_ICA = function(fitted_model,
                       cbind(zeros_matrix, vcov(fitted_model$fit_1)))
 
   ICA_given_model = ICA_given_model_constructor(
-    knots0 = knots0,
-    knots1 = knots1,
-    knott0 = knott0,
-    knott1 = knott1,
+    fitted_model = fitted_model,
     copula_par_unid = copula_par_unid,
-    copula_family1 = copula_family1,
     copula_family2 = copula_family2,
-    rotation_par_id = rotation_par_id,
     rotation_par_unid = rotation_par_unid,
     n_prec = n_prec,
     mutinfo_estimator = mutinfo_estimator,
@@ -116,20 +92,27 @@ summary_level_bootstrap_ICA = function(fitted_model,
   return(ICA_hats)
 }
 
-ICA_given_model_constructor = function(knots0,
-                                       knots1,
-                                       knott0,
-                                       knott1,
+ICA_given_model_constructor = function(fitted_model,
                                        copula_par_unid,
-                                       copula_family1,
                                        copula_family2,
-                                       rotation_par_id,
                                        rotation_par_unid,
                                        n_prec,
                                        mutinfo_estimator,
                                        composite,
                                        seed) {
-  k = length(knots0)
+  # Number of knots
+  k = length(fitted_model$knots1)
+  # Location of the knots
+  knots0 = fitted_model$knots0
+  knots1 = fitted_model$knots1
+  knott0 = fitted_model$knott0
+  knott1 = fitted_model$knott1
+  # Copula Families
+  copula_family1 = fitted_model$copula_family
+  # Copula rotations for the identifiable copulas
+  r_12 = fitted_model$copula_rotations[1]
+  r_34 = fitted_model$copula_rotations[2]
+
   ICA_given_model = function(theta) {
     # The first k + 1 elements of theta correspond to the parameters in fit_0,
     # the next k + 1 elements correspond to the parameters in fit_1. In a second
@@ -170,13 +153,14 @@ ICA_given_model_constructor = function(knots0,
 
     # Compute the log of the mutual information
     ICA = compute_ICA_SurvSurv(
-      copula_par = c(c_12, copula_par_unid[1], c_34, copula_par_unid[2:4]),
-      rotation_par = c(
-        rotation_par_id,
-        rotation_par_unid[1],
-        rotation_par_id,
-        rotation_par_unid[2:4]
-      ),
+      copula_par = c(c_12,
+                     copula_par_unid[1],
+                     c_34,
+                     copula_par_unid[2:4]),
+      rotation_par = c(r_12,
+                       rotation_par_unid[1],
+                       r_34,
+                       rotation_par_unid[2:4]),
       copula_family1 = copula_family1,
       copula_family2 = copula_family2,
       n_prec = n_prec,

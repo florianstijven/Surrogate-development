@@ -18,7 +18,7 @@ compute_ICA_SurvSurv(
   composite,
   marginal_sp_rho = TRUE,
   seed = 1,
-  mutinfo_estimator = FNN::mutinfo
+  mutinfo_estimator = NULL
 )
 }
 \arguments{
@@ -60,7 +60,8 @@ matrix? Defaults to \code{TRUE}.}
 environment.}
 
 \item{mutinfo_estimator}{Function that estimates the mutual information
-between the first two arguments which are numeric vectors.}
+between the first two arguments which are numeric vectors. Defaults to
+\code{FNN::mutinfo()} with default arguments.}
 }
 \value{
 (numeric) A Named vector with the following elements:
