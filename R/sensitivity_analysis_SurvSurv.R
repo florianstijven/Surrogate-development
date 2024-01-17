@@ -183,8 +183,13 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
                                                 copula_family2 = fitted_model$copula_family,
                                                 n_prec = 5e3,
                                                 ncores = 1) {
+  # If copula_family2 contains only 1 element, this vector is appended to
+  # the correct length.
+  copula_family1 = fitted_model$copula_family
+  if(length(copula_family1) == 1) copula_family1 = rep(copula_family2, 2)
+  if(length(copula_family2) == 1) copula_family2 = rep(copula_family2, 4)
   # Extract relevant estimated parameters/objects for the fitted copula model.
-  copula_family = fitted_model$copula_family
+
   k = length(fitted_model$knots0)
 
   gammas0 = force(coef(fitted_model$fit_0)[1:k])
@@ -229,8 +234,10 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
   c34 = coef(fitted_model$fit_1)[n_par]
   # For the Gaussian copula, fisher's Z transformation was applied. We have to
   # backtransform to the correlation scale in that case.
-  if (copula_family == "gaussian") {
+  if (copula_family1[1] == "gaussian") {
     c12 = (exp(2 * c12) - 1) / (exp(2 * c12) + 1)
+  }
+  if (copula_family1[2] == "gaussian") {
     c34 = (exp(2 * c34) - 1) / (exp(2 * c34) + 1)
   }
   c = sample_copula_parameters(
@@ -244,11 +251,11 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
   c_list = purrr::map(.x = split(c, seq(nrow(c))), .f = as.double)
   # Sample rotation parameters of the unidentifiable copula's family does not
   # allow for negative associations.
-  if (copula_family2 %in% c("gumbel", "clayton")) {
-    r = sample_rotation_parameters(n_sim, degrees)
-  } else {
-    r = sample_rotation_parameters(n_sim, 0)
-  }
+  r = sample_rotation_parameters(n_sim)
+  if (copula_family2[1] %in% c("gaussian", "frank")) r[, 1] = rep(0, n_sim)
+  if (copula_family2[2] %in% c("gaussian", "frank")) r[, 2] = rep(0, n_sim)
+  if (copula_family2[3] %in% c("gaussian", "frank")) r[, 3] = rep(0, n_sim)
+  if (copula_family2[4] %in% c("gaussian", "frank")) r[, 4] = rep(0, n_sim)
   r = cbind(rep(copula_rotations[1], n_sim),
             r[, 1],
             rep(copula_rotations[2], n_sim),
@@ -256,10 +263,9 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
   r_list = purrr::map(.x = split(r, seq(nrow(r))), .f = as.double)
   # For every set of sampled unidentifiable parameters, compute the
   # required quantities.
-
   #put all other arguments in a list for the apply function
   MoreArgs = list(
-    copula_family1 = copula_family,
+    copula_family1 = copula_family1,
     copula_family2 = copula_family2,
     n_prec = n_prec,
     q_S0 = q_S0,

@@ -149,9 +149,11 @@ estimate_ICA_BinCont = function(delta_S, delta_T) {
 #'   `rotation_par` correspond to \eqn{(c_{12}, c_{23}, c_{34}, c_{13;2},
 #'   c_{24;3}, c_{14;23})}.
 #' @param copula_family1 Copula family of \eqn{c_{12}} and \eqn{c_{34}}. For the
-#'   possible options, see `loglik_copula_scale()`.
+#'   possible options, see `loglik_copula_scale()`. The elements of
+#'   `copula_family` correspond to \eqn{(c_{12}, c_{34})}.
 #' @param copula_family2 Copula family of the other bivariate copulas. For the
-#'   possible options, see `loglik_copula_scale()`.
+#'   possible options, see `loglik_copula_scale()`. The elements of
+#'   `copula_family2` correspond to \eqn{(c_{23}, c_{13;2}, c_{24;3}, c_{14;23})}.
 #' @param n Number of samples to be taken from the D-vine copula.
 #'
 #'
@@ -179,39 +181,52 @@ sample_dvine = function(copula_par,
   r24_3 = rotation_par[5]
   r14_23 = rotation_par[6]
 
+  # If the copula families are vectors with only 1 element, they are appended to
+  # the correct length.
+  force(copula_family1);force(copula_family2)
+  if(length(copula_family1) == 1) copula_family1 = rep(copula_family1, 2)
+  if(length(copula_family2) == 1) copula_family2 = rep(copula_family2, 4)
+  # D-vine copula classes/family.
+  fam12 = copula_family1[1]
+  fam23 = copula_family2[1]
+  fam34 = copula_family1[2]
+  fam13_2 = copula_family2[2]
+  fam24_3 = copula_family2[3]
+  fam14_23 = copula_family2[4]
+
   pair_copulas = list(
     list(
       rvinecopulib::bicop_dist(
-        family = copula_family1,
+        family = fam12,
         rotation = r12,
         parameters = c12
       ),
       rvinecopulib::bicop_dist(
-        family = copula_family2,
+        family = fam23,
         rotation = r23,
         parameters = c23
       ),
       rvinecopulib::bicop_dist(
-        family = copula_family1,
+        family = fam34,
         rotation = r34,
         parameters = c34
       )
     ),
     list(
       rvinecopulib::bicop_dist(
-        family = copula_family2,
+        family = fam13_2,
         rotation = r13_2,
         parameters = c13_2
       ),
       rvinecopulib::bicop_dist(
-        family = copula_family2,
+        family = fam24_3,
         rotation = r24_3,
         parameters = c24_3
       )
     ),
     list(
       rvinecopulib::bicop_dist(
-        family = copula_family2,
+        family = fam14_23,
         rotation = r14_23,
         parameters = c14_23
       )

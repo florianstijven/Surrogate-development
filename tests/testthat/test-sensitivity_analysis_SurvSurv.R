@@ -23,8 +23,9 @@ test_that("sensitivity_analysis_SurvSurv_copula() works on a single core with Cl
     n_prec = 500
   )
   output_vector = c(sens_results$ICA[1],
+                    sens_results$sp_rho[1],
                     sens_results$c23[3])
-  check_vector = c(0.987833035047, 1.374917942896)
+  check_vector = c(0.987833035047, 0.984428257713, 1.374917942896)
   expect_equal(output_vector, check_vector)
 })
 
@@ -54,8 +55,9 @@ test_that("sensitivity_analysis_SurvSurv_copula() works on 2 cores with Clayton 
     ncores = 2
   )
   output_vector = c(sens_results$ICA[1],
+                    sens_results$sp_rho[1],
                     sens_results$c23[3])
-  check_vector = c(0.987833035047, 1.374917942896)
+  check_vector = c(0.987833035047, 0.984428257713, 1.374917942896)
   expect_equal(output_vector, check_vector)
 })
 
@@ -84,8 +86,9 @@ test_that("sensitivity_analysis_SurvSurv_copula() works on a single core with Ga
     n_prec = 500
   )
   output_vector = c(sens_results$ICA[1],
+                    sens_results$sp_rho[1],
                     sens_results$c23[3])
-  check_vector = c(0.957439366743, 0.152435752847)
+  check_vector = c(0.957439366743, 0.962676202705, 0.152435752847)
   expect_equal(output_vector, check_vector)
 })
 
@@ -115,7 +118,41 @@ test_that("sensitivity_analysis_SurvSurv_copula() works on a single core with Fr
     n_prec = 2e3
   )
   output_vector = c(sens_results$ICA[1],
+                    sens_results$sp_rho[1],
                     sens_results$c23[1])
-  check_vector = c(0.817704460703, -3.171396109739)
+  check_vector = c(0.817704460703, 0.845998546500, -3.171396109739)
+  expect_equal(output_vector, check_vector, tolerance = 1e-5)
+})
+
+test_that("sensitivity_analysis_SurvSurv_copula() works on a single core with Frank copula and four different unidentifiable copulas", {
+  data("Ovarian")
+  # For simplicity, data is not recoded to semi-competing risks format, but the
+  # data are left in the composite event format.
+  set.seed(1)
+  data = data.frame(
+    Ovarian$Pfs,
+    Ovarian$Surv + rchisq(n = nrow(Ovarian), df = 1),
+    Ovarian$Treat,
+    Ovarian$PfsInd,
+    Ovarian$SurvInd
+  )
+  ovarian_fitted =
+    fit_model_SurvSurv(data = data,
+                       copula_family = "frank",
+                       n_knots = 1)
+  # Illustration with small number of replications and low precision
+  set.seed(1)
+  sens_results = sensitivity_analysis_SurvSurv_copula(
+    ovarian_fitted,
+    composite = TRUE,
+    cond_ind = TRUE,
+    n_sim = 1,
+    n_prec = 2e3,
+    copula_family2 = c("clayton", "frank", "gaussian", "gumbel")
+  )
+  output_vector = c(sens_results$ICA[1],
+                    sens_results$sp_rho[1],
+                    sens_results$c23[1])
+  check_vector = c(0.835682882779, 0.879073155768, 0.436161760666)
   expect_equal(output_vector, check_vector, tolerance = 1e-5)
 })
