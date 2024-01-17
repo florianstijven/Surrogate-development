@@ -298,12 +298,16 @@ sample_deltas_BinCont = function(copula_par,
   Delta_dataframe = data.frame(DeltaS = S1 - S0,
                                DeltaT = T1 - T0)
   # Compute the pairwise marginal Spearman's rho values from the sample.
+  sp_rho_matrix = matrix(NA, ncol = 4, nrow = 4)
+  survival_classification = c(prop_harmed = NA,
+                              prop_protected = NA,
+                              prop_always = NA,
+                              prop_never = NA)
   if (marginal_sp_rho) {
-    sp_rho_matrix = NULL
     sp_rho_matrix = stats::cor(data.frame(T0, S0, S1, T1), method = "spearman")
     # If we're in the survival-survival setting, then the 2x2 survival
     # classification is also computed.
-    survival_classification = NULL
+
     if (setting == "SurvSurv") {
       prop_harmed = mean((S0 == T0) &
                            (S1 < T1))

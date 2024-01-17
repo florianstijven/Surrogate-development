@@ -43,7 +43,7 @@ compute_ICA_SurvSurv = function(copula_par,
     # If no function has been supplies for mutinfo_estimator, we use the defualt
     # from the FNN R package.
     requireNamespace("FNN", quietly = FALSE)
-    mutinfo_estimator = FNN::mutinfo()
+    mutinfo_estimator = FNN::mutinfo
   }
 
   withr::local_seed(seed)
@@ -64,7 +64,6 @@ compute_ICA_SurvSurv = function(copula_par,
     setting = "SurvSurv",
     composite = composite
   )
-
   delta_df = delta_list$Delta_dataframe
   sp_rho_matrix = delta_list$marginal_sp_rho_matrix
   # Compute mutual information between Delta S and Delta T.
