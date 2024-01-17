@@ -8,7 +8,8 @@
 #' @param q_T0 Quantile function for the distribution of \eqn{T_0}.
 #' @param q_T1 Quantile function for the distribution of \eqn{T_1}.
 #' @param mutinfo_estimator Function that estimates the mutual information
-#'  between the first two arguments which are numeric vectors.
+#'  between the first two arguments which are numeric vectors. Defaults to
+#'  `FNN::mutinfo()` with default arguments.
 #'
 #' @inheritParams compute_ICA_BinCont
 #' @inheritParams estimate_mutual_information_SurvSurv
@@ -37,7 +38,14 @@ compute_ICA_SurvSurv = function(copula_par,
                                 composite,
                                 marginal_sp_rho = TRUE,
                                 seed = 1,
-                                mutinfo_estimator = FNN::mutinfo) {
+                                mutinfo_estimator = NULL) {
+  if (is.null(mutinfo_estimator)) {
+    # If no function has been supplies for mutinfo_estimator, we use the defualt
+    # from the FNN R package.
+    requireNamespace("FNN", quietly = FALSE)
+    mutinfo_estimator = FNN::mutinfo()
+  }
+
   withr::local_seed(seed)
   # Sample individual causal treatment effects from the given model. If
   # marginal_sp_rho = TRUE, then the Spearman's correlation matrix is also
