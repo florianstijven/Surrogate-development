@@ -1,22 +1,10 @@
 test_that("sensitivity_analysis_SurvSurv_copula() works on a single core with Clayton copula", {
-  data("Ovarian")
-  # For simplicity, data is not recoded to semi-competing risks format, but the
-  # data are left in the composite event format.
-  data = data.frame(
-    Ovarian$Pfs,
-    Ovarian$Surv,
-    Ovarian$Treat,
-    Ovarian$PfsInd,
-    Ovarian$SurvInd
-  )
-  ovarian_fitted =
-      fit_model_SurvSurv(data = data,
-                         copula_family = "clayton",
-                         n_knots = 1)
+  # Load fitted copula model.
+  fitted_model = readRDS(test_path("fixtures", "ovarian-dvine-clayton.rds"))
   # Illustration with small number of replications and low precision
   set.seed(1)
   sens_results = sensitivity_analysis_SurvSurv_copula(
-    ovarian_fitted,
+    fitted_model,
     composite = TRUE,
     cond_ind = TRUE,
     n_sim = 5,
@@ -30,24 +18,12 @@ test_that("sensitivity_analysis_SurvSurv_copula() works on a single core with Cl
 })
 
 test_that("sensitivity_analysis_SurvSurv_copula() works on 2 cores with Clayton copula", {
-  data("Ovarian")
-  # For simplicity, data is not recoded to semi-competing risks format, but the
-  # data are left in the composite event format.
-  data = data.frame(
-    Ovarian$Pfs,
-    Ovarian$Surv,
-    Ovarian$Treat,
-    Ovarian$PfsInd,
-    Ovarian$SurvInd
-  )
-  ovarian_fitted =
-    fit_model_SurvSurv(data = data,
-                       copula_family = "clayton",
-                       n_knots = 1)
+  # Load fitted copula model.
+  fitted_model = readRDS(test_path("fixtures", "ovarian-dvine-clayton.rds"))
   # Illustration with small number of replications and low precision
   set.seed(1)
   sens_results = sensitivity_analysis_SurvSurv_copula(
-    ovarian_fitted,
+    fitted_model,
     composite = TRUE,
     cond_ind = TRUE,
     n_sim = 5,
@@ -62,24 +38,12 @@ test_that("sensitivity_analysis_SurvSurv_copula() works on 2 cores with Clayton 
 })
 
 test_that("sensitivity_analysis_SurvSurv_copula() works on a single core with Gaussian copula", {
-  data("Ovarian")
-  # For simplicity, data is not recoded to semi-competing risks format, but the
-  # data are left in the composite event format.
-  data = data.frame(
-    Ovarian$Pfs,
-    Ovarian$Surv,
-    Ovarian$Treat,
-    Ovarian$PfsInd,
-    Ovarian$SurvInd
-  )
-  ovarian_fitted =
-    fit_model_SurvSurv(data = data,
-                       copula_family = "gaussian",
-                       n_knots = 1)
+  # Load fitted copula model.
+  fitted_model = readRDS(test_path("fixtures", "ovarian-dvine-gaussian.rds"))
   # Illustration with small number of replications and low precision
   set.seed(1)
   sens_results = sensitivity_analysis_SurvSurv_copula(
-    ovarian_fitted,
+    fitted_model,
     composite = TRUE,
     cond_ind = TRUE,
     n_sim = 5,
@@ -93,25 +57,12 @@ test_that("sensitivity_analysis_SurvSurv_copula() works on a single core with Ga
 })
 
 test_that("sensitivity_analysis_SurvSurv_copula() works on a single core with Frank copula", {
-  data("Ovarian")
-  # For simplicity, data is not recoded to semi-competing risks format, but the
-  # data are left in the composite event format.
-  set.seed(1)
-  data = data.frame(
-    Ovarian$Pfs,
-    Ovarian$Surv + rchisq(n = nrow(Ovarian), df = 1),
-    Ovarian$Treat,
-    Ovarian$PfsInd,
-    Ovarian$SurvInd
-  )
-  ovarian_fitted =
-    fit_model_SurvSurv(data = data,
-                       copula_family = "frank",
-                       n_knots = 1)
+  # Load fitted copula model.
+  fitted_model = readRDS(test_path("fixtures", "ovarian-dvine-frank.rds"))
   # Illustration with small number of replications and low precision
   set.seed(1)
   sens_results = sensitivity_analysis_SurvSurv_copula(
-    ovarian_fitted,
+    fitted_model,
     composite = TRUE,
     cond_ind = TRUE,
     n_sim = 1,
@@ -120,30 +71,17 @@ test_that("sensitivity_analysis_SurvSurv_copula() works on a single core with Fr
   output_vector = c(sens_results$ICA[1],
                     sens_results$sp_rho[1],
                     sens_results$c23[1])
-  check_vector = c(0.817704460703, 0.845998546500, -3.171396109739)
+  check_vector = c(0.990380494599, 0.986181510545, -3.171396109738)
   expect_equal(output_vector, check_vector, tolerance = 1e-5)
 })
 
 test_that("sensitivity_analysis_SurvSurv_copula() works on a single core with Frank copula and four different unidentifiable copulas", {
-  data("Ovarian")
-  # For simplicity, data is not recoded to semi-competing risks format, but the
-  # data are left in the composite event format.
-  set.seed(1)
-  data = data.frame(
-    Ovarian$Pfs,
-    Ovarian$Surv + rchisq(n = nrow(Ovarian), df = 1),
-    Ovarian$Treat,
-    Ovarian$PfsInd,
-    Ovarian$SurvInd
-  )
-  ovarian_fitted =
-    fit_model_SurvSurv(data = data,
-                       copula_family = "frank",
-                       n_knots = 1)
+  # Load fitted copula model.
+  fitted_model = readRDS(test_path("fixtures", "ovarian-dvine-frank.rds"))
   # Illustration with small number of replications and low precision
   set.seed(1)
   sens_results = sensitivity_analysis_SurvSurv_copula(
-    ovarian_fitted,
+    fitted_model,
     composite = TRUE,
     cond_ind = TRUE,
     n_sim = 1,
@@ -153,6 +91,6 @@ test_that("sensitivity_analysis_SurvSurv_copula() works on a single core with Fr
   output_vector = c(sens_results$ICA[1],
                     sens_results$sp_rho[1],
                     sens_results$c23[1])
-  check_vector = c(0.835682882779, 0.879073155768, 0.436161760666)
+  check_vector = c(0.991389516772, 0.988913341228, 0.436161760666)
   expect_equal(output_vector, check_vector, tolerance = 1e-5)
 })

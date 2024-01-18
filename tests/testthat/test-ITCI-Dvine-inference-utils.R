@@ -1,15 +1,6 @@
 test_that("Delta method based on numerical derivatives works", {
-  data("Ovarian")
-  #For simplicity, data is not recoded to semi-competing risks format, but is
-  #left in the composite event format.
-  data = data.frame(Ovarian$Pfs,
-                    Ovarian$Surv,
-                    Ovarian$Treat,
-                    Ovarian$PfsInd,
-                    Ovarian$SurvInd)
-  fitted_model = fit_model_SurvSurv(data = data,
-                                    copula_family = "clayton",
-                                    n_knots = 1)
+  # Load fitted copula model.
+  fitted_model = readRDS(test_path("fixtures", "ovarian-dvine-clayton.rds"))
   # The computation of the ICA is way to inaccurate here to combine it with
   # numerical differentiation. This test is added to check breaking changes.
   estimated_variance = delta_method_log_mutinfo(
@@ -26,17 +17,8 @@ test_that("Delta method based on numerical derivatives works", {
 })
 
 test_that("Resampling method for the ICA based on fitted model summary information works", {
-  data("Ovarian")
-  #For simplicity, data is not recoded to semi-competing risks format, but is
-  #left in the composite event format.
-  data = data.frame(Ovarian$Pfs,
-                    Ovarian$Surv,
-                    Ovarian$Treat,
-                    Ovarian$PfsInd,
-                    Ovarian$SurvInd)
-  fitted_model = fit_model_SurvSurv(data = data,
-                                    copula_family = "clayton",
-                                    n_knots = 1)
+  # Load fitted copula model.
+  fitted_model = readRDS(test_path("fixtures", "ovarian-dvine-clayton.rds"))
   # The computation of the ICA is way to inaccurate here to combine it with
   # numerical differentiation. This test is added to check breaking changes.
   estimated_ICAs = summary_level_bootstrap_ICA(
