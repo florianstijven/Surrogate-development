@@ -1,3 +1,40 @@
+
+#' Confidence interval for the ICA given the unidentifiable parameters
+#'
+#' [DVine_ICA_confint()] computes the confidence interval for the ICA
+#' in the D-vine copula model. The unidentifiable parameters are fixed at the user
+#' supplied values.
+#'
+#' @param alpha (numeric) `1 - alpha` is the level of the confidence interval
+#' @inheritParams ICA_given_model_constructor
+#' @inheritParams summary_level_bootstrap_ICA
+#'
+#' @return (numeric) Vector with the limits of the two-sided `1 - alpha`
+#'   confidence interval.
+DVine_ICA_confint = function(fitted_model,
+                                         level,
+                                         copula_par_unid,
+                                         copula_family2,
+                                         rotation_par_unid,
+                                         n_prec,
+                                         mutinfo_estimator = NULL,
+                                         composite,
+                                         B) {
+  bootstrap_replications = summary_level_bootstrap_ICA(
+    fitted_model = itted_model,
+    copula_par_unid = copula_par_unid,
+    copula_family2 = copula_family2,
+    rotation_par_unid = rotation_par_unid,
+    n_prec = n_prec,
+    mutinfo_estimator = mutinfo_estimator,
+    composite = composite,
+    B = B
+  )
+
+  limits = tats::quantile(bootstrap_replications, prob = c(alpha / 2, 1 - (alpha / 2)))
+  return(limits)
+}
+
 #' Variance of log-mutual information based on the delta method
 #'
 #' [delta_method_log_mutinfo()] computes the variance of the estimated log
