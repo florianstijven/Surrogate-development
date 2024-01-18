@@ -11,7 +11,8 @@ new_vine_copula_ss_fit(
   knots0,
   knots1,
   knott0,
-  knott1
+  knott1,
+  copula_rotations
 )
 }
 \arguments{

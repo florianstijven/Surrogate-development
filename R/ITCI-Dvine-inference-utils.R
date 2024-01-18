@@ -1,3 +1,19 @@
+#' Variance of log-mutual information based on the delta method
+#'
+#' [delta_method_log_mutinfo()] computes the variance of the estimated log
+#' mutual information, given the unidentifiable parameters.
+#'
+#' @param eps (numeric) Step size for finite difference in numeric
+#'   differentiation
+#' @inheritParams ICA_given_model_constructor
+#'
+#'  This function should not be used. The ICA is computed through numerical
+#'  methods with a considerable error. This error is negligible in individual estimates
+#'  of the ICA; however, this error easily breaks the numeric differentiation because
+#'  finite differences are inflated by this error.
+#'
+#' @return (numeric) Variance for the estimated ICA based on the delta method,
+#'   holding the unidentifiable parameters fixed at the user supplied values.
 delta_method_log_mutinfo = function(fitted_model,
                                     copula_par_unid,
                                     copula_family2,
@@ -42,6 +58,16 @@ delta_method_log_mutinfo = function(fitted_model,
   return(variance_log_mutinfo)
 }
 
+#' Bootstrap based on the multivariate normal sampling distribution
+#'
+#' [summary_level_bootstrap_ICA()] performs a parametric type of bootstrap based
+#' on the estimated multivariate normal sampling distribution of the maximum
+#' likelihood estimator for the (observable) D-vine copula model parameters.
+#'
+#' @param B Number of bootstrap replications
+#' @inheritParams ICA_given_model_constructor
+#'
+#' @return (numeric) Vector of bootstrap replications for the estimated ICA.
 summary_level_bootstrap_ICA = function(fitted_model,
                                        copula_par_unid,
                                        copula_family2,
@@ -92,6 +118,26 @@ summary_level_bootstrap_ICA = function(fitted_model,
   return(ICA_hats)
 }
 
+#' Constructor for the function that returns that ICA as a function of the
+#' identifiable parameters
+#'
+#' [ICA_given_model_constructor()] returns a function fixes the unidentifiable
+#' parameters at user-specified values and takes the identifiable parameters as
+#' argument.
+#'
+#' @param fitted_model TO ADD
+#' @param copula_par_unid Parameter vector for the sequence of *unidentifiable*
+#'   bivariate copulas that define the D-vine copula. The elements of
+#'   `copula_par` correspond to \eqn{(c_{23}, c_{13;2}, c_{24;3}, c_{14;23})}.
+#' @param rotation_par_unid Vector of rotation parameters for the sequence of
+#'   *unidentifiable* bivariate copulas that define the D-vine copula. The elements of
+#'   `rotation_par` correspond to \eqn{(c_{23}, c_{13;2},
+#'   c_{24;3}, c_{14;23})}.
+#' @inheritParams compute_ICA_SurvSurv
+#'
+#' @return A function that computes the ICA as a function of the identifiable
+#'   parameters. In this computation, the unidentifiable parameters are fixed at
+#'   the values supplied as arguments to [ICA_given_model_constructor()]
 ICA_given_model_constructor = function(fitted_model,
                                        copula_par_unid,
                                        copula_family2,

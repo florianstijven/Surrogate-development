@@ -63,8 +63,9 @@ Value.
 \item \code{FALSE} (default): No additional measures are returned.
 }}
 
-\item{copula_family2}{Copula family of the unidentifiable bivariate copulas.
-For the possible options, see \code{\link[=loglik_copula_scale]{loglik_copula_scale()}}.}
+\item{copula_family2}{Copula family of the other bivariate copulas. For the
+possible options, see \code{loglik_copula_scale()}. The elements of
+\code{copula_family2} correspond to \eqn{(c_{23}, c_{13;2}, c_{24;3}, c_{14;23})}.}
 
 \item{n_prec}{Number of Monte-Carlo samples for the \emph{numerical approximation}
 of the ICA in each replication of the sensitivity analysis.}

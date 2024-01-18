@@ -28,10 +28,12 @@ bivariate copulas that define the D-vine copula. The elements of
   c_{24;3}, c_{14;23})}.}
 
 \item{copula_family1}{Copula family of \eqn{c_{12}} and \eqn{c_{34}}. For the
-possible options, see \code{loglik_copula_scale()}.}
+possible options, see \code{loglik_copula_scale()}. The elements of
+\code{copula_family} correspond to \eqn{(c_{12}, c_{34})}.}
 
 \item{copula_family2}{Copula family of the other bivariate copulas. For the
-possible options, see \code{loglik_copula_scale()}.}
+possible options, see \code{loglik_copula_scale()}. The elements of
+\code{copula_family2} correspond to \eqn{(c_{23}, c_{13;2}, c_{24;3}, c_{14;23})}.}
 
 \item{n_prec}{Number of Monte Carlo samples for the computation of the mutual
 information.}
