@@ -172,3 +172,4 @@ S3method(summary, ISTE.ContCont)
 S3method(summary, BimixedCbCContCont)
 
 S3method(print, vine_copula_SurvSurv_fit)
+S3method(print, sensitivity_intervals_Dvine)

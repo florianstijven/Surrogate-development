@@ -11,27 +11,30 @@
 #'
 #' @return (numeric) Vector with the limits of the two-sided `1 - alpha`
 #'   confidence interval.
-DVine_ICA_confint = function(fitted_model,
-                                         level,
-                                         copula_par_unid,
-                                         copula_family2,
-                                         rotation_par_unid,
-                                         n_prec,
-                                         mutinfo_estimator = NULL,
-                                         composite,
-                                         B) {
+Dvine_ICA_confint = function(fitted_model,
+                             alpha,
+                             copula_par_unid,
+                             copula_family2,
+                             rotation_par_unid,
+                             n_prec,
+                             mutinfo_estimator = NULL,
+                             composite,
+                             B,
+                             seed)
+{
   bootstrap_replications = summary_level_bootstrap_ICA(
-    fitted_model = itted_model,
+    fitted_model = fitted_model,
     copula_par_unid = copula_par_unid,
     copula_family2 = copula_family2,
     rotation_par_unid = rotation_par_unid,
     n_prec = n_prec,
     mutinfo_estimator = mutinfo_estimator,
     composite = composite,
-    B = B
+    B = B,
+    seed = seed
   )
 
-  limits = tats::quantile(bootstrap_replications, prob = c(alpha / 2, 1 - (alpha / 2)))
+  limits = stats::quantile(bootstrap_replications, prob = c(alpha / 2, 1 - (alpha / 2)))
   return(limits)
 }
 
@@ -138,12 +141,10 @@ summary_level_bootstrap_ICA = function(fitted_model,
 
   # Resample parameter estimates from the estimated multivariate normal sampling
   # distribution.
-  theta_resampled = withr::with_seed(seed = seed,
-                                     code = {
-                                       mvtnorm::rmvnorm(n = B,
-                                                        mean = theta_hat,
-                                                        sigma = vcov_matrix)
-                                     })
+  theta_resampled = mvtnorm::rmvnorm(n = B,
+                                     mean = theta_hat,
+                                     sigma = vcov_matrix)
+
 
   # Compute the ICA for the resampled parameter estimates.
   ICA_hats = apply(

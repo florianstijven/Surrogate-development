@@ -21,6 +21,7 @@ test_that("Resampling method for the ICA based on fitted model summary informati
   fitted_model = readRDS(test_path("fixtures", "ovarian-dvine-clayton.rds"))
   # The computation of the ICA is way to inaccurate here to combine it with
   # numerical differentiation. This test is added to check breaking changes.
+  set.seed(1)
   estimated_ICAs = summary_level_bootstrap_ICA(
     fitted_model = fitted_model,
     rotation_par_unid = c(0,0,0,0),
