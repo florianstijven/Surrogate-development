@@ -20,16 +20,14 @@
 #'  * `d2[i] = -1` if `v[i]` corresponds to left-censored value
 #'
 #' @return Value of the copula loglikelihood evaluated in `theta`.
-clayton_loglik_copula_scale <- function(theta, u, v, d1, d2){
+clayton_loglik_copula_scale <- function(theta, u, v, d1, d2) {
   # Natural logarithm of copula evaluated in u and v.
-  log_C = - (1 / theta) * log(u**(-theta) + v**(-theta) - 1)
+  log_C = -(1 / theta) * log(u ** (-theta) + v ** (-theta) - 1)
   # Log likelihood contribution for uncensored observations.
   part1 <-
-    ifelse(
-      (d1 == 1) & (d2 == 1),
-      log(theta + 1) + (2 * theta + 1) * log_C - (theta + 1) *(log(u) + log(v)),
-      0
-    )
+    ifelse((d1 == 1) & (d2 == 1),
+           log(theta + 1) + (2 * theta + 1) * log_C - (theta + 1) * (log(u) + log(v)),
+           0)
   # Log likelihood contribution for second observation left-censored.
   part2 <-
     ifelse((d1 == 1) & (d2 == -1),
@@ -45,12 +43,12 @@ clayton_loglik_copula_scale <- function(theta, u, v, d1, d2){
 
   # Log likelihood contribution for second observation right-censored.
   part5 <- ifelse((d1 == 1) & (d2 == 0),
-                  log(1 - (exp(log_C) / u)**(theta + 1)),
+                  log(1 - (exp(log_C) / u) ** (theta + 1)),
                   0)
 
   # Log likelihood contribution for first observation right-censored.
   part6 <- ifelse((d1 == 0) & (d2 == 1),
-                  log(1 - (exp(log_C) / v)**(theta + 1)),
+                  log(1 - (exp(log_C) / v) ** (theta + 1)),
                   0)
 
   # Log likelihood contribution for both observations right-censored.
@@ -344,12 +342,33 @@ gaussian_loglik_copula_scale <- function(theta, u, v, d1, d2){
 #' * `"frank"`
 #' * `"gumbel"`
 #' * `"gaussian"`
+#' @param r rotation parameter. Should be `0L`, `90L`, `180L`, or `270L`.
 #'
 #'   The parameterization of the respective copula families can be found in the
 #'   help files of the dedicated functions named `copula_loglik_copula_scale()`.
 #'
 #' @return Value of the copula loglikelihood evaluated in `theta`.
-loglik_copula_scale <- function(theta, u, v, d1, d2, copula_family){
+loglik_copula_scale <- function(theta, u, v, d1, d2, copula_family, r = 0L){
+  # The specific copula loglikelihood functions have been implemented for the
+  # non-rotated case. By changing u, v, d1, and d2, we can compute the
+  # corresponding loglikelihoods for the rotated copulas.
+  switch(
+    r,
+    "180" = {
+      u = 1 - u
+      v = 1 - v
+      d1 = -1 * d1
+      d2 = -1 * d2
+    },
+    "90" = {
+      u = 1 - u
+      d1 = -1 * d1
+    },
+    "270" = {
+      v = 1 - v
+      d2 = -1 * d2
+    }
+  )
   loglik_copula = switch(
     copula_family,
     "clayton" = clayton_loglik_copula_scale(theta, u, v, d1, d2),

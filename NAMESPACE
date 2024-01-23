@@ -134,6 +134,7 @@ S3method(plot, ICA.ContCont.MultS)
 S3method(plot, PPE.BinBin)
 S3method(plot, comb27.BinBin)
 S3method(plot, ISTE.ContCont)
+S3method(plot, vine_copula_SurvSurv_fit)
 
 S3method(summary, Fano.BinBin)
 S3method(summary, UnifixedContCont)
@@ -173,3 +174,4 @@ S3method(summary, BimixedCbCContCont)
 
 S3method(print, vine_copula_SurvSurv_fit)
 S3method(print, sensitivity_intervals_Dvine)
+

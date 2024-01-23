@@ -172,4 +172,132 @@ marginal_gof_scr = function(fitted_model,
   lines(grid, probs1, col = "red")
 }
 
+mean_S_before_T_plots_scr = function(fitted_model,
+                                     plot_method = scatter.smooth,
+                                     grid,
+                                     ...)
+{
+  # Select appropriate subpopulation.
+  selected_data = fitted_model$data[fitted_model$data$PfsInd == 1 & fitted_model$data$SurvInd == 1, ]
+
+  # Compute the expected value at the grid points.
+  model_cond_means0 = sapply(
+    X = grid,
+    FUN = mean_S_before_T,
+    fitted_model = fitted_model,
+    treated = 0
+  )
+  model_cond_means1 = sapply(
+    X = grid,
+    FUN = mean_S_before_T,
+    fitted_model = fitted_model,
+    treated = 1
+  )
+
+  # Plot the smooth and model-based estimates
+  plot_method(
+    x = selected_data$Surv[selected_data$Treat == 0],
+    y = selected_data$Pfs[selected_data$Treat == 0],
+    xlab = "t",
+    ylab = "E(S | T = t, S < T)",
+    col = "gray",
+    main = "Control Treatment"
+  )
+  lines(x = grid, y = model_cond_means0, col = "red")
+  legend(
+    x = "topleft",
+    lty = 1,
+    col = c("red", "black"),
+    legend = c("Model-Based", "Smooth Estimated")
+  )
+
+  plot_method(
+    x = selected_data$Surv[selected_data$Treat == 1],
+    y = selected_data$Pfs[selected_data$Treat == 1],
+    xlab = "t",
+    ylab = "E(S | T = t, S < T)",
+    col = "gray",
+    main = "Experimental Treatment", degree = 2
+  )
+  lines(x = grid, y = model_cond_means1, col = "red")
+  legend(
+    x = "topleft",
+    lty = 1,
+    col = c("red", "black"),
+    legend = c("Model-Based", "Smooth Estimated")
+  )
+
+}
+
+mean_S_before_T = function(t, fitted_model, treated) {
+  if (treated == 0) {
+    fitted_submodel = fitted_model$fit_0
+    knots = fitted_model$knots0
+    knott = fitted_model$knott0
+    }  else {
+    fitted_submodel = fitted_model$fit_1
+    knots = fitted_model$knots1
+    knott = fitted_model$knott1
+  }
+  # Extract estimated model parameters
+  para = fitted_submodel$estimate
+  k = length(knott)
+
+  # Helper function that computes the density for T = t.
+  para_t = para[(1 + k):(2 * k)]
+  dens_t = function(x) {
+    flexsurv::dsurvspline(x = x, gamma = para_t, knots = knott)
+  }
+  # Compute probability of S_Tilde < T. This is the probability of progressing
+  # before dying, given that the patien died at t. We re-use the log likelihood
+  # functions to compute this probability.
+
+  # Probability of (S_tilde > t, T = t).
+  prob1 = exp(
+    survival_survival_loglik(
+      para = para,
+      X = t,
+      delta_X = 0,
+      Y = t,
+      delta_Y = 1,
+      copula_family = fitted_model$copula_family,
+      knotsx = knots,
+      knotsy = knott
+    )
+  )
+  prob_progression_t =  1 - (prob1 / dens_t(t))
+
+  # Compute the expected value through numerical integration. First, define a
+  # helper function that compute the probability of (S_tilde = s, T = t).
+  # Second, define the integrand.
+  dens_joint = function(s, t) {
+    exp(
+      survival_survival_loglik(
+        para = para,
+        X = s,
+        delta_X = 1,
+        Y = t,
+        delta_Y = 1,
+        copula_family = fitted_model$copula_family,
+        knotsx = knots,
+        knotsy = knott
+      )
+    )
+  }
+  integrand = function(x) {
+    (1 / prob_progression_t) *
+      x * sapply(x, dens_joint, t = t) / dens_t(t)
+  }
+
+  mean_S_given_T = stats::integrate(
+    f = integrand,
+    lower = 0,
+    upper = t
+  )$value
+
+  return(mean_S_given_T)
+}
+
+
+
 

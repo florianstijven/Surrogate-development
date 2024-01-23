@@ -228,7 +228,8 @@ fit_model_SurvSurv = function(data,
       knots1 = knots1,
       knott0 = knott0,
       knott1 = knott1,
-      copula_rotations = copula_rotations
+      copula_rotations = copula_rotations,
+      data = data
     )
   )
 }
@@ -243,6 +244,7 @@ fit_model_SurvSurv = function(data,
 #' @param knots1 placement of knots for Royston-Parmar model
 #' @param knott0 placement of knots for Royston-Parmar model
 #' @param knott1 placement of knots for Royston-Parmar model
+#' @param data Original data
 #'
 #' @return S3 object
 #'
@@ -255,7 +257,8 @@ new_vine_copula_ss_fit = function(fit_0,
                                   knots1,
                                   knott0,
                                   knott1,
-                                  copula_rotations) {
+                                  copula_rotations,
+                                  data) {
   structure(
     .Data = list(
       fit_0 = fit_0,
@@ -265,7 +268,8 @@ new_vine_copula_ss_fit = function(fit_0,
       knots1 = knots1,
       knott0 = knott0,
       knott1 = knott1,
-      copula_rotations = copula_rotations
+      copula_rotations = copula_rotations,
+      data = data
     ),
     class = "vine_copula_SurvSurv_fit"
   )
@@ -432,15 +436,16 @@ survival_survival_loglik =  function(para,
                                      delta_Y,
                                      copula_family,
                                      knotsx,
-                                     knotsy)
+                                     knotsy,
+                                     sum_observations = TRUE)
 {
   k = length(knotsx) - 2
   switch(
     copula_family,
-    "clayton" = clayton_loglik(para, X, Y, delta_X, delta_Y, k, knotsx, knotsy),
-    "frank" = frank_loglik(para, X, Y, delta_X, delta_Y, k, knotsx, knotsy),
-    "gumbel" = gumbel_loglik(para, X, Y, delta_X, delta_Y, k, knotsx, knotsy),
-    "gaussian" = normal_loglik(para, X, Y, delta_X, delta_Y, k, knotsx, knotsy),
+    "clayton" = clayton_loglik(para, X, Y, delta_X, delta_Y, k, knotsx, knotsy, sum_observations),
+    "frank" = frank_loglik(para, X, Y, delta_X, delta_Y, k, knotsx, knotsy, sum_observations),
+    "gumbel" = gumbel_loglik(para, X, Y, delta_X, delta_Y, k, knotsx, knotsy, sum_observations),
+    "gaussian" = normal_loglik(para, X, Y, delta_X, delta_Y, k, knotsx, knotsy, sum_observations),
   )
 }
 
@@ -502,5 +507,21 @@ print.vine_copula_SurvSurv_fit = function(x, ...) {
   print(summary(x$fit_0))
   cat("Summary of Maximum Likelihood fit for Treat = 1:\n")
   print(summary(x$fit_1))
+}
+
+plot.vine_copula_SurvSurv_fit = function(x, composite = TRUE, grid = NULL, time_unit = "years", ...) {
+  if (is.null(grid)) {
+    # If the user did not provide a grid, compute the default grid.
+    grid = seq(from = 0, to = max(x$data[, 1:2]), length.out = 2e2)
+  }
+  # Plot marginal survival functions
+  # Plot marginal functions for the composite surrogate
+  if (composite) marginal_gof_scr(fitted_model = x, data = x$data, grid = grid, time_unit = time_unit)
+  # Plot expected progression time as a function of OS for the subpopulation of
+  # patients that progress before dying.
+
+
+  # Plot the probability of not having progressed before dying, given the
+  # survival time.
 }
 
