@@ -46,9 +46,6 @@ right-censored,
 \item \code{"frank"}
 \item \code{"gumbel"}
 \item \code{"gaussian"}
-
-The parameterization of the respective copula families can be found in the
-help files of the dedicated functions named \code{copula_loglik_copula_scale()}.
 }}
 
 \item{cdf_X}{Distribution function for the first outcome variable.}

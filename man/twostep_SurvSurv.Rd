@@ -37,9 +37,6 @@ twostep_SurvSurv(
 \item \code{"frank"}
 \item \code{"gumbel"}
 \item \code{"gaussian"}
-
-The parameterization of the respective copula families can be found in the
-help files of the dedicated functions named \code{copula_loglik_copula_scale()}.
 }}
 
 \item{n_knots}{Number of internal knots for the Royston-Parmar survival model.}

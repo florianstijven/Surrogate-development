@@ -4,7 +4,7 @@
 \alias{loglik_copula_scale}
 \title{Loglikelihood on the Copula Scale}
 \usage{
-loglik_copula_scale(theta, u, v, d1, d2, copula_family)
+loglik_copula_scale(theta, u, v, d1, d2, copula_family, r = 0L)
 }
 \arguments{
 \item{theta}{Copula parameter}
@@ -36,10 +36,12 @@ right-censored,
 \item \code{"frank"}
 \item \code{"gumbel"}
 \item \code{"gaussian"}
+}}
+
+\item{r}{rotation parameter. Should be \code{0L}, \code{90L}, \code{180L}, or \code{270L}.
 
 The parameterization of the respective copula families can be found in the
-help files of the dedicated functions named \code{copula_loglik_copula_scale()}.
-}}
+help files of the dedicated functions named \code{copula_loglik_copula_scale()}.}
 }
 \value{
 Value of the copula loglikelihood evaluated in \code{theta}.
