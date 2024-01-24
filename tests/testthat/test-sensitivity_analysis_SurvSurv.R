@@ -18,6 +18,9 @@ test_that("sensitivity_analysis_SurvSurv_copula() works on a single core with Cl
 })
 
 test_that("sensitivity_analysis_SurvSurv_copula() works on 2 cores with Clayton copula", {
+  # Do not run this test on CRAN because multiple cores may not be available on
+  # the CRAN computer.
+  skip_on_cran()
   # Load fitted copula model.
   fitted_model = readRDS(test_path("fixtures", "ovarian-dvine-clayton.rds"))
   # Illustration with small number of replications and low precision
