@@ -1,18 +1,5 @@
 test_that("mean_S_before_T() works well with Gaussian, Frank, Clayton, and Gumbel copulas",
           {
-            data("Ovarian")
-            data_scr = data.frame(
-              ttp = Ovarian$Pfs,
-              os = Ovarian$Surv,
-              treat = Ovarian$Treat,
-              ttp_ind = ifelse(
-                Ovarian$Pfs == Ovarian$Surv &
-                  Ovarian$SurvInd == 1,
-                0,
-                Ovarian$PfsInd
-              ),
-              os_ind = Ovarian$SurvInd
-            )
             # Load fitted copula models.
             fitted_clayton = readRDS(test_path("fixtures", "ovarian-dvine-clayton-scr.rds"))
             fitted_gaussian = readRDS(test_path("fixtures", "ovarian-dvine-gaussian-scr.rds"))
