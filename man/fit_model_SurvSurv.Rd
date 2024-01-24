@@ -17,9 +17,12 @@ fit_model_SurvSurv(
 \item{data}{A data frame in the correct format (See details).}
 
 \item{copula_family}{One of the following parametric copula families:
-\code{"clayton"}, \code{"frank"}, \code{"gaussian"}, or \code{"gumbel"}.}
+\code{"clayton"}, \code{"frank"}, \code{"gaussian"}, or \code{"gumbel"}. The first element in
+\code{copula_family} corresponds to the control group, the second to the
+experimental group.}
 
-\item{n_knots}{Number of internal knots for the Royston-Parmar survival model.}
+\item{n_knots}{Number of internal knots for the Royston-Parmar survival
+model.}
 
 \item{fitted_model}{Fitted model from which initial values are extracted. If
 \code{NULL} (default), standard initial values are used. This option intended
@@ -40,8 +43,8 @@ The function \code{fit_model_SurvSurv()} fits the copula model for time-to-event
 surrogate and true endpoints (Stijven et al., 2022). Because the bivariate
 distributions of the surrogate-true endpoint pairs are functionally
 independent across treatment groups, a bivariate distribution is fitted in
-each treatment group separately. The marginal distributions are based on the Royston-Parmar
-survival model (Royston and Parmar, 2002).
+each treatment group separately. The marginal distributions are based on the
+Royston-Parmar survival model (Royston and Parmar, 2002).
 }
 \section{Model}{
 In the causal-inference approach to evaluating surrogate endpoints, the first
@@ -50,9 +53,9 @@ outcomes. Let \eqn{(T_0, S_0, S_1, T_1)'} denote the vector of potential
 outcomes where \eqn{(S_k, T_k)'} is the pair of potential outcomes under
 treatment \eqn{Z = k}. \eqn{T} refers to the true endpoint, e.g., overall
 survival. \eqn{S} refers to the composite surrogate endpoint, e.g.,
-progression-free-survival. Because \eqn{S} is
-usually a composite endpoint with death as possible event, modeling
-difficulties arise because \eqn{Pr(S_k = T_k) > 0}.
+progression-free-survival. Because \eqn{S} is usually a composite endpoint
+with death as possible event, modeling difficulties arise because \eqn{Pr(S_k
+= T_k) > 0}.
 
 Due to difficulties in modeling the composite surrogate and the true endpoint
 jointly, the time-to-surrogate event (\eqn{\tilde{S}}) is modeled instead of
@@ -69,8 +72,8 @@ Two modelling choices are made before estimating the two bivariate
 distributions described in the previous paragraph:
 \itemize{
 \item The number of internal knots for the Royston-Parmar survival models. This
-is specified through the \code{n_knots} argument. The number of knots is assumed to
-be equal across the four margins.
+is specified through the \code{n_knots} argument. The number of knots is assumed
+to be equal across the four margins.
 \item The parametric family of the bivariate copulas. The parametric family is
 assumed to be equal across treatment groups. This choice is specified through
 the \code{copula_family} argument.
@@ -118,10 +121,10 @@ Keilegom, I. (2022). An information-theoretic approach to the evaluation of
 time-to-event surrogates for time-to-event true endpoints based on causal
 inference.
 
-Royston, P., & Parmar, M. K. (2002). Flexible parametric proportional-hazards
-and proportional-odds models for censored survival data, with application to
-prognostic modelling and estimation of treatment effects. Statistics in
-medicine, 21(15), 2175-2197.
+Royston, P., & Parmar, M. K. (2002). Flexible parametric
+proportional-hazards and proportional-odds models for censored survival
+data, with application to prognostic modelling and estimation of treatment
+effects. Statistics in medicine, 21(15), 2175-2197.
 }
 \seealso{
 \code{\link[=marginal_gof_scr]{marginal_gof_scr()}}, \code{\link[=sensitivity_analysis_SurvSurv_copula]{sensitivity_analysis_SurvSurv_copula()}}

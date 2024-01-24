@@ -180,7 +180,7 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
                                                 upper = c(1, 1, 1, 1),
                                                 degrees = c(0, 90, 180, 270),
                                                 marg_association = TRUE,
-                                                copula_family2 = fitted_model$copula_family,
+                                                copula_family2 = fitted_model$copula_family[1],
                                                 n_prec = 5e3,
                                                 ncores = 1) {
   # If copula_family2 contains only 1 element, this vector is appended to

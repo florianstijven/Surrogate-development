@@ -29,7 +29,7 @@
 compute_ICA_SurvSurv = function(copula_par,
                                 rotation_par,
                                 copula_family1,
-                                copula_family2 = copula_family1,
+                                copula_family2,
                                 n_prec,
                                 q_S0,
                                 q_T0,

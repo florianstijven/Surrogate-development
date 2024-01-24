@@ -83,14 +83,43 @@ test_that("sensitivity_analysis_SurvSurv_copula() works on a single core with Fr
   sens_results = sensitivity_analysis_SurvSurv_copula(
     fitted_model,
     composite = TRUE,
+    cond_ind = FALSE,
+    n_sim = 1,
+    n_prec = 2e3,
+    copula_family2 = c("clayton", "frank", "gaussian", "frank")
+  )
+  set.seed(1)
+  sens_results_cond1 = sensitivity_analysis_SurvSurv_copula(
+    fitted_model,
+    composite = TRUE,
     cond_ind = TRUE,
     n_sim = 1,
     n_prec = 2e3,
-    copula_family2 = c("clayton", "frank", "gaussian", "gumbel")
+    copula_family2 = c("clayton", "frank", "gaussian", "frank")
   )
-  output_vector = c(sens_results$ICA[1],
-                    sens_results$sp_rho[1],
-                    sens_results$c23[1])
-  check_vector = c(0.991389516772, 0.988913341228, 0.436161760666)
-  expect_equal(output_vector, check_vector, tolerance = 1e-5)
+  set.seed(1)
+  sens_results_cond2 = sensitivity_analysis_SurvSurv_copula(
+    fitted_model,
+    composite = TRUE,
+    cond_ind = TRUE,
+    n_sim = 1,
+    n_prec = 2e3,
+    copula_family2 = c("clayton", "frank", "frank", "frank")
+  )
+
+  # Check results for setting without conditional independence.
+  expect_equal(
+    c(sens_results$ICA[1],
+      sens_results$sp_rho[1],
+      sens_results$c23[1]),
+    c(0.989283572592, 0.984415882604, 0.436161760666)
+  )
+
+  # Check that results for two conditional independence settings are identical.
+  # The only difference is in the copula for which we assume conditional
+  # independence.
+  expect_equal(
+    sens_results_cond1,
+    sens_results_cond2, ignore_attr = "copula_family2"
+  )
 })

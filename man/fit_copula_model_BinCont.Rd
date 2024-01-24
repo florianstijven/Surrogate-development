@@ -19,7 +19,9 @@ fit_copula_model_BinCont(
 \item{data}{A data frame in the correct format (See details).}
 
 \item{copula_family}{One of the following parametric copula families:
-\code{"clayton"}, \code{"frank"}, \code{"gaussian"}, or \code{"gumbel"}.}
+\code{"clayton"}, \code{"frank"}, \code{"gaussian"}, or \code{"gumbel"}. The first element in
+\code{copula_family} corresponds to the control group, the second to the
+experimental group.}
 
 \item{marginal_surrogate}{Marginal distribution for the surrogate. For all
 available options, see \code{?Surrogate::cdf_fun}.}

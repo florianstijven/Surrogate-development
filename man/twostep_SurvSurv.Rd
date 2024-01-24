@@ -39,7 +39,8 @@ twostep_SurvSurv(
 \item \code{"gaussian"}
 }}
 
-\item{n_knots}{Number of internal knots for the Royston-Parmar survival model.}
+\item{n_knots}{Number of internal knots for the Royston-Parmar survival
+model.}
 
 \item{method}{Optimization algorithm for maximizing the objective function.
 For all options, see \code{?maxLik::maxLik}. Defaults to \code{"BFGRS"}.}

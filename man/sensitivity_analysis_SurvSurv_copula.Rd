@@ -13,7 +13,7 @@ sensitivity_analysis_SurvSurv_copula(
   upper = c(1, 1, 1, 1),
   degrees = c(0, 90, 180, 270),
   marg_association = TRUE,
-  copula_family2 = fitted_model$copula_family,
+  copula_family2 = fitted_model$copula_family[1],
   n_prec = 5000,
   ncores = 1
 )
