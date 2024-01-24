@@ -519,16 +519,20 @@ print.vine_copula_SurvSurv_fit = function(x, ...) {
 plot.vine_copula_SurvSurv_fit = function(x, composite = TRUE, grid = NULL, time_unit = "years", ...) {
   if (is.null(grid)) {
     # If the user did not provide a grid, compute the default grid.
-    grid = seq(from = 0, to = max(x$data[, 1:2]), length.out = 2e2)
+    grid = seq(from = 1e-5,
+               to = max(x$data[, 1:2]),
+               length.out = 2e2)
   }
-  # Plot marginal survival functions
-  # Plot marginal functions for the composite surrogate
-  if (composite) marginal_gof_scr(fitted_model = x, data = x$data, grid = grid, time_unit = time_unit)
+  # Plot marginal survival functions.
+  if (composite)
+    marginal_gof_plots_scr(fitted_model = x, grid = grid)
   # Plot expected progression time as a function of OS for the subpopulation of
   # patients that progress before dying.
-
-
+  mean_S_before_T_plots_scr(fitted_model = x,
+                            grid = grid)
   # Plot the probability of not having progressed before dying, given the
   # survival time.
+  prob_dying_without_progression_plots(fitted_model = x,
+                         grid = grid)
 }
 

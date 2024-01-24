@@ -55,4 +55,15 @@ test_that("plotting functions for GoF work as expected.",
                                        ))
               }
             )
+            vdiffr::expect_doppelganger(
+              title = "probability of dying without progression - gof",
+              fig = function() {
+                prob_dying_without_progression_plots(fitted_model = fitted_gumbel,
+                                                     grid = seq(
+                                                       from = 1e-5,
+                                                       to = 2,
+                                                       length.out = 20
+                                                     ))
+              }
+            )
           })

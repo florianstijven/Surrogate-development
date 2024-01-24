@@ -27,4 +27,17 @@ test_that("SurvivalSurvival model works with Frank and Gumbel copula for Ovarian
             expect_equal(log_lik_fitted, c(123.9074566805, 21.7039951207), ignore_attr = "df")
           })
 
+test_that("plot() works for fitted survival-survival copula models",
+          {
+            # Load Ovarian data in semi-competing risks format.
+            fitted_gumbel = readRDS(test_path("fixtures", "ovarian-dvine-gumbel-scr.rds"))
+
+            vdiffr::expect_doppelganger(
+              title = "plot functionf for gof",
+              fig = function() {
+                plot(fitted_gumbel)
+              }
+            )
+          })
+
 
