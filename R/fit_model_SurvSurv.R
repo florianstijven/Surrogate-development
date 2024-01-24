@@ -4,8 +4,8 @@
 #' surrogate and true endpoints (Stijven et al., 2022). Because the bivariate
 #' distributions of the surrogate-true endpoint pairs are functionally
 #' independent across treatment groups, a bivariate distribution is fitted in
-#' each treatment group separately. The marginal distributions are based on the Royston-Parmar
-#' survival model (Royston and Parmar, 2002).
+#' each treatment group separately. The marginal distributions are based on the
+#' Royston-Parmar survival model (Royston and Parmar, 2002).
 #'
 #' @details
 #'
@@ -17,9 +17,9 @@
 #' outcomes where \eqn{(S_k, T_k)'} is the pair of potential outcomes under
 #' treatment \eqn{Z = k}. \eqn{T} refers to the true endpoint, e.g., overall
 #' survival. \eqn{S} refers to the composite surrogate endpoint, e.g.,
-#' progression-free-survival. Because \eqn{S} is
-#' usually a composite endpoint with death as possible event, modeling
-#' difficulties arise because \eqn{Pr(S_k = T_k) > 0}.
+#' progression-free-survival. Because \eqn{S} is usually a composite endpoint
+#' with death as possible event, modeling difficulties arise because \eqn{Pr(S_k
+#' = T_k) > 0}.
 #'
 #' Due to difficulties in modeling the composite surrogate and the true endpoint
 #' jointly, the time-to-surrogate event (\eqn{\tilde{S}}) is modeled instead of
@@ -35,8 +35,8 @@
 #' Two modelling choices are made before estimating the two bivariate
 #' distributions described in the previous paragraph:
 #' * The number of internal knots for the Royston-Parmar survival models. This
-#' is specified through the `n_knots` argument. The number of knots is assumed to
-#' be equal across the four margins.
+#' is specified through the `n_knots` argument. The number of knots is assumed
+#' to be equal across the four margins.
 #' * The parametric family of the bivariate copulas. The parametric family is
 #' assumed to be equal across treatment groups. This choice is specified through
 #' the `copula_family` argument.
@@ -60,20 +60,23 @@
 #' death.
 #'
 #' @references Stijven, F., Alonso, a., Molenberghs, G., Van Der Elst, W., Van
-#' Keilegom, I. (2022). An information-theoretic approach to the evaluation of
-#' time-to-event surrogates for time-to-event true endpoints based on causal
-#' inference.
+#'   Keilegom, I. (2022). An information-theoretic approach to the evaluation of
+#'   time-to-event surrogates for time-to-event true endpoints based on causal
+#'   inference.
 #'
-#' Royston, P., & Parmar, M. K. (2002). Flexible parametric proportional-hazards
-#' and proportional-odds models for censored survival data, with application to
-#' prognostic modelling and estimation of treatment effects. Statistics in
-#' medicine, 21(15), 2175-2197.
+#'   Royston, P., & Parmar, M. K. (2002). Flexible parametric
+#'   proportional-hazards and proportional-odds models for censored survival
+#'   data, with application to prognostic modelling and estimation of treatment
+#'   effects. Statistics in medicine, 21(15), 2175-2197.
 #'
 #'
 #' @param data A data frame in the correct format (See details).
-#' @param copula_family One of the following parametric copula families:
-#'   `"clayton"`, `"frank"`, `"gaussian"`, or `"gumbel"`.
-#' @param n_knots Number of internal knots for the Royston-Parmar survival model.
+#' @param copula_family  One of the following parametric copula families:
+#'   `"clayton"`, `"frank"`, `"gaussian"`, or `"gumbel"`. The first element in
+#'   `copula_family` corresponds to the control group, the second to the
+#'   experimental group.
+#' @param n_knots Number of internal knots for the Royston-Parmar survival
+#'   model.
 #' @param fitted_model Fitted model from which initial values are extracted. If
 #'   `NULL` (default), standard initial values are used. This option intended
 #'   for when a model is repeatedly fitted, e.g., in a bootstrap.
@@ -112,6 +115,10 @@ fit_model_SurvSurv = function(data,
                               fitted_model = NULL,
                               method = "BFGS",
                               maxit = 500) {
+  # If copula_family is length 1, we repeat the same copula family.
+  if (length(copula_family) == 1) {
+    copula_family = rep(copula_family, 2)
+  }
   # Column names are added to make the intrepretation of the further code
   # easier. Pfs refers to the surrogate, Surv refers to the true endpoint.
   colnames(data) = c("Pfs", "Surv", "Treat", "PfsInd", "SurvInd")
@@ -128,7 +135,7 @@ fit_model_SurvSurv = function(data,
     delta_X = data0$PfsInd,
     Y = data0$Surv,
     delta_Y = data0$SurvInd,
-    copula_family = copula_family,
+    copula_family = copula_family[1],
     n_knots = n_knots,
     method = method
   )
@@ -137,7 +144,7 @@ fit_model_SurvSurv = function(data,
     delta_X = data1$PfsInd,
     Y = data1$Surv,
     delta_Y = data1$SurvInd,
-    copula_family = copula_family,
+    copula_family = copula_family[2],
     n_knots = n_knots,
     method = method
   )
@@ -167,7 +174,7 @@ fit_model_SurvSurv = function(data,
       delta_X = data0$PfsInd,
       Y = data0$Surv,
       delta_Y = data0$SurvInd,
-      copula_family = copula_family,
+      copula_family = copula_family[1],
       knotsx = knots0,
       knotsy = knott0
     )
@@ -192,7 +199,7 @@ fit_model_SurvSurv = function(data,
       delta_X = data1$PfsInd,
       Y = data1$Surv,
       delta_Y = data1$SurvInd,
-      copula_family = copula_family,
+      copula_family = copula_family[2],
       knotsx = knots1,
       knotsy = knott1
     )
@@ -216,7 +223,7 @@ fit_model_SurvSurv = function(data,
   # parameter for the Gaussian copula will give errors. The rotation parameters
   # are therefore set to zero for the Gaussian copula. Equivalently for the
   # Frank copula.
-  if (copula_family %in% c("gaussian", "frank")) copula_rotations = c(0, 0)
+  copula_rotations = ifelse(copula_family %in% c("gaussian", "frank"), 0, copula_rotations)
 
 
   return(
@@ -321,9 +328,9 @@ model_fit_measures = function(fitted_model){
   copula_par1 = coef(fitted_model$fit_1)[2*(n_knots + 2) + 1]
   #convert fitted copula parameters to kendall's tau scale
   tau_0 = conversion_copula_tau(copula_par = copula_par0,
-                                copula_family = fitted_model$copula_family)
+                                copula_family = fitted_model$copula_family[1])
   tau_1 = conversion_copula_tau(copula_par = copula_par1,
-                                copula_family = fitted_model$copula_family)
+                                copula_family = fitted_model$copula_family[2])
 
   #compute total maximized log likelihood
   log_lik = fitted_model$log_lik0 + fitted_model$log_lik1

@@ -260,7 +260,7 @@ mean_S_before_T = function(t, fitted_model, treated) {
       delta_X = 0,
       Y = t,
       delta_Y = 1,
-      copula_family = fitted_model$copula_family,
+      copula_family = fitted_model$copula_family[treated + 1],
       knotsx = knots,
       knotsy = knott
     )
@@ -278,7 +278,7 @@ mean_S_before_T = function(t, fitted_model, treated) {
         delta_X = 1,
         Y = t,
         delta_Y = 1,
-        copula_family = fitted_model$copula_family,
+        copula_family = fitted_model$copula_family[treated + 1],
         knotsx = knots,
         knotsy = knott
       )
