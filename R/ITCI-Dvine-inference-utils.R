@@ -1,7 +1,7 @@
 
 #' Confidence interval for the ICA given the unidentifiable parameters
 #'
-#' [DVine_ICA_confint()] computes the confidence interval for the ICA
+#' [Dvine_ICA_confint()] computes the confidence interval for the ICA
 #' in the D-vine copula model. The unidentifiable parameters are fixed at the user
 #' supplied values.
 #'
@@ -47,6 +47,7 @@ Dvine_ICA_confint = function(fitted_model,
 #'   differentiation
 #' @inheritParams ICA_given_model_constructor
 #'
+#' @details
 #'  This function should not be used. The ICA is computed through numerical
 #'  methods with a considerable error. This error is negligible in individual estimates
 #'  of the ICA; however, this error easily breaks the numeric differentiation because
@@ -141,6 +142,7 @@ summary_level_bootstrap_ICA = function(fitted_model,
 
   # Resample parameter estimates from the estimated multivariate normal sampling
   # distribution.
+  requireNamespace("mvtnorm")
   theta_resampled = mvtnorm::rmvnorm(n = B,
                                      mean = theta_hat,
                                      sigma = vcov_matrix)

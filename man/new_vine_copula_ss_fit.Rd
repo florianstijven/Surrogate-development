@@ -31,6 +31,8 @@ new_vine_copula_ss_fit(
 
 \item{knott1}{placement of knots for Royston-Parmar model}
 
+\item{copula_rotations}{vector of copula rotation parameters}
+
 \item{data}{Original data}
 }
 \value{

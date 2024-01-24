@@ -15,6 +15,30 @@
 #'
 #' @return WIP
 #' @export
+#' @examples
+#' # Load Schizophrenia data set.
+#' data("Schizo_BinCont")
+#' # Perform listwise deletion.
+#' na = is.na(Schizo_BinCont$CGI_Bin) | is.na(Schizo_BinCont$PANSS)
+#' X = Schizo_BinCont$PANSS[!na]
+#' Y = Schizo_BinCont$CGI_Bin[!na]
+#' Treat = Schizo_BinCont$Treat[!na]
+#' # Ensure that the treatment variable is binary.
+#' Treat = ifelse(Treat == 1, 1, 0)
+#' data = data.frame(X,
+#'                   Y,
+#'                   Treat)
+#' # Fit copula model.
+#' fitted_model = fit_copula_model_BinCont(data, "clayton", "normal", twostep = FALSE)
+#' # Perform sensitivity analysis with a very low number of replications.
+#' sens_results = sensitivity_analysis_BinCont_copula(
+#'   fitted_model,
+#'   10,
+#'   cond_ind = TRUE,
+#'   lower = c(-1,-1,-1,-1),
+#'   upper = c(1, 1, 1, 1),
+#'   n_prec = 1e3
+#' )
 fit_copula_model_BinCont = function(data,
                              copula_family,
                              marginal_surrogate,
@@ -117,6 +141,7 @@ fit_copula_submodel_BinCont = function(X,
   # parameters. The names of these parameters should correspond to the marginal
   # distribution arguments.
   fix.arg = coef(ml_fit)[c(-1, -length(coef(ml_fit)))]
+  requireNamespace("stringr")
   names(fix.arg) = stringr::str_sub(names(fix.arg),
                                     start = 1L, end = -5L)
   marginal_S_dist = marginal_distribution(
@@ -250,6 +275,7 @@ twostep_BinCont = function(X,
 #' @return Object of class `fitdistrplus::fitdist` that represents the marginal
 #'   surrogate distribution.
 marginal_distribution = function(x, distribution, fix.arg = NULL) {
+  requireNamespace("fitdistrplus")
   # No fixed arguments are provided.
   if (is.null(fix.arg)) {
     fitted_dist = switch(
@@ -318,6 +344,7 @@ marginal_distribution = function(x, distribution, fix.arg = NULL) {
 
 
 BinCont_starting_values = function(X, Y, copula_family, marginal_surrogate){
+  requireNamespace("copula")
   # The starting value for the association parameter is obtained by estimating
   # the copula parameter through Kendall's tau, ignoring censoring. The
   # estimated Kendall's tau is then converted to the copula parameter scale.

@@ -17,6 +17,36 @@ delta_method_log_mutinfo(
 )
 }
 \arguments{
+\item{fitted_model}{TO ADD}
+
+\item{copula_par_unid}{Parameter vector for the sequence of \emph{unidentifiable}
+bivariate copulas that define the D-vine copula. The elements of
+\code{copula_par} correspond to \eqn{(c_{23}, c_{13;2}, c_{24;3}, c_{14;23})}.}
+
+\item{copula_family2}{Copula family of the other bivariate copulas. For the
+possible options, see \code{loglik_copula_scale()}. The elements of
+\code{copula_family2} correspond to \eqn{(c_{23}, c_{13;2}, c_{24;3}, c_{14;23})}.}
+
+\item{rotation_par_unid}{Vector of rotation parameters for the sequence of
+\emph{unidentifiable} bivariate copulas that define the D-vine copula. The elements of
+\code{rotation_par} correspond to \eqn{(c_{23}, c_{13;2},
+  c_{24;3}, c_{14;23})}.}
+
+\item{n_prec}{Number of Monte Carlo samples for the computation of the mutual
+information.}
+
+\item{mutinfo_estimator}{Function that estimates the mutual information
+between the first two arguments which are numeric vectors. Defaults to
+\code{FNN::mutinfo()} with default arguments.}
+
+\item{composite}{(boolean)  If \code{composite} is \code{TRUE}, then the surrogate
+endpoint is a composite of both a "pure" surrogate endpoint and the true
+endpoint, e.g., progression-free survival is the minimum of time-to-progression
+and time-to-death.}
+
+\item{seed}{Seed for Monte Carlo sampling. This seed does not affect the global
+environment.}
+
 \item{eps}{(numeric) Step size for finite difference in numeric
 differentiation}
 }
@@ -27,4 +57,10 @@ holding the unidentifiable parameters fixed at the user supplied values.
 \description{
 \code{\link[=delta_method_log_mutinfo]{delta_method_log_mutinfo()}} computes the variance of the estimated log
 mutual information, given the unidentifiable parameters.
+}
+\details{
+This function should not be used. The ICA is computed through numerical
+methods with a considerable error. This error is negligible in individual estimates
+of the ICA; however, this error easily breaks the numeric differentiation because
+finite differences are inflated by this error.
 }

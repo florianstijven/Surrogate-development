@@ -91,6 +91,7 @@ gumbel_loglik <- function(para, X, Y, d1, d2, k = 2, knotsx, knotsy, sum_observa
 
 #' @importFrom stats pnorm qnorm
 normal_loglik <- function(para, X, Y, d1, d2, k = 2, knotsx, knotsy, sum_observations){
+  requireNamespace("mvtnorm")
   #k is the number of knots in the model, this determines the length of para
   gammax <- para[1:(k + 2)]
   gammay <- para[(k + 3):(2*(k + 2))]

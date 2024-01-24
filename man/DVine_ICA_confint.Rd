@@ -57,7 +57,7 @@ environment.}
 confidence interval.
 }
 \description{
-\code{\link[=DVine_ICA_confint]{DVine_ICA_confint()}} computes the confidence interval for the ICA
+\code{\link[=Dvine_ICA_confint]{Dvine_ICA_confint()}} computes the confidence interval for the ICA
 in the D-vine copula model. The unidentifiable parameters are fixed at the user
 supplied values.
 }

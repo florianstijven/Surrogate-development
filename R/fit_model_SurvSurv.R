@@ -91,7 +91,7 @@
 #'
 #' @author Florian Stijven
 #'
-#' @seealso [marginal_gof_scr()], [sensitivity_analysis_SurvSurv_copula()]
+#' @seealso [sensitivity_analysis_SurvSurv_copula()]
 #'
 #' @examples
 #' if(require(Surrogate)) {
@@ -251,6 +251,7 @@ fit_model_SurvSurv = function(data,
 #' @param knots1 placement of knots for Royston-Parmar model
 #' @param knott0 placement of knots for Royston-Parmar model
 #' @param knott1 placement of knots for Royston-Parmar model
+#' @param copula_rotations vector of copula rotation parameters
 #' @param data Original data
 #'
 #' @return S3 object
@@ -457,6 +458,7 @@ survival_survival_loglik =  function(para,
 }
 
 SurvSurv_starting_values = function(X, delta_X, Y, delta_Y, copula_family, n_knots){
+  requireNamespace("copula")
   # The starting value for the association parameter is obtained by estimating
   # the copula parameter through Kendall's tau, ignoring censoring. The
   # estimated Kendall's tau is then converted to the copula parameter scale.

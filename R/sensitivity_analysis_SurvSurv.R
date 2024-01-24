@@ -276,7 +276,7 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
     marginal_sp_rho = marg_association,
     seed = 1
   )
-  if (ncores > 1) {
+  if (ncores > 1 & requireNamespace("parallel")) {
     cl  <- parallel::makeCluster(ncores)
     #helper function
     # surrogacy_sample_sens <- surrogacy_sample_sens
@@ -342,7 +342,7 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
   colnames(c) = c("c12", "c23", "c34",  "c13_2", "c24_3", "c14_23")
   colnames(r) = c("r12", "r23", "r34",  "r13_2", "r24_3", "r14_23")
 
-  sens_results = dplyr::bind_cols(as.data.frame(measures_df), c, r)
+  sens_results = cbind(as.data.frame(measures_df), c, r)
   attr(sens_results, which = "copula_family1") = copula_family1
   attr(sens_results, which = "copula_family2") = copula_family2
   attr(sens_results, which = "composite") = composite

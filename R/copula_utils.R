@@ -222,6 +222,7 @@ gumbel_loglik_copula_scale <- function(theta, u, v, d1, d2){
 #'
 #' @return Value of the copula loglikelihood evaluated in `theta`.
 gaussian_loglik_copula_scale <- function(theta, u, v, d1, d2){
+  requireNamespace("mvtnorm")
   # For efficiency purposes, some quantities that are needed multiple times are
   # first precomputed. In this way, we do not waste resources on computing the
   # same quantity multiple times.

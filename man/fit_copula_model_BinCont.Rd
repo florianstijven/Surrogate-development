@@ -51,3 +51,28 @@ distributions of the surrogate-true endpoint pairs are functionally
 independent across treatment groups, a bivariate distribution is fitted in
 each treatment group separately.
 }
+\examples{
+# Load Schizophrenia data set.
+data("Schizo_BinCont")
+# Perform listwise deletion.
+na = is.na(Schizo_BinCont$CGI_Bin) | is.na(Schizo_BinCont$PANSS)
+X = Schizo_BinCont$PANSS[!na]
+Y = Schizo_BinCont$CGI_Bin[!na]
+Treat = Schizo_BinCont$Treat[!na]
+# Ensure that the treatment variable is binary.
+Treat = ifelse(Treat == 1, 1, 0)
+data = data.frame(X,
+                  Y,
+                  Treat)
+# Fit copula model.
+fitted_model = fit_copula_model_BinCont(data, "clayton", "normal", twostep = FALSE)
+# Perform sensitivity analysis with a very low number of replications.
+sens_results = sensitivity_analysis_BinCont_copula(
+  fitted_model,
+  10,
+  cond_ind = TRUE,
+  lower = c(-1,-1,-1,-1),
+  upper = c(1, 1, 1, 1),
+  n_prec = 1e3
+)
+}

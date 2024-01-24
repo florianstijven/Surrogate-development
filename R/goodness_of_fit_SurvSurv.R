@@ -27,7 +27,7 @@
 #'                      copula_family = "clayton",
 #'                      n_knots = 1)
 #' grid = seq(from = 0, to = 2, length.out = 50)
-#' marginal_gof_plots_scr(ovarian_fitted, grid)
+#' Surrogate:::marginal_gof_plots_scr(ovarian_fitted, grid)
 #'
 #' @importFrom survival survfit Surv
 marginal_gof_plots_scr = function(fitted_model,
@@ -155,12 +155,13 @@ marginal_gof_scr_T_plot = function(fitted_model,
 
 
 mean_S_before_T_plots_scr = function(fitted_model,
-                                     plot_method = scatter.smooth,
+                                     plot_method = NULL,
                                      grid,
                                      ...)
 {
   mean_S_before_T_plot_scr(
     fitted_model = fitted_model,
+    plot_method = plot_method,
     grid = grid,
     treated = 0,
     xlab = "t",
@@ -170,6 +171,7 @@ mean_S_before_T_plots_scr = function(fitted_model,
   )
   mean_S_before_T_plot_scr(
     fitted_model = fitted_model,
+    plot_method = plot_method,
     grid = grid,
     treated = 1,
     xlab = "t",
@@ -201,7 +203,7 @@ mean_S_before_T_plot_scr = function(fitted_model,
         # Fit GAM
         fit_gam = mgcv::gam(y~s(x), family = stats::quasi(link = "log", variance = "mu"))
         # Plot smooth estimated.
-        predictions = predict(fit_gam, newdata = data.frame(x = grid), type = "link", se.fit = TRUE)
+        predictions = mgcv::predict.gam(fit_gam, newdata = data.frame(x = grid), type = "link", se.fit = TRUE)
         plot(
           x = grid,
           y = exp(predictions$fit),
@@ -361,7 +363,7 @@ prob_dying_without_progression_plot = function(fitted_model,
         fit_gam = mgcv::gam(y~s(x), family = stats::binomial())
         expit = function(x) 1 / (1 + exp(-x))
         # Plot smooth estimated.
-        predictions = predict(fit_gam, newdata = data.frame(x = grid), type = "link", se.fit = TRUE)
+        predictions = mgcv::predict.gam(fit_gam, newdata = data.frame(x = grid), type = "link", se.fit = TRUE)
         plot(
           x = grid,
           y = expit(predictions$fit),

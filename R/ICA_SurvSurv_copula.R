@@ -24,8 +24,6 @@
 #'  \rho_{s}(S_1, T_1)}
 #'  * Survival classification proportions (if asked):
 #'  \deqn{\pi_{harmed}, \pi_{protected}, \pi_{always}, \pi_{never}}
-#'
-#' @importFrom withr local_seed
 compute_ICA_SurvSurv = function(copula_par,
                                 rotation_par,
                                 copula_family1,
@@ -45,7 +43,7 @@ compute_ICA_SurvSurv = function(copula_par,
     requireNamespace("FNN", quietly = FALSE)
     mutinfo_estimator = FNN::mutinfo
   }
-
+  requireNamespace("withr")
   withr::local_seed(seed)
   # Sample individual causal treatment effects from the given model. If
   # marginal_sp_rho = TRUE, then the Spearman's correlation matrix is also
@@ -109,6 +107,7 @@ compute_ICA_SurvSurv = function(copula_par,
 #' @return (numeric) estimated mutual information.
 #' @importFrom kdecopula kdecop dep_measures
 estimate_mutual_information_SurvSurv = function(delta_S, delta_T, minfo_prec) {
+  requireNamespace("kdecopula")
   # When minfo = 0, we do not want to compute the mutual information. Therefore,
   # a NA is returned in that case.
   if (minfo_prec == 0) {

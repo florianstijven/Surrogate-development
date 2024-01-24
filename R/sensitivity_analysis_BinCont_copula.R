@@ -55,6 +55,7 @@ sample_copula_parameters = function(copula_family2,
                                     cond_ind = FALSE,
                                     lower = c(-1,-1,-1,-1),
                                     upper = c(1, 1, 1, 1)) {
+  requireNamespace("copula")
   # If copula_family2 contains only 1 element, this vector is appended to
   # the correct length.
   if(length(copula_family2) == 1) copula_family2 = rep(copula_family2, 4)
@@ -212,7 +213,7 @@ sample_rotation_parameters = function(n_sim, degrees = c(0, 90, 180, 270)) {
 #' estimated association parameters from [fit_copula_model_BinCont()] refer to
 #' associations on a latent scale.
 #'
-#' @examples
+#' @inherit fit_copula_model_BinCont examples
 sensitivity_analysis_BinCont_copula = function(fitted_model,
                                                n_sim,
                                                cond_ind,
@@ -281,7 +282,7 @@ sensitivity_analysis_BinCont_copula = function(fitted_model,
   )
 
   # Use multicore computing if asked.
-  if(ncores > 1){
+  if(ncores > 1 & requireNamespace("parallel")){
     cl  <- parallel::makeCluster(ncores)
     print("Starting parallel simulations")
     temp = parallel::clusterMap(
@@ -310,8 +311,7 @@ sensitivity_analysis_BinCont_copula = function(fitted_model,
 
   colnames(c) = c("c12", "c23", "c34", "c13_2", "c24_3", "c14_23")
   colnames(r) = c("r12", "r23", "r34", "r13_2", "r24_3", "r14_23")
-  return(dplyr::bind_cols(as.data.frame(measures_df), c, r))
-
   # Return a data frame with the results of the sensiviity analysis.
+  return(cbind(as.data.frame(measures_df), c, r))
 
 }

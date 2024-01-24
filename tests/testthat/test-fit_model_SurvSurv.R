@@ -33,7 +33,7 @@ test_that("plot() works for fitted survival-survival copula models",
             fitted_gumbel = readRDS(test_path("fixtures", "ovarian-dvine-gumbel-scr.rds"))
 
             vdiffr::expect_doppelganger(
-              title = "plot functionf for gof",
+              title = "plot function for gof",
               fig = function() {
                 plot(fitted_gumbel)
               }

@@ -4,6 +4,7 @@ compute_entropy = function(probs) {
 
 
 estimate_mutual_information_BinCont = function(delta_S, delta_T) {
+  requireNamespace("cubature")
   # Estimate three conditional densities for the three possible values of delta
   # T.
   lower_S = min(delta_S)
@@ -377,6 +378,7 @@ compute_ICA_BinCont = function(copula_par,
                                marginal_sp_rho = TRUE,
                                seed = 1)
 {
+  requireNamespace("withr")
   withr::local_seed(seed)
   # Sample individual causal treatment effects from the given model. If
   # marginal_sp_rho = TRUE, then the Spearman's correlation matrix is also

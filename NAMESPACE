@@ -51,12 +51,8 @@ importFrom("stats", "uniroot")
 importFrom("graphics", "arrows")
 importFrom("stats", "weighted.mean")
 importFrom("stats", "approxfun")
-import(cubature)
-import(fitdistrplus)
 import(maxLik)
 import(purrr)
-import(stringr)
-import(withr)
 
 
 export(plot.UnifixedContCont, plot.UnimixedContCont, plot.BifixedContCont, plot.BimixedContCont,
@@ -99,7 +95,7 @@ export(AA.MultS, BifixedContCont, BimixedCbCContCont,
        SPF.BinBin, SPF.BinCont)
 export(MICA.ContCont)
 export(sensitivity_analysis_SurvSurv_copula, model_fit_measures,
-       marginal_gof_scr, fit_model_SurvSurv)
+       fit_model_SurvSurv)
 export(sensitivity_analysis_BinCont_copula, fit_copula_model_BinCont)
 
 

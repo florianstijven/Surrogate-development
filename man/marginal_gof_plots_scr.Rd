@@ -36,6 +36,6 @@ ovarian_fitted =
                      copula_family = "clayton",
                      n_knots = 1)
 grid = seq(from = 0, to = 2, length.out = 50)
-marginal_gof_plots_scr(ovarian_fitted, grid)
+Surrogate:::marginal_gof_plots_scr(ovarian_fitted, grid)
 
 }
