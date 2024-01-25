@@ -1,12 +1,12 @@
-MICA.ContCont <- function(Trial.R, D.aa, D.bb, T0S0, T1S1, T0T0=1, T1T1=1, S0S0=1, S1S1=1, T0T1=seq(-1, 1, by=.1), T0S1=seq(-1, 1, by=.1), T1S0=seq(-1, 1, by=.1), S0S1=seq(-1, 1, by=.1)) { 
-  
+MICA.ContCont <- function(Trial.R, D.aa, D.bb, T0S0, T1S1, T0T0=1, T1T1=1, S0S0=1, S1S1=1, T0T1=seq(-1, 1, by=.1), T0S1=seq(-1, 1, by=.1), T1S0=seq(-1, 1, by=.1), S0S1=seq(-1, 1, by=.1)) {
+
   Results <- na.exclude(matrix(NA, 1, 8))
   colnames(Results) <- c("T0T1", "T0S0", "T0S1", "T1S0", "T1S1", "S0S1", "ICA", "MICA")
   T0S0_hier <- T0S0[1]
   T1S1_hier <- T1S1[1]
   combins <- expand.grid(T0T1, T0S0_hier, T0S1, T1S0, T1S1_hier, S0S1)
   lengte <- dim(combins)[1]
-  
+
   if (length(T0S0)>1){
     if (length(T0S0)<lengte){stop("The specified vector for T0S0 should be larger than ", lengte) }
     T0S0_vector <- T0S0[1:lengte] # sample
@@ -17,16 +17,16 @@ MICA.ContCont <- function(Trial.R, D.aa, D.bb, T0S0, T1S1, T0T0=1, T1T1=1, S0S0=
     T1S1_vector <- T1S1[1:lengte] # sample
     combins[,5] <- T1S1_vector
   }
-  
-  
-  for (i in 1: nrow(combins)) {   
-    T0T1 <- combins[i, 1]  
-    T0S0 <- combins[i, 2]  
+
+
+  for (i in 1: nrow(combins)) {
+    T0T1 <- combins[i, 1]
+    T0S0 <- combins[i, 2]
     T0S1 <- combins[i, 3]
     T1S0 <- combins[i, 4]
-    T1S1 <- combins[i, 5]  
-    S0S1 <- combins[i, 6]  
-    Sigma_c <- diag(4)   
+    T1S1 <- combins[i, 5]
+    S0S1 <- combins[i, 6]
+    Sigma_c <- diag(4)
     Sigma_c[2,1] <- Sigma_c[1,2] <- T0T1 * (sqrt(T0T0)*sqrt(T1T1))
     Sigma_c[3,1] <- Sigma_c[1,3] <- T0S0 * (sqrt(T0T0)*sqrt(S0S0))
     Sigma_c[4,1] <- Sigma_c[1,4] <- T0S1 * (sqrt(T0T0)*sqrt(S1S1))
@@ -38,8 +38,8 @@ MICA.ContCont <- function(Trial.R, D.aa, D.bb, T0S0, T1S1, T0T0=1, T1T1=1, S0S0=
     Sigma_c[3,3] <- S0S0
     Sigma_c[4,4] <- S1S1
     Cor_c <- cov2cor(Sigma_c)
-    Min.Eigen.Cor <- try(min(eigen(Cor_c)$values), TRUE)  
-    
+    Min.Eigen.Cor <- try(min(eigen(Cor_c)$values), TRUE)
+
     if (Min.Eigen.Cor > 0) {
       ICA <- ((sqrt(S0S0*T0T0)*Cor_c[3,1])+(sqrt(S1S1*T1T1)*Cor_c[4,2])-(sqrt(S0S0*T1T1)*Cor_c[3,2])-(sqrt(S1S1*T0T0)*Cor_c[4,1]))/(sqrt((T0T0+T1T1-(2*sqrt(T0T0*T1T1)*Cor_c[2,1]))*(S0S0+S1S1-(2*sqrt(S0S0*S1S1)*Cor_c[4,3]))))
       Var_eps_t <- T0T0 + T1T1 - (2*sqrt(T0T0*T1T1)*Cor_c[2,1])
@@ -56,34 +56,33 @@ MICA.ContCont <- function(Trial.R, D.aa, D.bb, T0S0, T1S1, T0T0=1, T1T1=1, S0S0=
   Results <- data.frame(Results, stringsAsFactors = TRUE)
   rownames(Results) <- NULL
   Total.Num.Matrices <- nrow(combins)
-  
-  fit <- 
+
+  fit <-
     list(Total.Num.Matrices=Total.Num.Matrices, Pos.Def=Results[,1:6], ICA=Results$ICA, MICA=Results$MICA, Call=match.call())
-  
+
   class(fit) <- "MICA.ContCont"
   fit
-  
+
 }
 
 
 
 plot.MICA.ContCont <- function(x, ICA=TRUE, MICA=TRUE, Type="Percent", Labels=FALSE, Xlab.ICA, Main.ICA, Xlab.MICA, Main.MICA,
                                Par=par(oma=c(0, 0, 0, 0), mar=c(5.1, 4.1, 4.1, 2.1)), col, ...){
-  
-  Object <- x 
+
+  Object <- x
   if (MICA==TRUE){
-  dev.new()
-  par=Par 
+  par=Par
   if (missing(Xlab.MICA)) {Xlab.MICA <- expression(rho[M])}
   if (missing(col)) {col <- c(8)}
-  if (missing(Main.MICA)) {Main.MICA="MICA"}  
-  
+  if (missing(Main.MICA)) {Main.MICA="MICA"}
+
   if (Type=="Freq"){
     h <- hist(Object$MICA, ...)
     h$density <- h$counts/sum(h$counts)
     cumulMidPoint <- ecdf(x=Object$MICA)(h$mids)
     labs <- paste(round((1-cumulMidPoint), digits=4)*100, "%", sep="")
-    
+
     if (Labels==FALSE){
       plot(h,freq=T, xlab=Xlab.MICA, ylab="Frequency", col=col, main=Main.MICA)
     }
@@ -91,13 +90,13 @@ plot.MICA.ContCont <- function(x, ICA=TRUE, MICA=TRUE, Type="Percent", Labels=FA
       plot(h,freq=T, xlab=Xlab.MICA, ylab="Frequency", col=col, main=Main.MICA, labels=labs)
     }
   }
-  
+
   if (Type=="Percent"){
     h <- hist(Object$MICA, ...)
     h$density <- h$counts/sum(h$counts)
     cumulMidPoint <- ecdf(x=Object$MICA)(h$mids)
     labs <- paste(round((1-cumulMidPoint), digits=4)*100, "%", sep="")
-    
+
     if (Labels==FALSE){
       plot(h,freq=F, xlab=Xlab.MICA, ylab="Percentage", col=col, main=Main.MICA)
     }
@@ -105,7 +104,7 @@ plot.MICA.ContCont <- function(x, ICA=TRUE, MICA=TRUE, Type="Percent", Labels=FA
       plot(h,freq=F, xlab=Xlab.MICA, ylab="Percentage", col=col, main=Main.MICA, labels=labs)
     }
   }
-  
+
   if (Type=="CumPerc"){
     h <- hist(Object$MICA, breaks=length(Object$MICA), ...)
     h$density <- h$counts/sum(h$counts)
@@ -113,24 +112,23 @@ plot.MICA.ContCont <- function(x, ICA=TRUE, MICA=TRUE, Type="Percent", Labels=FA
     plot(x=h$mids, y=cumulative, xlab=Xlab.MICA, ylab="Cumulative percentage", col=0, main=Main.MICA)
     lines(x=h$mids, y=cumulative)
   }
-  
-  
-  
+
+
+
   }
-  
+
   if (ICA==TRUE){
-  dev.new()
-  par=Par 
+  par=Par
   if (missing(Xlab.ICA)) {Xlab.ICA <- expression(rho[Delta])}
   if (missing(col)) {col <- c(8)}
-  if (missing(Main.ICA)) {Main.ICA="ICA"} 
-  
+  if (missing(Main.ICA)) {Main.ICA="ICA"}
+
   if (Type=="Freq"){
     h <- hist(Object$ICA, ...)
     h$density <- h$counts/sum(h$counts)
     cumulMidPoint <- ecdf(x=Object$ICA)(h$mids)
     labs <- paste(round((1-cumulMidPoint), digits=4)*100, "%", sep="")
-    
+
     if (Labels==FALSE){
       plot(h,freq=T, xlab=Xlab.ICA, ylab="Frequency", col=col, main=Main.ICA)
     }
@@ -138,13 +136,13 @@ plot.MICA.ContCont <- function(x, ICA=TRUE, MICA=TRUE, Type="Percent", Labels=FA
       plot(h,freq=T, xlab=Xlab.ICA, ylab="Frequency", col=col, main=Main.ICA, labels=labs)
     }
   }
-  
+
   if (Type=="Percent"){
     h <- hist(Object$ICA, ...)
     h$density <- h$counts/sum(h$counts)
     cumulMidPoint <- ecdf(x=Object$ICA)(h$mids)
     labs <- paste(round((1-cumulMidPoint), digits=4)*100, "%", sep="")
-    
+
     if (Labels==FALSE){
       plot(h,freq=F, xlab=Xlab.ICA, ylab="Percentage", col=col, main=Main.ICA)
     }
@@ -152,7 +150,7 @@ plot.MICA.ContCont <- function(x, ICA=TRUE, MICA=TRUE, Type="Percent", Labels=FA
       plot(h,freq=F, xlab=Xlab.ICA, ylab="Percentage", col=col, main=Main.ICA, labels=labs)
     }
   }
-  
+
   if (Type=="CumPerc"){
     h <- hist(Object$ICA, breaks=length(Object$ICA), ...)
     h$density <- h$counts/sum(h$counts)
@@ -160,15 +158,15 @@ plot.MICA.ContCont <- function(x, ICA=TRUE, MICA=TRUE, Type="Percent", Labels=FA
     plot(x=h$mids, y=cumulative, xlab=Xlab.ICA, ylab="Cumulative percentage", col=0, main=Main.ICA)
     lines(x=h$mids, y=cumulative)
   }
-  
+
   }
 }
 
 
 summary.MICA.ContCont <- function(object, ..., Object){
 
-   
-  if (missing(Object)){Object <- object} 
+
+  if (missing(Object)){Object <- object}
 
   mode <- function(data) {
     x <- data
@@ -176,7 +174,7 @@ summary.MICA.ContCont <- function(object, ..., Object){
     mode_val <- z$x[which.max(z$y)]
     fit <- list(mode_val= mode_val)
   }
-  
+
   cat("\nFunction call:\n\n")
   print(Object$Call)
   cat("\n\n# Total number of matrices that can be formed by the specified vectors and/or scalars")
@@ -187,8 +185,8 @@ summary.MICA.ContCont <- function(object, ..., Object){
   cat("\n#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n")
   cat(nrow(Object$Pos.Def))
   cat("\n\n\n# Causal-inference (MICA) results summary")
-  cat("\n#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n")  
-  cat("Mean (SD) MICA: ", format(round(mean(Object$MICA), 4), nsmall = 4), " (", format(round(sd(Object$MICA), 4), nsmall = 4), ")", 
+  cat("\n#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n")
+  cat("Mean (SD) MICA: ", format(round(mean(Object$MICA), 4), nsmall = 4), " (", format(round(sd(Object$MICA), 4), nsmall = 4), ")",
       "  [min: ", format(round(min(Object$MICA), 4), nsmall = 4), "; max: ",  format(round(max(Object$MICA), 4), nsmall = 4), "]", sep="")
   cat("\nMode MICA: ", format(round(mode(Object$MICA)$mode_val, 4), nsmall = 4))
   cat("\n\nQuantiles of the MICA distribution: \n\n")
