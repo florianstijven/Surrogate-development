@@ -97,6 +97,8 @@ export(MICA.ContCont)
 export(sensitivity_analysis_SurvSurv_copula, model_fit_measures,
        fit_model_SurvSurv)
 export(sensitivity_analysis_BinCont_copula, fit_copula_model_BinCont)
+export(marginal_gof_scr_S_plot, marginal_gof_scr_T_plot,
+       prob_dying_without_progression_plot, mean_S_before_T_plot_scr)
 
 
 S3method(plot, Fano.BinBin)
