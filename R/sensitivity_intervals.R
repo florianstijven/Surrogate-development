@@ -1,3 +1,21 @@
+#' Compute Sensitivity Intervals
+#'
+#' [sensitivity_intervals_Dvine()] computes the intervals of ignorance and
+#' uncertainty within the information-theoretic causal inference framework when
+#' the data are modeled with a D-vine copula model.
+#'
+#' @param sens_results Dataframe returned by
+#'   [sensitivity_analysis_SurvSurv_copula()]. If additional assumptions need to
+#'   be incorporated, this dataframe can first be filtered.
+#' @param measure Compute intervals for which measure of surrogacy? Defaults to
+#'   `"ICA"`. See first column names of `sens_results` for other possibilities.
+#' @inheritParams Dvine_ICA_confint
+#'
+#' @return An S3 object of the class `sensitivity_intervals_Dvine` which can be
+#' printed.
+#' @export
+#'
+#' @inherit sensitivity_analysis_SurvSurv_copula examples
 sensitivity_intervals_Dvine = function(fitted_model,
                                        sens_results,
                                        measure = "ICA",

@@ -18,7 +18,9 @@ Dvine_ICA_confint(
 )
 }
 \arguments{
-\item{fitted_model}{TO ADD}
+\item{fitted_model}{Returned value from \code{\link[=fit_model_SurvSurv]{fit_model_SurvSurv()}}. This object
+contains the estimated identifiable part of the joint distribution for the
+potential outcomes.}
 
 \item{alpha}{(numeric) \code{1 - alpha} is the level of the confidence interval}
 

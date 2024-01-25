@@ -11,7 +11,6 @@
 #'   functions.
 #'
 #' @examples
-#' library(Surrogate)
 #' data("Ovarian")
 #' #For simplicity, data is not recoded to semi-competing risks format, but is
 #' #left in the composite event format.
@@ -269,7 +268,6 @@ mean_S_before_T_plots_scr = function(fitted_model,
 #' @export
 #'
 #' @examples
-#' library(Surrogate)
 #' # Load Ovarian data
 #' data("Ovarian")
 #' # Recode the Ovarian data in the semi-competing risks format.

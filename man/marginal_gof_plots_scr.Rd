@@ -20,7 +20,6 @@ functions for the fitted model. This results in four plots of survival
 functions, one for each of \eqn{S_0}, \eqn{S_1}, \eqn{T_0}, \eqn{T_1}.
 }
 \examples{
-library(Surrogate)
 data("Ovarian")
 #For simplicity, data is not recoded to semi-competing risks format, but is
 #left in the composite event format.

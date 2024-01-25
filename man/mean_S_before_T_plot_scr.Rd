@@ -69,7 +69,6 @@ onto \eqn{T_k} in the subset of patients with uncensored \eqn{T_k}.
 }
 
 \examples{
-library(Surrogate)
 # Load Ovarian data
 data("Ovarian")
 # Recode the Ovarian data in the semi-competing risks format.

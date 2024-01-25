@@ -53,7 +53,6 @@ The \code{\link[=marginal_gof_scr_T_plot]{marginal_gof_scr_T_plot()}} function p
 }
 
 \examples{
-library(Surrogate)
 # Load Ovarian data
 data("Ovarian")
 # Recode the Ovarian data in the semi-competing risks format.

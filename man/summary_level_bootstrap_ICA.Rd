@@ -17,7 +17,9 @@ summary_level_bootstrap_ICA(
 )
 }
 \arguments{
-\item{fitted_model}{TO ADD}
+\item{fitted_model}{Returned value from \code{\link[=fit_model_SurvSurv]{fit_model_SurvSurv()}}. This object
+contains the estimated identifiable part of the joint distribution for the
+potential outcomes.}
 
 \item{copula_par_unid}{Parameter vector for the sequence of \emph{unidentifiable}
 bivariate copulas that define the D-vine copula. The elements of

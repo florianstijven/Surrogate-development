@@ -165,7 +165,6 @@ summary_level_bootstrap_ICA = function(fitted_model,
 #' parameters at user-specified values and takes the identifiable parameters as
 #' argument.
 #'
-#' @param fitted_model TO ADD
 #' @param copula_par_unid Parameter vector for the sequence of *unidentifiable*
 #'   bivariate copulas that define the D-vine copula. The elements of
 #'   `copula_par` correspond to \eqn{(c_{23}, c_{13;2}, c_{24;3}, c_{14;23})}.
@@ -174,6 +173,7 @@ summary_level_bootstrap_ICA = function(fitted_model,
 #'   `rotation_par` correspond to \eqn{(c_{23}, c_{13;2},
 #'   c_{24;3}, c_{14;23})}.
 #' @inheritParams compute_ICA_SurvSurv
+#' @inheritParams sensitivity_analysis_SurvSurv_copula
 #'
 #' @return A function that computes the ICA as a function of the identifiable
 #'   parameters. In this computation, the unidentifiable parameters are fixed at

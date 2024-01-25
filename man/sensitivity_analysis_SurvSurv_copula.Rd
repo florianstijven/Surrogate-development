@@ -187,29 +187,34 @@ Stijven et al. (2022).
 }
 
 \examples{
-library(Surrogate)
+# Load Ovarian data
 data("Ovarian")
-# For simplicity, data is not recoded to semi-competing risks format, but the
-# data are left in the composite event format.
-data = data.frame(
-  Ovarian$Pfs,
-  Ovarian$Surv,
-  Ovarian$Treat,
-  Ovarian$PfsInd,
-  Ovarian$SurvInd
+# Recode the Ovarian data in the semi-competing risks format.
+data_scr = data.frame(
+  ttp = Ovarian$Pfs,
+  os = Ovarian$Surv,
+  treat = Ovarian$Treat,
+  ttp_ind = ifelse(
+    Ovarian$Pfs == Ovarian$Surv &
+      Ovarian$SurvInd == 1,
+    0,
+    Ovarian$PfsInd
+  ),
+  os_ind = Ovarian$SurvInd
 )
-ovarian_fitted =
-    fit_model_SurvSurv(data = data,
-                       copula_family = "clayton",
-                       n_knots = 1)
+# Fit copula model.
+fitted_model = fit_model_SurvSurv(data = data_scr,
+                                  copula_family = "clayton",
+                                  n_knots = 1)
 # Illustration with small number of replications and low precision
-sensitivity_analysis_SurvSurv_copula(ovarian_fitted,
+sens_results = sensitivity_analysis_SurvSurv_copula(fitted_model,
                   n_sim = 5,
                   n_prec = 2000,
                   copula_family2 = "clayton",
                   cond_ind = TRUE)
-
-
+# Compute intervals of ignorance and uncertainty. Again, the number of
+# bootstrap replications should be larger in practice.
+sensitivity_intervals_Dvine(fitted_model, sens_results, B = 50)
 }
 \references{
 Stijven, F., Alonso, a., Molenberghs, G., Van Der Elst, W., Van
