@@ -1,8 +1,8 @@
 #' Compute Sensitivity Intervals
 #'
-#' [sensitivity_intervals_Dvine()] computes the intervals of ignorance and
-#' uncertainty within the information-theoretic causal inference framework when
-#' the data are modeled with a D-vine copula model.
+#' [sensitivity_intervals_Dvine()] computes the estimated intervals of ignorance
+#' and uncertainty within the information-theoretic causal inference framework
+#' when the data are modeled with a D-vine copula model.
 #'
 #' @param sens_results Dataframe returned by
 #'   [sensitivity_analysis_SurvSurv_copula()]. If additional assumptions need to
@@ -30,21 +30,13 @@ sensitivity_intervals_Dvine = function(fitted_model,
   copula_family2 = attr(sens_results, "copula_family2")
   composite = attr(sens_results, "composite")
 
-  # Compute confidence interval for the two scenarios selected above.
-  upper_confint = Dvine_ICA_confint(
-    fitted_model = fitted_model,
-    alpha = alpha,
-    copula_par_unid = as.numeric(upper_limit_row[1, c("c23", "c13_2", "c24_3", "c14_23")]),
-    copula_family2 = copula_family2,
-    rotation_par_unid = as.numeric(upper_limit_row[1, c("r23", "r13_2", "r24_3", "r14_23")]),
-    n_prec = n_prec,
-    composite = composite,
-    B = B,
-    seed = 1
+  est_interval_of_ignorance = c(
+    as.numeric(lower_limit_row[measure]),
+    as.numeric(upper_limit_row[measure])
   )
-  lower_confint = Dvine_ICA_confint(
+  # Perform parametric bootstrap for setting that yielded smallest ICA.
+  bootstrap_replications_lower = summary_level_bootstrap_ICA(
     fitted_model = fitted_model,
-    alpha = alpha,
     copula_par_unid = as.numeric(lower_limit_row[1, c("c23", "c13_2", "c24_3", "c14_23")]),
     copula_family2 = copula_family2,
     rotation_par_unid = as.numeric(lower_limit_row[1, c("r23", "r13_2", "r24_3", "r14_23")]),
@@ -54,28 +46,50 @@ sensitivity_intervals_Dvine = function(fitted_model,
     seed = 1
   )
 
-  interval_of_ignorance = c(
-    as.numeric(lower_limit_row[measure]),
-    as.numeric(upper_limit_row[measure])
+  # Perform parametric bootstrap for setting that yielded largest ICA.
+  bootstrap_replications_upper = summary_level_bootstrap_ICA(
+    fitted_model = fitted_model,
+    copula_par_unid = as.numeric(upper_limit_row[1, c("c23", "c13_2", "c24_3", "c14_23")]),
+    copula_family2 = copula_family2,
+    rotation_par_unid = as.numeric(upper_limit_row[1, c("r23", "r13_2", "r24_3", "r14_23")]),
+    n_prec = n_prec,
+    composite = composite,
+    B = B,
+    seed = 1
   )
-  interval_of_uncertainty = c(
-    lower_confint[1],
-    upper_confint[2]
+
+  # Compute confidence intervals for the two scenarios selected above. For the
+  # uncertainty intervals with pointwise 1 - alpha coverage, we can consider the
+  # lower (upper) limit of a one-sided 1 - alpha confidence interval for the smallest
+  # (largest) estimated ICA.
+  interval_of_uncertainty_pointwise_coverage = c(
+    stats::quantile(bootstrap_replications_lower, prob = alpha),
+    stats::quantile(bootstrap_replications_upper, prob = 1 - alpha)
+  )
+  # For the uncertainty interval with strong 1 - alpha coverage, we need to
+  # consider the lower (upper) limit of two-sided 1 - alpha confidence intervals
+  # for the smallest (largest) estimated ICA.
+  interval_of_uncertainty_strong_coverage = c(
+    stats::quantile(bootstrap_replications_lower, prob = alpha / 2),
+    stats::quantile(bootstrap_replications_upper, prob = 1 - alpha / 2)
   )
 
   return(
     new_sensitivity_intervals_Dvine(
       fitted_model,
       upper_limit = list(
-        scenario_information = upper_limit_row,
-        confint = upper_confint
+        scenario_information = upper_limit_row
+        # confint_alpha = upper_confint_alpha,
+        # confint_2alpha = upper_confint_2alpha
       ),
       lower_limit = list(
-        scenario_information = lower_limit_row,
-        confint = lower_confint
+        scenario_information = lower_limit_row
+        # confint_alpha = lower_confint_alpha,
+        # confint_2alpha = lower_confint_2alpha
       ),
-      interval_of_ignorance = interval_of_ignorance,
-      interval_of_uncertainty = interval_of_uncertainty,
+      est_interval_of_ignorance = est_interval_of_ignorance,
+      interval_of_uncertainty_pointwise_coverage = interval_of_uncertainty_pointwise_coverage,
+      interval_of_uncertainty_strong_coverage = interval_of_uncertainty_strong_coverage,
       alpha = alpha,
       copula_family2 = copula_family2
     )
@@ -84,20 +98,23 @@ sensitivity_intervals_Dvine = function(fitted_model,
 
 new_sensitivity_intervals_Dvine = function(fitted_model,
                                            upper_limit,
-                                           interval_of_ignorance,
-                                           interval_of_uncertainty,
                                            lower_limit,
+                                           est_interval_of_ignorance,
+                                           interval_of_uncertainty_pointwise_coverage,
+                                           interval_of_uncertainty_strong_coverage,
                                            alpha,
                                            copula_family2) {
-  names(interval_of_ignorance) = NULL
-  names(interval_of_uncertainty) = NULL
+  names(est_interval_of_ignorance) = NULL
+  names(interval_of_uncertainty_pointwise_coverage) = NULL
+  names(interval_of_uncertainty_strong_coverage) = NULL
   structure(
     .Data = list(
       fitted_model = fitted_model,
       upper_limit = upper_limit,
       lower_limit = lower_limit,
-      interval_of_ignorance = interval_of_ignorance,
-      interval_of_uncertainty = interval_of_uncertainty,
+      est_interval_of_ignorance = est_interval_of_ignorance,
+      interval_of_uncertainty_pointwise_coverage = interval_of_uncertainty_pointwise_coverage,
+      interval_of_uncertainty_strong_coverage = interval_of_uncertainty_strong_coverage,
       alpha = alpha,
       copula_family2 = copula_family2
     ),
@@ -111,9 +128,11 @@ print.sensitivity_intervals_Dvine = function(x, ...) {
   cat("Unidentifiable Copula Family (c23, c13_2, c24_3, and c14_23): "); cat(x$copula_family2); cat("\n")
   cat("Number of Internal Knots: "); cat(length(x$fitted_model$knots0) - 2)
   cat("\n\n")
-  cat("Estimated interval of ignorance: "); print_interval(x$interval_of_ignorance); cat("\n")
-  cat("Estimated interval of uncertainty: "); print_interval(x$interval_of_uncertainty); cat("\n")
+  cat("Estimated interval of ignorance: "); print_interval(x$est_interval_of_ignorance); cat("\n")
+  cat("Interval of uncertainty (pointwise): "); print_interval(x$interval_of_uncertainty_pointwise_coverage); cat("\n")
+  cat("Interval of uncertainty (strong): "); print_interval(x$interval_of_uncertainty_strong_coverage); cat("\n")
   cat("alpha = "); cat(x$alpha)
+  cat("\n")
 }
 
 print_interval = function(x, digits = 3) {
