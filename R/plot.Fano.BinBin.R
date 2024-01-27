@@ -45,26 +45,26 @@ for (j in 1:length(Delta)){
   Xlab<-expression(pi[10])
   Ylab<-expression(R[HL]^2)
 
- 
+
   plot(x$samplepi10,x$R2_HL,xlab=Xlab,main="", ylab=Ylab,type="n")
 if (length(uncert)==1) {
   for (j in 1:length(Delta)){
    for (i in 1:length(uncert)){
-    points(x$samplepi10[x$delta==Delta[j] & x$uncertainty==uncert[i]] , x$R2_HL[x$delta==Delta[j] & x$uncertainty==uncert[i]],pch=1,col=color[j]) 
-   }  
+    points(x$samplepi10[x$delta==Delta[j] & x$uncertainty==uncert[i]] , x$R2_HL[x$delta==Delta[j] & x$uncertainty==uncert[i]],pch=1,col=color[j])
+   }
   }
  }
 
- 
+
 if (length(uncert)>1) {
   for (j in 1:length(Delta)){
    for (i in 1:length(uncert)){
-  lines(x$samplepi10[x$delta==Delta[j] & x$uncertainty==uncert[i]] , x$R2_HL[x$delta==Delta[j] & x$uncertainty==uncert[i]], lwd=lwd,col=color[j]) 
-   }  
+  lines(x$samplepi10[x$delta==Delta[j] & x$uncertainty==uncert[i]] , x$R2_HL[x$delta==Delta[j] & x$uncertainty==uncert[i]], lwd=lwd,col=color[j])
+   }
   lines(pi10 , meanvector[,j], lwd=lwd+5,col=color[j])
   }
  }
-  
+
   legend(bty="n",Cex.Position, col=color, pch=20, cex = Cex.Legend,legend=vector_legend)
 }
 
@@ -78,10 +78,10 @@ if (missing(linety)) {lty<-seq(1:1+length(Delta))}
 
 if (length(color)!=length(Delta)) {
   cat("\nNote. color vector and Delta vector have unequal length \n")
-} 
+}
 if (length(linety)!=length(Delta)) {
   cat("\nNote. linetype vector and Delta vector have unequal length \n")
-} 
+}
 
 for (j in 1:length(Delta)){
       try(max[j] <- max(density(x$R2_HL[x$delta==Delta[j]], na.rm = T)$y), silent=TRUE)
@@ -115,8 +115,8 @@ graphnum=0
 
 
 for (j in 1:length(Delta)){
-graphnum=graphnum+1; 
-if (graphnum>graphs_per_page){dev.new();graphnum=1;par(mfrow=graphs, oma=goma,mar=gmar);}
+graphnum=graphnum+1;
+if (graphnum>graphs_per_page){graphnum=1;par(mfrow=graphs, oma=goma,mar=gmar);}
 
 hist(x$R2_H[x$delta==Delta[j]],xlab=Xlab.R2_HL,ylab="Frequency",main=main.R2_HL,
      xlim=c(0,1), freq=TRUE,breaks=seq(0,1,0.01))

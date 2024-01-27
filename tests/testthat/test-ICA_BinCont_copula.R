@@ -93,3 +93,4 @@ test_that("compute_ICA_BinCont() works in a sample example", {
                ignore_attr = "names",
                tolerance = 1e-4)
 })
+

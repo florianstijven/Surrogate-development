@@ -1,4 +1,4 @@
-clayton_loglik <- function(para, X, Y, d1, d2, k = 2, knotsx, knotsy){
+clayton_loglik <- function(para, X, Y, d1, d2, k = 2, knotsx, knotsy, sum_observations){
   #k is the number of knots in the model, this determines the length of para
   gammax <- para[1:(k + 2)]
   gammay <- para[(k + 3):(2*(k + 2))]
@@ -19,12 +19,15 @@ clayton_loglik <- function(para, X, Y, d1, d2, k = 2, knotsx, knotsy){
   part3 <- ifelse((1-d1)*d2==1, (theta+1)*log(C) - (theta+1)*log(v) + log(dv),0) #terminal event only
   part4 <- ifelse((1-d1)*(1-d2)==1,log(C),0) #both events censored
 
-  loglik <- sum(part1+part2+part3+part4)
+  loglik = part1+part2+part3+part4
+  if (sum_observations){
+    loglik <- sum(loglik)
+  }
 
   return(loglik)
 }
 
-frank_loglik <- function(para, X, Y, d1, d2, k = 2, knotsx, knotsy){
+frank_loglik <- function(para, X, Y, d1, d2, k = 2, knotsx, knotsy, sum_observations){
   #k is the number of knots in the model, this determines the length of para
   gammax <- para[1:(k + 2)]
   gammay <- para[(k + 3):(2*(k + 2))]
@@ -46,12 +49,15 @@ frank_loglik <- function(para, X, Y, d1, d2, k = 2, knotsx, knotsy){
   part3 <- ifelse(((1-d1)*(d2))==1,(log((1-exp(theta*C))/(1-exp(theta*v)))+log(dv)),0)
   part4 <- ifelse(((1-d1)*(1-d2))==1,log(C),0)
 
-  loglik <- sum(part1+part2+part3+part4)
+  loglik = part1+part2+part3+part4
+  if (sum_observations){
+    loglik <- sum(loglik)
+  }
 
   return(loglik)
 }
 
-gumbel_loglik <- function(para, X, Y, d1, d2, k = 2, knotsx, knotsy){
+gumbel_loglik <- function(para, X, Y, d1, d2, k = 2, knotsx, knotsy, sum_observations){
   #k is the number of knots in the model, this determines the length of para
   gammax <- para[1:(k + 2)]
   gammay <- para[(k + 3):(2*(k + 2))]
@@ -75,13 +81,17 @@ gumbel_loglik <- function(para, X, Y, d1, d2, k = 2, knotsx, knotsy){
   part3 <- ifelse(((1-d1)*(d2))==1,(log(C)+(theta-1)*log(-log(v))-log(v)-(theta-1)*log(-log(C))+log(dv)),0)
   part4 <- ifelse(((1-d1)*(1-d2))==1,log(C),0)
 
-  loglik <- sum(part1+part2+part3+part4)
+  loglik = part1+part2+part3+part4
+  if (sum_observations){
+    loglik <- sum(loglik)
+  }
 
   return(loglik)
 }
 
 #' @importFrom stats pnorm qnorm
-normal_loglik <- function(para, X, Y, d1, d2, k = 2, knotsx, knotsy){
+normal_loglik <- function(para, X, Y, d1, d2, k = 2, knotsx, knotsy, sum_observations){
+  requireNamespace("mvtnorm")
   #k is the number of knots in the model, this determines the length of para
   gammax <- para[1:(k + 2)]
   gammay <- para[(k + 3):(2*(k + 2))]
@@ -211,7 +221,11 @@ normal_loglik <- function(para, X, Y, d1, d2, k = 2, knotsx, knotsy){
     )), 1, normal_cdf, cov_matrix
   ))), 0)
 
-  loglik <- (part1+part2+part3+part4)
+  loglik = part1+part2+part3+part4
+  if (sum_observations){
+    loglik <- sum(loglik)
+  }
+
   return(loglik)
 }
 

@@ -13,9 +13,8 @@ sensitivity_analysis_SurvSurv_copula(
   upper = c(1, 1, 1, 1),
   degrees = c(0, 90, 180, 270),
   marg_association = TRUE,
-  copula_family2 = fitted_model$copula_family,
+  copula_family2 = fitted_model$copula_family[1],
   n_prec = 5000,
-  minfo_prec = 0,
   ncores = 1
 )
 }
@@ -64,16 +63,12 @@ Value.
 \item \code{FALSE} (default): No additional measures are returned.
 }}
 
-\item{copula_family2}{Copula family of the unidentifiable bivariate copulas.
-For the possible options, see \code{\link[=loglik_copula_scale]{loglik_copula_scale()}}.}
+\item{copula_family2}{Copula family of the other bivariate copulas. For the
+possible options, see \code{loglik_copula_scale()}. The elements of
+\code{copula_family2} correspond to \eqn{(c_{23}, c_{13;2}, c_{24;3}, c_{14;23})}.}
 
 \item{n_prec}{Number of Monte-Carlo samples for the \emph{numerical approximation}
 of the ICA in each replication of the sensitivity analysis.}
-
-\item{minfo_prec}{Number of quasi Monte-Carlo samples for the numerical
-integration to obtain the mutual information. If this value is 0 (default),
-the mutual information is not computed and \code{NA} is returned for the mutual
-information and derived quantities.}
 
 \item{ncores}{Number of cores used in the sensitivity analysis. The
 computations are computationally heavy, and this option can speed things
@@ -192,29 +187,34 @@ Stijven et al. (2022).
 }
 
 \examples{
-library(Surrogate)
+# Load Ovarian data
 data("Ovarian")
-# For simplicity, data is not recoded to semi-competing risks format, but the
-# data are left in the composite event format.
-data = data.frame(
-  Ovarian$Pfs,
-  Ovarian$Surv,
-  Ovarian$Treat,
-  Ovarian$PfsInd,
-  Ovarian$SurvInd
+# Recode the Ovarian data in the semi-competing risks format.
+data_scr = data.frame(
+  ttp = Ovarian$Pfs,
+  os = Ovarian$Surv,
+  treat = Ovarian$Treat,
+  ttp_ind = ifelse(
+    Ovarian$Pfs == Ovarian$Surv &
+      Ovarian$SurvInd == 1,
+    0,
+    Ovarian$PfsInd
+  ),
+  os_ind = Ovarian$SurvInd
 )
-ovarian_fitted =
-    fit_model_SurvSurv(data = data,
-                       copula_family = "clayton",
-                       n_knots = 1)
+# Fit copula model.
+fitted_model = fit_model_SurvSurv(data = data_scr,
+                                  copula_family = "clayton",
+                                  n_knots = 1)
 # Illustration with small number of replications and low precision
-sensitivity_analysis_SurvSurv_copula(ovarian_fitted,
+sens_results = sensitivity_analysis_SurvSurv_copula(fitted_model,
                   n_sim = 5,
                   n_prec = 2000,
                   copula_family2 = "clayton",
                   cond_ind = TRUE)
-
-
+# Compute intervals of ignorance and uncertainty. Again, the number of
+# bootstrap replications should be larger in practice.
+sensitivity_intervals_Dvine(fitted_model, sens_results, B = 50)
 }
 \references{
 Stijven, F., Alonso, a., Molenberghs, G., Van Der Elst, W., Van

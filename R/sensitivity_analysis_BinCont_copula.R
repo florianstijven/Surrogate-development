@@ -35,8 +35,6 @@
 #' S_0, S_1, T_1)'}) this assumption could be justified by subject-matter knowledge.
 #'
 #'
-#' @param copula_family2 Copula family of the unidentifiable bivariate copulas.
-#'   For the possible options, see [loglik_copula_scale()].
 #' @param n_sim Number of copula parameter vectors to be sampled.
 #' @param cond_ind (boolean) Indicates whether conditional independence is
 #'   assumed, see Conditional Independence. Defaults to `FALSE`.
@@ -48,6 +46,7 @@
 #' @param upper (numeric) Vector of length 4 that provides the upper limit,
 #'   \eqn{\boldsymbol{b} = (b_{23}, b_{13;2}, b_{24;3},
 #'   b_{14;23})'}. Defaults to `c(1, 1, 1, 1)`.
+#' @inheritParams sample_dvine
 #'
 #' @return A `n_sim` by `4` numeric matrix where each row corresponds to a
 #'   sample for \eqn{\boldsymbol{\theta}_{unid}}.
@@ -56,27 +55,34 @@ sample_copula_parameters = function(copula_family2,
                                     cond_ind = FALSE,
                                     lower = c(-1,-1,-1,-1),
                                     upper = c(1, 1, 1, 1)) {
+  requireNamespace("copula")
+  # If copula_family2 contains only 1 element, this vector is appended to
+  # the correct length.
+  if(length(copula_family2) == 1) copula_family2 = rep(copula_family2, 4)
+
+  # Families that are restricted to positive associations.
+  positive_only = c("clayton", "gumbel")
+  all_associations = c("gaussian", "frank")
   # Enforce restrictions of copula family on lower and upper limits that were
   # provided by the user.
-  switch(
-    copula_family2,
-    frank = {
-      lower = ifelse(lower > -1, lower, -1)
-      upper = ifelse(upper < 1, upper, 1)
-    },
-    gaussian = {
-      lower = ifelse(lower > -1, lower, -1)
-      upper = ifelse(upper < 1, upper, 1)
-    },
-    clayton = {
-      lower = ifelse(lower > 0, lower, 0)
-      upper = ifelse(upper < 1, upper, 1)
-    },
-    gumbel = {
-      lower = ifelse(lower > 0, lower, 0)
-      upper = ifelse(upper < 1, upper, 1)
+  lower = purrr::map2_dbl(
+    .x = copula_family2,
+    .y = lower,
+    .f = function(x, y) {
+      if (x %in% positive_only) {
+        ifelse(y > 0, y, 0)
+      }
+      else if (x %in% all_associations) {
+        ifelse(y > -1, y, -1)
+      }
     }
   )
+  # Regardless of the copula family, the upper bound should be (at max) 1. In
+  # principle, there also exist copula families with an upper bound for
+  # Spearman's rho strictly smaller than 1; however, they should probably not be
+  # used in a sensitivity analysis (and have not been implemented).
+  upper = ifelse(upper < 1, upper, 1)
+
   # Sample Spearman's rho parameters from the specified uniform distributions.
   # This code chunk returns a list.
   u = purrr::map2(
@@ -90,71 +96,47 @@ sample_copula_parameters = function(copula_family2,
     u[[2]] = rep(0, n_sim)
     u[[3]] = rep(0, n_sim)
   }
+
   # Convert sampled Spearman's rho parameter to the copula parameter scale.
-  switch(
-    copula_family2,
-    frank = {
-      c = purrr::map(
-        .x = u,
-        .f = function(x) {
-          purrr::map_dbl(
-            .x = x,
-            .f = function(x) {
-              c_vec = copula::iRho(copula::frankCopula(), rho = x)
-              # Functions for the frank copula cannot handle parameters larger
-              # than abs(35).
-              ifelse(abs(c_vec) > 35 | is.na(c_vec), sign(c_vec) * 35, c_vec)
-            }
-          )
+  c = purrr::map2(
+    .x = copula_family2,
+    .y = u,
+    .f = function(x, y) {
+      switch(
+        x,
+        frank = {
+          copula_fun = copula::frankCopula()
+          upper_limit = 35
+        },
+        gaussian = {
+          copula_fun = copula::ellipCopula(family = "normal")
+          upper_limit = 1
+        },
+        clayton = {
+          copula_fun = copula::claytonCopula()
+          upper_limit = 28
+        },
+        gumbel = {
+          copula_fun = copula::gumbelCopula()
+          upper_limit = 50
         }
       )
-    },
-    gaussian = {
-      c = purrr::map(
-        .x = u,
-        .f = function(x) {
-          purrr::map_dbl(
-            .x = x,
-            .f = function(x) {
-              copula::iRho(copula::ellipCopula(family = "normal"), rho = x)
-            }
-          )
-        }
+      c_vec = purrr::map_dbl(
+        .x = y,
+        .f = function(x) copula::iRho(copula_fun, rho = x)
       )
-    },
-    clayton = {
-      c = purrr::map(
-        .x = u,
-        .f = function(x) {
-          purrr::map_dbl(
-            .x = x,
-            .f = function(x) {
-              c_vec = ifelse(x != 0, copula::iRho(copula::claytonCopula(), rho = x), 1e-5)
-              # Functions for the Clayton copula cannot handle parameter values
-              # larger than 28.
-              c_vec = ifelse(c_vec > 28 | is.na(c_vec), 28, c_vec)
-            }
-          )
-        }
-      )
-    },
-    gumbel = {
-      c = purrr::map(
-        .x = u,
-        .f = function(x) {
-          purrr::map_dbl(
-            .x = x,
-            .f = function(x) {
-              c_vec = copula::iRho(copula::gumbelCopula(), rho = x)
-              # Functions for the Gumbel copula cannot handle parameter values
-              # larger than 50.
-              c_vec = ifelse(c_vec > 50 | is.na(c_vec), 50, c_vec)
-            }
-          )
-        }
-      )
+      # Clayton copulas cannot handle independence (c_vec will contain NAs). The
+      # ad-hoc solution employed here is to let the copula parameter be close
+      # enough to the independence copula.
+      if(x == "clayton") c_vec = ifelse(y == 0, 1e-5, c_vec)
+
+      # Functions for the chosen copulas cannot handle parameter values larger
+      # than upper_limit as defined above.
+      c_vec = ifelse(c_vec > upper_limit | is.na(c_vec), upper_limit, c_vec)
+      return(c_vec)
     }
   )
+
   # Convert list to a data frame.
   c = as.data.frame(c, col.names = c("c23", "c13_2", "c24_3", "c14_23"))
 
@@ -231,7 +213,7 @@ sample_rotation_parameters = function(n_sim, degrees = c(0, 90, 180, 270)) {
 #' estimated association parameters from [fit_copula_model_BinCont()] refer to
 #' associations on a latent scale.
 #'
-#' @examples
+#' @inherit fit_copula_model_BinCont examples
 sensitivity_analysis_BinCont_copula = function(fitted_model,
                                                n_sim,
                                                cond_ind,
@@ -300,7 +282,7 @@ sensitivity_analysis_BinCont_copula = function(fitted_model,
   )
 
   # Use multicore computing if asked.
-  if(ncores > 1){
+  if(ncores > 1 & requireNamespace("parallel")){
     cl  <- parallel::makeCluster(ncores)
     print("Starting parallel simulations")
     temp = parallel::clusterMap(
@@ -329,8 +311,7 @@ sensitivity_analysis_BinCont_copula = function(fitted_model,
 
   colnames(c) = c("c12", "c23", "c34", "c13_2", "c24_3", "c14_23")
   colnames(r) = c("r12", "r23", "r34", "r13_2", "r24_3", "r14_23")
-  return(dplyr::bind_cols(as.data.frame(measures_df), c, r))
-
   # Return a data frame with the results of the sensiviity analysis.
+  return(cbind(as.data.frame(measures_df), c, r))
 
 }

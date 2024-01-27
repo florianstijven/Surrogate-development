@@ -7,6 +7,9 @@
 #'
 #' @param q_T0 Quantile function for the distribution of \eqn{T_0}.
 #' @param q_T1 Quantile function for the distribution of \eqn{T_1}.
+#' @param mutinfo_estimator Function that estimates the mutual information
+#'  between the first two arguments which are numeric vectors. Defaults to
+#'  `FNN::mutinfo()` with default arguments.
 #'
 #' @inheritParams compute_ICA_BinCont
 #' @inheritParams estimate_mutual_information_SurvSurv
@@ -21,21 +24,26 @@
 #'  \rho_{s}(S_1, T_1)}
 #'  * Survival classification proportions (if asked):
 #'  \deqn{\pi_{harmed}, \pi_{protected}, \pi_{always}, \pi_{never}}
-#'
-#' @importFrom withr local_seed
 compute_ICA_SurvSurv = function(copula_par,
                                 rotation_par,
                                 copula_family1,
-                                copula_family2 = copula_family1,
+                                copula_family2,
                                 n_prec,
-                                minfo_prec,
                                 q_S0,
                                 q_T0,
                                 q_S1,
                                 q_T1,
                                 composite,
                                 marginal_sp_rho = TRUE,
-                                seed = 1) {
+                                seed = 1,
+                                mutinfo_estimator = NULL) {
+  if (is.null(mutinfo_estimator)) {
+    # If no function has been supplies for mutinfo_estimator, we use the defualt
+    # from the FNN R package.
+    requireNamespace("FNN", quietly = FALSE)
+    mutinfo_estimator = FNN::mutinfo
+  }
+  requireNamespace("withr")
   withr::local_seed(seed)
   # Sample individual causal treatment effects from the given model. If
   # marginal_sp_rho = TRUE, then the Spearman's correlation matrix is also
@@ -54,11 +62,10 @@ compute_ICA_SurvSurv = function(copula_par,
     setting = "SurvSurv",
     composite = composite
   )
-
   delta_df = delta_list$Delta_dataframe
   sp_rho_matrix = delta_list$marginal_sp_rho_matrix
   # Compute mutual information between Delta S and Delta T.
-  mutual_information = estimate_mutual_information_SurvSurv(delta_df$DeltaS, delta_df$DeltaT, minfo_prec)
+  mutual_information = mutinfo_estimator(delta_df$DeltaS, delta_df$DeltaT)
   # Compute ICA
   ICA = 1 - exp(-2 * mutual_information)
   sp_rho = stats::cor(delta_df$DeltaS, delta_df$DeltaT, method = "spearman")
@@ -100,6 +107,7 @@ compute_ICA_SurvSurv = function(copula_par,
 #' @return (numeric) estimated mutual information.
 #' @importFrom kdecopula kdecop dep_measures
 estimate_mutual_information_SurvSurv = function(delta_S, delta_T, minfo_prec) {
+  requireNamespace("kdecopula")
   # When minfo = 0, we do not want to compute the mutual information. Therefore,
   # a NA is returned in that case.
   if (minfo_prec == 0) {

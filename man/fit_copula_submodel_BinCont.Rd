@@ -23,9 +23,6 @@ fit_copula_submodel_BinCont(
 \item \code{"frank"}
 \item \code{"gumbel"}
 \item \code{"gaussian"}
-
-The parameterization of the respective copula families can be found in the
-help files of the dedicated functions named \code{copula_loglik_copula_scale()}.
 }}
 
 \item{marginal_surrogate}{Marginal distribution for the surrogate. For all

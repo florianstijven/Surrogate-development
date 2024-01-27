@@ -9,16 +9,16 @@ compute_ICA_SurvSurv(
   copula_par,
   rotation_par,
   copula_family1,
-  copula_family2 = copula_family1,
+  copula_family2,
   n_prec,
-  minfo_prec,
   q_S0,
   q_T0,
   q_S1,
   q_T1,
   composite,
   marginal_sp_rho = TRUE,
-  seed = 1
+  seed = 1,
+  mutinfo_estimator = NULL
 )
 }
 \arguments{
@@ -32,18 +32,15 @@ bivariate copulas that define the D-vine copula. The elements of
   c_{24;3}, c_{14;23})}.}
 
 \item{copula_family1}{Copula family of \eqn{c_{12}} and \eqn{c_{34}}. For the
-possible options, see \code{loglik_copula_scale()}.}
+possible options, see \code{loglik_copula_scale()}. The elements of
+\code{copula_family} correspond to \eqn{(c_{12}, c_{34})}.}
 
 \item{copula_family2}{Copula family of the other bivariate copulas. For the
-possible options, see \code{loglik_copula_scale()}.}
+possible options, see \code{loglik_copula_scale()}. The elements of
+\code{copula_family2} correspond to \eqn{(c_{23}, c_{13;2}, c_{24;3}, c_{14;23})}.}
 
 \item{n_prec}{Number of Monte Carlo samples for the computation of the mutual
 information.}
-
-\item{minfo_prec}{Number of quasi Monte-Carlo samples for the numerical
-integration to obtain the mutual information. If this value is 0 (default),
-the mutual information is not computed and \code{NA} is returned for the mutual
-information and derived quantities.}
 
 \item{q_S0}{Quantile function for the distribution of \eqn{S_0}.}
 
@@ -63,6 +60,10 @@ matrix? Defaults to \code{TRUE}.}
 
 \item{seed}{Seed for Monte Carlo sampling. This seed does not affect the global
 environment.}
+
+\item{mutinfo_estimator}{Function that estimates the mutual information
+between the first two arguments which are numeric vectors. Defaults to
+\code{FNN::mutinfo()} with default arguments.}
 }
 \value{
 (numeric) A Named vector with the following elements:

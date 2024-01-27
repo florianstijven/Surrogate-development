@@ -1,25 +1,25 @@
-ICA.Sample.ContCont <- function(T0S0, T1S1, T0T0=1, T1T1=1, S0S0=1, S1S1=1, 
+ICA.Sample.ContCont <- function(T0S0, T1S1, T0T0=1, T1T1=1, S0S0=1, S1S1=1,
                                 T0T1=seq(-1, 1, by=.001), T0S1=seq(-1, 1, by=.001), T1S0=seq(-1, 1, by=.001),
-                                S0S1=seq(-1, 1, by=.001), M=50000) { 
-  
+                                S0S1=seq(-1, 1, by=.001), M=50000) {
+
   T0S0_val <- T0S0
-  T1S1_val <- T1S1 
+  T1S1_val <- T1S1
   T0T1_val <- T0T1
   T0S1_val <- T0S1
   T1S0_val <- T1S0
   S0S1_val <- S0S1
-  
-  Results <- na.exclude(matrix(NA, 1, 9))  
-  colnames(Results) <- c("T0T1", "T0S0", "T0S1", "T1S0", "T1S1", "S0S1", "ICA", "Sigma.Delta.T", "delta") 
-  
-  for (i in 1: M) {   
+
+  Results <- na.exclude(matrix(NA, 1, 9))
+  colnames(Results) <- c("T0T1", "T0S0", "T0S1", "T1S0", "T1S1", "S0S1", "ICA", "Sigma.Delta.T", "delta")
+
+  for (i in 1: M) {
     T0T1 <- runif(n = 1, min = min(T0T1_val), max = max(T0T1_val))
-    T0S0 <- runif(n = 1, min = min(T0S0_val), max = max(T0S0_val)) 
-    T0S1 <- runif(n = 1, min = min(T0S1_val), max = max(T0S1_val))  
-    T1S0 <- runif(n = 1, min = min(T1S0_val), max = max(T1S0_val))  
-    T1S1 <- runif(n = 1, min = min(T1S1_val), max = max(T1S1_val))  
-    S0S1 <- runif(n = 1, min = min(S0S1_val), max = max(S0S1_val)) 
-    Sigma_c <- diag(4)         
+    T0S0 <- runif(n = 1, min = min(T0S0_val), max = max(T0S0_val))
+    T0S1 <- runif(n = 1, min = min(T0S1_val), max = max(T0S1_val))
+    T1S0 <- runif(n = 1, min = min(T1S0_val), max = max(T1S0_val))
+    T1S1 <- runif(n = 1, min = min(T1S1_val), max = max(T1S1_val))
+    S0S1 <- runif(n = 1, min = min(S0S1_val), max = max(S0S1_val))
+    Sigma_c <- diag(4)
     Sigma_c[2,1] <- Sigma_c[1,2] <- T0T1 * (sqrt(T0T0)*sqrt(T1T1))
     Sigma_c[3,1] <- Sigma_c[1,3] <- T0S0 * (sqrt(T0T0)*sqrt(S0S0))
     Sigma_c[4,1] <- Sigma_c[1,4] <- T0S1 * (sqrt(T0T0)*sqrt(S1S1))
@@ -31,8 +31,8 @@ ICA.Sample.ContCont <- function(T0S0, T1S1, T0T0=1, T1T1=1, S0S0=1, S1S1=1,
     Sigma_c[3,3] <- S0S0
     Sigma_c[4,4] <- S1S1
     Cor_c <- cov2cor(Sigma_c)
-    Min.Eigen.Cor <- try(min(eigen(Cor_c)$values), TRUE)  
-    
+    Min.Eigen.Cor <- try(min(eigen(Cor_c)$values), TRUE)
+
     if (Min.Eigen.Cor > 0) {
       ICA <- ((sqrt(S0S0*T0T0)*Cor_c[3,1])+(sqrt(S1S1*T1T1)*Cor_c[4,2])-(sqrt(S0S0*T1T1)*Cor_c[3,2])-(sqrt(S1S1*T0T0)*Cor_c[4,1]))/(sqrt((T0T0+T1T1-(2*sqrt(T0T0*T1T1)*Cor_c[2,1]))*(S0S0+S1S1-(2*sqrt(S0S0*S1S1)*Cor_c[4,3]))))
       if ((is.finite(ICA))==TRUE){
@@ -46,33 +46,32 @@ ICA.Sample.ContCont <- function(T0S0, T1S1, T0T0=1, T1T1=1, S0S0=1, S1S1=1,
   Results <- data.frame(Results, stringsAsFactors = TRUE)
   rownames(Results) <- NULL
   Total.Num.Matrices <- dim(Results)[1]
-  
-  fit <- 
+
+  fit <-
     list(Total.Num.Matrices=Total.Num.Matrices, Pos.Def=Results[,1:6], ICA=Results$ICA, GoodSurr=Results[,7:9], Call=match.call())
-  
+
   class(fit) <- "ICA.ContCont"
   fit
-  
+
 }
 
 
-plot.ICA.ContCont <- function(x, Xlab.ICA, Main.ICA, Type="Percent", Labels=FALSE, ICA=TRUE, Good.Surr=FALSE, Main.Good.Surr, 
-                              Par=par(oma=c(0, 0, 0, 0), mar=c(5.1, 4.1, 4.1, 2.1)), col, ...){   
-    Object <- x 
+plot.ICA.ContCont <- function(x, Xlab.ICA, Main.ICA, Type="Percent", Labels=FALSE, ICA=TRUE, Good.Surr=FALSE, Main.Good.Surr,
+                              Par=par(oma=c(0, 0, 0, 0), mar=c(5.1, 4.1, 4.1, 2.1)), col, ...){
+    Object <- x
     if (missing(Xlab.ICA)) {Xlab.ICA <- expression(rho[Delta])}
-    if (missing(Main.ICA)) {Main.ICA="ICA"} 
+    if (missing(Main.ICA)) {Main.ICA="ICA"}
     if (missing(col)) {col <- c(8)}
-    
+
     if (ICA==TRUE){
-    
-    dev.new() 
-    par=Par  
+
+    par=Par
     if (Type=="Freq"){
         h <- hist(Object$ICA, ...)
         h$density <- h$counts/sum(h$counts)
         cumulMidPoint <- ecdf(x=Object$ICA)(h$mids)
         labs <- paste(round((1-cumulMidPoint), digits=4)*100, "%", sep="")
-        
+
         if (Labels==FALSE){
           plot(h,freq=T, xlab=Xlab.ICA, ylab="Frequency", col=col, main=Main.ICA)
            }
@@ -80,13 +79,13 @@ plot.ICA.ContCont <- function(x, Xlab.ICA, Main.ICA, Type="Percent", Labels=FALS
           plot(h,freq=T, xlab=Xlab.ICA, ylab="Frequency", col=col, main=Main.ICA, labels=labs)
            }
         }
-    
+
     if (Type=="Percent"){
         h <- hist(Object$ICA, ...)
         h$density <- h$counts/sum(h$counts)
         cumulMidPoint <- ecdf(x=Object$ICA)(h$mids)
         labs <- paste(round((1-cumulMidPoint), digits=4)*100, "%", sep="")
-        
+
         if (Labels==FALSE){
           plot(h,freq=F, xlab=Xlab.ICA, ylab="Percentage", col=col, main=Main.ICA)
             }
@@ -94,7 +93,7 @@ plot.ICA.ContCont <- function(x, Xlab.ICA, Main.ICA, Type="Percent", Labels=FALS
           plot(h,freq=F, xlab=Xlab.ICA, ylab="Percentage", col=col, main=Main.ICA, labels=labs)
             }
         }
-    
+
     if (Type=="CumPerc"){
       h <- hist(Object$ICA, breaks=length(Object$ICA), ...)
       h$density <- h$counts/sum(h$counts)
@@ -103,18 +102,18 @@ plot.ICA.ContCont <- function(x, Xlab.ICA, Main.ICA, Type="Percent", Labels=FALS
       lines(x=h$mids, y=cumulative)
          }
     }
-    
-    
+
+
     if (Good.Surr==TRUE){
-    
-    if (missing(Main.Good.Surr)) {Main.Good.Surr = " "}  
+
+    if (missing(Main.Good.Surr)) {Main.Good.Surr = " "}
     par=Par
     if (Type=="Freq"){
       h <- hist(Object$GoodSurr$delta, ...)
       h$density <- h$counts/sum(h$counts)
       cumulMidPoint <- ecdf(x=Object$GoodSurr$delta)(h$mids)
       labs <- paste(round((1-cumulMidPoint), digits=4)*100, "%", sep="")
-      
+
       if (Labels==FALSE){
         plot(h,freq=T, xlab=expression(delta), ylab="Frequency", main=Main.Good.Surr, col=col)
       }
@@ -122,13 +121,13 @@ plot.ICA.ContCont <- function(x, Xlab.ICA, Main.ICA, Type="Percent", Labels=FALS
         plot(h,freq=T, xlab=expression(delta), ylab="Frequency", col=col, labels=labs, main=Main.Good.Surr)
       }
     }
-    
+
     if (Type=="Percent"){
       h <- hist(Object$GoodSurr$delta, ...)
       h$density <- h$counts/sum(h$counts)
       cumulMidPoint <- ecdf(x=Object$GoodSurr$delta)(h$mids)
       labs <- paste(round((1-cumulMidPoint), digits=4)*100, "%", sep="")
-      
+
       if (Labels==FALSE){
         plot(h,freq=F, xlab=expression(delta), ylab="Percentage", col=col, main=Main.Good.Surr)
       }
@@ -136,7 +135,7 @@ plot.ICA.ContCont <- function(x, Xlab.ICA, Main.ICA, Type="Percent", Labels=FALS
         plot(h,freq=F, xlab=expression(delta), ylab="Percentage", col=col, labels=labs, main=Main.Good.Surr)
       }
     }
-    
+
     if (Type=="CumPerc"){
       h <- hist(Object$GoodSurr$delta, breaks=length(Object$GoodSurr$delta), ...)
       h$density <- h$counts/sum(h$counts)
@@ -144,22 +143,22 @@ plot.ICA.ContCont <- function(x, Xlab.ICA, Main.ICA, Type="Percent", Labels=FALS
       plot(x=h$mids, y=cumulative, xlab=expression(delta), ylab="Cumulative percentage", col=0, main=Main.Good.Surr)
       lines(x=h$mids, y=cumulative)
     }
-    
-  
-    }    
+
+
+    }
 
 }
 
 summary.ICA.ContCont <- function(object, ..., Object){
-  if (missing(Object)){Object <- object} 
-  
+  if (missing(Object)){Object <- object}
+
   mode <- function(data) {
     x <- data
     z <- density(x)
     mode_val <- z$x[which.max(z$y)]
     fit <- list(mode_val= mode_val)
   }
-  
+
   cat("\nFunction call:\n\n")
   print(Object$Call)
   cat("\n\n# Total number of matrices that can be formed by the specified vectors and/or scalars")
@@ -170,8 +169,8 @@ summary.ICA.ContCont <- function(object, ..., Object){
   cat("\n#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n")
   cat(nrow(Object$Pos.Def))
   cat("\n\n\n# Causal-inference (ICA) results summary")
-  cat("\n#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n")  
-  cat("Mean (SD) ICA: ", format(round(mean(Object$ICA), 4), nsmall = 4), " (", format(round(sd(Object$ICA), 4), nsmall = 4), ")", 
+  cat("\n#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n")
+  cat("Mean (SD) ICA: ", format(round(mean(Object$ICA), 4), nsmall = 4), " (", format(round(sd(Object$ICA), 4), nsmall = 4), ")",
       "  [min: ", format(round(min(Object$ICA), 4), nsmall = 4), "; max: ",  format(round(max(Object$ICA), 4), nsmall = 4), "]", sep="")
   cat("\nMode ICA: ", format(round(mode(Object$ICA)$mode_val, 4), nsmall = 4))
   cat("\n\nQuantiles of the ICA distribution: \n\n")

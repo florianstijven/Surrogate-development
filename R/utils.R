@@ -1,4 +1,5 @@
 conversion_copula_tau = function(copula_par, copula_family){
+  requireNamespace("copula")
   if(copula_family == "frank"){
     return(
       copula::tau(copula = copula::frankCopula(copula_par))

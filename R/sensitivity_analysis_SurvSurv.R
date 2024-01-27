@@ -149,29 +149,34 @@
 #'   data. Biostatistics, 23 (4), 1115-1132
 #'
 #' @examples
-#' library(Surrogate)
+#' # Load Ovarian data
 #' data("Ovarian")
-#' # For simplicity, data is not recoded to semi-competing risks format, but the
-#' # data are left in the composite event format.
-#' data = data.frame(
-#'   Ovarian$Pfs,
-#'   Ovarian$Surv,
-#'   Ovarian$Treat,
-#'   Ovarian$PfsInd,
-#'   Ovarian$SurvInd
+#' # Recode the Ovarian data in the semi-competing risks format.
+#' data_scr = data.frame(
+#'   ttp = Ovarian$Pfs,
+#'   os = Ovarian$Surv,
+#'   treat = Ovarian$Treat,
+#'   ttp_ind = ifelse(
+#'     Ovarian$Pfs == Ovarian$Surv &
+#'       Ovarian$SurvInd == 1,
+#'     0,
+#'     Ovarian$PfsInd
+#'   ),
+#'   os_ind = Ovarian$SurvInd
 #' )
-#' ovarian_fitted =
-#'     fit_model_SurvSurv(data = data,
-#'                        copula_family = "clayton",
-#'                        n_knots = 1)
+#' # Fit copula model.
+#' fitted_model = fit_model_SurvSurv(data = data_scr,
+#'                                   copula_family = "clayton",
+#'                                   n_knots = 1)
 #' # Illustration with small number of replications and low precision
-#' sensitivity_analysis_SurvSurv_copula(ovarian_fitted,
+#' sens_results = sensitivity_analysis_SurvSurv_copula(fitted_model,
 #'                   n_sim = 5,
 #'                   n_prec = 2000,
 #'                   copula_family2 = "clayton",
 #'                   cond_ind = TRUE)
-#'
-#'
+#' # Compute intervals of ignorance and uncertainty. Again, the number of
+#' # bootstrap replications should be larger in practice.
+#' sensitivity_intervals_Dvine(fitted_model, sens_results, B = 50)
 sensitivity_analysis_SurvSurv_copula = function(fitted_model,
                                                 composite = TRUE,
                                                 n_sim,
@@ -180,12 +185,16 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
                                                 upper = c(1, 1, 1, 1),
                                                 degrees = c(0, 90, 180, 270),
                                                 marg_association = TRUE,
-                                                copula_family2 = fitted_model$copula_family,
+                                                copula_family2 = fitted_model$copula_family[1],
                                                 n_prec = 5e3,
-                                                minfo_prec = 0,
                                                 ncores = 1) {
+  # If copula_family2 contains only 1 element, this vector is appended to
+  # the correct length.
+  copula_family1 = fitted_model$copula_family
+  if(length(copula_family1) == 1) copula_family1 = rep(copula_family2, 2)
+  if(length(copula_family2) == 1) copula_family2 = rep(copula_family2, 4)
   # Extract relevant estimated parameters/objects for the fitted copula model.
-  copula_family = fitted_model$copula_family
+
   k = length(fitted_model$knots0)
 
   gammas0 = force(coef(fitted_model$fit_0)[1:k])
@@ -197,6 +206,8 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
   knott0 = force(fitted_model$knott0)
   gammat1 = force(coef(fitted_model$fit_1)[(k + 1):(2 * k)])
   knott1 = force(fitted_model$knott1)
+
+  copula_rotations = force(fitted_model$copula_rotations)
 
   q_S0 = function(p) {
     flexsurv::qsurvspline(p = p,
@@ -228,8 +239,10 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
   c34 = coef(fitted_model$fit_1)[n_par]
   # For the Gaussian copula, fisher's Z transformation was applied. We have to
   # backtransform to the correlation scale in that case.
-  if (copula_family == "gaussian") {
+  if (copula_family1[1] == "gaussian") {
     c12 = (exp(2 * c12) - 1) / (exp(2 * c12) + 1)
+  }
+  if (copula_family1[2] == "gaussian") {
     c34 = (exp(2 * c34) - 1) / (exp(2 * c34) + 1)
   }
   c = sample_copula_parameters(
@@ -243,32 +256,23 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
   c_list = purrr::map(.x = split(c, seq(nrow(c))), .f = as.double)
   # Sample rotation parameters of the unidentifiable copula's family does not
   # allow for negative associations.
-  if (copula_family2 %in% c("gumbel", "clayton")) {
-    r = sample_rotation_parameters(n_sim, degrees)
-  } else {
-    r = sample_rotation_parameters(n_sim, 0)
-  }
-  # Add rotation parameters for identifiable copulas. Rotation parameters are
-  # 180 because survival copulas were fitted.
-  rotation_identifiable = 180
-  # The Gaussian copula is invariant to rotations and a non-zero rotation
-  # parameter for the Gaussian copula will give errors. The rotation parameters
-  # are therefore set to zero for the Gaussian copula.
-  if (copula_family %in% c("gaussian", "frank")) rotation_identifiable = 0
-  r = cbind(rep(rotation_identifiable, n_sim),
+  r = sample_rotation_parameters(n_sim)
+  if (copula_family2[1] %in% c("gaussian", "frank")) r[, 1] = rep(0, n_sim)
+  if (copula_family2[2] %in% c("gaussian", "frank")) r[, 2] = rep(0, n_sim)
+  if (copula_family2[3] %in% c("gaussian", "frank")) r[, 3] = rep(0, n_sim)
+  if (copula_family2[4] %in% c("gaussian", "frank")) r[, 4] = rep(0, n_sim)
+  r = cbind(rep(copula_rotations[1], n_sim),
             r[, 1],
-            rep(rotation_identifiable, n_sim),
+            rep(copula_rotations[2], n_sim),
             r[, 2:4])
   r_list = purrr::map(.x = split(r, seq(nrow(r))), .f = as.double)
   # For every set of sampled unidentifiable parameters, compute the
   # required quantities.
-
   #put all other arguments in a list for the apply function
   MoreArgs = list(
-    copula_family1 = copula_family,
+    copula_family1 = copula_family1,
     copula_family2 = copula_family2,
     n_prec = n_prec,
-    minfo_prec = minfo_prec,
     q_S0 = q_S0,
     q_T0 = q_T0,
     q_S1 = q_S1,
@@ -277,7 +281,7 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
     marginal_sp_rho = marg_association,
     seed = 1
   )
-  if (ncores > 1) {
+  if (ncores > 1 & requireNamespace("parallel")) {
     cl  <- parallel::makeCluster(ncores)
     #helper function
     # surrogacy_sample_sens <- surrogacy_sample_sens
@@ -342,6 +346,11 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
 
   colnames(c) = c("c12", "c23", "c34",  "c13_2", "c24_3", "c14_23")
   colnames(r) = c("r12", "r23", "r34",  "r13_2", "r24_3", "r14_23")
-  return(dplyr::bind_cols(as.data.frame(measures_df), c, r))
+
+  sens_results = cbind(as.data.frame(measures_df), c, r)
+  attr(sens_results, which = "copula_family1") = copula_family1
+  attr(sens_results, which = "copula_family2") = copula_family2
+  attr(sens_results, which = "composite") = composite
+  return(sens_results)
 
 }

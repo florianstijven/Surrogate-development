@@ -69,8 +69,6 @@ log_likelihood_copula_model = function(theta,
 #' * `"t"`: t distribution as parameterized in `stats::pt()` where `para[1]` and
 #'   `para[2]` correspond to `ncp` and `df`, respectively.
 #'
-#' @details
-#'
 #' @return A distribution function that has a single argument. This is the
 #'   vector of values in which the distribution function is evaluated.
 cdf_fun = function(para, family){

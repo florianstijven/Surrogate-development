@@ -11,7 +11,9 @@ new_vine_copula_ss_fit(
   knots0,
   knots1,
   knott0,
-  knott1
+  knott1,
+  copula_rotations,
+  data
 )
 }
 \arguments{
@@ -28,6 +30,10 @@ new_vine_copula_ss_fit(
 \item{knott0}{placement of knots for Royston-Parmar model}
 
 \item{knott1}{placement of knots for Royston-Parmar model}
+
+\item{copula_rotations}{vector of copula rotation parameters}
+
+\item{data}{Original data}
 }
 \value{
 S3 object
