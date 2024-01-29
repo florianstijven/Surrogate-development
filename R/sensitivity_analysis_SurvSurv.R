@@ -256,7 +256,7 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
   c_list = purrr::map(.x = split(c, seq(nrow(c))), .f = as.double)
   # Sample rotation parameters of the unidentifiable copula's family does not
   # allow for negative associations.
-  r = sample_rotation_parameters(n_sim)
+  r = sample_rotation_parameters(n_sim, degrees = degrees)
   if (copula_family2[1] %in% c("gaussian", "frank")) r[, 1] = rep(0, n_sim)
   if (copula_family2[2] %in% c("gaussian", "frank")) r[, 2] = rep(0, n_sim)
   if (copula_family2[3] %in% c("gaussian", "frank")) r[, 3] = rep(0, n_sim)
