@@ -1,8 +1,8 @@
 #' Sensitivity analysis for individual causal association
 #'
-#' The [sensitivity_analysis_SurvSurv_copula()] function performs the sensitivity analysis
-#' for the individual causal association (ICA) as described by Stijven et
-#' al. (2022).
+#' The [sensitivity_analysis_SurvSurv_copula()] function performs the
+#' sensitivity analysis for the individual causal association (ICA) as described
+#' by Stijven et al. (2022).
 #'
 #' @details
 #'
@@ -19,8 +19,8 @@
 #' I(\Delta S; \Delta T)}.} By token of that transformation, \eqn{R^2_H} is
 #' restricted to the unit interval where 0 indicates independence, and 1 a
 #' functional relationship between \eqn{\Delta S} and \eqn{\Delta T}. The mutual
-#' information is returned by [sensitivity_analysis_SurvSurv_copula()] if a non-zero value is
-#' specified for `minfo_prec` (see Arguments).
+#' information is returned by [sensitivity_analysis_SurvSurv_copula()] if a
+#' non-zero value is specified for `minfo_prec` (see Arguments).
 #'
 #' The association between \eqn{\Delta S} and \eqn{\Delta T} can also be
 #' quantified by Spearman's \eqn{\rho} (or Kendall's \eqn{\tau}). This quantity
@@ -97,8 +97,8 @@
 #' @param n_prec Number of Monte-Carlo samples for the *numerical approximation*
 #'   of the ICA in each replication of the sensitivity analysis.
 #' @param ncores Number of cores used in the sensitivity analysis. The
-#'   computations are computationally heavy, and this option can speed things
-#'   up considerably.
+#'   computations are computationally heavy, and this option can speed things up
+#'   considerably.
 #' @param marg_association Boolean.
 #' * `TRUE`: Return marginal association measures
 #'   in each replication in terms of Spearman's rho. The proportion of harmed,
@@ -108,6 +108,9 @@
 #' @param cond_ind Boolean.
 #' * `TRUE`: Assume conditional independence (see Additional Assumptions).
 #' * `FALSE` (default): Conditional independence is not assumed.
+#' @param sample_plots Indices for replicates in the sensitivity analysis for
+#'   which the sampled individual treatment effects are plotted. Defaults to
+#'   `NULL`: no plots are displayed.
 #' @inheritParams estimate_mutual_information_SurvSurv
 #' @inheritParams sample_copula_parameters
 #' @inheritParams compute_ICA_BinCont
@@ -117,27 +120,28 @@
 #'   sensitivity analysis. The returned data frame always contains the following
 #'   columns:
 #' * `ICA`, `sp_rho`: ICA as quantified by \eqn{R^2_h(\Delta S, \Delta T)} and
-#' \eqn{\rho_s(\Delta S, \Delta T)}.
+#'   \eqn{\rho_s(\Delta S, \Delta T)}.
 #' * `c23`, `c13_2`, `c24_3`, `c14_23`: sampled copula parameters of the
-#' unidentifiable copulas in the D-vine copula. The parameters correspond to the
-#' parameterization of the `copula_family2` copula as in the `copula` R-package.
+#'   unidentifiable copulas in the D-vine copula. The parameters correspond to
+#'   the parameterization of the `copula_family2` copula as in the `copula`
+#'   R-package.
 #' * `r23`, `r13_2`, `r24_3`, `r14_23`: sampled rotation parameters of the
-#' unidentifiable copulas in the D-vine copula. These values are constant for
-#' the Gaussian copula family since that copula is invariant to rotations.
+#'   unidentifiable copulas in the D-vine copula. These values are constant for
+#'   the Gaussian copula family since that copula is invariant to rotations.
 #'
-#' The returned data frame also contains the following columns when `get_marg_tau`
-#' is `TRUE`:
+#'   The returned data frame also contains the following columns when
+#'   `get_marg_tau` is `TRUE`:
 #' * `sp_s0s1`, `sp_s0t0`, `sp_s0t1`, `sp_s1t0`, `sp_s1t1`, `sp_t0t1`:
-#' Spearman's \eqn{\rho} between the corresponding potential outcomes. Note that
-#' these associations refer to the potential time-to-composite events and/or
-#' time-to-true endpoint event. In contrary, the estimated association
-#' parameters from [fit_model_SurvSurv()] refer to associations between the
-#' time-to-surrogate event and time-to true endpoint event. Also note that
-#' `sp_s1t1` is constant whereas `sp_s0t0` is not. This is a particularity of
-#' the MC procedure to calculate both measures and thus not a bug.
+#'   Spearman's \eqn{\rho} between the corresponding potential outcomes. Note
+#'   that these associations refer to the potential time-to-composite events
+#'   and/or time-to-true endpoint event. In contrary, the estimated association
+#'   parameters from [fit_model_SurvSurv()] refer to associations between the
+#'   time-to-surrogate event and time-to true endpoint event. Also note that
+#'   `sp_s1t1` is constant whereas `sp_s0t0` is not. This is a particularity of
+#'   the MC procedure to calculate both measures and thus not a bug.
 #' * `prop_harmed`, `prop_protected`, `prop_always`, `prop_never`: proportions
-#' of the corresponding population strata in each replication. These are defined
-#' in Nevo and Gorfine (2022).
+#'   of the corresponding population strata in each replication. These are
+#'   defined in Nevo and Gorfine (2022).
 #' @export
 #'
 #' @references Stijven, F., Alonso, a., Molenberghs, G., Van Der Elst, W., Van
@@ -187,7 +191,8 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
                                                 marg_association = TRUE,
                                                 copula_family2 = fitted_model$copula_family[1],
                                                 n_prec = 5e3,
-                                                ncores = 1) {
+                                                ncores = 1,
+                                                sample_plots = NULL) {
   # If copula_family2 contains only 1 element, this vector is appended to
   # the correct length.
   copula_family1 = fitted_model$copula_family
@@ -282,6 +287,9 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
     seed = 1
   )
   if (ncores > 1 & requireNamespace("parallel")) {
+    if (!is.null(sample_plots)){
+      warning("Sample plots cannot be displayed when sensitivity analysis is executed in parallel.")
+    }
     cl  <- parallel::makeCluster(ncores)
     #helper function
     # surrogacy_sample_sens <- surrogacy_sample_sens
@@ -313,10 +321,13 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
     })
   }
   else if (ncores == 1) {
+    sample_plots_indicator = rep(FALSE, n_sim)
+    sample_plots_indicator[sample_plots] = TRUE
     temp = mapply(
       FUN = compute_ICA_SurvSurv,
       copula_par = c_list,
       rotation_par = r_list,
+      plot_deltas = sample_plots_indicator,
       MoreArgs = MoreArgs,
       SIMPLIFY = FALSE
     )

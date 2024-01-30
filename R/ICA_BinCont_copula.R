@@ -281,7 +281,8 @@ sample_deltas_BinCont = function(copula_par,
                                  q_T1 = NULL,
                                  marginal_sp_rho = TRUE,
                                  setting = "BinCont",
-                                 composite = FALSE){
+                                 composite = FALSE,
+                                 plot_deltas = FALSE){
   # Sample data on the copula scale.
   U = sample_dvine(copula_par,
                    rotation_par,
@@ -327,13 +328,37 @@ sample_deltas_BinCont = function(copula_par,
     # classification is also computed.
 
     if (setting == "SurvSurv") {
-      prop_harmed = mean((S0 == T0) &
-                           (S1 < T1))
-      prop_protected = mean((S0 < T0) &
-                              (S1 == T1))
-      prop_always = mean((S0 < T0) &
-                           (S1 < T1))
+      harmed = (S0 == T0) & (S1 < T1)
+      protected = (S0 < T0) & (S1 == T1)
+      always = (S0 < T0) & (S1 < T1)
+      if (plot_deltas) {
+        never = !harmed & !protected & !always
+        plot(
+          Delta_dataframe[always, ],
+          xlab = "Delta S",
+          ylab = "Delta T",
+          xlim = c(min(Delta_dataframe$DeltaS), max(Delta_dataframe$DeltaS)),
+          ylim = c(min(Delta_dataframe$DeltaT), max(Delta_dataframe$DeltaT)),
+          col = rgb(red = 0, green = 0, blue = 0, alpha = 0.1),
+          cex = 0.5
+        )
+        points(Delta_dataframe[harmed,], col = rgb(red = 1, green = 0, blue = 0, alpha = 0.1), cex = 0.5)
+        points(Delta_dataframe[protected,], col = rgb(red = 0, green = 0, blue = 1, alpha = 0.1), cex = 0.5)
+        points(Delta_dataframe[never,], col = rgb(red = 0, green = 1, blue = 0, alpha = 0.1), cex = 0.5)
+        legend(
+          x = "topleft",
+          col = c("black", "red", "blue", "green"),
+          pch = 1,
+          legend = c("Always", "Harmed", "Protected", "Never"),
+          title = "Progression Type"
+        )
+      }
+
+      prop_harmed = mean(harmed)
+      prop_protected = mean(protected)
+      prop_always = mean(always)
       prop_never = 1 - prop_harmed - prop_protected - prop_always
+
       survival_classification = c(prop_harmed = prop_harmed,
                                   prop_protected = prop_protected,
                                   prop_always = prop_always,

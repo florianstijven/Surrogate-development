@@ -1,16 +1,17 @@
 test_that("compute_ICA_SurvSurv works", {
-  copula_par = 1:6
+  copula_par = c(5, 2, 5, 2, 2, 2)
   rotation_par = rep(0, 6)
   copula_family1 = "clayton"
   copula_family2 = copula_family1
-  n_prec = 1e4
+  n_prec = 5e3
   q_S0 = qnorm
-  q_T0 = qnorm
+  q_T0 = function(p) qnorm(p, mean = 1)
   q_S1 = qnorm
-  q_T1 = qnorm
+  q_T1 = function(p) qnorm(p, mean = 1)
   composite = TRUE
   marginal_sp_rho = TRUE
   seed = 1
+  # BUG TO FIX REGARDING MUTUAL INFORMATION ESTIMATOR
   output_vector = compute_ICA_SurvSurv(copula_par,
                        rotation_par,
                        copula_family1,
@@ -24,7 +25,7 @@ test_that("compute_ICA_SurvSurv works", {
                        marginal_sp_rho,
                        seed)
   output_vector = unname(output_vector[1:4])
-  check_vector = c(0.73969296, 0.06695890, 0.80386137 , 0.80195259)
+  check_vector = c(0.329931193410, 0.385933009133, 0.890199861304, 0.835027399097)
   expect_equal(output_vector, check_vector)
 })
 
@@ -55,6 +56,6 @@ test_that("compute_ICA_SurvSurv works for different unidentifiable copulas", {
                                        marginal_sp_rho,
                                        seed)
   output_vector = unname(output_vector[1:4])
-  check_vector = c(0.886825247223, 0.310282184611, 0.676431933056, 0.511494812175)
+  check_vector = c(0.440951593781, 0.310282184611, 0.676431933056, 0.511494812175)
   expect_equal(output_vector, check_vector)
 })

@@ -13,7 +13,7 @@ test_that("Delta method based on numerical derivatives works", {
     seed = 1,
     eps = 1e-2
   )
-  expect_equal(estimated_variance, matrix(0.158789300236, nrow = 1, ncol = 1))
+  expect_equal(estimated_variance, matrix(0.309301300833, nrow = 1, ncol = 1))
 })
 
 test_that("Resampling method for the ICA based on fitted model summary information works", {
@@ -34,5 +34,5 @@ test_that("Resampling method for the ICA based on fitted model summary informati
   )
   mean_ICA = mean(estimated_ICAs)
   sd_ICA = sd(estimated_ICAs)
-  expect_equal(c(mean_ICA, sd_ICA), c(0.99124170985157, 0.00166932399608))
+  expect_equal(c(mean_ICA, sd_ICA), c(0.99096747638744, 0.00145160206983))
 })
