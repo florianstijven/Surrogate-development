@@ -214,7 +214,7 @@
 #' Nevo, D., & Gorfine, M. (2022). Causal inference for semi-competing risks
 #' data. Biostatistics, 23 (4), 1115-1132
 #'
-#' @examples
+#' @examplesIf identical(Sys.getenv("NOT_CRAN"), "true")
 #' # Load Ovarian data
 #' data("Ovarian")
 #' # Recode the Ovarian data in the semi-competing risks format.
@@ -242,7 +242,7 @@
 #'                   cond_ind = TRUE)
 #' # Compute intervals of ignorance and uncertainty. Again, the number of
 #' # bootstrap replications should be larger in practice.
-#' sensitivity_intervals_Dvine(fitted_model, sens_results, B = 50)
+#' sensitivity_intervals_Dvine(fitted_model, sens_results, B = 10)
 sensitivity_analysis_SurvSurv_copula = function(fitted_model,
                                                 composite = TRUE,
                                                 n_sim,

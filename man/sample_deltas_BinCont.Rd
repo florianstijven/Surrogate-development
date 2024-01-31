@@ -64,6 +64,9 @@ matrix? Defaults to \code{TRUE}.}
 endpoint is a composite of both a "pure" surrogate endpoint and the true
 endpoint, e.g., progression-free survival is the minimum of time-to-progression
 and time-to-death.}
+
+\item{plot_deltas}{Plot the sampled individual causal effects? Defaults to
+\code{FALSE}.}
 }
 \value{
 A list with two elements:

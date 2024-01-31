@@ -260,6 +260,8 @@ sample_dvine = function(copula_par,
 #' @param setting Should be one of the following two:
 #' * `"BinCont"`: for when \eqn{S} is continuous and \eqn{T} is binary.
 #' * `"SurvSurv"`: for when both \eqn{S} and \eqn{T} are time-to-event variables.
+#' @param plot_deltas Plot the sampled individual causal effects? Defaults to
+#' `FALSE`.
 #'
 #' @inheritParams sample_dvine
 #'

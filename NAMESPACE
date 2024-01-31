@@ -52,6 +52,7 @@ importFrom("graphics", "arrows")
 importFrom("stats", "weighted.mean")
 importFrom("stats", "approxfun")
 importFrom("stats", "resid")
+importFrom("grDevices", "rgb")
 import(maxLik)
 import(purrr)
 
