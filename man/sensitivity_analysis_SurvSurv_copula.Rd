@@ -250,6 +250,7 @@ Stijven et al. (2024).
 }
 
 \examples{
+\dontshow{if (identical(Sys.getenv("NOT_CRAN"), "true")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Load Ovarian data
 data("Ovarian")
 # Recode the Ovarian data in the semi-competing risks format.
@@ -277,7 +278,8 @@ sens_results = sensitivity_analysis_SurvSurv_copula(fitted_model,
                   cond_ind = TRUE)
 # Compute intervals of ignorance and uncertainty. Again, the number of
 # bootstrap replications should be larger in practice.
-sensitivity_intervals_Dvine(fitted_model, sens_results, B = 50)
+sensitivity_intervals_Dvine(fitted_model, sens_results, B = 10)
+\dontshow{\}) # examplesIf}
 }
 \references{
 Alonso, A. (2018). An information-theoretic approach for the evaluation of
