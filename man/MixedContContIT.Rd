@@ -94,6 +94,7 @@ Wim Van der Elst, Ariel Alonso, & Geert Molenberghs
 \code{\link{FixedContContIT}}, \code{\link{plot Information-Theoretic}}
 }
 \examples{
+\dontrun{ # Time consuming (>5sec) code part
 # Example 1
 # Based on the ARMD data:
 data(ARMD)
@@ -104,7 +105,6 @@ Pat.ID=Id, Model="Full")
 # Obtain a summary of the results:
 summary(Sur)
 
-\dontrun{ # Time consuming (>5sec) code part
 # Example 2
 # Conduct an analysis based on a simulated dataset with 2000 patients, 200 trials,
 # and Rindiv=Rtrial=.8

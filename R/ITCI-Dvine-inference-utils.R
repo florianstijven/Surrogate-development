@@ -1,4 +1,3 @@
-
 #' Confidence interval for the ICA given the unidentifiable parameters
 #'
 #' [Dvine_ICA_confint()] computes the confidence interval for the ICA
@@ -141,8 +140,8 @@ summary_level_bootstrap_ICA = function(fitted_model,
   zeros_matrix = matrix(rep(0, (2 * k + 1) ** 2), ncol = (2 * k + 1))
   vcov_matrix = rbind(cbind(vcov(fitted_model$fit_0), zeros_matrix),
                       cbind(zeros_matrix, vcov(fitted_model$fit_1)))
-  # For the Gaussian copula, fisher's Z transformation was applied. We have to
-  # backtransform to the correlation scale in that case.
+
+
   ICA_given_model = ICA_given_model_constructor(
     fitted_model = fitted_model,
     copula_par_unid = copula_par_unid,
@@ -160,6 +159,9 @@ summary_level_bootstrap_ICA = function(fitted_model,
   theta_resampled = mvtnorm::rmvnorm(n = B,
                                      mean = theta_hat,
                                      sigma = vcov_matrix)
+
+  # For the Gaussian copula, fisher's Z transformation was applied. We have to
+  # backtransform to the correlation scale in that case.
   a = length(coef(fitted_model$fit_0))
   b = length(coef(fitted_model$fit_1))
   if (fitted_model$copula_family[1] == "gaussian") {
@@ -168,6 +170,7 @@ summary_level_bootstrap_ICA = function(fitted_model,
   if (fitted_model$copula_family[1] == "gaussian") {
     theta_resampled[, a + b] = (exp(2 * theta_resampled[, a + b]) - 1) / (exp(2 * theta_resampled[, a + b]) + 1)
   }
+
 
 
   # Compute the ICA for the resampled parameter estimates.

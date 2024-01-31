@@ -41,8 +41,12 @@ information.}
 
 \item{mutinfo_estimator}{Function that estimates the mutual information
 between the first two arguments which are numeric vectors. Defaults to
+<<<<<<< HEAD
 \code{FNN::mutinfo()} with default arguments.
 @param plot_deltas (logical) Plot the sampled individual treatment effects?}
+=======
+\code{FNN::mutinfo()} with default arguments.}
+>>>>>>> WimVDE001/master
 
 \item{composite}{(boolean)  If \code{composite} is \code{TRUE}, then the surrogate
 endpoint is a composite of both a "pure" surrogate endpoint and the true
@@ -60,6 +64,7 @@ environment.}
 on the estimated multivariate normal sampling distribution of the maximum
 likelihood estimator for the (observable) D-vine copula model parameters.
 }
+<<<<<<< HEAD
 \details{
 Let \eqn{\hat{\boldsymbol{\beta}}} be the estimated identifiable parameter
 vector, \eqn{\hat{\Sigma}} the corresponding estimated covariance matrix, and
@@ -73,3 +78,5 @@ compute the ICA as \eqn{ICA(\hat{\boldsymbol{\beta}}^{(b)},
 \boldsymbol{\nu})}.
 }
 }
+=======
+>>>>>>> WimVDE001/master

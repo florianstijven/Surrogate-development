@@ -37,6 +37,7 @@ An S3 object of the class \code{sensitivity_intervals_Dvine} which can be
 printed.
 }
 \description{
+<<<<<<< HEAD
 \code{\link[=sensitivity_intervals_Dvine]{sensitivity_intervals_Dvine()}} computes the estimated intervals of ignorance
 and uncertainty within the information-theoretic causal inference framework
 when the data are modeled with a D-vine copula model.
@@ -82,6 +83,12 @@ known. Therefore, it is estimated as
 and similarly for \eqn{\boldsymbol{\nu}_u}.
 }
 
+=======
+\code{\link[=sensitivity_intervals_Dvine]{sensitivity_intervals_Dvine()}} computes the intervals of ignorance and
+uncertainty within the information-theoretic causal inference framework when
+the data are modeled with a D-vine copula model.
+}
+>>>>>>> WimVDE001/master
 \examples{
 # Load Ovarian data
 data("Ovarian")
@@ -112,7 +119,10 @@ sens_results = sensitivity_analysis_SurvSurv_copula(fitted_model,
 # bootstrap replications should be larger in practice.
 sensitivity_intervals_Dvine(fitted_model, sens_results, B = 50)
 }
+<<<<<<< HEAD
 \references{
 Vansteelandt, Stijn, et al. "Ignorance and uncertainty regions as inferential
 tools in a sensitivity analysis." Statistica Sinica (2006): 953-979.
 }
+=======
+>>>>>>> WimVDE001/master

@@ -13,7 +13,7 @@
 #'
 #' In the causal-inference approach to evaluating surrogate endpoints, the first
 #' step is to estimate the joint distribution of the relevant potential
-#' outcomes. Let \eqn{(T_0, S_0, S_1, T_1)'} denote the vector of potential
+#' outcomes. Let \eqn{(T_0, S_0, S_1, T_1)'}.  denote the vector of potential
 #' outcomes where \eqn{(S_k, T_k)'} is the pair of potential outcomes under
 #' treatment \eqn{Z = k}. \eqn{T} refers to the true endpoint, e.g., overall
 #' survival. \eqn{S} refers to the composite surrogate endpoint, e.g.,

@@ -12,6 +12,7 @@ sens_results = sensitivity_analysis_SurvSurv_copula(
 # Save results to file.
 saveRDS(sens_results, file = "tests/testthat/fixtures/sens-results-ovarian-clayton.rds")
 
+
 # Load fitted copula model.
 fitted_model_comp = readRDS(test_path("fixtures", "ovarian-dvine-gaussian-scr.rds"))
 # Perform sensitivity analysis with a small number of replications

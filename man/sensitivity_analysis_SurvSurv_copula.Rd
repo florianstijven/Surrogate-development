@@ -15,8 +15,12 @@ sensitivity_analysis_SurvSurv_copula(
   marg_association = TRUE,
   copula_family2 = fitted_model$copula_family[1],
   n_prec = 5000,
+<<<<<<< HEAD
   ncores = 1,
   sample_plots = NULL
+=======
+  ncores = 1
+>>>>>>> WimVDE001/master
 )
 }
 \arguments{

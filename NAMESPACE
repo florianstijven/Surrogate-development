@@ -51,6 +51,7 @@ importFrom("stats", "uniroot")
 importFrom("graphics", "arrows")
 importFrom("stats", "weighted.mean")
 importFrom("stats", "approxfun")
+importFrom("stats", "resid")
 import(maxLik)
 import(purrr)
 
@@ -92,7 +93,7 @@ export(AA.MultS, BifixedContCont, BimixedCbCContCont,
        Sim.Data.STS, Sim.Data.STSBinBin, Single.Trial.RE.AA,
        SurvSurv, Test.Mono, TrialLevelIT,
        TrialLevelMA, TwoStageSurvSurv, UnifixedContCont, UnimixedContCont,
-       SPF.BinBin, SPF.BinCont)
+       SPF.BinBin, SPF.BinCont, MufixedContCont.MultS, MumixedContCont.MultS)
 export(MICA.ContCont)
 export(sensitivity_analysis_SurvSurv_copula, model_fit_measures,
        fit_model_SurvSurv)
@@ -170,6 +171,11 @@ S3method(summary, ECT)
 S3method(summary, Bootstrap.MEP.BinBin)
 S3method(summary, ISTE.ContCont)
 S3method(summary, BimixedCbCContCont)
+
+S3method(summary, MufixedContCont.MultS)
+S3method(summary, MumixedContCont.MultS)
+
+
 
 S3method(print, vine_copula_SurvSurv_fit)
 S3method(print, sensitivity_intervals_Dvine)
