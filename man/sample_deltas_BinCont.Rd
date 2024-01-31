@@ -17,7 +17,8 @@ sample_deltas_BinCont(
   q_T1 = NULL,
   marginal_sp_rho = TRUE,
   setting = "BinCont",
-  composite = FALSE
+  composite = FALSE,
+  plot_deltas = FALSE
 )
 }
 \arguments{

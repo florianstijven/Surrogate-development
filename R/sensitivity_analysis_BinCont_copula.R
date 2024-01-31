@@ -152,23 +152,41 @@ sample_rotation_parameters = function(n_sim, degrees = c(0, 90, 180, 270)) {
 
 #' Perform Sensitivity Analysis for the Individual Causal Association with a
 #' Continuous Surrogate and Binary True Endpoint
-#'
-#'
+
 #' @details
+#' # Information-Theoretic Causal Inference Framework
+#'
+#' The information-theoretic causal inference (ITCI) is a general framework to
+#' evaluate surrogate endpoints in the single-trial setting (Alonso et al.,
+#' 2015). In this framework, we focus on the individual causal effects,
+#' \eqn{\Delta S = S_1 - S_0} and \eqn{\Delta T = T_1 - T_0} where \eqn{S_z}
+#' and \eqn{T_z} are the potential surrogate end true endpoint under treatment
+#' \eqn{Z = z}.
+#'
+#' In the ITCI framework, we say that \eqn{S} is a good surrogate for \eqn{T}
+#' if
+#' *\eqn{\Delta S} conveys a substantial amount of information on \eqn{\Delta T}*
+#' (Alonso, 2018). This amount of shared information can generally be quantified
+#' by the mutual information between \eqn{\Delta S} and \eqn{\Delta T},
+#' denoted by \eqn{I(\Delta S; \Delta T)}. However, the mutual information lies
+#' in \eqn{[0, + \infty]} which complicates the interpretation. In addition,
+#' the mutual information may not be defined in specific scenarios where
+#' absolute continuity of certain probability measures fails. Therefore, the
+#' mutual information is transformed, and possibly modified, to enable a simple
+#' interpretation in light of the definition of surrogacy. The resulting measure
+#' is termed the individual causal association (ICA). This is explained in
+#' the next sections.
+#'
+#' While the definition of surrogacy in the ITCI framework rests on information
+#' theory, shared information is closely related to statistical association. Hence,
+#' we can also define the ICA in terms of statistical association measures, like
+#' Spearman's rho and Kendall's tau. The advantage of the latter are that they
+#' are well-known, simple and rank-based measures of association.
+#'
 #' # Quantifying Surrogacy
 #'
-#' In the information-theoretic causal-inference (ITCI) framework to evaluate
-#' surrogate endpoints, the ICA is the measure of primary interest. This measure
-#' quantifies how much information the individual causal treatment effect on the
-#' surrogate (\eqn{\Delta S}) provides on the individual causal treatment effect
-#' on the true endpoint (\eqn{\Delta T}). The mutual information between
-#' \eqn{\Delta S} and \eqn{\Delta T}, denoted by \eqn{I(\Delta S; \Delta T)} is
-#' a natural candidate to quantify this amount of shared information. However,
-#' the mutual information is difficult to interpret as there does not exist a
-#' general upper bound. Alonso et al. (na) therfore proposed to quantify the ICA
-#' thorugh a transformation of the mutual information that is guaranteed to lie
-#' in the unit interval. It is the following measure, \deqn{R^2_H =
-#' \frac{I(\Delta S; \Delta T)}{H(\Delta T)}} where \eqn{H(\Delta T)} is the
+#' Alonso et al. (na) proposed to the following measure for the ICA: \deqn{R^2_H
+#' = \frac{I(\Delta S; \Delta T)}{H(\Delta T)}} where \eqn{H(\Delta T)} is the
 #' entropy of \eqn{\Delta T}. By token of that transformation of the mutual
 #' information, \eqn{R^2_H} is restricted to the unit interval where 0 indicates
 #' independence, and 1 a functional relationship between \eqn{\Delta S} and

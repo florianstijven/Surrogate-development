@@ -4,6 +4,47 @@
 #' and uncertainty within the information-theoretic causal inference framework
 #' when the data are modeled with a D-vine copula model.
 #'
+#' @details
+#' # Intervals of Ignorance and Uncertainty
+#'
+#' Vansteelandt et al. (2006) formalized sensitivity analysis for partly
+#' identifiable parameters in the context of missing data and MNAR. These
+#' concepts can be applied to the estimation of the ICA. Indeed, the ICA is also
+#' partly identifiable because 50% if the potential outcomes are missing.
+#'
+#' Vansteelandt et al. (2006) replace a point estimate with a interval estimate:
+#' the estimated interval of ignorance. In addition, they proposed several
+#' extension of the classic confidence interval together with appropriate
+#' definitions of coverage; these are termed intervals of uncertainty.
+#'
+#' [sensitivity_intervals_Dvine()] implements the estimated interval of
+#' ignorance and the pointwise and strong intervals of uncertainty. Let \eqn{\boldsymbol{\nu}_l}
+#' and \eqn{\boldsymbol{\nu}_u} be the values for the sensitivity parameter that
+#' lead to the lowest and largest ICA, respectively, while fixing the identifiable
+#' parameter at its estimated value \eqn{\hat{\boldsymbol{\beta}}}. See also
+#' [summary_level_bootstrap_ICA()]. The following intervals are implemented:
+#'
+#' 1. *Estimated interval of ignorance*. This interval is defined as
+#' \eqn{[ICA(\hat{\boldsymbol{\beta}}, \boldsymbol{\nu}_l), ICA(\hat{\boldsymbol{\beta}}, \boldsymbol{\nu}_u)]}.
+#' 2. *Pointiwse interval of uncertainty*. Let \eqn{C_l} (and \eqn{C_u}) be the
+#' lower (and upper) limit of a one-sided \eqn{1 - \alpha} CI for
+#' \eqn{ICA(\boldsymbol{\beta_0}, \boldsymbol{\nu}_l)} (and
+#' \eqn{ICA(\boldsymbol{\beta_0}, \boldsymbol{\nu}_l)}). This interval is then
+#' defined as \eqn{[C_l, C_u]} when the ignorance is much larger than the
+#' statistical imprecision.
+#' 3. *Strong interval of uncertainty*. Let \eqn{C_l} (and \eqn{C_u}) be the
+#' lower (and upper) limit of a two-sided \eqn{1 - \alpha} CI for
+#' \eqn{ICA(\boldsymbol{\beta_0}, \boldsymbol{\nu}_l)} (and
+#' \eqn{ICA(\boldsymbol{\beta_0}, \boldsymbol{\nu}_l)}). This interval is then
+#' defined as \eqn{[C_l, C_u]}.
+#'
+#' The CIs, which are need for the intervals of uncertainty, are based on
+#' percentile bootstrap confidence intervals, as documented in
+#' [summary_level_bootstrap_ICA()]. In addition, \eqn{\boldsymbol{\nu}_l} is not
+#' known. Therefore, it is estimated as
+#' \deqn{\arg \min_{\boldsymbol{\nu} \in \Gamma} ICA(\hat{\boldsymbol{\beta}}, \boldsymbol{\nu}),}
+#' and similarly for \eqn{\boldsymbol{\nu}_u}.
+#'
 #' @param sens_results Dataframe returned by
 #'   [sensitivity_analysis_SurvSurv_copula()]. If additional assumptions need to
 #'   be incorporated, this dataframe can first be filtered.
@@ -16,6 +57,9 @@
 #' @export
 #'
 #' @inherit sensitivity_analysis_SurvSurv_copula examples
+#' @references
+#' Vansteelandt, Stijn, et al. "Ignorance and uncertainty regions as inferential
+#' tools in a sensitivity analysis." Statistica Sinica (2006): 953-979.
 sensitivity_intervals_Dvine = function(fitted_model,
                                        sens_results,
                                        measure = "ICA",

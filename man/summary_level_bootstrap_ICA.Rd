@@ -41,7 +41,8 @@ information.}
 
 \item{mutinfo_estimator}{Function that estimates the mutual information
 between the first two arguments which are numeric vectors. Defaults to
-\code{FNN::mutinfo()} with default arguments.}
+\code{FNN::mutinfo()} with default arguments.
+@param plot_deltas (logical) Plot the sampled individual treatment effects?}
 
 \item{composite}{(boolean)  If \code{composite} is \code{TRUE}, then the surrogate
 endpoint is a composite of both a "pure" surrogate endpoint and the true
@@ -58,4 +59,17 @@ environment.}
 \code{\link[=summary_level_bootstrap_ICA]{summary_level_bootstrap_ICA()}} performs a parametric type of bootstrap based
 on the estimated multivariate normal sampling distribution of the maximum
 likelihood estimator for the (observable) D-vine copula model parameters.
+}
+\details{
+Let \eqn{\hat{\boldsymbol{\beta}}} be the estimated identifiable parameter
+vector, \eqn{\hat{\Sigma}} the corresponding estimated covariance matrix, and
+\eqn{\boldsymbol{\nu}} a fixed value for the sensitivity parameter. The
+bootstrap is then performed in the following steps
+\enumerate{
+\item Resample the identifiable parameters from the estimated sampling distribution,
+\deqn{\hat{\boldsymbol{\beta}}^{(b)} \sim N(\hat{\boldsymbol{\beta}}, \hat{\Sigma}).}
+\item For each resampled parameter vector and the fixed sensitivty parameter,
+compute the ICA as \eqn{ICA(\hat{\boldsymbol{\beta}}^{(b)},
+\boldsymbol{\nu})}.
+}
 }

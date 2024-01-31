@@ -2,33 +2,82 @@
 #'
 #' The [sensitivity_analysis_SurvSurv_copula()] function performs the
 #' sensitivity analysis for the individual causal association (ICA) as described
-#' by Stijven et al. (2022).
+#' by Stijven et al. (2024).
 #'
 #' @details
+#' # Information-Theoretic Causal Inference Framework
 #'
-#' # Quantifying Surrogacy
+#' The information-theoretic causal inference (ITCI) is a general framework to
+#' evaluate surrogate endpoints in the single-trial setting (Alonso et al.,
+#' 2015). In this framework, we focus on the individual causal effects,
+#' \eqn{\Delta S = S_1 - S_0} and \eqn{\Delta T = T_1 - T_0} where \eqn{S_z}
+#' and \eqn{T_z} are the potential surrogate end true endpoint under treatment
+#' \eqn{Z = z}.
 #'
-#' In the causal-inference framework to evaluate surrogate endpoints, the ICA is
-#' the measure of primary interest. This measure quantifies the association
-#' between the individual causal treatment effects on the surrogate (\eqn{\Delta
-#' S}) and on the true endpoint (\eqn{\Delta T}). Stijven et al. (2022) proposed
-#' to quantify this association through the squared informational coefficient of
-#' correlation (SICC or \eqn{R^2_H}), which is based on information-theoretic
-#' principles. Indeed, \eqn{R^2_H} is a transformation of the mutual information
-#' between \eqn{\Delta S} and \eqn{\Delta T}, \deqn{R^2_H = 1 - e^{-2 \cdot
-#' I(\Delta S; \Delta T)}.} By token of that transformation, \eqn{R^2_H} is
-#' restricted to the unit interval where 0 indicates independence, and 1 a
-#' functional relationship between \eqn{\Delta S} and \eqn{\Delta T}. The mutual
-#' information is returned by [sensitivity_analysis_SurvSurv_copula()] if a
-#' non-zero value is specified for `minfo_prec` (see Arguments).
+#' In the ITCI framework, we say that \eqn{S} is a good surrogate for \eqn{T}
+#' if
+#' *\eqn{\Delta S} conveys a substantial amount of information on \eqn{\Delta T}*
+#' (Alonso, 2018). This amount of shared information can generally be quantified
+#' by the mutual information between \eqn{\Delta S} and \eqn{\Delta T},
+#' denoted by \eqn{I(\Delta S; \Delta T)}. However, the mutual information lies
+#' in \eqn{[0, + \infty]} which complicates the interpretation. In addition,
+#' the mutual information may not be defined in specific scenarios where
+#' absolute continuity of certain probability measures fails. Therefore, the
+#' mutual information is transformed, and possibly modified, to enable a simple
+#' interpretation in light of the definition of surrogacy. The resulting measure
+#' is termed the individual causal association (ICA). This is explained in
+#' the next sections.
 #'
-#' The association between \eqn{\Delta S} and \eqn{\Delta T} can also be
-#' quantified by Spearman's \eqn{\rho} (or Kendall's \eqn{\tau}). This quantity
-#' requires appreciably less computing time than the mutual information. This
-#' quantity is therefore always returned for every replication of the
-#' sensitivity analysis.
+#' While the definition of surrogacy in the ITCI framework rests on information
+#' theory, shared information is closely related to statistical association. Hence,
+#' we can also define the ICA in terms of statistical association measures, like
+#' Spearman's rho and Kendall's tau. The advantage of the latter are that they
+#' are well-known, simple and rank-based measures of association.
+#'
+#' # Surrogacy in The Survival-Survival Setting
+#'
+#' ## General Introduction
+#'
+#' Stijven et al. (2024) proposed to quantify the ICA through the squared
+#' informational coefficient of correlation (SICC or \eqn{R^2_H}), which is a
+#' transformation of the mutaul information to the unit interval: \deqn{R^2_H =
+#' 1 - e^{-2 \cdot I(\Delta S; \Delta T)}} where 0 indicates independence, and 1
+#' a functional relationship between \eqn{\Delta S} and \eqn{\Delta T}. The ICA
+#' (or a modified version, see next) is returned by
+#' [sensitivity_analysis_SurvSurv_copula()]. Concurrently, the Spearman's
+#' correlation between \eqn{\Delta S} and \eqn{\Delta T} is also returned.
+#'
+#' ## Issues with Composite Endpoints
+#'
+#' In the survival-survival setting where the surrogate is a composite endpoint,
+#' care should be taken when defining the mutual information. Indeed, when
+#' \eqn{S_z} is progression-free survival and \eqn{T_z} is overall survival,
+#' there is a probability atom in the joint distribution of \eqn{(S_z, T_z)'}
+#' because \eqn{P(S_z = T_z) > 0}. In other words, there are patient that die
+#' before progressing. While this probability atom is correctly taken into
+#' account in the models fitted by [fit_model_SurvSurv()], this probability atom
+#' reappears when considering the distribution of \eqn{(\Delta S, \Delta T)'}
+#' because \eqn{P(\Delta S = \Delta T) > 0} if we are considering PFS and OS.
+#'
+#' Because of the atom in the distribution of \eqn{(\Delta S, \Delta T)'}, the
+#' corresponding mutual information is not defined. To solve this, the mutual
+#' information is computed excluding the patients for which \eqn{\Delta S =
+#' \Delta T} when `composite = TRUE`. The proportion of excluded patients is, among
+#' other things, returned when `marginal_association = TRUE`. This is the proportion
+#' of "never" patients following the classification of Nevo and Gorfine (2022).
+#' See also Additional Assumptions.
+#'
+#' This modified version of the ICA quantifies the surrogacy of \eqn{S} when
+#' "adjusted for the composite nature of \eqn{S}". Indeed, we exclude patients
+#' where \eqn{\Delta S} perfectly predicts \eqn{\Delta T} *just because \eqn{S}
+#' is a composite of \eqn{T} (and other variables).
+#'
+#' Other (rank-based) statistical measures of association, however,
+#' remain well-defined and are thus computed without excluding any patients.
 #'
 #' # Sensitivity Analysis
+#'
+#' ## Monte Carlo Approach
 #'
 #' Because \eqn{S_0} and \eqn{S_1} are never simultaneously observed in the same
 #' patient, \eqn{\Delta S} is not observable, and analogously for \eqn{\Delta
@@ -50,6 +99,11 @@
 #' assumptions can be used that restrict the parameter space of the
 #' unidentifiable parameters. This in turn reduces the uncertainty regarding the
 #' ICA.
+#'
+#' ## Intervals of Ignorance and Uncertainty
+#'
+#' The results of the sensitivity analysis can be formalized (and summarized) in
+#' intervals of ignorance and uncertainty using [sensitivity_intervals_Dvine()].
 #'
 #' # Additional Assumptions
 #'
@@ -80,7 +134,7 @@
 #' potential outcomes, and (ii) the proportions of the population strata as
 #' defined by Nevo and Gorfine (2022) if semi-competing risks are present. More
 #' details on the interpretation and use of these assumptions can be found in
-#' Stijven et al. (2022).
+#' Stijven et al. (2024).
 #'
 #'
 #' @param fitted_model Returned value from [fit_model_SurvSurv()]. This object
@@ -119,7 +173,7 @@
 #' @return A data frame is returned. Each row represents one replication in the
 #'   sensitivity analysis. The returned data frame always contains the following
 #'   columns:
-#' * `ICA`, `sp_rho`: ICA as quantified by \eqn{R^2_h(\Delta S, \Delta T)} and
+#' * `ICA`, `sp_rho`: ICA as quantified by \eqn{R^2_h(\Delta S^*, \Delta T^*)} and
 #'   \eqn{\rho_s(\Delta S, \Delta T)}.
 #' * `c23`, `c13_2`, `c24_3`, `c14_23`: sampled copula parameters of the
 #'   unidentifiable copulas in the D-vine copula. The parameters correspond to
@@ -144,13 +198,21 @@
 #'   defined in Nevo and Gorfine (2022).
 #' @export
 #'
-#' @references Stijven, F., Alonso, a., Molenberghs, G., Van Der Elst, W., Van
-#'   Keilegom, I. (2022). An information-theoretic approach to the evaluation of
-#'   time-to-event surrogates for time-to-event true endpoints based on causal
-#'   inference.
+#' @references
+#' Alonso, A. (2018). An information-theoretic approach for the evaluation of
+#' surrogate endpoints. In Wiley StatsRef: Statistics Reference Online. John
+#' Wiley & Sons, Ltd.
 #'
-#'   Nevo, D., & Gorfine, M. (2022). Causal inference for semi-competing risks
-#'   data. Biostatistics, 23 (4), 1115-1132
+#' Alonso, A., Van der Elst, W., Molenberghs, G., Buyse, M., and Burzykowski, T.
+#' (2015). On the relationship between the causal-inference and meta-analytic
+#' paradigms for the validation of surrogate endpoints. Biometrics 71, 15–24.
+#'
+#' Stijven, F., Alonso, a., Molenberghs, G., Van Der Elst, W., Van Keilegom, I.
+#' (2024). An information-theoretic approach to the evaluation of time-to-event
+#' surrogates for time-to-event true endpoints based on causal inference.
+#'
+#' Nevo, D., & Gorfine, M. (2022). Causal inference for semi-competing risks
+#' data. Biostatistics, 23 (4), 1115-1132
 #'
 #' @examples
 #' # Load Ovarian data

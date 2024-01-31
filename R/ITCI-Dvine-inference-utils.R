@@ -105,6 +105,19 @@ delta_method_log_mutinfo = function(fitted_model,
 #' on the estimated multivariate normal sampling distribution of the maximum
 #' likelihood estimator for the (observable) D-vine copula model parameters.
 #'
+#' @details
+#' Let \eqn{\hat{\boldsymbol{\beta}}} be the estimated identifiable parameter
+#' vector, \eqn{\hat{\Sigma}} the corresponding estimated covariance matrix, and
+#' \eqn{\boldsymbol{\nu}} a fixed value for the sensitivity parameter. The
+#' bootstrap is then performed in the following steps
+#'
+#' 1. Resample the identifiable parameters from the estimated sampling distribution,
+#' \deqn{\hat{\boldsymbol{\beta}}^{(b)} \sim N(\hat{\boldsymbol{\beta}}, \hat{\Sigma}).}
+#' 2. For each resampled parameter vector and the fixed sensitivty parameter,
+#' compute the ICA as \eqn{ICA(\hat{\boldsymbol{\beta}}^{(b)},
+#' \boldsymbol{\nu})}.
+#'
+#'
 #' @param B Number of bootstrap replications
 #' @inheritParams ICA_given_model_constructor
 #'
