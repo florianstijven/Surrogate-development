@@ -26,6 +26,13 @@ fitted_model = fit_model_SurvSurv(data = data,
                                   n_knots = 1)
 saveRDS(fitted_model, file = "tests/testthat/fixtures/ovarian-dvine-gaussian.rds")
 
+# Fit and save the D-vine copula model with Clayton and Gumbel copula and
+# variable number of knots
+fitted_model = fit_model_SurvSurv(data = data,
+                                  copula_family = c("clayton", "gumbel"),
+                                  n_knots = c(0, 1, 2, 1))
+saveRDS(fitted_model, file = "tests/testthat/fixtures/ovarian-dvine-variable.rds")
+
 
 # D-vine model for Schizo data --------------------------------------------
 copula_family = "clayton"

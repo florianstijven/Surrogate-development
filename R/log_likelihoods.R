@@ -1,9 +1,11 @@
-clayton_loglik <- function(para, X, Y, d1, d2, k = 2, knotsx, knotsy, sum_observations){
-  #k is the number of knots in the model, this determines the length of para
-  gammax <- para[1:(k + 2)]
-  gammay <- para[(k + 3):(2*(k + 2))]
+clayton_loglik <- function(para, X, Y, d1, d2, knotsx, knotsy, sum_observations){
+  #k is the number of knots in the model, this determines the length of para.
+  kx = length(knotsx) - 2
+  ky = length(knotsy) - 2
+  gammax <- para[1:(kx + 2)]
+  gammay <- para[(kx + 3):(kx + ky + 4)]
   #last value in para is the association parameter
-  theta <- para[2*(k + 2) + 1]
+  theta <- para[kx + ky + 5]
 
   #survival probabilities
   u = flexsurv::psurvspline(q = X, gamma = gammax, knots = knotsx, lower.tail = FALSE)
@@ -27,12 +29,14 @@ clayton_loglik <- function(para, X, Y, d1, d2, k = 2, knotsx, knotsy, sum_observ
   return(loglik)
 }
 
-frank_loglik <- function(para, X, Y, d1, d2, k = 2, knotsx, knotsy, sum_observations){
-  #k is the number of knots in the model, this determines the length of para
-  gammax <- para[1:(k + 2)]
-  gammay <- para[(k + 3):(2*(k + 2))]
+frank_loglik <- function(para, X, Y, d1, d2, knotsx, knotsy, sum_observations){
+  #k is the number of knots in the model, this determines the length of para.
+  kx = length(knotsx) - 2
+  ky = length(knotsy) - 2
+  gammax <- para[1:(kx + 2)]
+  gammay <- para[(kx + 3):(kx + ky + 4)]
   #last value in para is the association parameter
-  theta <- para[2*(k + 2) + 1]
+  theta <- para[kx + ky + 5]
 
   #survival probabilities
   u = flexsurv::psurvspline(q = X, gamma = gammax, knots = knotsx, lower.tail = FALSE)
@@ -57,12 +61,14 @@ frank_loglik <- function(para, X, Y, d1, d2, k = 2, knotsx, knotsy, sum_observat
   return(loglik)
 }
 
-gumbel_loglik <- function(para, X, Y, d1, d2, k = 2, knotsx, knotsy, sum_observations){
-  #k is the number of knots in the model, this determines the length of para
-  gammax <- para[1:(k + 2)]
-  gammay <- para[(k + 3):(2*(k + 2))]
+gumbel_loglik <- function(para, X, Y, d1, d2, knotsx, knotsy, sum_observations){
+  #k is the number of knots in the model, this determines the length of para.
+  kx = length(knotsx) - 2
+  ky = length(knotsy) - 2
+  gammax <- para[1:(kx + 2)]
+  gammay <- para[(kx + 3):(kx + ky + 4)]
   #last value in para is the association parameter
-  theta <- para[2*(k + 2) + 1]
+  theta <- para[kx + ky + 5]
 
   #survival probabilities
   u = flexsurv::psurvspline(q = X, gamma = gammax, knots = knotsx, lower.tail = FALSE)
@@ -90,13 +96,17 @@ gumbel_loglik <- function(para, X, Y, d1, d2, k = 2, knotsx, knotsy, sum_observa
 }
 
 #' @importFrom stats pnorm qnorm
-normal_loglik <- function(para, X, Y, d1, d2, k = 2, knotsx, knotsy, sum_observations){
+normal_loglik <- function(para, X, Y, d1, d2, knotsx, knotsy, sum_observations){
   requireNamespace("mvtnorm")
-  #k is the number of knots in the model, this determines the length of para
-  gammax <- para[1:(k + 2)]
-  gammay <- para[(k + 3):(2*(k + 2))]
+  #k is the number of knots in the model, this determines the length of para.
+  kx = length(knotsx) - 2
+  ky = length(knotsy) - 2
+  gammax <- para[1:(kx + 2)]
+  gammay <- para[(kx + 3):(kx + ky + 4)]
+  #last value in para is the association parameter
+  theta <- para[kx + ky + 5]
   # Last value in para is rho. We use the inverse Fisher transformation.
-  rho <- (exp(2 * para[2*(k + 2) + 1]) - 1)/(exp(2 * para[2*(k + 2) + 1]) + 1)
+  rho <- (exp(2 * theta) - 1)/(exp(2 * theta) + 1)
 
   df.1 <- d1 & d2     #case part 1
   df.2 <- d1 & (!d2)  #case part 2

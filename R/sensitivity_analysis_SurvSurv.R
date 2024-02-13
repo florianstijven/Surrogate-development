@@ -262,16 +262,19 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
   if(length(copula_family2) == 1) copula_family2 = rep(copula_family2, 4)
   # Extract relevant estimated parameters/objects for the fitted copula model.
 
-  k = length(fitted_model$knots0)
+  ks0 = length(fitted_model$knots0)
+  ks1 = length(fitted_model$knots1)
+  kt0 = length(fitted_model$knott0)
+  kt1 = length(fitted_model$knott1)
 
-  gammas0 = force(coef(fitted_model$fit_0)[1:k])
+  gammas0 = force(coef(fitted_model$fit_0)[1:ks0])
   knots0 = force(fitted_model$knots0)
-  gammas1 = force(coef(fitted_model$fit_1)[1:k])
+  gammas1 = force(coef(fitted_model$fit_1)[1:ks1])
   knots1 = force(fitted_model$knots1)
 
-  gammat0 = force(coef(fitted_model$fit_0)[(k + 1):(2 * k)])
+  gammat0 = force(coef(fitted_model$fit_0)[(ks0 + 1):(ks0 + kt0)])
   knott0 = force(fitted_model$knott0)
-  gammat1 = force(coef(fitted_model$fit_1)[(k + 1):(2 * k)])
+  gammat1 = force(coef(fitted_model$fit_1)[(ks1 + 1):(ks1 + kt1)])
   knott1 = force(fitted_model$knott1)
 
   copula_rotations = force(fitted_model$copula_rotations)
@@ -365,7 +368,7 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
     force(search_path)
     parallel::clusterExport(
       cl = cl,
-      varlist = c("fitted_model", "k", "search_path"),
+      varlist = c("fitted_model", "search_path"),
       envir = environment()
     )
     parallel::clusterEvalQ(cl = cl, expr = .libPaths(new = search_path))

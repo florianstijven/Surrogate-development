@@ -119,6 +119,10 @@ fit_model_SurvSurv = function(data,
   if (length(copula_family) == 1) {
     copula_family = rep(copula_family, 2)
   }
+  # If the length of n_knots is 1, increase the length to 4 by repeating the original element.
+  if (length(n_knots == 1)) {
+    n_knots = rep(n_knots, 4)
+  }
   # Column names are added to make the intrepretation of the further code
   # easier. Pfs refers to the surrogate, Surv refers to the true endpoint.
   colnames(data) = c("Pfs", "Surv", "Treat", "PfsInd", "SurvInd")
@@ -136,7 +140,7 @@ fit_model_SurvSurv = function(data,
     Y = data0$Surv,
     delta_Y = data0$SurvInd,
     copula_family = copula_family[1],
-    n_knots = n_knots,
+    n_knots = n_knots[1:2],
     method = method
   )
   twostep_fit1 = twostep_SurvSurv(
@@ -145,7 +149,7 @@ fit_model_SurvSurv = function(data,
     Y = data1$Surv,
     delta_Y = data1$SurvInd,
     copula_family = copula_family[2],
-    n_knots = n_knots,
+    n_knots = n_knots[3:4],
     method = method
   )
 
@@ -413,15 +417,15 @@ twostep_SurvSurv = function(X,
   copula_start = starting_values_list$inv_tau
   start = c(marg_coef_x, marg_coef_y, copula_start)
   # Add informative names to the starting values.
-  names(start) = c(paste(names(start)[1:(n_knots + 2)], "(S)"),
-                   paste(names(start)[1:(n_knots + 2)], "(T)"),
+  names(start) = c(paste(names(start)[1:(n_knots[1] + 2)], "(S)"),
+                   paste(names(start)[(n_knots[1] + 3):(sum(n_knots) + 4)], "(T)"),
                    "theta (copula)")
   suppressWarnings({
     ml_fit = maxLik::maxLik(
       logLik = log_lik_function,
       start = start,
       method = method,
-      fixed = 1:(2 * n_knots + 4)
+      fixed = 1:(sum(n_knots) + 4)
     )
   })
 
@@ -447,13 +451,12 @@ survival_survival_loglik =  function(para,
                                      knotsy,
                                      sum_observations = TRUE)
 {
-  k = length(knotsx) - 2
   switch(
     copula_family,
-    "clayton" = clayton_loglik(para, X, Y, delta_X, delta_Y, k, knotsx, knotsy, sum_observations),
-    "frank" = frank_loglik(para, X, Y, delta_X, delta_Y, k, knotsx, knotsy, sum_observations),
-    "gumbel" = gumbel_loglik(para, X, Y, delta_X, delta_Y, k, knotsx, knotsy, sum_observations),
-    "gaussian" = normal_loglik(para, X, Y, delta_X, delta_Y, k, knotsx, knotsy, sum_observations),
+    "clayton" = clayton_loglik(para, X, Y, delta_X, delta_Y, knotsx, knotsy, sum_observations),
+    "frank" = frank_loglik(para, X, Y, delta_X, delta_Y, knotsx, knotsy, sum_observations),
+    "gumbel" = gumbel_loglik(para, X, Y, delta_X, delta_Y, knotsx, knotsy, sum_observations),
+    "gaussian" = normal_loglik(para, X, Y, delta_X, delta_Y, knotsx, knotsy, sum_observations),
   )
 }
 
@@ -492,13 +495,13 @@ SurvSurv_starting_values = function(X, delta_X, Y, delta_Y, copula_family, n_kno
   fit_s = flexsurv::flexsurvspline(
     formula = survival::Surv(X, delta_X) ~ 1,
     data = data,
-    k = n_knots,
+    k = n_knots[1],
     scale = "hazard"
   )
   fit_t = flexsurv::flexsurvspline(
     formula = survival::Surv(Y, delta_Y) ~ 1,
     data = data,
-    k = n_knots,
+    k = n_knots[2],
     scale = "hazard"
   )
 
