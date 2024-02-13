@@ -369,10 +369,11 @@ mean_S_before_T = function(t, fitted_model, treated) {
   }
   # Extract estimated model parameters
   para = fitted_submodel$estimate
-  k = length(knott)
+  ks = length(knots)
+  kt = length(knott)
 
   # Helper function that computes the density for T = t.
-  para_t = para[(1 + k):(2 * k)]
+  para_t = para[(1 + ks):(ks + kt)]
   dens_t = function(x) {
     flexsurv::dsurvspline(x = x, gamma = para_t, knots = knott)
   }
@@ -425,10 +426,11 @@ prob_progression_before_dying = function(t, fitted_model, treated) {
   }
   # Extract estimated model parameters
   para = fitted_submodel$estimate
-  k = length(knott)
+  ks = length(knots)
+  kt = length(knott)
 
   # Helper function that computes the density for T = t.
-  para_t = para[(1 + k):(2 * k)]
+  para_t = para[(1 + ks):(kt + ks)]
   dens_t = function(x) {
     flexsurv::dsurvspline(x = x, gamma = para_t, knots = knott)
   }
