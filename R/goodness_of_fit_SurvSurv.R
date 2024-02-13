@@ -116,7 +116,7 @@ marginal_gof_scr_S_plot = function(fitted_model,
   }
 
   # Helper function that computes P(S_tilde > x, T > x).
-  para_t = para[(1 + k):(2 * k)]
+  para = fitted_submodel$estimate
   surv_joint = function(x) {
     exp(
       survival_survival_loglik(
