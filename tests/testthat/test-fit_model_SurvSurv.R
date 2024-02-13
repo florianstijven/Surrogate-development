@@ -41,7 +41,7 @@ test_that("SurvivalSurvival model works with Frank and Gumbel copula for Ovarian
                                               copula_family = c("frank", "gumbel"),
                                               n_knots = 2)
             log_lik_fitted = c(logLik(fitted_model$fit_0), logLik(fitted_model$fit_1))
-            expect_equal(log_lik_fitted, c(123.9074566805, 21.7039951207), ignore_attr = "df")
+            expect_equal(log_lik_fitted, c(124.3326825768, 23.9716552942), ignore_attr = "df")
           })
 
 test_that("plot() works for fitted survival-survival copula models",

@@ -138,7 +138,7 @@ fit_model_SurvSurv = function(data,
   # gives the final estimate.
   twostep_fit0 = twostep_SurvSurv(
     X = data0$Pfs,
-    delta_X = data0$PfsInd,
+    delta_X = ifelse(data0$Surv == data0$Pfs & data0$SurvInd == 1, 1, data0$PfsInd),
     Y = data0$Surv,
     delta_Y = data0$SurvInd,
     copula_family = copula_family[1],
@@ -147,7 +147,7 @@ fit_model_SurvSurv = function(data,
   )
   twostep_fit1 = twostep_SurvSurv(
     X = data1$Pfs,
-    delta_X = data1$PfsInd,
+    delta_X = ifelse(data1$Surv == data1$Pfs & data1$SurvInd == 1, 1, data1$PfsInd),
     Y = data1$Surv,
     delta_Y = data1$SurvInd,
     copula_family = copula_family[2],
