@@ -76,7 +76,9 @@
 #'   `copula_family` corresponds to the control group, the second to the
 #'   experimental group.
 #' @param n_knots Number of internal knots for the Royston-Parmar survival
-#'   model.
+#'   models for \eqn{\tilde{S}_0}, \eqn{T_0}, \eqn{\tilde{S}_1}, and \eqn{T_1}.
+#'   If `length(n_knots) == 1`, the same number of knots are assumed for the
+#'   four marginal distributions.
 #' @param fitted_model Fitted model from which initial values are extracted. If
 #'   `NULL` (default), standard initial values are used. This option intended
 #'   for when a model is repeatedly fitted, e.g., in a bootstrap.

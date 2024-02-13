@@ -22,7 +22,9 @@ fit_model_SurvSurv(
 experimental group.}
 
 \item{n_knots}{Number of internal knots for the Royston-Parmar survival
-model.}
+models for \eqn{\tilde{S}_0}, \eqn{T_0}, \eqn{\tilde{S}_1}, and \eqn{T_1}.
+If \code{length(n_knots) == 1}, the same number of knots are assumed for the
+four marginal distributions.}
 
 \item{fitted_model}{Fitted model from which initial values are extracted. If
 \code{NULL} (default), standard initial values are used. This option intended
