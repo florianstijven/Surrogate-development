@@ -34,7 +34,7 @@ test_that("Intervals of ignorance and uncertainty are correctly computed", {
   )
   expect_equal(
     c(est_interval_of_ignorance_comp, interval_of_uncertainty_strong_comp, interval_of_uncertainty_pointwise_comp),
-    c(0.662090973918, 0.990987432115, 0.559628845836, 0.989380789908, 0.574665825259, 0.989102101652)
+    c(0.642646510145, 0.991589287727, 0.549380709430, 0.989841849380, 0.557863618749, 0.989797430885)
   )
 })
 

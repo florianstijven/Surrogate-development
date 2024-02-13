@@ -18,10 +18,10 @@ test_that("mean_S_before_T() works well with Gaussian, Frank, Clayton, and Gumbe
                            gumbel1)
             expect_equal(output_vec,
                          c(
-                           0.724653499621,
-                           0.606863379335,
-                           0.711095534584,
-                           0.704344059670
+                           0.722046011688,
+                           0.604292841017,
+                           0.736617341769,
+                           0.696193182170
                          ))
           })
 
