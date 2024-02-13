@@ -114,9 +114,6 @@ marginal_gof_scr_S_plot = function(fitted_model,
     knots = fitted_model$knots1
     knott = fitted_model$knott1
   }
-  # Extract estimated model parameters
-  para = fitted_submodel$estimate
-  k = length(knott)
 
   # Helper function that computes P(S_tilde > x, T > x).
   para_t = para[(1 + k):(2 * k)]
@@ -162,17 +159,20 @@ marginal_gof_scr_T_plot = function(fitted_model,
                                    ...) {
   if (treated == 0) {
     fitted_submodel = fitted_model$fit_0
+    knots = fitted_model$knots0
     knott = fitted_model$knott0
   }  else {
     fitted_submodel = fitted_model$fit_1
+    knots = fitted_model$knots1
     knott = fitted_model$knott1
   }
   # Extract estimated model parameters
   para = fitted_submodel$estimate
-  k = length(knott)
+  ks = length(knots)
+  kt = length(knott)
 
   # Helper function that computes the survival function for T.
-  para_t = para[(1 + k):(2 * k)]
+  para_t = para[(1 + ks):(ks + kt)]
   surv_t = function(x) {
     flexsurv::psurvspline(q = x, gamma = para_t, knots = knott)
   }
