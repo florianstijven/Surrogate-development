@@ -17,7 +17,7 @@ test_that("sensitivity_analysis_SurvSurv_copula() works on a single core with Cl
   expect_equal(output_vector, check_vector)
 })
 
-test_that("sensitivity_analysis_SurvSurv_copula() works on a single core with Clayton copula", {
+test_that("sensitivity_analysis_SurvSurv_copula() works with variable number of knots", {
   # Load fitted copula model.
   fitted_model = readRDS(test_path("fixtures", "ovarian-dvine-variable.rds"))
   # Illustration with small number of replications and low precision
@@ -32,7 +32,7 @@ test_that("sensitivity_analysis_SurvSurv_copula() works on a single core with Cl
   output_vector = c(sens_results$ICA[1],
                     sens_results$sp_rho[1],
                     sens_results$c23[3])
-  check_vector = c(0.852418715860, 0.765136212545, 1.374917942896)
+  check_vector = c(0.973170806302, 0.971849999400, 1.374917942896)
   expect_equal(output_vector, check_vector)
 })
 

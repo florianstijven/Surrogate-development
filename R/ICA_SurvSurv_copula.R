@@ -80,7 +80,7 @@ compute_ICA_SurvSurv = function(copula_par,
     # which is equal to 1 - prop_never as defined further on.
   }
   else {
-    select_samples = rep(1, length(delta_df$DeltaS))
+    select_samples = rep(TRUE, length(delta_df$DeltaS))
   }
   mutual_information = mutinfo_estimator(delta_df$DeltaS[select_samples],
                                          delta_df$DeltaT[select_samples])

@@ -303,12 +303,13 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
   }
 
   # number of parameters
-  n_par = length(coef(fitted_model$fit_0))
+  n_par0 = length(coef(fitted_model$fit_0))
+  n_par1 = length(coef(fitted_model$fit_1))
 
   # Pull association parameters from estimated parameter vectors. The
   # association parameter is always the last one in the corresponding vector
-  c12 = coef(fitted_model$fit_0)[n_par]
-  c34 = coef(fitted_model$fit_1)[n_par]
+  c12 = coef(fitted_model$fit_0)[n_par0]
+  c34 = coef(fitted_model$fit_1)[n_par1]
   # For the Gaussian copula, fisher's Z transformation was applied. We have to
   # backtransform to the correlation scale in that case.
   if (copula_family1[1] == "gaussian") {

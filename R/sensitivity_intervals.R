@@ -82,6 +82,7 @@ sensitivity_intervals_Dvine = function(fitted_model,
     as.numeric(lower_limit_row[measure]),
     as.numeric(upper_limit_row[measure])
   )
+
   # Perform parametric bootstrap for setting that yielded smallest ICA.
   bootstrap_replications_lower = summary_level_bootstrap_ICA(
     fitted_model = fitted_model,

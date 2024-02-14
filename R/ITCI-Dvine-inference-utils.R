@@ -132,17 +132,14 @@ summary_level_bootstrap_ICA = function(fitted_model,
                                        composite,
                                        seed,
                                        restr_time = +Inf) {
-  # Number of knots
-  k = length(fitted_model$knots1)
-
   # Parameter estimates
   theta_hat = c(coef(fitted_model$fit_0), coef(fitted_model$fit_1))
 
   # Compute covariance matrix of the sampling distribution.
-  zeros_matrix = matrix(rep(0, (2 * k + 1) ** 2), ncol = (2 * k + 1))
+  zeros_matrix = matrix(rep(0, length(coef(fitted_model$fit_0)) * length(coef(fitted_model$fit_1))),
+                        ncol = length(coef(fitted_model$fit_1)))
   vcov_matrix = rbind(cbind(vcov(fitted_model$fit_0), zeros_matrix),
-                      cbind(zeros_matrix, vcov(fitted_model$fit_1)))
-
+                      cbind(t(zeros_matrix), vcov(fitted_model$fit_1)))
 
   ICA_given_model = ICA_given_model_constructor(
     fitted_model = fitted_model,
@@ -219,7 +216,12 @@ ICA_given_model_constructor = function(fitted_model,
                                        seed,
                                        restr_time = +Inf) {
   # Number of knots
-  k = length(fitted_model$knots1)
+  ks0 = length(fitted_model$knots0)
+  ks1 = length(fitted_model$knots1)
+  kt0 = length(fitted_model$knott0)
+  kt1 = length(fitted_model$knott1)
+  n_par0 = length(coef(fitted_model$fit_0))
+  n_par1 = length(coef(fitted_model$fit_1))
   # Location of the knots
   knots0 = fitted_model$knots0
   knots1 = fitted_model$knots1
@@ -237,17 +239,17 @@ ICA_given_model_constructor = function(fitted_model,
     # The first k + 1 elements of theta correspond to the parameters in fit_0,
     # the next k + 1 elements correspond to the parameters in fit_1. In a second
     # step, the parameters for each marginal distribution are extracted.
-    theta0 = theta[1:(2 * k + 1)]
-    theta1 = theta[(2 * k + 2):(4 * k + 2)]
+    theta0 = theta[1:n_par0]
+    theta1 = theta[(n_par0 + 1):(n_par0 + n_par1)]
 
-    gammas0 = theta0[1:k]
-    gammas1 = theta1[1:k]
-    gammat0 = theta0[(k + 1):(2 * k)]
-    gammat1 = theta1[(k + 1):(2 * k)]
+    gammas0 = theta0[1:ks0]
+    gammas1 = theta1[1:ks1]
+    gammat0 = theta0[(ks0 + 1):(ks0 + kt0)]
+    gammat1 = theta1[(ks1 + 1):(ks1 + kt1)]
 
     # The last elements of theta_0 and theta_1 contain the copula parameters.
-    c_12 = theta0[2 * k + 1]
-    c_34 = theta1[2 * k + 1]
+    c_12 = theta0[n_par0]
+    c_34 = theta1[n_par1]
 
     # Quantile functions for the marginal distributions
     q_S0 = function(p) {
