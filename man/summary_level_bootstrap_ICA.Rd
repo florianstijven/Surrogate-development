@@ -11,9 +11,11 @@ summary_level_bootstrap_ICA(
   rotation_par_unid,
   n_prec,
   B,
+  measure = "ICA",
   mutinfo_estimator = NULL,
   composite,
-  seed
+  seed,
+  restr_time = +Inf
 )
 }
 \arguments{
@@ -39,6 +41,9 @@ information.}
 
 \item{B}{Number of bootstrap replications}
 
+\item{measure}{Compute intervals for which measure of surrogacy? Defaults to
+\code{"ICA"}. See first column names of \code{sens_results} for other possibilities.}
+
 \item{mutinfo_estimator}{Function that estimates the mutual information
 between the first two arguments which are numeric vectors. Defaults to
 \code{FNN::mutinfo()} with default arguments.
@@ -51,6 +56,11 @@ and time-to-death.}
 
 \item{seed}{Seed for Monte Carlo sampling. This seed does not affect the global
 environment.}
+
+\item{restr_time}{Restriction time for the potential outcomes. Defaults to
+\code{+Inf} which means no restriction. Otherwise, the sampled potential outcomes
+are replace by \code{pmin(S0, restr_time)} (and similarly for the other potential
+outcomes).}
 }
 \value{
 (numeric) Vector of bootstrap replications for the estimated ICA.

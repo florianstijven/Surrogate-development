@@ -38,7 +38,8 @@ compute_ICA_SurvSurv = function(copula_par,
                                 marginal_sp_rho = TRUE,
                                 seed = 1,
                                 mutinfo_estimator = NULL,
-                                plot_deltas = FALSE) {
+                                plot_deltas = FALSE,
+                                restr_time = +Inf) {
   if (is.null(mutinfo_estimator)) {
     # If no function has been supplies for mutinfo_estimator, we use the defualt
     # from the FNN R package.
@@ -63,7 +64,8 @@ compute_ICA_SurvSurv = function(copula_par,
     marginal_sp_rho = marginal_sp_rho,
     setting = "SurvSurv",
     composite = composite,
-    plot_deltas = plot_deltas
+    plot_deltas = plot_deltas,
+    restr_time = restr_time
   )
   delta_df = delta_list$Delta_dataframe
   sp_rho_matrix = delta_list$marginal_sp_rho_matrix

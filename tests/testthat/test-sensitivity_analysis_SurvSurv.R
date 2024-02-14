@@ -145,3 +145,26 @@ test_that("sensitivity_analysis_SurvSurv_copula() works on a single core with Fr
     sens_results_cond2, ignore_attr = "copula_family2"
   )
 })
+
+
+test_that("sensitivity_analysis_SurvSurv_copula() wth restricted survival times and Spearman's rho as ICA", {
+  # Load fitted copula model.
+  fitted_model = readRDS(test_path("fixtures", "ovarian-dvine-frank.rds"))
+  # Illustration with small number of replications and low precision
+  set.seed(1)
+  sens_results = sensitivity_analysis_SurvSurv_copula(
+    fitted_model,
+    lower = rep(0.5, 4),
+    composite = TRUE,
+    cond_ind = TRUE,
+    n_sim = 1,
+    n_prec = 2e3,
+    mutinfo_estimator = function(x, y) 1 - exp(-2 * stats::cor(x, y, method = "spearman")),
+    restr_time = 2
+  )
+  output_vector = c(sens_results$ICA[1],
+                    sens_results$sp_rho[1],
+                    sens_results$c23[1])
+  check_vector = c(0.818051345905, 0.963104747012, 4.861502022480)
+  expect_equal(output_vector, check_vector, tolerance = 1e-5)
+})

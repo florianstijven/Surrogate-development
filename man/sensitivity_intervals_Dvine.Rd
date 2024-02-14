@@ -10,7 +10,9 @@ sensitivity_intervals_Dvine(
   measure = "ICA",
   B = 200,
   alpha = 0.05,
-  n_prec = 5000
+  n_prec = 5000,
+  mutinfo_estimator = NULL,
+  restr_time = +Inf
 )
 }
 \arguments{
@@ -29,8 +31,18 @@ be incorporated, this dataframe can first be filtered.}
 
 \item{alpha}{(numeric) \code{1 - alpha} is the level of the confidence interval}
 
-\item{n_prec}{Number of Monte Carlo samples for the computation of the mutual
-information.}
+\item{n_prec}{Number of Monte-Carlo samples for the \emph{numerical approximation}
+of the ICA in each replication of the sensitivity analysis.}
+
+\item{mutinfo_estimator}{Function that estimates the mutual information
+between the first two arguments which are numeric vectors. Defaults to
+\code{FNN::mutinfo()} with default arguments.
+@param plot_deltas (logical) Plot the sampled individual treatment effects?}
+
+\item{restr_time}{Restriction time for the potential outcomes. Defaults to
+\code{+Inf} which means no restriction. Otherwise, the sampled potential outcomes
+are replace by \code{pmin(S0, restr_time)} (and similarly for the other potential
+outcomes).}
 }
 \value{
 An S3 object of the class \code{sensitivity_intervals_Dvine} which can be

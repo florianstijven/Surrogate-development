@@ -18,7 +18,8 @@ sample_deltas_BinCont(
   marginal_sp_rho = TRUE,
   setting = "BinCont",
   composite = FALSE,
-  plot_deltas = FALSE
+  plot_deltas = FALSE,
+  restr_time = +Inf
 )
 }
 \arguments{
@@ -67,6 +68,11 @@ and time-to-death.}
 
 \item{plot_deltas}{Plot the sampled individual causal effects? Defaults to
 \code{FALSE}.}
+
+\item{restr_time}{Restriction time for the potential outcomes. Defaults to
+\code{+Inf} which means no restriction. Otherwise, the sampled potential outcomes
+are replace by \code{pmin(S0, restr_time)} (and similarly for the other potential
+outcomes).}
 }
 \value{
 A list with two elements:

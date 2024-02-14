@@ -19,7 +19,8 @@ compute_ICA_SurvSurv(
   marginal_sp_rho = TRUE,
   seed = 1,
   mutinfo_estimator = NULL,
-  plot_deltas = FALSE
+  plot_deltas = FALSE,
+  restr_time = +Inf
 )
 }
 \arguments{
@@ -69,6 +70,11 @@ between the first two arguments which are numeric vectors. Defaults to
 
 \item{plot_deltas}{Plot the sampled individual causal effects? Defaults to
 \code{FALSE}.}
+
+\item{restr_time}{Restriction time for the potential outcomes. Defaults to
+\code{+Inf} which means no restriction. Otherwise, the sampled potential outcomes
+are replace by \code{pmin(S0, restr_time)} (and similarly for the other potential
+outcomes).}
 }
 \value{
 (numeric) A Named vector with the following elements:

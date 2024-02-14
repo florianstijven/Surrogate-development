@@ -127,9 +127,11 @@ summary_level_bootstrap_ICA = function(fitted_model,
                                        rotation_par_unid,
                                        n_prec,
                                        B,
+                                       measure = "ICA",
                                        mutinfo_estimator = NULL,
                                        composite,
-                                       seed) {
+                                       seed,
+                                       restr_time = +Inf) {
   # Number of knots
   k = length(fitted_model$knots1)
 
@@ -148,9 +150,11 @@ summary_level_bootstrap_ICA = function(fitted_model,
     copula_family2 = copula_family2,
     rotation_par_unid = rotation_par_unid,
     n_prec = n_prec,
+    measure = measure,
     mutinfo_estimator = mutinfo_estimator,
     composite = composite,
-    seed = seed
+    seed = seed,
+    restr_time = restr_time
   )
 
   # Resample parameter estimates from the estimated multivariate normal sampling
@@ -199,6 +203,7 @@ summary_level_bootstrap_ICA = function(fitted_model,
 #'   c_{24;3}, c_{14;23})}.
 #' @inheritParams compute_ICA_SurvSurv
 #' @inheritParams sensitivity_analysis_SurvSurv_copula
+#' @inheritParams sensitivity_intervals_Dvine
 #'
 #' @return A function that computes the ICA as a function of the identifiable
 #'   parameters. In this computation, the unidentifiable parameters are fixed at
@@ -208,9 +213,11 @@ ICA_given_model_constructor = function(fitted_model,
                                        copula_family2,
                                        rotation_par_unid,
                                        n_prec,
+                                       measure = "ICA",
                                        mutinfo_estimator,
                                        composite,
-                                       seed) {
+                                       seed,
+                                       restr_time = +Inf) {
   # Number of knots
   k = length(fitted_model$knots1)
   # Location of the knots
@@ -223,6 +230,8 @@ ICA_given_model_constructor = function(fitted_model,
   # Copula rotations for the identifiable copulas
   r_12 = fitted_model$copula_rotations[1]
   r_34 = fitted_model$copula_rotations[2]
+  marginal_sp_rho = TRUE
+  if (measure %in% c("ICA", "sp_rho")) marginal_sp_rho = FALSE
 
   ICA_given_model = function(theta) {
     # The first k + 1 elements of theta correspond to the parameters in fit_0,
@@ -282,8 +291,9 @@ ICA_given_model_constructor = function(fitted_model,
       composite = composite,
       mutinfo_estimator = mutinfo_estimator,
       seed = seed,
-      marginal_sp_rho = FALSE
-    )["ICA"]
+      marginal_sp_rho = marginal_sp_rho,
+      restr_time = restr_time
+    )[measure]
     return(ICA)
   }
   return(ICA_given_model)

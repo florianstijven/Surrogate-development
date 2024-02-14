@@ -51,6 +51,8 @@
 #' @param measure Compute intervals for which measure of surrogacy? Defaults to
 #'   `"ICA"`. See first column names of `sens_results` for other possibilities.
 #' @inheritParams Dvine_ICA_confint
+#' @inheritParams summary_level_bootstrap_ICA
+#' @inheritParams sensitivity_analysis_SurvSurv_copula
 #'
 #' @return An S3 object of the class `sensitivity_intervals_Dvine` which can be
 #' printed.
@@ -65,7 +67,9 @@ sensitivity_intervals_Dvine = function(fitted_model,
                                        measure = "ICA",
                                        B = 2e2,
                                        alpha = 0.05,
-                                       n_prec = 5e3) {
+                                       n_prec = 5e3,
+                                       mutinfo_estimator = NULL,
+                                       restr_time = +Inf) {
   # Select row with the smallest value for the ICA.
   upper_limit_row = sens_results[which.max(sens_results[[measure]]), ]
   # Select row with the largest value for the ICA.
@@ -87,7 +91,10 @@ sensitivity_intervals_Dvine = function(fitted_model,
     n_prec = n_prec,
     composite = composite,
     B = B,
-    seed = 1
+    seed = 1,
+    measure = measure,
+    mutinfo_estimator = mutinfo_estimator,
+    restr_time = restr_time
   )
 
   # Perform parametric bootstrap for setting that yielded largest ICA.
@@ -99,7 +106,10 @@ sensitivity_intervals_Dvine = function(fitted_model,
     n_prec = n_prec,
     composite = composite,
     B = B,
-    seed = 1
+    seed = 1,
+    measure = measure,
+    mutinfo_estimator = mutinfo_estimator,
+    restr_time = restr_time
   )
 
   # Compute confidence intervals for the two scenarios selected above. For the

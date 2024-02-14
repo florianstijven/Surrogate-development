@@ -262,6 +262,10 @@ sample_dvine = function(copula_par,
 #' * `"SurvSurv"`: for when both \eqn{S} and \eqn{T} are time-to-event variables.
 #' @param plot_deltas Plot the sampled individual causal effects? Defaults to
 #' `FALSE`.
+#' @param restr_time Restriction time for the potential outcomes. Defaults to
+#' `+Inf` which means no restriction. Otherwise, the sampled potential outcomes
+#' are replace by `pmin(S0, restr_time)` (and similarly for the other potential
+#' outcomes).
 #'
 #' @inheritParams sample_dvine
 #'
@@ -284,7 +288,8 @@ sample_deltas_BinCont = function(copula_par,
                                  marginal_sp_rho = TRUE,
                                  setting = "BinCont",
                                  composite = FALSE,
-                                 plot_deltas = FALSE){
+                                 plot_deltas = FALSE,
+                                 restr_time = +Inf){
   # Sample data on the copula scale.
   U = sample_dvine(copula_par,
                    rotation_par,
@@ -314,6 +319,12 @@ sample_deltas_BinCont = function(copula_par,
     S0 = pmin(S0, T0)
     S1 = pmin(S1, T1)
   }
+  # Restrict the potential outcomes to a finite interval (if asked).
+  S0 = pmin(S0, restr_time)
+  S1 = pmin(S1, restr_time)
+  T0 = pmin(T0, restr_time)
+  T1 = pmin(T1, restr_time)
+
   Delta_dataframe = data.frame(DeltaS = S1 - S0,
                                DeltaT = T1 - T0)
   # Compute the pairwise marginal Spearman's rho values from the sample.

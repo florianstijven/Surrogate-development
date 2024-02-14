@@ -26,3 +26,19 @@ sens_results_comp = sensitivity_analysis_SurvSurv_copula(
 )
 # Save results to file.
 saveRDS(sens_results_comp, file = "tests/testthat/fixtures/sens-results-ovarian-gaussian-comp.rds")
+
+# Load fitted copula model.
+fitted_model_comp = readRDS(test_path("fixtures", "ovarian-dvine-gaussian-scr.rds"))
+# Perform sensitivity analysis with a small number of replications
+set.seed(1)
+sens_results_comp = sensitivity_analysis_SurvSurv_copula(
+  fitted_model_comp,
+  composite = TRUE,
+  cond_ind = TRUE,
+  n_sim = 20,
+  n_prec = 1e4,
+  restr_time = 1,
+  mutinfo_estimator = function(x, y) 1 - exp(-2 * stats::cor(x, y, method = "spearman"))
+)
+# Save results to file.
+saveRDS(sens_results_comp, file = "tests/testthat/fixtures/sens-results-ovarian-gaussian-comp-sprho-restr.rds")

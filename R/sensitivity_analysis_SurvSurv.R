@@ -254,7 +254,9 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
                                                 copula_family2 = fitted_model$copula_family[1],
                                                 n_prec = 5e3,
                                                 ncores = 1,
-                                                sample_plots = NULL) {
+                                                sample_plots = NULL,
+                                                mutinfo_estimator = NULL,
+                                                restr_time = +Inf) {
   # If copula_family2 contains only 1 element, this vector is appended to
   # the correct length.
   copula_family1 = fitted_model$copula_family
@@ -349,7 +351,9 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
     q_T1 = q_T1,
     composite = composite,
     marginal_sp_rho = marg_association,
-    seed = 1
+    seed = 1,
+    mutinfo_estimator = mutinfo_estimator,
+    restr_time = restr_time
   )
   if (ncores > 1 & requireNamespace("parallel")) {
     if (!is.null(sample_plots)){

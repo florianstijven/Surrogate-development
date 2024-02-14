@@ -11,9 +11,11 @@ ICA_given_model_constructor(
   copula_family2,
   rotation_par_unid,
   n_prec,
+  measure = "ICA",
   mutinfo_estimator,
   composite,
-  seed
+  seed,
+  restr_time = +Inf
 )
 }
 \arguments{
@@ -37,6 +39,9 @@ possible options, see \code{loglik_copula_scale()}. The elements of
 \item{n_prec}{Number of Monte Carlo samples for the computation of the mutual
 information.}
 
+\item{measure}{Compute intervals for which measure of surrogacy? Defaults to
+\code{"ICA"}. See first column names of \code{sens_results} for other possibilities.}
+
 \item{mutinfo_estimator}{Function that estimates the mutual information
 between the first two arguments which are numeric vectors. Defaults to
 \code{FNN::mutinfo()} with default arguments.
@@ -49,6 +54,11 @@ and time-to-death.}
 
 \item{seed}{Seed for Monte Carlo sampling. This seed does not affect the global
 environment.}
+
+\item{restr_time}{Restriction time for the potential outcomes. Defaults to
+\code{+Inf} which means no restriction. Otherwise, the sampled potential outcomes
+are replace by \code{pmin(S0, restr_time)} (and similarly for the other potential
+outcomes).}
 }
 \value{
 A function that computes the ICA as a function of the identifiable
