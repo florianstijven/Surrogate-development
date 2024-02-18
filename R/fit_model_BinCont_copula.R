@@ -15,7 +15,7 @@
 #'
 #' @return WIP
 #' @export
-#' @examples
+#' @examplesIf identical(Sys.getenv("NOT_CRAN"), "true")
 #' # Load Schizophrenia data set.
 #' data("Schizo_BinCont")
 #' # Perform listwise deletion.

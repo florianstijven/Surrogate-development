@@ -58,7 +58,7 @@ with caution because the Poisson mean-variance relation may be wrong.
 
 \section{Death Before Progression}{
 If a patient dies before progressing, this means that \eqn{S_k = T_k}. This
-probability can be modeled as a function of time, i.e., \deqn{	\pi_k(t) & =
+probability can be modeled as a function of time, i.e., \deqn{	\pi_k(t) =
 P(S_k = t  \, | \, T_k = t).} The \code{\link[=prob_dying_without_progression_plot]{prob_dying_without_progression_plot()}}
 function plots the model-based estimate of this regression function together
 with a non-parametric estimate.

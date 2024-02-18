@@ -199,6 +199,7 @@ Stijven et al. (2024).
 }
 
 \examples{
+\dontshow{if (identical(Sys.getenv("NOT_CRAN"), "true")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Load Schizophrenia data set.
 data("Schizo_BinCont")
 # Perform listwise deletion.
@@ -222,4 +223,5 @@ sens_results = sensitivity_analysis_BinCont_copula(
   upper = c(1, 1, 1, 1),
   n_prec = 1e3
 )
+\dontshow{\}) # examplesIf}
 }

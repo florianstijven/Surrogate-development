@@ -2,6 +2,12 @@
 
 # Surrogate 3.2
 
+## SUrrogate 3.2.2
+
+* Added uncertainty intervals to summarize sensitivity analyses
+* Extended flexibility for survival-survival vine copula models and associated sensitivity analysis
+* Add functions to evaluate multivariate surrogates in the meta-analytic framework
+
 ## Surrogate 3.2.1
 
 * Added `ICA.BinCont.BS()` function. This function allows for evaluating a 
