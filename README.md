@@ -13,13 +13,15 @@ to evaluate the effectiveness of a new therapy (the true endpoint) is
 difficult to measure. In such a situation, it can be an effective
 strategy to replace the true endpoint by a (bio)marker that is easier to
 measure and that allows for a prediction of the treatment effect on the
-true endpoint (a surrogate endpoint). The package `Surrogate` allows for
+true endpoint (a surrogate endpoint). The package ‘Surrogate’ allows for
 an evaluation of the appropriateness of a candidate surrogate endpoint
 based on the meta-analytic, information-theoretic, and causal-inference
 frameworks. Part of this software has been developed using funding
 provided from the European Union’s Seventh Framework Programme for
-research, technological development and demonstration under Grant
-Agreement no 602552.
+research, technological development and demonstration (Grant Agreement
+no 602552), the Special Research Fund (BOF) of Hasselt University
+(BOF-number: BOF2OCPO3), GlaxoSmithKline Biologicals, Baekeland Mandaat
+(HBC.2022.0145), and Johnson & Johnson Innovative Medicine.
 
 ## Installation
 
