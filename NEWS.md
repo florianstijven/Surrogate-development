@@ -1,8 +1,6 @@
-# Surrogate (development version)
-
 # Surrogate 3.2
 
-## SUrrogate 3.2.2
+## Surrogate 3.2.2
 
 * Added uncertainty intervals to summarize sensitivity analyses
 * Extended flexibility for survival-survival vine copula models and associated sensitivity analysis
