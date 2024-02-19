@@ -3,8 +3,8 @@
 \title{Assess surrogacy in the causal-inference multiple-trial setting (Meta-analytic Individual Causal Association; MICA) in the continuous-continuous case}
 \description{
 The function \code{MICA.ContCont} quantifies surrogacy in the multiple-trial causal-inference framework. See \bold{Details} below.}
-\usage{MICA.ContCont(Trial.R, D.aa, D.bb, T0S0, T1S1, T0T0=1, T1T1=1, S0S0=1, S1S1=1, 
-T0T1=seq(-1, 1, by=.1), T0S1=seq(-1, 1, by=.1), T1S0=seq(-1, 1, by=.1), 
+\usage{MICA.ContCont(Trial.R, D.aa, D.bb, T0S0, T1S1, T0T0=1, T1T1=1, S0S0=1, S1S1=1,
+T0T1=seq(-1, 1, by=.1), T0S1=seq(-1, 1, by=.1), T1S0=seq(-1, 1, by=.1),
 S0S1=seq(-1, 1, by=.1))}
 \arguments{
 \item{Trial.R}{A scalar that specifies the trial-level correlation coefficient (i.e., \eqn{R_{trial}}) that should be used in the computation of \eqn{\rho_{M}}.}
@@ -35,15 +35,13 @@ where
 \deqn{V(\Delta_{Tij})=d_{bb}+\sigma_{T_{0}T_{0}}+\sigma_{T_{1}T_{1}}-2\sqrt{\sigma_{T_{0}T_{0}}\sigma_{T_{1}T_{1}}}\rho_{T_{0}T_{1}},}
 \deqn{V(\Delta_{Sij})=d_{aa}+\sigma_{S_{0}S_{0}}+\sigma_{S_{1}S_{1}}-2\sqrt{\sigma_{S_{0}S_{0}}\sigma_{S_{1}S_{1}}}\rho_{S_{0}S_{1}}.}
 
-The correlations between the counterfactuals (i.e., \eqn{\rho_{S_{0}T_{1}}}, \eqn{\rho_{S_{1}T_{0}}}, \eqn{\rho_{T_{0}T_{1}}}, and \eqn{\rho_{S_{0}S_{1}}}) are not identifiable from the data. It is thus warranted to conduct a sensitivity analysis (by considering vectors of possible values for the correlations between the counterfactuals -- rather than point estimates). 
+The correlations between the counterfactuals (i.e., \eqn{\rho_{S_{0}T_{1}}}, \eqn{\rho_{S_{1}T_{0}}}, \eqn{\rho_{T_{0}T_{1}}}, and \eqn{\rho_{S_{0}S_{1}}}) are not identifiable from the data. It is thus warranted to conduct a sensitivity analysis (by considering vectors of possible values for the correlations between the counterfactuals -- rather than point estimates).
 
-When the user specifies a vector of values that should be considered for one or more of the correlations that are involved in the computation of \eqn{\rho_{M}}, the function \code{MICA.ContCont} constructs all possible matrices that can be formed as based on the specified values, identifies the matrices that are positive definite (i.e., valid correlation matrices), and computes \eqn{\rho_{M}} for each of these matrices. An examination of the vector of the obtained \eqn{\rho_{M}} values allows for a straightforward examination of the impact of different assumptions regarding the correlations between the counterfactuals on the results (see also \code{\link{plot Causal-Inference ContCont}}), and the extent to which proponents of the causal-inference and meta-analytic frameworks will reach the same conclusion with respect to the appropriateness of the candidate surrogate at hand.   
+When the user specifies a vector of values that should be considered for one or more of the correlations that are involved in the computation of \eqn{\rho_{M}}, the function \code{MICA.ContCont} constructs all possible matrices that can be formed as based on the specified values, identifies the matrices that are positive definite (i.e., valid correlation matrices), and computes \eqn{\rho_{M}} for each of these matrices. An examination of the vector of the obtained \eqn{\rho_{M}} values allows for a straightforward examination of the impact of different assumptions regarding the correlations between the counterfactuals on the results (see also \code{\link{plot Causal-Inference ContCont}}), and the extent to which proponents of the causal-inference and meta-analytic frameworks will reach the same conclusion with respect to the appropriateness of the candidate surrogate at hand.
 
 \bold{Notes}{
-
 A single \eqn{\rho_{M}} value is obtained when all correlations in the function call are scalars.
-
-}}
+}
 
 \value{An object of class \code{MICA.ContCont} with components,
 \item{Total.Num.Matrices}{An object of class \code{numeric} which contains the total number of matrices that can be formed as based on the user-specified correlations.}
@@ -53,23 +51,23 @@ A single \eqn{\rho_{M}} value is obtained when all correlations in the function 
 }
 
 \references{
-Alonso, A., Van der Elst, W., Molenberghs, G., Buyse, M., & Burzykowski, T. (submitted). On the relationship between the causal-inference and meta-analytic paradigms for the validation of surrogate markers. 
+Alonso, A., Van der Elst, W., Molenberghs, G., Buyse, M., & Burzykowski, T. (submitted). On the relationship between the causal-inference and meta-analytic paradigms for the validation of surrogate markers.
 }
 \author{
 Wim Van der Elst, Ariel Alonso, & Geert Molenberghs
 }
-\section{Warning}{The theory that relates the causal-inference and the meta-analytic frameworks in the multiple-trial setting (as developped in Alonso et al., submitted) assumes that a reduced or semi-reduced modelling approach is used in the meta-analytic framework. Thus \eqn{R_{trial}},  \eqn{d_{aa}} and \eqn{d_{bb}} should be estimated based on a reduced model (i.e., using the \code{Model=c("Reduced")} argument in the functions \code{\link{UnifixedContCont}}, \code{\link{UnimixedContCont}}, \code{\link{BifixedContCont}}, or \code{\link{BimixedContCont}}) or based on a semi-reduced model (i.e., using the \code{Model=c("SemiReduced")} argument in the functions \code{\link{UnifixedContCont}}, \code{\link{UnimixedContCont}}, or \code{\link{BifixedContCont}}). } 
+\section{Warning}{The theory that relates the causal-inference and the meta-analytic frameworks in the multiple-trial setting (as developped in Alonso et al., submitted) assumes that a reduced or semi-reduced modelling approach is used in the meta-analytic framework. Thus \eqn{R_{trial}},  \eqn{d_{aa}} and \eqn{d_{bb}} should be estimated based on a reduced model (i.e., using the \code{Model=c("Reduced")} argument in the functions \code{\link{UnifixedContCont}}, \code{\link{UnimixedContCont}}, \code{\link{BifixedContCont}}, or \code{\link{BimixedContCont}}) or based on a semi-reduced model (i.e., using the \code{Model=c("SemiReduced")} argument in the functions \code{\link{UnifixedContCont}}, \code{\link{UnimixedContCont}}, or \code{\link{BifixedContCont}}). }
 \seealso{
 \code{\link{ICA.ContCont}},  \code{\link{MICA.Sample.ContCont}}, \code{\link{plot Causal-Inference ContCont}}, \code{\link{UnifixedContCont}}, \code{\link{UnimixedContCont}}, \code{\link{BifixedContCont}}, \code{\link{BimixedContCont}}
 }
 \examples{
 \dontrun{ #time-consuming code parts
 # Generate the vector of MICA values when R_trial=.8, rho_T0S0=rho_T1S1=.8,
-# sigma_T0T0=90, sigma_T1T1=100,sigma_ S0S0=10, sigma_S1S1=15, D.aa=5, D.bb=10,  
-# and when the grid of values {0, .2, ..., 1} is considered for the 
+# sigma_T0T0=90, sigma_T1T1=100,sigma_ S0S0=10, sigma_S1S1=15, D.aa=5, D.bb=10,
+# and when the grid of values {0, .2, ..., 1} is considered for the
 # correlations between the counterfactuals:
 SurMICA <- MICA.ContCont(Trial.R=.80, D.aa=5, D.bb=10, T0S0=.8, T1S1=.8,
-T0T0=90, T1T1=100, S0S0=10, S1S1=15, T0T1=seq(0, 1, by=.2), 
+T0T0=90, T1T1=100, S0S0=10, S1S1=15, T0T1=seq(0, 1, by=.2),
 T0S1=seq(0, 1, by=.2), T1S0=seq(0, 1, by=.2), S0S1=seq(0, 1, by=.2))
 
 # Examine and plot the vector of the generated MICA values:
@@ -79,7 +77,7 @@ plot(SurMICA)
 
 # Same analysis, but now assume that D.aa=.5 and D.bb=.1:
 SurMICA <- MICA.ContCont(Trial.R=.80, D.aa=.5, D.bb=.1, T0S0=.8, T1S1=.8,
-T0T0=90, T1T1=100, S0S0=10, S1S1=15, T0T1=seq(0, 1, by=.2), 
+T0T0=90, T1T1=100, S0S0=10, S1S1=15, T0T1=seq(0, 1, by=.2),
 T0S1=seq(0, 1, by=.2), T1S0=seq(0, 1, by=.2), S0S1=seq(0, 1, by=.2))
 
 # Examine and plot the vector of the generated MICA values:
@@ -87,13 +85,13 @@ summary(SurMICA)
 plot(SurMICA)
 
 
-# Same as first analysis, but specify vectors for rho_T0S0 and rho_T1S1: 
-# Sample from normal with mean .8 and SD=.1 (to account for uncertainty 
-# in estimation) 
-SurMICA <- MICA.ContCont(Trial.R=.80, D.aa=5, D.bb=10, 
-T0S0=rnorm(n=10000000, mean=.8, sd=.1), 
+# Same as first analysis, but specify vectors for rho_T0S0 and rho_T1S1:
+# Sample from normal with mean .8 and SD=.1 (to account for uncertainty
+# in estimation)
+SurMICA <- MICA.ContCont(Trial.R=.80, D.aa=5, D.bb=10,
+T0S0=rnorm(n=10000000, mean=.8, sd=.1),
 T1S1=rnorm(n=10000000, mean=.8, sd=.1),
-T0T0=90, T1T1=100, S0S0=10, S1S1=15, T0T1=seq(0, 1, by=.2), 
+T0T0=90, T1T1=100, S0S0=10, S1S1=15, T0T1=seq(0, 1, by=.2),
 T0S1=seq(0, 1, by=.2), T1S0=seq(0, 1, by=.2), S0S1=seq(0, 1, by=.2))
 }
 }

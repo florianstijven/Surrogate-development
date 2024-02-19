@@ -4,8 +4,8 @@
 \description{
 The function \code{ICA.BinBin} quantifies surrogacy in the single-trial causal-inference framework (individual causal association and causal concordance) when both the surrogate and the true endpoints are binary outcomes. See \bold{Details} below.}
 \usage{
-ICA.BinBin(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1, 
-Monotonicity=c("General"), Sum_Pi_f = seq(from=0.01, to=0.99, by=.01), 
+ICA.BinBin(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1,
+Monotonicity=c("General"), Sum_Pi_f = seq(from=0.01, to=0.99, by=.01),
 M=10000, Volume.Perc=0, Seed=sample(1:100000, size=1))
 }
 
@@ -19,7 +19,7 @@ M=10000, Volume.Perc=0, Seed=sample(1:100000, size=1))
   \item{Monotonicity}{Specifies which assumptions regarding monotonicity should be made: \code{Monotonicity=c("General")}, \code{Monotonicity=c("No")}, \code{Monotonicity=c("True.Endp")}, \code{Monotonicity=c("Surr.Endp")}, or \code{Monotonicity=c("Surr.True.Endp")}. See \bold{Details} below. Default \code{Monotonicity=c("General")}.}
   \item{Sum_Pi_f}{A scalar or vector that specifies the grid of values \eqn{G={g_{1},\: g_{2},\:...,\: g_{k}}} to be considered when the sensitivity analysis is conducted. See \bold{Details} below. Default \code{Sum_Pi_f = seq(from=0.01, to=0.99, by=.01)}.}
   \item{M}{The number of runs that are conducted for a given value of \code{Sum_Pi_f}. This argument is not used when \code{Volume.Perc=0}. Default \code{M=10000}.}
-  \item{Volume.Perc}{Note that the marginals that are observable in the data set a number of restrictions on the unidentified correlations. For example, under montonicity for \eqn{S} and \eqn{T}, it holds that \eqn{\pi_{0111}<=min(\pi_{0\cdot1\cdot}, \pi_{\cdot1\cdot1})} and \eqn{\pi_{1100}<=min(\pi_{1\cdot0\cdot}, \pi_{\cdot1\cdot0})}. For example, when \eqn{min(\pi_{0\cdot1\cdot}, \pi_{\cdot1\cdot1})=0.10} and \eqn{min(\pi_{1\cdot0\cdot}, \pi_{\cdot1\cdot0})=0.08}, then all valid  \eqn{\pi_{0111}<=0.10} and  all valid \eqn{\pi_{1100}<=0.08}. The argument \code{Volume.Perc} specifies the fraction  of the 'volume' of the paramater space that is explored. This volume is computed based on the grids G={0, 0.01, ..., maximum possible value for the counterfactual probability at hand}. E.g., in the previous example, the 'volume' of the parameter space would be \eqn{11*9=99}, and when e.g., the argument \code{Volume.Perc=1} is used a total of \eqn{99} runs will be conducted for each given value of \code{Sum_Pi_f}. Notice that when monotonicity is not assumed, relatively high values of \code{Volume.Perc} will lead to a large number of runs and consequently a long analysis time.}
+  \item{Volume.Perc}{Note that the marginals that are observable in the data set a number of restrictions on the unidentified correlations. For example, under montonicity for \eqn{S} and \eqn{T}, it holds that \eqn{\pi_{0111}<=min(\pi_{0\cdot1\cdot}, \pi_{\cdot1\cdot1})} and \eqn{\pi_{1100}<=min(\pi_{1\cdot0\cdot}, \pi_{\cdot1\cdot0})}. For example, when \eqn{min(\pi_{0\cdot1\cdot}, \pi_{\cdot1\cdot1})=0.10} and \eqn{min(\pi_{1\cdot0\cdot}, \pi_{\cdot1\cdot0})=0.08}, then all valid  \eqn{\pi_{0111}<=0.10} and  all valid \eqn{\pi_{1100}<=0.08}. The argument \code{Volume.Perc} specifies the fraction  of the 'volume' of the paramater space that is explored. This volume is computed based on the grids G=\{0, 0.01, ..., maximum possible value for the counterfactual probability at hand\}. E.g., in the previous example, the 'volume' of the parameter space would be \eqn{11*9=99}, and when e.g., the argument \code{Volume.Perc=1} is used a total of \eqn{99} runs will be conducted for each given value of \code{Sum_Pi_f}. Notice that when monotonicity is not assumed, relatively high values of \code{Volume.Perc} will lead to a large number of runs and consequently a long analysis time.}
   \item{Seed}{The seed to be used to generate \eqn{\pi_r}. Default \code{Seed=sample(1:100000, size=1)}.}
   }
 
@@ -27,11 +27,11 @@ M=10000, Volume.Perc=0, Seed=sample(1:100000, size=1))
 
 In the continuous normal setting, surroagacy can be assessed by studying the association between the individual causal effects on \eqn{S} and \eqn{T} (see \code{\link{ICA.ContCont}}). In that setting, the Pearson correlation is the obvious measure of association.
 
-When \eqn{S} and \eqn{T} are binary endpoints, multiple alternatives exist. Alonso et al. (2014) proposed the individual causal association (ICA; \eqn{R_{H}^{2}}), which captures the association between the individual causal effects of the treatment on \eqn{S} (\eqn{\Delta_S}) and \eqn{T} (\eqn{\Delta_T}) using information-theoretic principles. 
+When \eqn{S} and \eqn{T} are binary endpoints, multiple alternatives exist. Alonso et al. (2014) proposed the individual causal association (ICA; \eqn{R_{H}^{2}}), which captures the association between the individual causal effects of the treatment on \eqn{S} (\eqn{\Delta_S}) and \eqn{T} (\eqn{\Delta_T}) using information-theoretic principles.
 
 The function \code{ICA.BinBin} computes \eqn{R_{H}^{2}} based on plausible values of the potential outcomes. Denote by \eqn{\bold{Y}'=(T_0,T_1,S_0,S_1)} the vector of potential outcomes. The vector \eqn{\bold{Y}} can take 16 values and the set of parameters \eqn{\pi_{ijpq}=P(T_0=i,T_1=j,S_0=p,S_1=q)} (with \eqn{i,j,p,q=0/1}) fully characterizes its distribution.
 
-However, the parameters in \eqn{\pi_{ijpq}} are not all functionally independent, e.g., \eqn{1=\pi_{\cdot\cdot\cdot\cdot}}. When no assumptions regarding monotonicity are made, the data impose a total of \eqn{7} restrictions, and thus only \eqn{9} proabilities in \eqn{\pi_{ijpq}} are allowed to vary freely (for details, see Alonso et al., 2014). Based on the data and assuming SUTVA, the marginal probabilites \eqn{\pi_{1 \cdot 1 \cdot}}, \eqn{\pi_{1 \cdot 0 \cdot}}, \eqn{\pi_{\cdot 1 \cdot 1}}, \eqn{\pi_{\cdot 1 \cdot 0}}, \eqn{\pi_{0 \cdot 1 \cdot}}, and \eqn{\pi_{\cdot 0 \cdot 1}} can be computed (by hand or using the function \code{\link{MarginalProbs}}). Define the vector 
+However, the parameters in \eqn{\pi_{ijpq}} are not all functionally independent, e.g., \eqn{1=\pi_{\cdot\cdot\cdot\cdot}}. When no assumptions regarding monotonicity are made, the data impose a total of \eqn{7} restrictions, and thus only \eqn{9} proabilities in \eqn{\pi_{ijpq}} are allowed to vary freely (for details, see Alonso et al., 2014). Based on the data and assuming SUTVA, the marginal probabilites \eqn{\pi_{1 \cdot 1 \cdot}}, \eqn{\pi_{1 \cdot 0 \cdot}}, \eqn{\pi_{\cdot 1 \cdot 1}}, \eqn{\pi_{\cdot 1 \cdot 0}}, \eqn{\pi_{0 \cdot 1 \cdot}}, and \eqn{\pi_{\cdot 0 \cdot 1}} can be computed (by hand or using the function \code{\link{MarginalProbs}}). Define the vector
 \deqn{\bold{b}'=(1, \pi_{1 \cdot 1 \cdot}, \pi_{1 \cdot 0 \cdot}, \pi_{\cdot 1 \cdot 1}, \pi_{\cdot 1 \cdot 0}, \pi_{0 \cdot 1 \cdot}, \pi_{\cdot 0 \cdot 1})} and \eqn{\bold{A}} is a contrast matrix such that the identified restrictions can be written as a system of linear equation
 \deqn{\bold{A \pi} = \bold{b}.}
 
@@ -42,7 +42,7 @@ The following algorithm is used to generate plausible distributions for \eqn{\bo
 
 The previous developments hold when no monotonicity is assumed. When monotonicity for \eqn{S}, \eqn{T}, or for \eqn{S} and \eqn{T} is assumed, some of the probabilities of \eqn{\pi} are zero. For example, when montonicity is assumed for \eqn{T}, then \eqn{P(T_0 <= T_1)=1}, or equivantly, \eqn{\pi_{1000}=\pi_{1010}=\pi_{1001}=\pi_{1011}=0}. When monotonicity is assumed, the procedure described above is modified accordingly (for details, see Alonso et al., 2014). When a general analysis is requested (using \code{Monotonicity=c("General")} in the function call), all settings are considered (no monotonicity, monotonicity for \eqn{S} alone, for \eqn{T} alone, and for both for \eqn{S} and \eqn{T}.)
 
-To account for the uncertainty in the estimation of the marginal probabilities, a vector of values can be specified from which a random draw is made in each run (see \bold{Examples} below). 
+To account for the uncertainty in the estimation of the marginal probabilities, a vector of values can be specified from which a random draw is made in each run (see \bold{Examples} below).
 }
 
 \value{An object of class \code{ICA.BinBin} with components,
@@ -68,25 +68,25 @@ Wim Van der Elst, Paul Meyvisch, Ariel Alonso & Geert Molenberghs
 }
 \examples{
 \dontrun{# Time consuming code part
-# Compute R2_H given the marginals specified as the pi's, making no 
+# Compute R2_H given the marginals specified as the pi's, making no
 # assumptions regarding monotonicity (general case)
-ICA <- ICA.BinBin(pi1_1_=0.2619048, pi1_0_=0.2857143, pi_1_1=0.6372549, 
-pi_1_0=0.07843137, pi0_1_=0.1349206, pi_0_1=0.127451, Seed=1, 
+ICA <- ICA.BinBin(pi1_1_=0.2619048, pi1_0_=0.2857143, pi_1_1=0.6372549,
+pi_1_0=0.07843137, pi0_1_=0.1349206, pi_0_1=0.127451, Seed=1,
 Monotonicity=c("General"), Sum_Pi_f = seq(from=0.01, to=.99, by=.01), M=10000)
 
 # obtain plot of the results
 plot(ICA, R2_H=TRUE)
 
-# Example 2 where the uncertainty in the estimation 
+# Example 2 where the uncertainty in the estimation
 # of the marginals is taken into account
-ICA_BINBIN2 <- ICA.BinBin(pi1_1_=runif(10000, 0.2573, 0.4252), 
-pi1_0_=runif(10000, 0.1769, 0.3310), 
-pi_1_1=runif(10000, 0.5947, 0.7779), 
-pi_1_0=runif(10000, 0.0322, 0.1442), 
-pi0_1_=runif(10000, 0.0617, 0.1764), 
+ICA_BINBIN2 <- ICA.BinBin(pi1_1_=runif(10000, 0.2573, 0.4252),
+pi1_0_=runif(10000, 0.1769, 0.3310),
+pi_1_1=runif(10000, 0.5947, 0.7779),
+pi_1_0=runif(10000, 0.0322, 0.1442),
+pi0_1_=runif(10000, 0.0617, 0.1764),
 pi_0_1=runif(10000, 0.0254, 0.1315),
-Monotonicity=c("General"), 
-Sum_Pi_f = seq(from=0.01, to=0.99, by=.01), 
+Monotonicity=c("General"),
+Sum_Pi_f = seq(from=0.01, to=0.99, by=.01),
 M=50000, Seed=1)
 
 # Plot results
