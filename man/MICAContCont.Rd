@@ -39,7 +39,7 @@ The correlations between the counterfactuals (i.e., \eqn{\rho_{S_{0}T_{1}}}, \eq
 
 When the user specifies a vector of values that should be considered for one or more of the correlations that are involved in the computation of \eqn{\rho_{M}}, the function \code{MICA.ContCont} constructs all possible matrices that can be formed as based on the specified values, identifies the matrices that are positive definite (i.e., valid correlation matrices), and computes \eqn{\rho_{M}} for each of these matrices. An examination of the vector of the obtained \eqn{\rho_{M}} values allows for a straightforward examination of the impact of different assumptions regarding the correlations between the counterfactuals on the results (see also \code{\link{plot Causal-Inference ContCont}}), and the extent to which proponents of the causal-inference and meta-analytic frameworks will reach the same conclusion with respect to the appropriateness of the candidate surrogate at hand.
 
-\bold{Notes}{
+\bold{Notes}
 A single \eqn{\rho_{M}} value is obtained when all correlations in the function call are scalars.
 }
 
@@ -48,6 +48,7 @@ A single \eqn{\rho_{M}} value is obtained when all correlations in the function 
 \item{Pos.Def}{A \code{data.frame} that contains the positive definite matrices that can be formed based on the user-specified correlations. These matrices are used to compute the vector of the \eqn{\rho_{M}} values.}
 \item{ICA}{A scalar or vector of the \eqn{\rho_{\Delta}} values.}
 \item{MICA}{A scalar or vector of the \eqn{\rho_{M}} values.}
+
 }
 
 \references{

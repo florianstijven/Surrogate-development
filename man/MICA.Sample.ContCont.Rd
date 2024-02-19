@@ -44,8 +44,9 @@ In contrast, the function \code{MICA.Sample.ContCont} samples random values for 
 
 An examination of the vector of the obtained \eqn{\rho_{M}} values allows for a straightforward examination of the impact of different assumptions regarding the correlations between the counterfactuals on the results (see also \code{\link{plot Causal-Inference ContCont}}), and the extent to which proponents of the causal-inference and meta-analytic frameworks will reach the same conclusion with respect to the appropriateness of the candidate surrogate at hand.
 
-\bold{Notes}{
+\bold{Notes}
 A single \eqn{\rho_{M}} value is obtained when all correlations in the function call are scalars.
+
 }
 
 \value{An object of class \code{MICA.ContCont} with components,
