@@ -15,7 +15,8 @@ summary_level_bootstrap_ICA(
   mutinfo_estimator = NULL,
   composite,
   seed,
-  restr_time = +Inf
+  restr_time = +Inf,
+  ncores = 1
 )
 }
 \arguments{
@@ -61,6 +62,10 @@ environment.}
 \code{+Inf} which means no restriction. Otherwise, the sampled potential outcomes
 are replace by \code{pmin(S0, restr_time)} (and similarly for the other potential
 outcomes).}
+
+\item{ncores}{Number of cores used in the sensitivity analysis. The
+computations are computationally heavy, and this option can speed things up
+considerably.}
 }
 \value{
 (numeric) Vector of bootstrap replications for the estimated ICA.

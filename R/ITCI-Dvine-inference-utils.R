@@ -119,6 +119,7 @@ delta_method_log_mutinfo = function(fitted_model,
 #'
 #' @param B Number of bootstrap replications
 #' @inheritParams ICA_given_model_constructor
+#' @inheritParams sensitivity_analysis_SurvSurv_copula
 #'
 #' @return (numeric) Vector of bootstrap replications for the estimated ICA.
 summary_level_bootstrap_ICA = function(fitted_model,

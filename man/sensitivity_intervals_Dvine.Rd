@@ -12,7 +12,8 @@ sensitivity_intervals_Dvine(
   alpha = 0.05,
   n_prec = 5000,
   mutinfo_estimator = NULL,
-  restr_time = +Inf
+  restr_time = +Inf,
+  ncores = 1
 )
 }
 \arguments{
@@ -43,6 +44,10 @@ between the first two arguments which are numeric vectors. Defaults to
 \code{+Inf} which means no restriction. Otherwise, the sampled potential outcomes
 are replace by \code{pmin(S0, restr_time)} (and similarly for the other potential
 outcomes).}
+
+\item{ncores}{Number of cores used in the sensitivity analysis. The
+computations are computationally heavy, and this option can speed things up
+considerably.}
 }
 \value{
 An S3 object of the class \code{sensitivity_intervals_Dvine} which can be
