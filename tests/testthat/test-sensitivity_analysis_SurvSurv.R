@@ -59,9 +59,9 @@ test_that("sensitivity_analysis_SurvSurv_copula() works on 2 cores with Clayton 
   expect_equal(output_vector, check_vector)
 })
 
-test_that("sensitivity_analysis_SurvSurv_copula() works on a single core with Gaussian copula", {
+test_that("sensitivity_analysis_SurvSurv_copula() works on a single core with variable copula", {
   # Load fitted copula model.
-  fitted_model = readRDS(test_path("fixtures", "ovarian-dvine-gaussian.rds"))
+  fitted_model = readRDS(test_path("fixtures", "ovarian-dvine-variable.rds"))
   # Illustration with small number of replications and low precision
   set.seed(1)
   sens_results = sensitivity_analysis_SurvSurv_copula(
@@ -74,32 +74,13 @@ test_that("sensitivity_analysis_SurvSurv_copula() works on a single core with Ga
   output_vector = c(sens_results$ICA[1],
                     sens_results$sp_rho[1],
                     sens_results$c23[3])
-  check_vector = c(0.954300359124, 0.962676202705, 0.152435752847)
+  check_vector = c(0.973170806302, 0.971849999400, 1.374917942896)
   expect_equal(output_vector, check_vector)
 })
 
-test_that("sensitivity_analysis_SurvSurv_copula() works on a single core with Frank copula", {
+test_that("sensitivity_analysis_SurvSurv_copula() works on a single core with Clayton copula and four different unidentifiable copulas", {
   # Load fitted copula model.
-  fitted_model = readRDS(test_path("fixtures", "ovarian-dvine-frank.rds"))
-  # Illustration with small number of replications and low precision
-  set.seed(1)
-  sens_results = sensitivity_analysis_SurvSurv_copula(
-    fitted_model,
-    composite = TRUE,
-    cond_ind = TRUE,
-    n_sim = 1,
-    n_prec = 2e3
-  )
-  output_vector = c(sens_results$ICA[1],
-                    sens_results$sp_rho[1],
-                    sens_results$c23[1])
-  check_vector = c(0.985506493477, 0.986181510545, -3.171396109738)
-  expect_equal(output_vector, check_vector, tolerance = 1e-5)
-})
-
-test_that("sensitivity_analysis_SurvSurv_copula() works on a single core with Frank copula and four different unidentifiable copulas", {
-  # Load fitted copula model.
-  fitted_model = readRDS(test_path("fixtures", "ovarian-dvine-frank.rds"))
+  fitted_model = readRDS(test_path("fixtures", "ovarian-dvine-clayton.rds"))
   # Illustration with small number of replications and low precision
   set.seed(1)
   sens_results = sensitivity_analysis_SurvSurv_copula(
@@ -134,7 +115,7 @@ test_that("sensitivity_analysis_SurvSurv_copula() works on a single core with Fr
     c(sens_results$ICA[1],
       sens_results$sp_rho[1],
       sens_results$c23[1]),
-    c(0.983678101584, 0.984415882604, 0.436161760666)
+    c(0.995992037557, 0.995217038804, 0.436161760666)
   )
 
   # Check that results for two conditional independence settings are identical.
@@ -146,10 +127,9 @@ test_that("sensitivity_analysis_SurvSurv_copula() works on a single core with Fr
   )
 })
 
-
 test_that("sensitivity_analysis_SurvSurv_copula() wth restricted survival times and Spearman's rho as ICA", {
   # Load fitted copula model.
-  fitted_model = readRDS(test_path("fixtures", "ovarian-dvine-frank.rds"))
+  fitted_model = readRDS(test_path("fixtures", "ovarian-dvine-clayton.rds"))
   # Illustration with small number of replications and low precision
   set.seed(1)
   sens_results = sensitivity_analysis_SurvSurv_copula(
@@ -165,6 +145,6 @@ test_that("sensitivity_analysis_SurvSurv_copula() wth restricted survival times 
   output_vector = c(sens_results$ICA[1],
                     sens_results$sp_rho[1],
                     sens_results$c23[1])
-  check_vector = c(0.818051345905, 0.963104747012, 4.861502022480)
+  check_vector = c(0.822189801988, 0.995997149542, 1.682036932130)
   expect_equal(output_vector, check_vector, tolerance = 1e-5)
 })

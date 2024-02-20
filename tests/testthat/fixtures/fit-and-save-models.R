@@ -14,17 +14,17 @@ fitted_model = fit_model_SurvSurv(data = data,
                                   n_knots = 1)
 saveRDS(fitted_model, file = "tests/testthat/fixtures/ovarian-dvine-clayton.rds")
 
-# Fit and save the D-vine copula model with Frank copula
-fitted_model = fit_model_SurvSurv(data = data,
-                                  copula_family = "frank",
-                                  n_knots = 1)
-saveRDS(fitted_model, file = "tests/testthat/fixtures/ovarian-dvine-frank.rds")
+# # Fit and save the D-vine copula model with Frank copula
+# fitted_model = fit_model_SurvSurv(data = data,
+#                                   copula_family = "frank",
+#                                   n_knots = 1)
+# saveRDS(fitted_model, file = "tests/testthat/fixtures/ovarian-dvine-frank.rds")
 
-# Fit and save the D-vine copula model with Gaussian copula
-fitted_model = fit_model_SurvSurv(data = data,
-                                  copula_family = "gaussian",
-                                  n_knots = 1)
-saveRDS(fitted_model, file = "tests/testthat/fixtures/ovarian-dvine-gaussian.rds")
+# # Fit and save the D-vine copula model with Gaussian copula
+# fitted_model = fit_model_SurvSurv(data = data,
+#                                   copula_family = "gaussian",
+#                                   n_knots = 1)
+# saveRDS(fitted_model, file = "tests/testthat/fixtures/ovarian-dvine-gaussian.rds")
 
 # Fit and save the D-vine copula model with Clayton and Gumbel copula and
 # variable number of knots
@@ -83,8 +83,8 @@ fitted_model = fit_model_SurvSurv(data = data_scr,
                                   n_knots = 1)
 saveRDS(fitted_model, file = "tests/testthat/fixtures/ovarian-dvine-gaussian-scr.rds")
 
-fitted_model = fit_model_SurvSurv(data = data_scr,
-                                  copula_family = "gumbel",
-                                  n_knots = 1)
-saveRDS(fitted_model, file = "tests/testthat/fixtures/ovarian-dvine-gumbel-scr.rds")
+# fitted_model = fit_model_SurvSurv(data = data_scr,
+#                                   copula_family = "gumbel",
+#                                   n_knots = 1)
+# saveRDS(fitted_model, file = "tests/testthat/fixtures/ovarian-dvine-gumbel-scr.rds")
 
