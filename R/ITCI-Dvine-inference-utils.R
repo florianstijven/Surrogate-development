@@ -131,7 +131,8 @@ summary_level_bootstrap_ICA = function(fitted_model,
                                        mutinfo_estimator = NULL,
                                        composite,
                                        seed,
-                                       restr_time = +Inf) {
+                                       restr_time = +Inf,
+                                       ncores = 1) {
   # Parameter estimates
   theta_hat = c(coef(fitted_model$fit_0), coef(fitted_model$fit_1))
 
@@ -172,14 +173,43 @@ summary_level_bootstrap_ICA = function(fitted_model,
     theta_resampled[, a + b] = (exp(2 * theta_resampled[, a + b]) - 1) / (exp(2 * theta_resampled[, a + b]) + 1)
   }
 
+  if (ncores > 1 & requireNamespace("parallel")) {
+    cl  <- parallel::makeCluster(ncores)
+    # helper function
+    # surrogacy_sample_sens <- surrogacy_sample_sens
+    print("Starting parallel simulations")
 
-
-  # Compute the ICA for the resampled parameter estimates.
-  ICA_hats = apply(
-    X = theta_resampled,
-    FUN = ICA_given_model,
-    MARGIN = 1
-  )
+    # Get current search path and set the same search path in the new instances
+    # of R. Usually, this would not be necessary, but if the user changed the
+    # search path before running this function, there could be an issue.
+    search_path = .libPaths()
+    force(search_path)
+    parallel::clusterExport(
+      cl = cl,
+      varlist = c("search_path"),
+      envir = environment()
+    )
+    parallel::clusterEvalQ(cl = cl, expr = .libPaths(new = search_path))
+    ICA_hats = parallel::parApply(
+      cl = cl,
+      X = theta_resampled,
+      FUN = ICA_given_model,
+      MARGIN = 1
+    )
+    print("Finishing parallel simulations")
+    on.exit(expr = {
+      parallel::stopCluster(cl)
+      rm("cl")
+    })
+  }
+  else {
+    # Compute the ICA for the resampled parameter estimates.
+    ICA_hats = apply(
+      X = theta_resampled,
+      FUN = ICA_given_model,
+      MARGIN = 1
+    )
+  }
 
   return(ICA_hats)
 }

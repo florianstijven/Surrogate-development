@@ -32,7 +32,20 @@ test_that("Resampling method for the ICA based on fitted model summary informati
     seed = 1,
     B = 10L
   )
-  mean_ICA = mean(estimated_ICAs)
-  sd_ICA = sd(estimated_ICAs)
+  set.seed(1)
+  estimated_ICAs_p = summary_level_bootstrap_ICA(
+    fitted_model = fitted_model,
+    rotation_par_unid = c(0,0,0,0),
+    copula_par_unid = 1:4,
+    copula_family2 = "clayton",
+    n_prec = 1e3,
+    composite = TRUE,
+    seed = 1,
+    B = 10L,
+    ncores = 2
+  )
+  mean_ICA = mean(estimated_ICAs); sd_ICA = sd(estimated_ICAs)
+  mean_ICA_p = mean(estimated_ICAs_p); sd_ICA_p = sd(estimated_ICAs_p)
   expect_equal(c(mean_ICA, sd_ICA), c(0.99096747638744, 0.00145160206983))
+  expect_equal(c(mean_ICA_p, sd_ICA_p), c(0.99096747638744, 0.00145160206983))
 })

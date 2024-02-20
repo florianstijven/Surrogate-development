@@ -69,7 +69,8 @@ sensitivity_intervals_Dvine = function(fitted_model,
                                        alpha = 0.05,
                                        n_prec = 5e3,
                                        mutinfo_estimator = NULL,
-                                       restr_time = +Inf) {
+                                       restr_time = +Inf,
+                                       ncores = 1) {
   # Select row with the smallest value for the ICA.
   upper_limit_row = sens_results[which.max(sens_results[[measure]]), ]
   # Select row with the largest value for the ICA.
@@ -95,7 +96,8 @@ sensitivity_intervals_Dvine = function(fitted_model,
     seed = 1,
     measure = measure,
     mutinfo_estimator = mutinfo_estimator,
-    restr_time = restr_time
+    restr_time = restr_time,
+    ncores = ncores
   )
 
   # Perform parametric bootstrap for setting that yielded largest ICA.
@@ -110,7 +112,8 @@ sensitivity_intervals_Dvine = function(fitted_model,
     seed = 1,
     measure = measure,
     mutinfo_estimator = mutinfo_estimator,
-    restr_time = restr_time
+    restr_time = restr_time,
+    ncores = ncores
   )
 
   # Compute confidence intervals for the two scenarios selected above. For the
