@@ -116,6 +116,18 @@ sensitivity_intervals_Dvine = function(fitted_model,
     ncores = ncores
   )
 
+  # We allow for NAs in the boostrap replications, but give a warning.
+  if(any(is.na(bootstrap_replications_lower))) {
+    number_nas = sum(is.na(bootstrap_replications_lower))
+    warning(paste0("In ", as.character(number_nas), " of the boostrap replications for the lower limit, ICA could not be computed."))
+    bootstrap_replications_lower = na.omit(bootstrap_replications_lower)
+  }
+  if(any(is.na(bootstrap_replications_upper))) {
+    number_nas = sum(is.na(bootstrap_replications_upper))
+    warning(paste0("In ", as.character(number_nas), " of the boostrap replications for the upper limit, ICA could not be computed."))
+    bootstrap_replications_upper = na.omit(bootstrap_replications_upper)
+  }
+
   # Compute confidence intervals for the two scenarios selected above. For the
   # uncertainty intervals with pointwise 1 - alpha coverage, we can consider the
   # lower (upper) limit of a one-sided 1 - alpha confidence interval for the smallest

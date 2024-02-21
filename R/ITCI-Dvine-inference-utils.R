@@ -143,18 +143,28 @@ summary_level_bootstrap_ICA = function(fitted_model,
   vcov_matrix = rbind(cbind(vcov(fitted_model$fit_0), zeros_matrix),
                       cbind(t(zeros_matrix), vcov(fitted_model$fit_1)))
 
-  ICA_given_model = ICA_given_model_constructor(
-    fitted_model = fitted_model,
-    copula_par_unid = copula_par_unid,
-    copula_family2 = copula_family2,
-    rotation_par_unid = rotation_par_unid,
-    n_prec = n_prec,
-    measure = measure,
-    mutinfo_estimator = mutinfo_estimator,
-    composite = composite,
-    seed = seed,
-    restr_time = restr_time
+  ICA_given_model_original = ICA_given_model_constructor(
+    fitted_model = force(fitted_model),
+    copula_par_unid = force(copula_par_unid),
+    copula_family2 = force(copula_family2),
+    rotation_par_unid = force(rotation_par_unid),
+    n_prec = force(n_prec),
+    measure = force(measure),
+    mutinfo_estimator = force(mutinfo_estimator),
+    composite = force(composite),
+    seed = force(seed),
+    restr_time = force(restr_time)
   )
+  ICA_given_model = function(theta) {
+    tryCatch(
+      ICA_given_model_original(theta),
+      error = function(e) {
+        print(e)
+        return(NA)
+      }
+    )
+  }
+
 
   # Resample parameter estimates from the estimated multivariate normal sampling
   # distribution.
@@ -187,7 +197,7 @@ summary_level_bootstrap_ICA = function(fitted_model,
     force(search_path)
     parallel::clusterExport(
       cl = cl,
-      varlist = c("search_path"),
+      varlist = c("search_path", "ICA_given_model_original"),
       envir = environment()
     )
     parallel::clusterEvalQ(cl = cl, expr = .libPaths(new = search_path))
@@ -265,6 +275,10 @@ ICA_given_model_constructor = function(fitted_model,
   r_34 = fitted_model$copula_rotations[2]
   marginal_sp_rho = TRUE
   if (measure %in% c("ICA", "sp_rho")) marginal_sp_rho = FALSE
+
+  force(n_prec); force(mutinfo_estimator); force(copula_par_unid)
+  force(copula_family2); force(rotation_par_unid); force(composite)
+  force(seed); force(restr_time)
 
   ICA_given_model = function(theta) {
     # The first k + 1 elements of theta correspond to the parameters in fit_0,

@@ -90,3 +90,40 @@ test_that("Intervals of ignorance and uncertainty are correctly computed", {
 })
 
 
+test_that("Intervals of ignorance and uncertainty work on multiple cores", {
+  testthat::skip_on_cran()
+  # Load fitted copula model.
+  fitted_model = readRDS(test_path("fixtures", "ovarian-dvine-clayton.rds"))
+  # Load precomputed data set that is outputted by the sensitivity analysis
+  # functions.
+  sens_results = readRDS(test_path("fixtures", "sens-results-ovarian-clayton.rds"))
+  # Create sensitivity intervals object
+  set.seed(1)
+  n_prec = 1e3; B = 20
+  sensitivity_intervals_estimated = sensitivity_intervals_Dvine(
+    fitted_model = fitted_model,
+    sens_results = sens_results,
+    B = B,
+    n_prec = n_prec,
+    ncores = 2
+  )
+  est_interval_of_ignorance = sensitivity_intervals_estimated$est_interval_of_ignorance
+  interval_of_uncertainty_strong = sensitivity_intervals_estimated$interval_of_uncertainty_strong_coverage
+  interval_of_uncertainty_pointwise = sensitivity_intervals_estimated$interval_of_uncertainty_pointwise_coverage
+
+  expect_equal(
+    c(
+      est_interval_of_ignorance,
+      interval_of_uncertainty_strong,
+      interval_of_uncertainty_pointwise
+    ),
+    c(
+      0.835910421200,
+      0.997707840148,
+      0.748958557291,
+      0.997230581629,
+      0.754652670814,
+      0.997228210639
+    )
+  )
+})
