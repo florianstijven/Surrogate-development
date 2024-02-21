@@ -134,6 +134,7 @@ summary_level_bootstrap_ICA = function(fitted_model,
                                        seed,
                                        restr_time = +Inf,
                                        ncores = 1) {
+  withr::local_seed(seed)
   # Parameter estimates
   theta_hat = c(coef(fitted_model$fit_0), coef(fitted_model$fit_1))
 
