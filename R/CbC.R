@@ -93,7 +93,7 @@ BimixedCbCContCont = function(Dataset, Surr, True, Treat, Trial.ID,Min.Treat.Siz
   R2trial = R2TrialFun(DH)
   R2ind = R2IndFun(SigmaH)
 
-  R2ind.sd <- sqrt((4 * R2ind * ((1 - R2ind)^2))/(N - 3))
+  R2ind.sd <- sqrt((4 * R2ind * ((1 - R2ind)^2))/(sum(n) - 3))
   R2ind.lb <- max(0, R2ind + qnorm(Alpha/2) * R2ind.sd)
   R2ind.ub <- min(1, R2ind + qnorm(1 - Alpha/2) * R2ind.sd)
   Indiv.R2 <- data.frame(cbind(R2ind, R2ind.sd, R2ind.lb, R2ind.ub), stringsAsFactors = TRUE)
