@@ -71,7 +71,6 @@ fitted_model = fit_copula_model_BinCont(data, "clayton", "normal", twostep = FAL
 sens_results = sensitivity_analysis_BinCont_copula(
   fitted_model,
   10,
-  cond_ind = TRUE,
   lower = c(-1,-1,-1,-1),
   upper = c(1, 1, 1, 1),
   n_prec = 1e3

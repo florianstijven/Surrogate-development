@@ -6,14 +6,15 @@ test_that("sensitivity_analysis_SurvSurv_copula() works on a single core with Cl
   sens_results = sensitivity_analysis_SurvSurv_copula(
     fitted_model,
     composite = TRUE,
-    cond_ind = TRUE,
+    lower = c(-1, 0, 0, -1),
+    upper = c(1, 0, 0, 1),
     n_sim = 5,
     n_prec = 500
   )
   output_vector = c(sens_results$ICA[1],
                     sens_results$sp_rho[1],
                     sens_results$c23[3])
-  check_vector = c(0.983848446048, 0.984428257713, 1.374917942896)
+  check_vector = c(0.988990899030, 0.993308293233, 1.374917942896)
   expect_equal(output_vector, check_vector)
 })
 
@@ -25,14 +26,15 @@ test_that("sensitivity_analysis_SurvSurv_copula() works with variable number of 
   sens_results = sensitivity_analysis_SurvSurv_copula(
     fitted_model,
     composite = TRUE,
-    cond_ind = TRUE,
+    lower = c(-1, 0, 0, -1),
+    upper = c(1, 0, 0, 1),
     n_sim = 5,
     n_prec = 500
   )
   output_vector = c(sens_results$ICA[1],
                     sens_results$sp_rho[1],
                     sens_results$c23[3])
-  check_vector = c(0.973170806302, 0.971849999400, 1.374917942896)
+  check_vector = c(0.979074242038, 0.971166764667, 1.374917942896)
   expect_equal(output_vector, check_vector)
 })
 
@@ -47,7 +49,8 @@ test_that("sensitivity_analysis_SurvSurv_copula() works on 2 cores with Clayton 
   sens_results = sensitivity_analysis_SurvSurv_copula(
     fitted_model,
     composite = TRUE,
-    cond_ind = TRUE,
+    lower = c(-1, 0, 0, -1),
+    upper = c(1, 0, 0, 1),
     n_sim = 5,
     n_prec = 500,
     ncores = 2
@@ -55,7 +58,7 @@ test_that("sensitivity_analysis_SurvSurv_copula() works on 2 cores with Clayton 
   output_vector = c(sens_results$ICA[1],
                     sens_results$sp_rho[1],
                     sens_results$c23[3])
-  check_vector = c(0.983848446048, 0.984428257713, 1.374917942896)
+  check_vector = c(0.988990899030, 0.993308293233, 1.374917942896)
   expect_equal(output_vector, check_vector)
 })
 
@@ -67,14 +70,13 @@ test_that("sensitivity_analysis_SurvSurv_copula() works on a single core with va
   sens_results = sensitivity_analysis_SurvSurv_copula(
     fitted_model,
     composite = TRUE,
-    cond_ind = TRUE,
     n_sim = 5,
     n_prec = 500
   )
   output_vector = c(sens_results$ICA[1],
                     sens_results$sp_rho[1],
                     sens_results$c23[3])
-  check_vector = c(0.973170806302, 0.971849999400, 1.374917942896)
+  check_vector = c(0.973975831732, 0.972747026988, 1.374917942896)
   expect_equal(output_vector, check_vector)
 })
 
@@ -86,7 +88,6 @@ test_that("sensitivity_analysis_SurvSurv_copula() works on a single core with Cl
   sens_results = sensitivity_analysis_SurvSurv_copula(
     fitted_model,
     composite = TRUE,
-    cond_ind = FALSE,
     n_sim = 1,
     n_prec = 2e3,
     copula_family2 = c("clayton", "frank", "gaussian", "frank")
@@ -95,7 +96,8 @@ test_that("sensitivity_analysis_SurvSurv_copula() works on a single core with Cl
   sens_results_cond1 = sensitivity_analysis_SurvSurv_copula(
     fitted_model,
     composite = TRUE,
-    cond_ind = TRUE,
+    lower = c(-1, 0, 0, -1),
+    upper = c(1, 0, 0, 1),
     n_sim = 1,
     n_prec = 2e3,
     copula_family2 = c("clayton", "frank", "gaussian", "frank")
@@ -104,7 +106,8 @@ test_that("sensitivity_analysis_SurvSurv_copula() works on a single core with Cl
   sens_results_cond2 = sensitivity_analysis_SurvSurv_copula(
     fitted_model,
     composite = TRUE,
-    cond_ind = TRUE,
+    lower = c(-1, 0, 0, -1),
+    upper = c(1, 0, 0, 1),
     n_sim = 1,
     n_prec = 2e3,
     copula_family2 = c("clayton", "frank", "frank", "frank")
@@ -115,7 +118,7 @@ test_that("sensitivity_analysis_SurvSurv_copula() works on a single core with Cl
     c(sens_results$ICA[1],
       sens_results$sp_rho[1],
       sens_results$c23[1]),
-    c(0.995992037557, 0.995217038804, 0.436161760666)
+    c(0.996814266963, 0.995511262378, 0.436161760666)
   )
 
   # Check that results for two conditional independence settings are identical.
@@ -136,7 +139,6 @@ test_that("sensitivity_analysis_SurvSurv_copula() wth restricted survival times 
     fitted_model,
     lower = rep(0.5, 4),
     composite = TRUE,
-    cond_ind = TRUE,
     n_sim = 1,
     n_prec = 2e3,
     mutinfo_estimator = function(x, y) 1 - exp(-2 * stats::cor(x, y, method = "spearman")),
@@ -145,6 +147,6 @@ test_that("sensitivity_analysis_SurvSurv_copula() wth restricted survival times 
   output_vector = c(sens_results$ICA[1],
                     sens_results$sp_rho[1],
                     sens_results$c23[1])
-  check_vector = c(0.822189801988, 0.995997149542, 1.682036932130)
+  check_vector = c(0.822136179803, 0.995515244445, 1.682036932130)
   expect_equal(output_vector, check_vector, tolerance = 1e-5)
 })

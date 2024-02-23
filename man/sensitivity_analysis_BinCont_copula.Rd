@@ -8,7 +8,7 @@ Continuous Surrogate and Binary True Endpoint}
 sensitivity_analysis_BinCont_copula(
   fitted_model,
   n_sim,
-  cond_ind,
+  eq_cond_association = TRUE,
   lower = c(-1, -1, -1, -1),
   upper = c(1, 1, 1, 1),
   marg_association = TRUE,
@@ -27,10 +27,12 @@ ICA. The minimally sufficient number depends to a large extent on which
 inequality assumptions are subsequently imposed (see Additional
 Assumptions).}
 
-\item{cond_ind}{Boolean.
+\item{eq_cond_association}{Boolean.
 \itemize{
-\item \code{TRUE}: Assume conditional independence (see Additional Assumptions).
-\item \code{FALSE} (default): Conditional independence is not assumed.
+\item \code{TRUE} (default): Assume that the association in \eqn{(\tilde{S}_1, T_0)' | \tilde{S}_0}
+and \eqn{(\tilde{S}_0, T_1)' | \tilde{S}_1} are the same.
+\item \code{FALSE}: There is not specific a priori relationship between the
+above two associations.
 }}
 
 \item{lower}{(numeric) Vector of length 4 that provides the lower limit,
@@ -175,8 +177,7 @@ next two paragraphs.
 
 The equality assumptions have to be incorporated into the sensitivity
 analysis itself. Only one type of equality assumption has been implemented;
-this is the conditional independence assumption which can be specified
-through the \code{cond_ind} argument:
+this is the conditional independence assumption:
 \deqn{\tilde{S}_0 \perp T_1 | \tilde{S}_1 \; \text{and} \;
 \tilde{S}_1 \perp T_0 | \tilde{S}_0 .} This can informally be
 interpreted as ``what the control treatment does to the surrogate does not
@@ -218,7 +219,6 @@ fitted_model = fit_copula_model_BinCont(data, "clayton", "normal", twostep = FAL
 sens_results = sensitivity_analysis_BinCont_copula(
   fitted_model,
   10,
-  cond_ind = TRUE,
   lower = c(-1,-1,-1,-1),
   upper = c(1, 1, 1, 1),
   n_prec = 1e3

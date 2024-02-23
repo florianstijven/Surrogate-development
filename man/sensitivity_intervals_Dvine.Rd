@@ -125,7 +125,7 @@ sens_results = sensitivity_analysis_SurvSurv_copula(fitted_model,
                   n_sim = 5,
                   n_prec = 2000,
                   copula_family2 = "clayton",
-                  cond_ind = TRUE)
+                  eq_cond_association = TRUE)
 # Compute intervals of ignorance and uncertainty. Again, the number of
 # bootstrap replications should be larger in practice.
 sensitivity_intervals_Dvine(fitted_model, sens_results, B = 10)

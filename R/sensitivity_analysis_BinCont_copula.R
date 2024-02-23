@@ -36,8 +36,8 @@
 #'
 #'
 #' @param n_sim Number of copula parameter vectors to be sampled.
-#' @param cond_ind (boolean) Indicates whether conditional independence is
-#'   assumed, see Conditional Independence. Defaults to `FALSE`.
+#' @param eq_cond_association (boolean) Indicates whether \eqn{\rho_{13;2}} and
+#' \eqn{\rho_{24;3}} are set equal.
 #' @param lower (numeric) Vector of length 4 that provides the lower limit,
 #'   \eqn{\boldsymbol{a} = (a_{23}, a_{13;2}, a_{24;3},
 #'   a_{14;23})'}. Defaults to `c(-1, -1, -1, -1)`. If the provided lower limit
@@ -52,7 +52,7 @@
 #'   sample for \eqn{\boldsymbol{\theta}_{unid}}.
 sample_copula_parameters = function(copula_family2,
                                     n_sim,
-                                    cond_ind = FALSE,
+                                    eq_cond_association = FALSE,
                                     lower = c(-1,-1,-1,-1),
                                     upper = c(1, 1, 1, 1)) {
   requireNamespace("copula")
@@ -92,9 +92,8 @@ sample_copula_parameters = function(copula_family2,
       runif(n = n_sim, min = x, max = y)
   )
   # Impose conditional independence assumption if necessary.
-  if (cond_ind) {
-    u[[2]] = rep(0, n_sim)
-    u[[3]] = rep(0, n_sim)
+  if (eq_cond_association) {
+    u[[2]] = u[[3]]
   }
 
   # Convert sampled Spearman's rho parameter to the copula parameter scale.
@@ -234,22 +233,27 @@ sample_rotation_parameters = function(n_sim, degrees = c(0, 90, 180, 270)) {
 #' @inherit fit_copula_model_BinCont examples
 sensitivity_analysis_BinCont_copula = function(fitted_model,
                                                n_sim,
-                                               cond_ind,
+                                               eq_cond_association = TRUE,
                                                lower = c(-1, -1, -1, -1),
                                                upper = c(1, 1, 1, 1),
                                                marg_association = TRUE,
                                                n_prec = 1e4,
                                                ncores = 1) {
+  if(!requireNamespace("fitdistrplus")) {
+    errorCondition("Please install the 'fitdistrplus' package.")
+  }
   # Extract relevant estimated parameters/objects for the fitted copula model.
   copula_family = fitted_model$copula_family
   copula_family2 = fitted_model$copula_family
   q_S0 = function(p) {
     q = quantile(fitted_model$submodel0$marginal_S_dist, probs = p)
     q = as.numeric(t(q$quantiles))
+    return(q)
   }
   q_S1 = function(p) {
     q = quantile(fitted_model$submodel1$marginal_S_dist, probs = p)
     q = as.numeric(t(q$quantiles))
+    return(q)
   }
   c12 = coef(fitted_model$submodel0$ml_fit)[length(coef(fitted_model$submodel0$ml_fit))]
   c34 = coef(fitted_model$submodel1$ml_fit)[length(coef(fitted_model$submodel0$ml_fit))]
@@ -262,7 +266,7 @@ sensitivity_analysis_BinCont_copula = function(fitted_model,
   # Sample unidentifiable copula parameters.
   c = sample_copula_parameters(copula_family2 = copula_family2,
                                n_sim = n_sim,
-                               cond_ind = cond_ind,
+                               eq_cond_association = eq_cond_association,
                                lower = lower,
                                upper = upper
                                )

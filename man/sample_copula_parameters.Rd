@@ -7,7 +7,7 @@
 sample_copula_parameters(
   copula_family2,
   n_sim,
-  cond_ind = FALSE,
+  eq_cond_association = FALSE,
   lower = c(-1, -1, -1, -1),
   upper = c(1, 1, 1, 1)
 )
@@ -19,8 +19,8 @@ possible options, see \code{loglik_copula_scale()}. The elements of
 
 \item{n_sim}{Number of copula parameter vectors to be sampled.}
 
-\item{cond_ind}{(boolean) Indicates whether conditional independence is
-assumed, see Conditional Independence. Defaults to \code{FALSE}.}
+\item{eq_cond_association}{(boolean) Indicates whether \eqn{\rho_{13;2}} and
+\eqn{\rho_{24;3}} are set equal.}
 
 \item{lower}{(numeric) Vector of length 4 that provides the lower limit,
 \eqn{\boldsymbol{a} = (a_{23}, a_{13;2}, a_{24;3},

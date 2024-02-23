@@ -8,7 +8,7 @@ sensitivity_analysis_SurvSurv_copula(
   fitted_model,
   composite = TRUE,
   n_sim,
-  cond_ind,
+  eq_cond_association = TRUE,
   lower = c(-1, -1, -1, -1),
   upper = c(1, 1, 1, 1),
   degrees = c(0, 90, 180, 270),
@@ -37,10 +37,12 @@ ICA. The minimally sufficient number depends to a large extent on which
 inequality assumptions are subsequently imposed (see Additional
 Assumptions).}
 
-\item{cond_ind}{Boolean.
+\item{eq_cond_association}{Boolean.
 \itemize{
-\item \code{TRUE}: Assume conditional independence (see Additional Assumptions).
-\item \code{FALSE} (default): Conditional independence is not assumed.
+\item \code{TRUE} (default): Assume that the association in \eqn{(\tilde{S}_1, T_0)' | \tilde{S}_0}
+and \eqn{(\tilde{S}_0, T_1)' | \tilde{S}_1} are the same.
+\item \code{FALSE}: There is not specific a priori relationship between the
+above two associations.
 }}
 
 \item{lower}{(numeric) Vector of length 4 that provides the lower limit,
@@ -238,8 +240,7 @@ next two paragraphs.
 
 The equality assumptions have to be incorporated into the sensitivity
 analysis itself. Only one type of equality assumption has been implemented;
-this is the conditional independence assumption which can be specified
-through the \code{cond_ind} argument:
+this is the conditional independence assumption:
 \deqn{\tilde{S}_0 \perp T_1 | \tilde{S}_1 \; \text{and} \;
 \tilde{S}_1 \perp T_0 | \tilde{S}_0 .} This can informally be
 interpreted as ``what the control treatment does to the surrogate does not
@@ -287,7 +288,7 @@ sens_results = sensitivity_analysis_SurvSurv_copula(fitted_model,
                   n_sim = 5,
                   n_prec = 2000,
                   copula_family2 = "clayton",
-                  cond_ind = TRUE)
+                  eq_cond_association = TRUE)
 # Compute intervals of ignorance and uncertainty. Again, the number of
 # bootstrap replications should be larger in practice.
 sensitivity_intervals_Dvine(fitted_model, sens_results, B = 10)

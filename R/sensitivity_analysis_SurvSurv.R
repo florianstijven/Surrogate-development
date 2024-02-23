@@ -114,8 +114,7 @@
 #'
 #' The equality assumptions have to be incorporated into the sensitivity
 #' analysis itself. Only one type of equality assumption has been implemented;
-#' this is the conditional independence assumption which can be specified
-#' through the `cond_ind` argument:
+#' this is the conditional independence assumption:
 #' \deqn{\tilde{S}_0 \perp T_1 | \tilde{S}_1 \; \text{and} \;
 #' \tilde{S}_1 \perp T_0 | \tilde{S}_0 .} This can informally be
 #' interpreted as ``what the control treatment does to the surrogate does not
@@ -159,9 +158,11 @@
 #'   protected, never diseased, and always diseased is also returned. See also
 #'   Value.
 #' * `FALSE` (default): No additional measures are returned.
-#' @param cond_ind Boolean.
-#' * `TRUE`: Assume conditional independence (see Additional Assumptions).
-#' * `FALSE` (default): Conditional independence is not assumed.
+#' @param eq_cond_association Boolean.
+#' * `TRUE` (default): Assume that the association in \eqn{(\tilde{S}_1, T_0)' | \tilde{S}_0}
+#'          and \eqn{(\tilde{S}_0, T_1)' | \tilde{S}_1} are the same.
+#' * `FALSE`: There is not specific a priori relationship between the
+#'          above two associations.
 #' @param sample_plots Indices for replicates in the sensitivity analysis for
 #'   which the sampled individual treatment effects are plotted. Defaults to
 #'   `NULL`: no plots are displayed.
@@ -239,14 +240,14 @@
 #'                   n_sim = 5,
 #'                   n_prec = 2000,
 #'                   copula_family2 = "clayton",
-#'                   cond_ind = TRUE)
+#'                   eq_cond_association = TRUE)
 #' # Compute intervals of ignorance and uncertainty. Again, the number of
 #' # bootstrap replications should be larger in practice.
 #' sensitivity_intervals_Dvine(fitted_model, sens_results, B = 10)
 sensitivity_analysis_SurvSurv_copula = function(fitted_model,
                                                 composite = TRUE,
                                                 n_sim,
-                                                cond_ind,
+                                                eq_cond_association = TRUE,
                                                 lower = c(-1, -1, -1, -1),
                                                 upper = c(1, 1, 1, 1),
                                                 degrees = c(0, 90, 180, 270),
@@ -321,7 +322,7 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
   c = sample_copula_parameters(
     copula_family2 = copula_family2,
     n_sim = n_sim,
-    cond_ind = cond_ind,
+    eq_cond_association = eq_cond_association,
     lower = lower,
     upper = upper
   )
