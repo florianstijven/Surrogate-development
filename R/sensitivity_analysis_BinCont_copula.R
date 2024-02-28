@@ -124,10 +124,10 @@ sample_copula_parameters = function(copula_family2,
         .x = y,
         .f = function(x) copula::iRho(copula_fun, rho = x)
       )
-      # Clayton copulas cannot handle independence (c_vec will contain NAs). The
-      # ad-hoc solution employed here is to let the copula parameter be close
-      # enough to the independence copula.
-      if(x == "clayton") c_vec = ifelse(y == 0, 1e-5, c_vec)
+      # Clayton copulas cannot handle independence or almost independence (c_vec
+      # will contain NAs). The ad-hoc solution employed here is to let the
+      # copula parameter be close enough to the independence copula.
+      if(x == "clayton") c_vec = ifelse(y < 5 * 1e-4, 1e-5, c_vec)
 
       # Functions for the chosen copulas cannot handle parameter values larger
       # than upper_limit as defined above.
