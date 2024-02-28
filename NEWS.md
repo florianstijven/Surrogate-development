@@ -1,4 +1,6 @@
-# Surrogate (development version)
+# Surrogate 3.2
+
+## Surrogate 3.2.3
 
 * In the sensitivity analyses, we now have to option to set conditional 
   association parameters equal to each other through `eq_cond_association` 
@@ -6,8 +8,6 @@
   family was `"clayton"`, then, if the copula parameter on Spearman's rho scale
   was very close to zero, the conversion to the original copula parameter scale
   was wrong.
-
-# Surrogate 3.2
 
 ## Surrogate 3.2.2
 

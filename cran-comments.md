@@ -1,8 +1,5 @@
 ## R CMD check results
 
-0 errors | 0 warnings | 1 note
-
-* Imports includes 24 non-default packages.
-
-  This packages combines a large set of very different statistical
-  methodologies. Consequently, it depends on many packages.
+* In the previous submission, one test failed because of numerical differences
+between the expected versus actual results. This has been adressed by increasing
+the tolerance for that test. 

@@ -60,7 +60,7 @@
 #' death.
 #'
 #' @references Stijven, F., Alonso, a., Molenberghs, G., Van Der Elst, W., Van
-#'   Keilegom, I. (2022). An information-theoretic approach to the evaluation of
+#'   Keilegom, I. (2024). An information-theoretic approach to the evaluation of
 #'   time-to-event surrogates for time-to-event true endpoints based on causal
 #'   inference.
 #'
