@@ -350,10 +350,10 @@ mean_S_before_T_plot_scr = function(fitted_model,
   )
   lines(x = grid, y = model_cond_means, col = "red")
   legend(
-    x = "topleft",
+    x = "topright",
     lty = 1,
     col = c("red", "black"),
-    legend = c("Model-Based", "Smooth Estimated")
+    legend = c("Model-Based", "Smooth Estimate")
   )
 }
 
@@ -516,9 +516,8 @@ prob_dying_without_progression_plot = function(fitted_model,
   legend(
     x = "topright",
     lty = 1,
-    bty = "n",
     col = c("red", "black"),
-    legend = c("Model-Based", "Smooth Estimated")
+    legend = c("Model-Based", "Smooth Estimate")
   )
 }
 

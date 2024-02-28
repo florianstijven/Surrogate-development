@@ -407,10 +407,10 @@
 <circle cx='154.12' cy='433.80' r='2.70' style='stroke-width: 0.75; stroke: #BEBEBE;' />
 <circle cx='122.37' cy='471.63' r='2.70' style='stroke-width: 0.75; stroke: #BEBEBE;' />
 <polyline points='82.40,486.13 113.14,469.72 143.87,454.67 174.61,440.32 205.35,426.25 236.08,412.23 266.82,398.17 297.56,384.00 328.29,369.68 359.03,355.18 389.77,340.47 420.51,325.52 451.24,310.33 481.98,294.89 512.72,279.17 543.45,263.18 574.19,246.91 604.93,230.36 635.66,213.52 666.40,196.40 ' style='stroke-width: 0.75; stroke: #FF0000;' />
-<rect x='59.04' y='59.04' width='146.66' height='43.20' style='stroke-width: 0.75; fill: #FFFFFF;' />
-<line x1='69.84' y1='73.44' x2='91.44' y2='73.44' style='stroke-width: 0.75; stroke: #FF0000;' />
-<line x1='69.84' y1='87.84' x2='91.44' y2='87.84' style='stroke-width: 0.75;' />
-<text x='102.24' y='77.57' style='font-size: 12.00px; font-family: sans;' textLength='70.72px' lengthAdjust='spacingAndGlyphs'>Model-Based</text>
-<text x='102.24' y='91.97' style='font-size: 12.00px; font-family: sans;' textLength='98.06px' lengthAdjust='spacingAndGlyphs'>Smooth Estimated</text>
+<rect x='549.77' y='59.04' width='139.99' height='43.20' style='stroke-width: 0.75; fill: #FFFFFF;' />
+<line x1='560.57' y1='73.44' x2='582.17' y2='73.44' style='stroke-width: 0.75; stroke: #FF0000;' />
+<line x1='560.57' y1='87.84' x2='582.17' y2='87.84' style='stroke-width: 0.75;' />
+<text x='592.97' y='77.57' style='font-size: 12.00px; font-family: sans;' textLength='70.72px' lengthAdjust='spacingAndGlyphs'>Model-Based</text>
+<text x='592.97' y='91.97' style='font-size: 12.00px; font-family: sans;' textLength='91.39px' lengthAdjust='spacingAndGlyphs'>Smooth Estimate</text>
 </g>
 </svg>
