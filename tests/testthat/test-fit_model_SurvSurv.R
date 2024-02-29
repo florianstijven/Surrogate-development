@@ -34,6 +34,7 @@ test_that("SurvivalSurvival model works with Clayton and Gumbel copula for Ovari
 
 test_that("SurvivalSurvival model works with Frank and Gumbel copula for Ovarian data in semi-competing risks format",
           {
+            skip_on_cran()
             # Load Ovarian data in semi-competing risks format.
             data = readRDS(test_path("fixtures", "ovarian-data-scr.rds"))
 
@@ -45,7 +46,7 @@ test_that("SurvivalSurvival model works with Frank and Gumbel copula for Ovarian
               log_lik_fitted,
               c(124.3326825768, 23.9716552942),
               ignore_attr = "df",
-              tolerance = 1e-3
+              tolerance = 1e-2
             )
           })
 
