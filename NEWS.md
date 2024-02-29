@@ -1,8 +1,6 @@
-# Surrogate 3.2.3
-
 # Surrogate 3.2
 
-## Surrogate 3.2.3
+## Surrogate 3.2.4
 
 * In the sensitivity analyses, we now have to option to set conditional 
   association parameters equal to each other through `eq_cond_association` 
