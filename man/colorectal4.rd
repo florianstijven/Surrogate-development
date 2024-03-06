@@ -7,7 +7,7 @@ This dataset combines the data that were collected in 19 double-blind randomized
 }
 \usage{data("colorectal4")}
 \format{
-  A data frame with 3192 observations on the following 7 variables. 	
+  A data frame with 3192 observations on the following 7 variables.
   \describe{
     \item{\code{trialend}}{The ID number of a trial.}
     \item{\code{treatn}}{The treatment indicator, coded as 0=active control and 1=experimental treatment.}
@@ -17,12 +17,6 @@ This dataset combines the data that were collected in 19 double-blind randomized
     \item{\code{center}}{The center in which a patient was treated. In this dataset, there was only one center per trial, hence TRIAL=CENTER.}
     \item{\code{truend}}{Survival time (the true endpoint).}
   }
-}
-\details{
-%%  ~~ If necessary, more details than the __description__ above ~~
-}
-\source{
-%%  ~~ reference to a publication or URL from which the data were obtained ~~
 }
 \references{
 Alonso, A., Bigirumurame, T., Burzykowski, T., Buyse, M., Molenberghs, G., Muchene, L., ... & Van der Elst, W. (2016). Applied surrogate endpoint evaluation methods with SAS and R. CRC Press.
