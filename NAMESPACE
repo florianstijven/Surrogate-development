@@ -1,10 +1,13 @@
 # Imported functions
+importFrom(tidyr, pivot_longer)
 importFrom("stats", "nlm")
+importFrom("stats", "as.formula")
 importFrom(MASS, polr)
 importFrom(MASS, studres)
 importFrom(MASS, mvrnorm)
 importFrom(msm, deltamethod)
 importFrom(survival, Surv)
+importFrom(survival, survreg)
 importFrom(survival, coxph)
 importFrom("grDevices", "dev.new", "dev.off", "pdf")
 importFrom("graphics", "abline", "axis", "barplot", "box", "boxplot",
@@ -55,6 +58,15 @@ importFrom("stats", "resid")
 importFrom("grDevices", "rgb")
 import(maxLik)
 import(purrr)
+import(MASS)
+import(copula)
+import(dplyr)
+import(nlme)
+import(numDeriv)
+import(optimx)
+import(survival)
+import(ggplot2)
+import(tidyverse)
 
 
 export(plot.UnifixedContCont, plot.UnimixedContCont, plot.BifixedContCont, plot.BimixedContCont,
@@ -102,6 +114,7 @@ export(sensitivity_analysis_BinCont_copula, fit_copula_model_BinCont)
 export(marginal_gof_scr_S_plot, marginal_gof_scr_T_plot,
        prob_dying_without_progression_plot, mean_S_before_T_plot_scr)
 export(sensitivity_intervals_Dvine)
+export(survbin)
 
 
 S3method(plot, Fano.BinBin)
@@ -177,7 +190,10 @@ S3method(summary, MufixedContCont.MultS)
 S3method(summary, MumixedContCont.MultS)
 
 
-
 S3method(print, vine_copula_SurvSurv_fit)
 S3method(print, sensitivity_intervals_Dvine)
+
+S3method(plot,survbin)
+S3method(print,survbin)
+S3method(summary,survbin)
 
