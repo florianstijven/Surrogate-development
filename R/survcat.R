@@ -615,7 +615,7 @@ survcat <- function(data, true, trueind, surrog,
   }
 
   numgrad <- numDeriv::grad(x = initial_parameters, func = negll)
-  surpresswarnings(opt_BFGS <- optimx::optimx(par = as.vector(initial_parameters), fn=negll, hessian = TRUE,
+  suppressWarnings(opt_BFGS <- optimx::optimx(par = as.vector(initial_parameters), fn=negll, hessian = TRUE,
                      method = "BFGS",
                      control = list(trace = 0, maxit=10000)))
   if(opt_BFGS$convcode != 0) {
