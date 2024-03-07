@@ -37,9 +37,10 @@
 #' @param patientid Patient indicator.
 #'
 #' @return Returns an object of class "survbin" that can be used to evaluate surrogacy and contains the following elements:
-#' *Indiv.GlobalOdds: a data frame that contains the Global Odds and 95% confidence interval to evaluate surrogacy at the individual level.
-#' *Trial.R2: a data frame that contains the correlation coefficient and 95% confidence interval to evaluate surrogacy at the trial level.
-#' *EstTreatEffects: a data frame that contains the estimated treatment effects and sample size for each trial.
+#'
+#' * Indiv.GlobalOdds: a data frame that contains the Global Odds and 95% confidence interval to evaluate surrogacy at the individual level.
+#' * Trial.R2: a data frame that contains the correlation coefficient and 95% confidence interval to evaluate surrogacy at the trial level.
+#' * EstTreatEffects: a data frame that contains the estimated treatment effects and sample size for each trial.
 #'
 #' @export
 #'
@@ -655,11 +656,11 @@ survbin <- function(data, true, trueind, surrog,
   shihco$endp <- as.factor(shihco$endp)
   shihco$effect <- as.numeric(shihco$effect)
 
-  model <- nlme::gls(effect ~ -1 + endp, data = shihco,
-                     correlation = corSymm(form = ~ 1 | center),
-                     weights = varIdent(form = ~ 1 | endp),
-                     method = "ML",
-                     control = glsControl(maxIter = 25, msVerbose = TRUE))
+  invisible(capture.output(model <- nlme::gls(effect ~ -1 + factor(endp), data = shihco,
+                                              correlation = corCompSymm(form = ~ 1 | center),
+                                              weights = varIdent(form = ~ 1 | endp),
+                                              method = "ML",
+                                              control = glsControl(maxIter = 25, msVerbose = TRUE))))
 
   hulp <- nlme::intervals(model)
   R_lo <- as.numeric(unlist(hulp)["corStruct1"])
