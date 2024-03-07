@@ -609,8 +609,8 @@ survbin <- function(data, true, trueind, surrog,
 
   numgrad <- numDeriv::grad(x = initial_parameters, func = negll)
 
-  opt_BFGS <- optimx::optimx(par = as.vector(initial_parameters), fn=negll, hessian = TRUE, method = "BFGS",
-                     control = list(trace = 0, maxit=10000))
+  suppressWarnings(opt_BFGS <- optimx::optimx(par = as.vector(initial_parameters), fn=negll, hessian = TRUE, method = "BFGS",
+                     control = list(trace = 0, maxit=10000)))
 
   hessian_m <- attributes(opt_BFGS)$details["BFGS", "nhatend"][[1]]
   fisher_info <- solve(hessian_m, tol = 1e-35)
