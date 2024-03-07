@@ -1,5 +1,13 @@
 # Imported functions
+importFrom(stats, glm)
+importFrom(nlme, gls)
+importFrom(nlme, intervals)
+importFrom(optimx, optimx)
+importFrom(numDeriv, grad)
 importFrom(tidyr, pivot_longer)
+importFrom(dplyr, mutate)
+importFrom(dplyr, arrange)
+importFrom(tibble, add_row)
 importFrom("stats", "nlm")
 importFrom("stats", "as.formula")
 importFrom(MASS, polr)
@@ -59,15 +67,12 @@ importFrom("grDevices", "rgb")
 import(maxLik)
 import(purrr)
 import(MASS)
-import(copula)
 import(dplyr)
 import(nlme)
 import(numDeriv)
 import(optimx)
 import(survival)
 import(ggplot2)
-import(tidyverse)
-
 
 export(plot.UnifixedContCont, plot.UnimixedContCont, plot.BifixedContCont, plot.BimixedContCont,
 plot.FixedContContIT, plot.ICA.ContCont, plot.MICA.ContCont, plot.MinSurrContCont, plot.SPF.BinBin,
@@ -115,6 +120,7 @@ export(marginal_gof_scr_S_plot, marginal_gof_scr_T_plot,
        prob_dying_without_progression_plot, mean_S_before_T_plot_scr)
 export(sensitivity_intervals_Dvine)
 export(survbin)
+export(survcat)
 
 
 S3method(plot, Fano.BinBin)
@@ -196,4 +202,8 @@ S3method(print, sensitivity_intervals_Dvine)
 S3method(plot,survbin)
 S3method(print,survbin)
 S3method(summary,survbin)
+
+S3method(plot,survcat)
+S3method(print,survcat)
+S3method(summary,survcat)
 

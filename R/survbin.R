@@ -53,14 +53,6 @@
 #' summary(fit_bin)
 #' plot(fit_bin)
 #'
-#' @import copula
-#' @import tidyverse
-#' @import dplyr
-#' @import optimx
-#' @import numDeriv
-#' @import survival
-#' @import MASS
-#' @import nlme
 survbin <- function(data, true, trueind, surrog,
                     trt, center, trial, patientid) {
   resp_est <- surv_est <- sample_size <- Center_ID <- p <- shape <- variable <- NULL
@@ -97,29 +89,22 @@ survbin <- function(data, true, trueind, surrog,
 
   dataset1xxy <- assign_data(dataset1xxy)
 
-  # Define covariate variable names
   c <- length(unique(dataset1xxy$Center_ID))
   covariate_names <- paste0("treat", sprintf("%02d", 1:c))
 
-  # Create formula with covariates
   dataset1xxy$suro2 <- dataset1xxy$suro-1
   dataset1xxy$suro2_bis <- factor(dataset1xxy$suro2, levels = c("1", "0"))
   formula <- as.formula(paste("suro2_bis ~", paste(covariate_names, collapse = " + ")))
 
-  # Perform logistic regression
-  model <- glm(formula, data = dataset1xxy,
+  model <- stats::glm(formula, data = dataset1xxy,
                family = binomial(link = "logit"))
-
-  # Save parameter estimates
   ests <- coef(model)
   estimS <- as.matrix(ests)
 
-  # Read variables into vectors and matrices
   t <- as.matrix(dataset1xxy$surv)
   delta <- as.vector(dataset1xxy$survind)
   s <- as.vector(dataset1xxy$suro)
   x <- as.matrix(dataset1xxy$Z)
-  #xx <- as.matrix(dataset1xxy[, c("covariat1", "covariat2", ...)])
   center <- as.vector(dataset1xxy$Center_ID)
   trial <- as.vector(dataset1xxy$Trial_ID)
 
@@ -136,12 +121,6 @@ survbin <- function(data, true, trueind, surrog,
   par0s <- estimS
 
   intercS <- par0s[1:(K - 1), ]
-  # if (r > 0) {
-  #   effcovS <- par0s[(K - r):(K - 1 + r), ]
-  # } else {
-  #   effcovS <- matrix(NA, nrow = 0, ncol = 0)
-  # }
-
   efftrtS <- par0s[(K - 1 + r + 1):(K - 1 + r + numcents * qq), ]
 
   if (numtri > 1) {
@@ -153,58 +132,42 @@ survbin <- function(data, true, trueind, surrog,
   }
 
   estimate <- as.data.frame(param0s)
-
-  ### STEP 5: FITTING WEIBULL REGRESSION MODELS PER CENTER ###
-  # Sort dataset by center
   dataset1xxy <- dataset1xxy[order(dataset1xxy$Center_ID),]
-
-  # Initialize a list to store the model results
   model_results <- list()
 
-  # Fit Weibull survival regression model per center
   estt2 <- data.frame(center = numeric(),
                       intercept = numeric(),
                       treat_effect = numeric(),
                       scale = numeric(),
                       stringsAsFactors = FALSE)
 
-  # Fit Weibull survival regression model per center
   centers <- unique(dataset1xxy$Center_ID)
 
   for (i in seq_along(centers)) {
     center_data <- subset(dataset1xxy, Center_ID == centers[i])
-    model <- survreg(Surv(surv, survind) ~ Z, data = center_data, dist = "weibull")
+    model <- survival::survreg(Surv(surv, survind) ~ Z, data = center_data, dist = "weibull")
 
-    # Get parameter estimates and scale
     intercept <- coef(model)["(Intercept)"]
     treat_effect <- coef(model)["Z"]
     scale_param <- model$scale
 
-    # Append results to the estt dataframe
     estt2 <- estt2 %>%
-      add_row(center = as.numeric(centers[i]),
+      tibble::add_row(center = as.numeric(centers[i]),
               intercept = intercept,
               treat_effect = treat_effect,
               scale = scale_param)
   }
-  estt2
   estt <- estt2
-  estt
-  # Create new columns in the estt dataframe
   estt$p <- 1 / estt$scale
   estt$shape <- -estt$intercept
   estt$trt <- -estt$treat_effect / estt$scale
-
-  # Select and keep specific columns in the estt dataframe
   estt <- estt[, c("center", "p", "shape", "trt")]
-  estt
 
-  # Create a new dataframe 'estimT' with columns for center, variable, and value
   estimT <- estt %>%
-    pivot_longer(cols = c(p, shape, trt),
+    tidyr::pivot_longer(cols = c(p, shape, trt),
                  names_to = "variable",
                  values_to = "value") %>%
-    mutate(variable = case_when(
+    dplyr::mutate(variable = case_when(
       variable == "p" ~ "p",
       variable == "shape" ~ "shape",
       variable == "trt" ~ "trt"
@@ -212,14 +175,9 @@ survbin <- function(data, true, trueind, surrog,
 
   estimT <- estimT %>%
     arrange(variable, center)
-
-  # Keep only the value column in the estimT dataframe
   estimT <- estimT[, "value", drop = FALSE]
-
   estim <- estimT
-  estim
 
-  ### STEP 6: define the functions for the optimization procedure ###
   q1 <- function(u, v, theta) {
     quv <- sqrt((1 + (theta - 1) * (u + v))^2 - 4 * u * v * theta * (theta - 1))
     return(quv)
@@ -570,7 +528,6 @@ survbin <- function(data, true, trueind, surrog,
   }
 
   loglik <- function(param) {
-    # Read variables into vectors and matrices
     t <- as.matrix(dataset1xxy$surv)
     delta <- as.vector(dataset1xxy$survind)
     s <- as.vector(dataset1xxy$suro)
@@ -611,7 +568,6 @@ survbin <- function(data, true, trueind, surrog,
         interc <- param[1 + 2 * numtri + numcents + (K - 1) + stud - 1]
       }
       efftrtS <- param[1 + 2 * numtri + numcents + (K - 1) + numtri - 1 + i]
-      #alphai <- t(as.matrix(cbind(eta, interc, efftrtS)))
       alphai <- as.matrix(c(eta, interc, efftrtS))
 
       lambdai <- exp(lli)
@@ -646,28 +602,19 @@ survbin <- function(data, true, trueind, surrog,
 
   negll <- function(param){
     loglike <- loglik(param)
-    #Estimate negetive log likelihood value
     val <- -loglike
     return(val)
   }
 
-  #print(negll(initial_parameters))
+  numgrad <- numDeriv::grad(x = initial_parameters, func = negll)
 
-  ### OPTIMIZE THE LIKELIHOOD ###
-  numgrad <- grad(x = initial_parameters, func = negll)
-
-  opt_BFGS <- optimx(par = as.vector(initial_parameters), fn=negll, hessian = TRUE, method = "BFGS",
+  opt_BFGS <- optimx::optimx(par = as.vector(initial_parameters), fn=negll, hessian = TRUE, method = "BFGS",
                      control = list(trace = 0, maxit=10000))
 
-  #### obtain SE ####
   hessian_m <- attributes(opt_BFGS)$details["BFGS", "nhatend"][[1]]
   fisher_info <- solve(hessian_m, tol = 1e-35)
   prop_se <- sqrt(diag(fisher_info))
-
-  #### obtain estimates ####
   coef_BFGS <- coef(opt_BFGS)["BFGS",]
-
-  #### combine ####
   coef_se <- cbind(coef_BFGS, prop_se)
 
   endp1 <- coef_se[(2*numtri+1+1):(2*numtri+1+numcents), ]
@@ -692,42 +639,43 @@ survbin <- function(data, true, trueind, surrog,
   lo_th <- lo[1]
   up_th <- up[1]
 
-  #surrogacy measures individual
-  # print(theta)
-  # print(se_th)
-  # print(lo_th)
-  # print(up_th)
-
   #### TRIAL LEVEL ####
-  # Subset and rename variables for survival effect
   surv_eff <- subset(memo, select = c(center, surv_est))
   colnames(surv_eff)[2] <- "effect"
   surv_eff$endp <- "MAIN"
 
-  # Subset and rename variables for surrogate effect
   pfs_eff <- subset(memo, select = c(center, resp_est))
   colnames(pfs_eff)[2] <- "effect"
   pfs_eff$endp <- "SURR"
 
-  # Combine surv_eff and pfs_eff data frames
   shihco <- rbind(surv_eff, pfs_eff)
   shihco$center <- as.numeric(shihco$center)
 
-  # Sort the combined data frame by center and endp
   shihco <- shihco[order(shihco$center, shihco$endp), ]
   shihco$endp <- as.factor(shihco$endp)
   shihco$effect <- as.numeric(shihco$effect)
 
-  invisible(capture.output(model <- gls(effect ~ -1 + factor(endp), data = shihco,
-                                        correlation = corCompSymm(form = ~ 1 | center),
-                                        weights = varIdent(form = ~ 1 | endp),
-                                        method = "ML",
-                                        control = glsControl(maxIter = 25, msVerbose = TRUE))))
+  model <- nlme::gls(effect ~ -1 + endp, data = shihco,
+                     correlation = corSymm(form = ~ 1 | center),
+                     weights = varIdent(form = ~ 1 | endp),
+                     method = "ML",
+                     control = glsControl(maxIter = 25, msVerbose = TRUE))
 
-  rsquared <- intervals(model, which = "var-cov")$corStruct^2
-  R2 <- as.vector(rsquared)[2]
-  lo_R2 <- as.vector(rsquared)[1]
-  up_R2 <- as.vector(rsquared)[3]
+  hulp <- nlme::intervals(model)
+  R_lo <- as.numeric(unlist(hulp)["corStruct1"])
+  R <- as.numeric(unlist(hulp)["corStruct2"])
+  R_up <- as.numeric(unlist(hulp)["corStruct3"])
+
+  R_se_lo <- -(R_lo - R)/qnorm(0.975)
+  R_se_up <- (R_up - R)/qnorm(0.975)
+  R_se <- (R_se_lo + R_se_up)/2
+
+  R2 <- R^2
+  se_R2 <- 2 * abs(R) * R_se
+  lo_R2 <- R^2 - qnorm(0.975) * se_R2
+  lo_R2 <- max(lo_R2, 0)
+  up_R2 <- R^2 + qnorm(0.975) * se_R2
+  up_R2 <- min(up_R2, 1)
 
   Trial.R2 <- data.frame(cbind(R2, lo_R2, up_R2), stringsAsFactors = TRUE)
   colnames(Trial.R2) <- c("R2 Trial", "CI lower limit",
@@ -743,8 +691,6 @@ survbin <- function(data, true, trueind, surrog,
   rownames(EstTreatEffects) <- NULL
   colnames(EstTreatEffects) <- c("trial", "surv_est", "surv_se", "resp_est", "resp_se", "cova", "sample_size")
 
-
-  #### COMBINE SURROGACY MEASURES IN OUTPUT ####
   output_list <- list(Indiv.GlobalOdds = Indiv.GlobalOdds,
                       Trial.R2 = Trial.R2, EstTreatEffects=EstTreatEffects, Call = match.call())
 
