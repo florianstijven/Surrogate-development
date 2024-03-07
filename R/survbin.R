@@ -611,6 +611,9 @@ survbin <- function(data, true, trueind, surrog,
 
   suppressWarnings(opt_BFGS <- optimx::optimx(par = as.vector(initial_parameters), fn=negll, hessian = TRUE, method = "BFGS",
                      control = list(trace = 0, maxit=10000)))
+  if(opt_BFGS$convcode != 0) {
+    stop(paste("Optimization algorithm did not converge: convcode of optimx-function is equal to", opt_BFGS$convcode))
+  }
 
   hessian_m <- attributes(opt_BFGS)$details["BFGS", "nhatend"][[1]]
   fisher_info <- solve(hessian_m, tol = 1e-35)
