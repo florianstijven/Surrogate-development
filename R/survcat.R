@@ -667,27 +667,16 @@ survcat <- function(data, true, trueind, surrog,
   shihco$endp <- as.factor(shihco$endp)
   shihco$effect <- as.numeric(shihco$effect)
 
-  invisible(capture.output(model <- nlme::gls(effect ~ -1 + factor(endp), data = shihco,
+  invisible(capture.output(model <- gls(effect ~ -1 + factor(endp), data = shihco,
                                         correlation = corCompSymm(form = ~ 1 | center),
                                         weights = varIdent(form = ~ 1 | endp),
                                         method = "ML",
                                         control = glsControl(maxIter = 25, msVerbose = TRUE))))
 
-  hulp <- nlme::intervals(model)
-  R_lo <- as.numeric(unlist(hulp)["corStruct1"])
-  R <- as.numeric(unlist(hulp)["corStruct2"])
-  R_up <- as.numeric(unlist(hulp)["corStruct3"])
-
-  R_se_lo <- -(R_lo - R)/qnorm(0.975)
-  R_se_up <- (R_up - R)/qnorm(0.975)
-  R_se <- (R_se_lo + R_se_up)/2
-
-  R2 <- R^2
-  se_R2 <- 2 * abs(R) * R_se
-  lo_R2 <- R^2 - qnorm(0.975) * se_R2
-  lo_R2 <- max(lo_R2, 0)
-  up_R2 <- R^2 + qnorm(0.975) * se_R2
-  up_R2 <- min(up_R2, 1)
+  rsquared <- intervals(model, which = "var-cov")$corStruct^2
+  R2 <- as.vector(rsquared)[2]
+  lo_R2 <- as.vector(rsquared)[1]
+  up_R2 <- as.vector(rsquared)[3]
 
   Trial.R2 <- data.frame(cbind(R2, lo_R2, up_R2), stringsAsFactors = TRUE)
   colnames(Trial.R2) <- c("R2 Trial", "CI lower limit",
