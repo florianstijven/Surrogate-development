@@ -25,9 +25,11 @@ survcat(data, true, trueind, surrog, trt, center, trial, patientid)
 }
 \value{
 Returns an object of class "survcat" that can be used to evaluate surrogacy and contains the following elements:
-*Indiv.GlobalOdds: a data frame that contains the Global Odds and 95\% confidence interval to evaluate surrogacy at the individual level.
-*Trial.R2: a data frame that contains the correlation coefficient and 95\% confidence interval to evaluate surrogacy at the trial level.
-*EstTreatEffects: a data frame that contains the estimated treatment effects and sample size for each trial.
+\itemize{
+\item Indiv.GlobalOdds: a data frame that contains the Global Odds and 95\% confidence interval to evaluate surrogacy at the individual level.
+\item Trial.R2: a data frame that contains the correlation coefficient and 95\% confidence interval to evaluate surrogacy at the trial level.
+\item EstTreatEffects: a data frame that contains the estimated treatment effects and sample size for each trial.
+}
 }
 \description{
 The function 'survcat()' fits the model for a categorical (ordinal) surrogate and time-to-event true endpoint developed by Burzykowski et al. (2004) in the meta-analytic multiple-trial setting.

@@ -168,7 +168,7 @@ survbin <- function(data, true, trueind, surrog,
     tidyr::pivot_longer(cols = c(p, shape, trt),
                  names_to = "variable",
                  values_to = "value") %>%
-    dplyr::mutate(variable = case_when(
+    dplyr::mutate(variable = dplyr::case_when(
       variable == "p" ~ "p",
       variable == "shape" ~ "shape",
       variable == "trt" ~ "trt"
@@ -659,11 +659,11 @@ survbin <- function(data, true, trueind, surrog,
   shihco$endp <- as.factor(shihco$endp)
   shihco$effect <- as.numeric(shihco$effect)
 
-  invisible(capture.output(model <- gls(effect ~ -1 + factor(endp), data = shihco,
-                                        correlation = corCompSymm(form = ~ 1 | center),
-                                        weights = varIdent(form = ~ 1 | endp),
+  invisible(capture.output(model <- nlme::gls(effect ~ -1 + factor(endp), data = shihco,
+                                        correlation = nlme::corCompSymm(form = ~ 1 | center),
+                                        weights = nlme::varIdent(form = ~ 1 | endp),
                                         method = "ML",
-                                        control = glsControl(maxIter = 25, msVerbose = TRUE))))
+                                        control = nlme::glsControl(maxIter = 25, msVerbose = TRUE))))
 
   rsquared <- intervals(model, which = "var-cov")$corStruct^2
   R2 <- as.vector(rsquared)[2]
@@ -759,22 +759,26 @@ print.survbin <- function(x,...){
 #'                    trt = TREAT, center = CENTER, trial = TRIAL, patientid = patientid)
 #' plot(fit_bin)
 #'
-#' @import ggplot2
 plot.survbin <- function(x,...){
-  resp_est <- surv_est <- sample_size <- NULL
-  estimated_treatment_effects <- x$EstTreatEffects
+  if (requireNamespace("ggplot2", quietly = TRUE)) {
+    resp_est <- surv_est <- sample_size <- NULL
+    estimated_treatment_effects <- x$EstTreatEffects
 
-  estimated_treatment_effects$sample_size <- as.numeric(estimated_treatment_effects$sample_size)
-  estimated_treatment_effects$surv_est <- as.numeric(estimated_treatment_effects$surv_est)
-  estimated_treatment_effects$resp_est <- as.numeric(estimated_treatment_effects$resp_est)
+    estimated_treatment_effects$sample_size <- as.numeric(estimated_treatment_effects$sample_size)
+    estimated_treatment_effects$surv_est <- as.numeric(estimated_treatment_effects$surv_est)
+    estimated_treatment_effects$resp_est <- as.numeric(estimated_treatment_effects$resp_est)
 
-  # Create the scatter plot
-  ggplot(data = estimated_treatment_effects, aes(x = resp_est, y = surv_est, size = sample_size)) +
-    geom_point() +
-    geom_smooth(method = "lm", se = FALSE, color = "royalblue3") +
-    labs(x = "Treatment effect on surrogate", y = "Treatment effect on true") +
-    ggtitle("Treatment effect on true endpoint vs. treatment effect on surrogate endpoint") +
-    theme(legend.position="none")
+    # Create the scatter plot
+    ggplot2::ggplot(data = estimated_treatment_effects, ggplot2::aes(x = resp_est, y = surv_est, size = sample_size)) +
+      ggplot2::geom_point() +
+      ggplot2::geom_smooth(method = "lm", se = FALSE, color = "royalblue3") +
+      ggplot2::labs(x = "Treatment effect on surrogate", y = "Treatment effect on true") +
+      ggplot2::ggtitle("Treatment effect on true endpoint vs. treatment effect on surrogate endpoint") +
+      ggplot2::theme(legend.position="none")
+
+  } else {
+    stop("ggplot2 is not installed. Please install ggplot2 to use this function.")
+  }
 }
 
 
