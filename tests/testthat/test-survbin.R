@@ -1,5 +1,6 @@
 test_that("Survival-binary model works for Colorectal data",
           {
+            skip_on_cran()
             data("colorectal")
 
             fitted_model = survbin(data = colorectal, true = surv, trueind = SURVIND,

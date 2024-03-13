@@ -1,5 +1,6 @@
 test_that("Survival-ordinal model works for Colorectal4 data",
           {
+            skip_on_cran()
             data("colorectal4")
 
             fitted_model = survcat(data = colorectal4, true = truend, trueind = trueind,
