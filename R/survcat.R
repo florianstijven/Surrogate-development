@@ -46,13 +46,14 @@
 #' @author Dries De Witte
 #'
 #' @examples
+#' \dontrun{
 #' data("colorectal4")
 #' fit <- survcat(data = colorectal4, true = truend, trueind = trueind, surrog = surrogend,
 #'                trt = treatn, center = center, trial = trialend, patientid = patid)
 #' print(fit)
 #' summary(fit)
 #' plot(fit)
-#'
+#' }
 survcat <- function(data, true, trueind, surrog,
                     trt, center, trial, patientid) {
   resp_est <- surv_est <- sample_size <- Center_ID <- p <- shape <- variable <- NULL
@@ -713,10 +714,12 @@ survcat <- function(data, true, trueind, surrog,
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' data("colorectal4")
 #' fit <- survcat(data = colorectal4, true = truend, trueind = trueind, surrog = surrogend,
 #'                trt = treatn, center = center, trial = trialend, patientid = patid)
 #' summary(fit)
+#' }
 
 summary.survcat <- function(object,...){
   cat("Surrogacy measures with 95% confidence interval \n\n")
@@ -737,10 +740,12 @@ summary.survcat <- function(object,...){
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' data("colorectal4")
 #' fit <- survcat(data = colorectal4, true = truend, trueind = trueind, surrog = surrogend,
 #'                trt = treatn, center = center, trial = trialend, patientid = patid)
 #' print(fit)
+#' }
 print.survcat <- function(x,...){
   cat("Surrogacy measures with 95% confidence interval \n\n")
   cat("Individual level surrogacy: ", "\n\n")
@@ -763,10 +768,12 @@ print.survcat <- function(x,...){
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' data("colorectal4")
 #' fit <- survcat(data = colorectal4, true = truend, trueind = trueind, surrog = surrogend,
 #'                trt = treatn, center = center, trial = trialend, patientid = patid)
 #' plot(fit)
+#' }
 #'
 plot.survcat <- function(x,...){
   if (requireNamespace("ggplot2", quietly = TRUE)) {

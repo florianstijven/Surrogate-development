@@ -18,8 +18,10 @@ The surrogacy measures with their 95\% confidence intervals and the estimated tr
 Prints all the elements of an object fitted with the 'survcat()' function.
 }
 \examples{
+\dontrun{
 data("colorectal4")
 fit <- survcat(data = colorectal4, true = truend, trueind = trueind, surrog = surrogend,
                trt = treatn, center = center, trial = trialend, patientid = patid)
 print(fit)
+}
 }

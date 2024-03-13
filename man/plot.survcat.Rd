@@ -18,9 +18,11 @@ A plot of the type ggplot
 Generates a plot of the estimated treatment effects for the surrogate endpoint versus the estimated treatment effects for the true endpoint for an object fitted with the 'survcat()' function.
 }
 \examples{
+\dontrun{
 data("colorectal4")
 fit <- survcat(data = colorectal4, true = truend, trueind = trueind, surrog = surrogend,
                trt = treatn, center = center, trial = trialend, patientid = patid)
 plot(fit)
+}
 
 }

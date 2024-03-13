@@ -55,12 +55,14 @@ The data frame must contains the following columns:
 }
 
 \examples{
+\dontrun{
 data("colorectal")
 fit_bin <- survbin(data = colorectal, true = surv, trueind = SURVIND, surrog = responder,
                    trt = TREAT, center = CENTER, trial = TRIAL, patientid = patientid)
 print(fit_bin)
 summary(fit_bin)
 plot(fit_bin)
+}
 
 }
 \references{

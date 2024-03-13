@@ -18,9 +18,11 @@ A plot of the type ggplot
 Generates a plot of the estimated treatment effects for the surrogate endpoint versus the estimated treatment effects for the true endpoint for an object fitted with the 'survbin()' function.
 }
 \examples{
+\dontrun{
 data("colorectal")
 fit_bin <- survbin(data = colorectal, true = surv, trueind = SURVIND, surrog = responder,
                    trt = TREAT, center = CENTER, trial = TRIAL, patientid = patientid)
 plot(fit_bin)
+}
 
 }

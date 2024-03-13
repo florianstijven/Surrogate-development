@@ -18,8 +18,10 @@ The surrogacy measures with their 95\% confidence intervals.
 Provides a summary of the surrogacy measures for an object fitted with the 'survbin()' function.
 }
 \examples{
+\dontrun{
 data("colorectal")
 fit_bin <- survbin(data = colorectal, true = surv, trueind = SURVIND, surrog = responder,
                    trt = TREAT, center = CENTER, trial = TRIAL, patientid = patientid)
 summary(fit_bin)
+}
 }

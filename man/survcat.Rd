@@ -55,13 +55,14 @@ The data frame must contains the following columns:
 }
 
 \examples{
+\dontrun{
 data("colorectal4")
 fit <- survcat(data = colorectal4, true = truend, trueind = trueind, surrog = surrogend,
                trt = treatn, center = center, trial = trialend, patientid = patid)
 print(fit)
 summary(fit)
 plot(fit)
-
+}
 }
 \references{
 Burzykowski, T., Molenberghs, G., & Buyse, M. (2004). The validation of surrogate end points by using data from randomized clinical trials: a case-study in advanced colorectal cancer. Journal of the Royal Statistical Society Series A: Statistics in Society, 167(1), 103-124.

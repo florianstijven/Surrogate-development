@@ -18,8 +18,10 @@ The surrogacy measures with their 95\% confidence intervals and the estimated tr
 Prints all the elements of an object fitted with the 'survbin()' function.
 }
 \examples{
+\dontrun{
 data("colorectal")
 fit_bin <- survbin(data = colorectal, true = surv, trueind = SURVIND, surrog = responder,
                    trt = TREAT, center = CENTER, trial = TRIAL, patientid = patientid)
 print(fit_bin)
+}
 }

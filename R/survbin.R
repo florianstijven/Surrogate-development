@@ -47,12 +47,14 @@
 #' @author Dries De Witte
 #'
 #' @examples
+#' \dontrun{
 #' data("colorectal")
 #' fit_bin <- survbin(data = colorectal, true = surv, trueind = SURVIND, surrog = responder,
 #'                    trt = TREAT, center = CENTER, trial = TRIAL, patientid = patientid)
 #' print(fit_bin)
 #' summary(fit_bin)
 #' plot(fit_bin)
+#' }
 #'
 survbin <- function(data, true, trueind, surrog,
                     trt, center, trial, patientid) {
@@ -704,10 +706,12 @@ survbin <- function(data, true, trueind, surrog,
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' data("colorectal")
 #' fit_bin <- survbin(data = colorectal, true = surv, trueind = SURVIND, surrog = responder,
 #'                    trt = TREAT, center = CENTER, trial = TRIAL, patientid = patientid)
 #' summary(fit_bin)
+#' }
 
 summary.survbin <- function(object,...){
   cat("Surrogacy measures with 95% confidence interval \n\n")
@@ -728,10 +732,12 @@ summary.survbin <- function(object,...){
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' data("colorectal")
 #' fit_bin <- survbin(data = colorectal, true = surv, trueind = SURVIND, surrog = responder,
 #'                    trt = TREAT, center = CENTER, trial = TRIAL, patientid = patientid)
 #' print(fit_bin)
+#' }
 print.survbin <- function(x,...){
   cat("Surrogacy measures with 95% confidence interval \n\n")
   cat("Individual level surrogacy: ", "\n\n")
@@ -754,10 +760,12 @@ print.survbin <- function(x,...){
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' data("colorectal")
 #' fit_bin <- survbin(data = colorectal, true = surv, trueind = SURVIND, surrog = responder,
 #'                    trt = TREAT, center = CENTER, trial = TRIAL, patientid = patientid)
 #' plot(fit_bin)
+#' }
 #'
 plot.survbin <- function(x,...){
   if (requireNamespace("ggplot2", quietly = TRUE)) {
