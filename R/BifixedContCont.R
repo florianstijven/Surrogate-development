@@ -1,4 +1,3 @@
-
 BifixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model=c("Full"), 
                             Weighted=TRUE, Min.Trial.Size=2, Alpha=.05, 
                             T0T1=seq(-1, 1, by=.2), T0S1=seq(-1, 1, by=.2), T1S0=seq(-1, 1, by=.2), S0S1=seq(-1, 1, by=.2)){          
@@ -115,7 +114,7 @@ BifixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model=
                              correlation = nlme::corSymm(form=~1|as.factor(Trial.ID)/as.factor(Pat.ID)), 
                              weights=nlme::varIdent(form=~1|endpoint), data=Data.analyze) }
   
-  cors <- nlme::corMatrix(Model.For.R2indiv$modelStruct$corStruct)[[1]]
+  cors <- nlme::corMatrix(Model.For.R2indiv$modelStruct$corStruct)[[2]]
   varStruct <- capture.output(Model.For.R2indiv$modelStruct$varStruct)[3]
   varStruct <- cbind (as.numeric(unique(strsplit(varStruct, " ")[[1]])[1]), as.numeric(unique(strsplit(varStruct, " ")[[1]])[2]))
   vars <- as.numeric((varStruct**2) * (summary(Model.For.R2indiv)$sigma)**2)

@@ -1,7 +1,7 @@
 BimixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model=c("Full"), 
                     Min.Trial.Size=2, Alpha=.05, 
                     T0T1=seq(-1, 1, by=.2), T0S1=seq(-1, 1, by=.2), T1S0=seq(-1, 1, by=.2), 
-                    S0S1=seq(-1, 1, by=.2), ...){
+                    S0S1=seq(-1, 1, by=.2), ...){ 
   
   if ((Model==c("Full") | Model==c("Reduced"))==FALSE){stop ("The specification of the Model=c(\"...\") argument of the call is incorrect. Use either Model=c(\"Full\") or Model=c(\"Reduced\").")}     
   Surr <- Dataset[,paste(substitute(Surr))]
@@ -33,7 +33,7 @@ BimixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model=
   
   if (Model==c("Full")){
     
-    Model.S.and.T <- lmer(outcome ~ -1 + as.factor(endpoint):Treat + as.factor(endpoint) + 
+    Model.S.and.T <- lme4::lmer(outcome ~ -1 + as.factor(endpoint):Treat + as.factor(endpoint) + 
                             (-1+endpoint+endpoint:Treat|Trial.ID), data=Data.analyze, ...)   #
     
     Fixed.effect.pars.S <- rbind(summary(Model.S.and.T)$coefficients[1], summary(Model.S.and.T)$coefficients[3]) 
@@ -70,7 +70,7 @@ BimixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model=
   
   if (Model==c("Reduced")){
     
-    Model.S.and.T <- lmer(outcome ~ -1 + as.factor(endpoint):Treat + as.factor(endpoint) + (-1+endpoint:Treat|Trial.ID), data=Data.analyze, ...)   #
+    Model.S.and.T <- lme4::lmer(outcome ~ -1 + as.factor(endpoint):Treat + as.factor(endpoint) + (-1+endpoint:Treat|Trial.ID), data=Data.analyze, ...)   #
         
     Fixed.effect.pars.S <- rbind(summary(Model.S.and.T)$coefficients[1], summary(Model.S.and.T)$coefficients[3])
     Fixed.effect.pars.T <- rbind(summary(Model.S.and.T)$coefficients[2], summary(Model.S.and.T)$coefficients[4]) 
@@ -153,7 +153,7 @@ BimixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model=
   if (Model==c("Full")){
     
     rm(Model.S.and.T)
-    Model.S.and.T <- lme(outcome~ -1 + as.factor(endpoint):Treat + as.factor(endpoint), 
+    Model.S.and.T <- nlme::lme(outcome~ -1 + as.factor(endpoint):Treat + as.factor(endpoint), 
                      random=~ -1 + as.factor(endpoint) + as.factor(endpoint):Treat|as.factor(Trial.ID),
                      correlation = nlme::corSymm(form=~1|as.factor(Trial.ID)/as.factor(Pat.ID)), data=Data.analyze,
                      weights=nlme::varIdent(form=~1|endpoint), control = list(msVerbose = FALSE, optimizer = "nlm", niterEM = 25, msMaxIter=500))  
@@ -161,13 +161,13 @@ BimixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model=
   
   if (Model==c("Reduced")){
     rm(Model.S.and.T)
-    Model.S.and.T <- lme(outcome~ -1 + as.factor(endpoint):Treat + as.factor(endpoint), 
+    Model.S.and.T <- nlme::lme(outcome~ -1 + as.factor(endpoint):Treat + as.factor(endpoint), 
                          random=~ -1 + as.factor(endpoint):Treat|as.factor(Trial.ID),
                          correlation = nlme::corSymm(form=~1|as.factor(Trial.ID)/as.factor(Pat.ID)), data=Data.analyze,
                          weights=nlme::varIdent(form=~1|endpoint), control = list(msVerbose = FALSE, optimizer = "nlm", niterEM = 25, msMaxIter=500))  
    }
   
-  cors <- nlme::corMatrix(Model.S.and.T$modelStruct$corStruct)[[1]]
+  cors <- nlme::corMatrix(Model.S.and.T$modelStruct$corStruct)[[2]]
   varStruct <- capture.output(Model.S.and.T$modelStruct$varStruct)[3]
   varStruct <- cbind(as.numeric(unique(strsplit(varStruct, " ")[[1]])[1]), as.numeric(unique(strsplit(varStruct, " ")[[1]])[2]))
   vars <- as.numeric((varStruct**2) * (summary(Model.S.and.T)$sigma)**2)

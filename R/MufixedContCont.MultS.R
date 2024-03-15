@@ -1,4 +1,4 @@
-MufixedContCont.MultS <- function(Dataset, Endpoints=True~Surr.1+Surr.2, 
+MufixedContCont.MultS <- function(Dataset, Endpoints=True~Surr.1+Surr.2,  
  Treat="Treat", Trial.ID="Trial.ID", Pat.ID="Pat.ID", 
  Model=c("Full"), Weighted=TRUE, Min.Trial.Size=2, Alpha=.05, 
  Number.Bootstraps=0, Seed=123){          
@@ -17,11 +17,21 @@ MufixedContCont.MultS <- function(Dataset, Endpoints=True~Surr.1+Surr.2,
       # Remove trials with less patients than specified in Min.Trial.Size
   Select.Trial.IDs <- names(table(Dataset.Wide$Trial.ID))[table(Dataset.Wide$Trial.ID)>=Min.Trial.Size]
   Dataset.Wide <- Dataset.Wide[Dataset.Wide$Trial.ID %in% Select.Trial.IDs,]
+  
+  # Check coding
+  if (length(unique(Dataset.Wide$Treat))!=2) stop("Please make sure that the treatment variable has only 2 levels.")
+  if ((sort(unique(Dataset.Wide$Treat))[1]==c(-0.5)) & (sort(unique(Dataset.Wide$Treat))[2]==c(0.5))){
+    Dataset.Wide$Treat <- Dataset.Wide$Treat+.5}
+  if (((sort(unique(Dataset.Wide$Treat))[1]==c(0) & sort(unique(Dataset.Wide$Treat))[2]==c(1))==FALSE) & 
+      ((sort(unique(Dataset.Wide$Treat))[1]==c(-1) & sort(unique(Dataset.Wide$Treat))[2]==c(1))==FALSE))
+    stop("Please make sure that the treatment is either coded as control = -1 and experimental = 1, or as control = 0 and experimental = 1.")
+  
   Obs.per.trial <- table(Dataset.Wide$Trial.ID)
   N.total <- dim(Dataset.Wide)[1]
   data <- na.exclude(tidyr::gather(Dataset.Wide, endpoint, outcome, c(Surr.1):True))
   data <- data[order(c(data$Pat.ID)),]
   
+
   # stage 1
   if (Model==c("Full")){
     Fitted.Model <- nlme::gls(outcome ~ -1 + as.factor(Trial.ID):Treat:as.factor(endpoint) + as.factor(Trial.ID):as.factor(endpoint),

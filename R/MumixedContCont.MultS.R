@@ -1,4 +1,4 @@
-MumixedContCont.MultS <- function(Dataset, Endpoints=True~Surr.1+Surr.2, 
+MumixedContCont.MultS <- function(Dataset, Endpoints=True~Surr.1+Surr.2,  
     Treat="Treat", Trial.ID="Trial.ID", Pat.ID="Pat.ID", 
     Model=c("Full"), Min.Trial.Size=2, Alpha=.05, Opt="nlminb"){
   
@@ -14,13 +14,21 @@ MumixedContCont.MultS <- function(Dataset, Endpoints=True~Surr.1+Surr.2,
   # Remove trials with less patients than specified in Min.Trial.Size
   Select.Trial.IDs <- names(table(Dataset.Wide$Trial.ID))[table(Dataset.Wide$Trial.ID)>=Min.Trial.Size]
   Dataset.Wide <- Dataset.Wide[Dataset.Wide$Trial.ID %in% Select.Trial.IDs,]
+  
+  # Check coding
+  if (length(unique(Dataset.Wide$Treat))!=2) stop("Please make sure that the treatment variable has only 2 levels.")
+  if ((sort(unique(Dataset.Wide$Treat))[1]==c(-0.5)) & (sort(unique(Dataset.Wide$Treat))[2]==c(0.5))){
+    Dataset.Wide$Treat <- Dataset.Wide$Treat+.5}
+  if (((sort(unique(Dataset.Wide$Treat))[1]==c(0) & sort(unique(Dataset.Wide$Treat))[2]==c(1))==FALSE) & 
+      ((sort(unique(Dataset.Wide$Treat))[1]==c(-1) & sort(unique(Dataset.Wide$Treat))[2]==c(1))==FALSE))
+    stop("Please make sure that the treatment is either coded as control = -1 and experimental = 1, or as control = 0 and experimental = 1.")
+  
+  
   Obs.per.trial <- table(Dataset.Wide$Trial.ID)
-  # min(table(Dataset.Wide$Trial.ID))   check
   N.total <- dim(Dataset.Wide)[1]
   data <- na.exclude(tidyr::gather(Dataset.Wide, endpoint, outcome, c(Surr.1):True))
   
-  
-   if (Model==c("Full")){
+  if (Model==c("Full")){
      ctrl <- nlme::lmeControl(opt=Opt)
      Fitted.Model <- nlme::lme(outcome~ -1 + as.factor(endpoint):Treat + as.factor(endpoint), 
                           random=~ -1 + as.factor(endpoint) + as.factor(endpoint):Treat|as.factor(Trial.ID),
@@ -131,7 +139,7 @@ MumixedContCont.MultS <- function(Dataset, Endpoints=True~Surr.1+Surr.2,
   Cond.Number.Sigma.Matrix <- max(singular)/min(singular)
   
   fit <- 
-    list(Data.Analyze=data, Obs.Per.Trial=Obs.per.trial, 
+    list(Data.Analyze=Dataset.Wide, Obs.Per.Trial=Obs.per.trial, 
         Fixed.Effect=Fixed.Effect.Pars, Random.Effect=Random.effect.pars, 
         Trial.R2.Lee=Trial.R2.Lee.Method, Indiv.R2.Lee=Indiv.R2.Lee, 
         D=D, Cond.Number.D.Matrix=Cond.Number.D.Matrix, Cond.Number.Sigma.Matrix=Cond.Number.Sigma.Matrix, 

@@ -1,8 +1,12 @@
 .Data.Processing <- function(Dataset=Dataset, Surr=Surr, True=True, Treat=Treat, Trial.ID=Trial.ID, Pat.ID=Pat.ID, Min.Trial.Size=Min.Trial.Size){
-  
+   
+  Pat.ID <- as.factor(as.character(Pat.ID))
   Dataset <- data.frame(cbind(Surr, True, Treat, Trial.ID, Pat.ID))
   Dataset <- na.exclude(Dataset[order(Dataset$Trial.ID),])
   if (length(unique(Dataset$Treat))!=2) stop("Please make sure that the treatment variable has only 2 levels.")
+  if ((sort(unique(Dataset$Treat))[1]==c(-0.5)) & (sort(unique(Dataset$Treat))[2]==c(0.5))){
+    Dataset$Treat <- Dataset$Treat+.5}
+  
   if (((sort(unique(Dataset$Treat))[1]==c(0) & sort(unique(Dataset$Treat))[2]==c(1))==FALSE) & 
         ((sort(unique(Dataset$Treat))[1]==c(-1) & sort(unique(Dataset$Treat))[2]==c(1))==FALSE))
     stop("Please make sure that the treatment is either coded as control = -1 and experimental = 1, or as control = 0 and experimental = 1.")

@@ -1,4 +1,4 @@
-SurvSurv <- function(Dataset, Surr, SurrCens, True, TrueCens, Treat, 
+SurvSurv <- function(Dataset, Surr, SurrCens, True, TrueCens, Treat,  
 Trial.ID, Weighted=TRUE, Alpha=.05){ #, Number.Bootstraps=500, Seed=sample(1:1000, size=1)
 
   
@@ -10,7 +10,18 @@ Trial.ID, Weighted=TRUE, Alpha=.05){ #, Number.Bootstraps=500, Seed=sample(1:100
   Trial.ID <- Dataset[,paste(substitute(Trial.ID))]
   All_data <- data.frame(cbind(Surr, SurrCens, True, TrueCens, Treat, Trial.ID), stringsAsFactors = TRUE)
   names(All_data) <- c("Surr", "SurrCens", "True", "TrueCens", "Treat", "Trial.ID")
-
+  All_data$Surr <- as.numeric(as.character(All_data$Surr))
+  All_data$True <- as.numeric(as.character(All_data$True))
+  
+  if (length(unique(All_data$Treat))!=2) stop("Please make sure that the treatment variable has only 2 levels.")
+ if ((sort(unique(All_data$Treat))[1]==c(-0.5)) & (sort(unique(All_data$Treat))[2]==c(0.5))){
+   All_data$Treat <- All_data$Treat+.5}
+  
+  if (((sort(unique(All_data$Treat))[1]==c(0) & sort(unique(All_data$Treat))[2]==c(1))==FALSE) & 
+      ((sort(unique(All_data$Treat))[1]==c(-1) & sort(unique(All_data$Treat))[2]==c(1))==FALSE))
+    stop("Please make sure that the treatment is either coded as control = -1 and experimental = 1, or as control = 0 and experimental = 1.")
+  
+  
   #R2h ind
   surv_data_Surr <- Surv(time=All_data$Surr, time2=All_data$SurrCens)
   surv_data_True <- Surv(time=All_data$True, time2=All_data$TrueCens)
