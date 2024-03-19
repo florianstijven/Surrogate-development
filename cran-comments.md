@@ -1,7 +1,6 @@
 ## Resubmission
-This is a resubmission. In this version I have:
+Imports includes 22 non-default packages.
 
-* Skipped an additional test that caused issues on the OPENBLAS check of CRAN. 
-  This test failed because of small numerical differences in the OPENBLAS check.
-  On all other platforms and R versions, this test returns exactly the expected
-  values.
+* This packages combines many different methods for evaluating surrogate
+  endpoints. Hence, it inevitably relies on a substantial number of external
+  packages that implement these methods.
