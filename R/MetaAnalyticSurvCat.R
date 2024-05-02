@@ -1,15 +1,14 @@
 
-
-#' Compute surrogacy measures for a binary surrogate and a time-to-event true endpoint in the meta-analytic multiple-trial setting.
+#' Compute surrogacy measures for a categorical (ordinal) surrogate and a time-to-event true endpoint in the meta-analytic multiple-trial setting.
 #'
-#'The function 'survbin()' fits the model for a binary surrogate and time-to-event true endpoint developed by Burzykowski et al. (2004) in the meta-analytic multiple-trial setting.
+#'The function 'MetaAnalyticSurvCat()' fits the model for a categorical (ordinal) surrogate and time-to-event true endpoint developed by Burzykowski et al. (2004) in the meta-analytic multiple-trial setting.
 #'
 #' @details
 #'
 #' # Model
 #'
 #' In the model developed by Burzykowski et al. (2004), a copula-based model is used for the true endpoint and a latent continuous variable, underlying the surrogate endpoint.
-#' More specifically, the Plackett copula is used. The marginal model for the surrogate endpoint is a logistic regression model. For the true endpoint, the proportional hazard model is used.
+#' More specifically, the Plackett copula is used. The marginal model for the surrogate endpoint is a proportional odds model. For the true endpoint, the proportional hazards model is used.
 #' The quality of the surrogate at the individual level can be evaluated by using the copula parameter Theta, which takes the form of a global odds ratio.
 #' The quality of the surrogate at the trial level can be evaluated by considering the correlation coefficient between the estimated treatment effects, while adjusting for the estimation error.
 #'
@@ -19,7 +18,7 @@
 #'
 #' * a column with the observed time-to-event (true endpoint)
 #' * a column with the time-to-event indicator: 1 if true event is observed, 0 otherwise
-#' * a column with the binary surrogate endpoint: 1 or 2
+#' * a column with the ordinal surrogate endpoint: 1 2 3 ... K
 #' * a column with the treatment indicator: 0 or 1
 #' * a column with the trial indicator
 #' * a column with the center indicator. If there are no different centers within each trial, the center indicator is equal to the trial indicator
@@ -30,17 +29,18 @@
 #' @param data A data frame with the correct columns (See details).
 #' @param true Observed time-to-event (true endpoint).
 #' @param trueind Time-to-event indicator.
-#' @param surrog Binary surrogate endpoint.
+#' @param surrog Ordinal surrogate endpoint.
 #' @param trt Treatment indicator.
 #' @param center Center indicator (equal to trial if there are no different centers).
 #' @param trial Trial indicator.
 #' @param patientid Patient indicator.
 #'
-#' @return Returns an object of class "survbin" that can be used to evaluate surrogacy and contains the following elements:
+#' @return Returns an object of class "MetaAnalyticSurvCat" that can be used to evaluate surrogacy and contains the following elements:
 #'
 #' * Indiv.GlobalOdds: a data frame that contains the Global Odds and 95% confidence interval to evaluate surrogacy at the individual level.
 #' * Trial.R2: a data frame that contains the correlation coefficient and 95% confidence interval to evaluate surrogacy at the trial level.
 #' * EstTreatEffects: a data frame that contains the estimated treatment effects and sample size for each trial.
+#' * fit_output: output of the maximization procedure to maximize the likelihood.
 #'
 #' @export
 #'
@@ -48,29 +48,29 @@
 #'
 #' @examples
 #' \dontrun{
-#' data("colorectal")
-#' fit_bin <- survbin(data = colorectal, true = surv, trueind = SURVIND, surrog = responder,
-#'                    trt = TREAT, center = CENTER, trial = TRIAL, patientid = patientid)
-#' print(fit_bin)
-#' summary(fit_bin)
-#' plot(fit_bin)
+#' data("colorectal4")
+#' fit <- MetaAnalyticSurvCat(data = colorectal4, true = truend, trueind = trueind, surrog = surrogend,
+#'                trt = treatn, center = center, trial = trialend, patientid = patid)
+#' print(fit)
+#' summary(fit)
+#' plot(fit)
 #' }
-#'
-survbin <- function(data, true, trueind, surrog,
+MetaAnalyticMetaAnalyticSurvCat <- function(data, true, trueind, surrog,
                     trt, center, trial, patientid) {
   resp_est <- surv_est <- sample_size <- Center_ID <- p <- shape <- variable <- NULL
   dataset1xxy <- data
   dataset1xxy$surv <- data[[substitute(true)]]
   dataset1xxy$survind <- data[[substitute(trueind)]]
-  dataset1xxy$suro <- data[[substitute(surrog)]]
-  dataset1xxy$Z <- data[[substitute(trt)]]
-  dataset1xxy$Center_ID <- data[[substitute(center)]]
-  dataset1xxy$Trial_ID <- data[[substitute(trial)]]
-  dataset1xxy$Pat_ID <- data[[substitute(patientid)]]
+  dataset1xxy$response <- data[[substitute(surrog)]]
+  dataset1xxy$treat <- data[[substitute(trt)]]
+  dataset1xxy$center <- data[[substitute(center)]]
+  dataset1xxy$trial <- data[[substitute(trial)]]
+  dataset1xxy$patientid <- data[[substitute(patientid)]]
+
 
   assign_data <- function(dataset1xxy) {
-    dataset1xxy <- dataset1xxy[order(dataset1xxy$Center_ID), ]
-    centnum <- unique(dataset1xxy$Center_ID)
+    dataset1xxy <- dataset1xxy[order(dataset1xxy$center), ]
+    centnum <- unique(dataset1xxy$center)
     centid <- list()
 
     for (i in seq_along(centnum)) {
@@ -83,8 +83,8 @@ survbin <- function(data, true, trueind, surrog,
       const_var <- paste0("const", sprintf("%02d", i))
       treat_var <- paste0("treat", sprintf("%02d", i))
 
-      dataset1xxy[[const_var]] <- as.integer(dataset1xxy$Center_ID == centid[[paste0("centid", sprintf("%02d", i))]])
-      dataset1xxy[[treat_var]] <- as.numeric(dataset1xxy[[const_var]]) * as.numeric(dataset1xxy[["Z"]])
+      dataset1xxy[[const_var]] <- as.integer(dataset1xxy$center == centid[[paste0("centid", sprintf("%02d", i))]])
+      dataset1xxy[[treat_var]] <- as.numeric(dataset1xxy[[const_var]]) * as.numeric(dataset1xxy[["treat"]])
     }
 
     return(dataset1xxy)
@@ -92,24 +92,27 @@ survbin <- function(data, true, trueind, surrog,
 
   dataset1xxy <- assign_data(dataset1xxy)
 
-  c <- length(unique(dataset1xxy$Center_ID))
+  # Define covariate variable names
+  c <- length(unique(dataset1xxy$center))
   covariate_names <- paste0("treat", sprintf("%02d", 1:c))
 
-  dataset1xxy$suro2 <- dataset1xxy$suro-1
-  dataset1xxy$suro2_bis <- factor(dataset1xxy$suro2, levels = c("1", "0"))
-  formula <- as.formula(paste("suro2_bis ~", paste(covariate_names, collapse = " + ")))
+  dataset1xxy$response_f <- as.factor(dataset1xxy$response)
+  formula <- as.formula(paste("response_f ~", paste(covariate_names, collapse = " + ")))
 
-  model <- stats::glm(formula, data = dataset1xxy,
-               family = binomial(link = "logit"))
-  ests <- coef(model)
+  # Fit proportional odds model
+  model <- MASS::polr(formula, data = dataset1xxy, Hess=TRUE)
+
+  # Save parameter estimates
+  ests <- c(as.vector(model$zeta), as.vector(model$coefficients))
   estimS <- as.matrix(ests)
 
+  # Read variables into vectors and matrices
   t <- as.matrix(dataset1xxy$surv)
   delta <- as.vector(dataset1xxy$survind)
-  s <- as.vector(dataset1xxy$suro)
-  x <- as.matrix(dataset1xxy$Z)
-  center <- as.vector(dataset1xxy$Center_ID)
-  trial <- as.vector(dataset1xxy$Trial_ID)
+  s <- as.vector(dataset1xxy$response_f)
+  x <- as.matrix(dataset1xxy$treat)
+  center <- as.vector(dataset1xxy$center)
+  trial <- as.vector(dataset1xxy$trial)
 
   qq <- ncol(x)
   qq
@@ -124,6 +127,7 @@ survbin <- function(data, true, trueind, surrog,
   par0s <- estimS
 
   intercS <- par0s[1:(K - 1), ]
+
   efftrtS <- par0s[(K - 1 + r + 1):(K - 1 + r + numcents * qq), ]
 
   if (numtri > 1) {
@@ -135,7 +139,8 @@ survbin <- function(data, true, trueind, surrog,
   }
 
   estimate <- as.data.frame(param0s)
-  dataset1xxy <- dataset1xxy[order(dataset1xxy$Center_ID),]
+
+  dataset1xxy <- dataset1xxy[order(dataset1xxy$center),]
   model_results <- list()
 
   estt2 <- data.frame(center = numeric(),
@@ -144,23 +149,24 @@ survbin <- function(data, true, trueind, surrog,
                       scale = numeric(),
                       stringsAsFactors = FALSE)
 
-  centers <- unique(dataset1xxy$Center_ID)
+  centers <- unique(dataset1xxy$center)
 
   for (i in seq_along(centers)) {
-    center_data <- subset(dataset1xxy, Center_ID == centers[i])
-    model <- survival::survreg(Surv(surv, survind) ~ Z, data = center_data, dist = "weibull")
+    center_data <- subset(dataset1xxy, center == centers[i])
+    model <- survival::survreg(Surv(surv, survind) ~ treat, data = center_data, dist = "weibull")
 
     intercept <- coef(model)["(Intercept)"]
-    treat_effect <- coef(model)["Z"]
+    treat_effect <- coef(model)["treat"]
     scale_param <- model$scale
-
     estt2 <- estt2 %>%
       tibble::add_row(center = as.numeric(centers[i]),
               intercept = intercept,
               treat_effect = treat_effect,
               scale = scale_param)
   }
+
   estt <- estt2
+
   estt$p <- 1 / estt$scale
   estt$shape <- -estt$intercept
   estt$trt <- -estt$treat_effect / estt$scale
@@ -177,10 +183,11 @@ survbin <- function(data, true, trueind, surrog,
     ))
 
   estimT <- estimT %>%
-    arrange(variable, center)
+    dplyr::arrange(variable, center)
   estimT <- estimT[, "value", drop = FALSE]
   estim <- estimT
 
+  # define the functions for the likelihood
   q1 <- function(u, v, theta) {
     quv <- sqrt((1 + (theta - 1) * (u + v))^2 - 4 * u * v * theta * (theta - 1))
     return(quv)
@@ -531,12 +538,13 @@ survbin <- function(data, true, trueind, surrog,
   }
 
   loglik <- function(param) {
+    # Read variables into vectors and matrices
     t <- as.matrix(dataset1xxy$surv)
     delta <- as.vector(dataset1xxy$survind)
-    s <- as.vector(dataset1xxy$suro)
-    x <- as.matrix(dataset1xxy$Z)
-    center <- as.vector(dataset1xxy$Center_ID)
-    trial <- as.vector(dataset1xxy$Trial_ID)
+    s <- as.vector(dataset1xxy$response_f)
+    x <- as.matrix(dataset1xxy$treat)
+    center <- as.vector(dataset1xxy$center)
+    trial <- as.vector(dataset1xxy$trial)
 
     cents <- unique(center)
     numcents <- length(cents)
@@ -577,16 +585,15 @@ survbin <- function(data, true, trueind, surrog,
       lti <- lambdai * t[center == cents[i], ]
       pgi <- pgts(theta, lambdai, pi, betai, alphai, ti, si, zti, zsi, xi)
       cGi <- cGts(theta, lambdai, pi, betai, alphai, ti, si, zti, zsi, xi)
-
       lik <- lik + sum(deltai * log(pgi) + (1 - deltai) * log(cGi))
     }
 
-    return(lik)
+    return(-lik)
   }
 
   initparm <- function(theta0) {
-    s <- as.vector(dataset1xxy$suro)
-    center <- as.vector(dataset1xxy$Center_ID)
+    s <- as.vector(dataset1xxy$response_f)
+    center <- as.vector(dataset1xxy$center)
 
     center <- unique(center)
     cents <- unique(center)
@@ -603,25 +610,14 @@ survbin <- function(data, true, trueind, surrog,
 
   initial_parameters <- initparm(5)
 
-  negll <- function(param){
-    loglike <- loglik(param)
-    val <- -loglike
-    return(val)
-  }
+  par0 <- as.vector(initial_parameters)
+  nlm_output <- nlm(loglik, par0 , hessian=TRUE, iterlim = 10000)
 
-  numgrad <- numDeriv::grad(x = initial_parameters, func = negll)
-
-  suppressWarnings(opt_BFGS <- optimx::optimx(par = as.vector(initial_parameters), fn=negll, hessian = TRUE, method = "BFGS",
-                     control = list(trace = 0, maxit=10000)))
-  if(opt_BFGS$convcode != 0) {
-    stop(paste("Optimization algorithm did not converge: convcode of optimx-function is equal to", opt_BFGS$convcode))
-  }
-
-  hessian_m <- attributes(opt_BFGS)$details["BFGS", "nhatend"][[1]]
-  fisher_info <- solve(hessian_m, tol = 1e-35)
-  prop_se <- sqrt(diag(fisher_info))
-  coef_BFGS <- coef(opt_BFGS)["BFGS",]
-  coef_se <- cbind(coef_BFGS, prop_se)
+  hessian_m <-nlm_output$hessian
+  fisher_info<-solve(hessian_m)
+  se <-sqrt(diag(fisher_info))
+  est <- nlm_output$estimate
+  coef_se <- cbind(est, se)
 
   endp1 <- coef_se[(2*numtri+1+1):(2*numtri+1+numcents), ]
   endp2 <- coef_se[(1+3*numtri+numcents+(K-1)-1+1):nrow(coef_se), ]
@@ -631,24 +627,25 @@ survbin <- function(data, true, trueind, surrog,
     weight[i, ] <- nrow(as.matrix(which(center == cents[i])))
   }
 
-  cova <- diag(fisher_info[(2*numtri+1+1):(2*numtri+1+numcents), (1+3*numtri+numcents+(K-1)-1+1):length(coef_BFGS)])
+  cova <- diag(fisher_info[(2*numtri+1+1):(2*numtri+1+numcents), (1+3*numtri+numcents+(K-1)-1+1):length(est)])
 
   memo <- cbind(cents, endp1, endp2, cova, weight)
   colnames(memo) <- c("center", "surv_est", "surv_se", "resp_est", "resp_se", "cova", "weight")
   memo <- as.data.frame(memo)
 
-  #### INDIVIDUAL LEVEL ####
-  lo <- coef_BFGS - qnorm(0.975) * prop_se
-  up <- coef_BFGS + qnorm(0.975) * prop_se
-  theta <- coef_BFGS[1]
-  se_th <- prop_se[1]
+  #Individual level surrogacy
+  lo <- est - qnorm(0.975) * se
+  up <- est + qnorm(0.975) * se
+  theta <- est[1]
+  se_th <- se[1]
   lo_th <- lo[1]
   up_th <- up[1]
 
-  #### TRIAL LEVEL ####
+  #Trial level surrogacy
   surv_eff <- subset(memo, select = c(center, surv_est))
   colnames(surv_eff)[2] <- "effect"
   surv_eff$endp <- "MAIN"
+  surv_eff
 
   pfs_eff <- subset(memo, select = c(center, resp_est))
   colnames(pfs_eff)[2] <- "effect"
@@ -667,7 +664,7 @@ survbin <- function(data, true, trueind, surrog,
                                         method = "ML",
                                         control = nlme::glsControl(maxIter = 25, msVerbose = TRUE))))
 
-  rsquared <- intervals(model, which = "var-cov")$corStruct^2
+  rsquared <- nlme::intervals(model, which = "var-cov")$corStruct^2
   R2 <- as.vector(rsquared)[2]
   lo_R2 <- as.vector(rsquared)[1]
   up_R2 <- as.vector(rsquared)[3]
@@ -687,19 +684,21 @@ survbin <- function(data, true, trueind, surrog,
   colnames(EstTreatEffects) <- c("trial", "surv_est", "surv_se", "resp_est", "resp_se", "cova", "sample_size")
 
   output_list <- list(Indiv.GlobalOdds = Indiv.GlobalOdds,
-                      Trial.R2 = Trial.R2, EstTreatEffects=EstTreatEffects, Call = match.call())
+                      Trial.R2 = Trial.R2, EstTreatEffects=EstTreatEffects, fit_output = nlm_output,
+                      Call = match.call())
 
-  class(output_list) <- "survbin"
+  class(output_list) <- "MetaAnalyticSurvCat"
 
   return(output_list)
 
+
 }
 
-#' Provides a summary of the surrogacy measures for an object fitted with the 'survbin()' function.
+#' Provides a summary of the surrogacy measures for an object fitted with the 'MetaAnalyticSurvCat()' function.
 #'
-#' @method summary survbin
+#' @method summary MetaAnalyticSurvCat
 #'
-#' @param object An object of class 'survbin' fitted with the 'survbin()' function.
+#' @param object An object of class 'MetaAnalyticSurvCat' fitted with the 'MetaAnalyticSurvCat()' function.
 #' @param ... ...
 #'
 #' @return The surrogacy measures with their 95% confidence intervals.
@@ -707,13 +706,13 @@ survbin <- function(data, true, trueind, surrog,
 #'
 #' @examples
 #' \dontrun{
-#' data("colorectal")
-#' fit_bin <- survbin(data = colorectal, true = surv, trueind = SURVIND, surrog = responder,
-#'                    trt = TREAT, center = CENTER, trial = TRIAL, patientid = patientid)
-#' summary(fit_bin)
+#' data("colorectal4")
+#' fit <- MetaAnalyticSurvCat(data = colorectal4, true = truend, trueind = trueind, surrog = surrogend,
+#'                trt = treatn, center = center, trial = trialend, patientid = patid)
+#' summary(fit)
 #' }
 
-summary.survbin <- function(object,...){
+summary.MetaAnalyticSurvCat <- function(object,...){
   cat("Surrogacy measures with 95% confidence interval \n\n")
   cat("Individual level surrogacy: ", "\n\n")
   cat("Global Odds: ", sprintf("%.4f", object$Indiv.GlobalOdds[1,1]), "[", sprintf("%.4f", object$Indiv.GlobalOdds[1,2]),";", sprintf("%.4f", object$Indiv.GlobalOdds[1,3]) , "]", "\n\n")
@@ -721,11 +720,11 @@ summary.survbin <- function(object,...){
   cat("R Square: ", sprintf("%.4f", object$Trial.R2[1,1]),"[", sprintf("%.4f", object$Trial.R2[1,2]),";", sprintf("%.4f", object$Trial.R2[1,3]) , "]", "\n\n")
 }
 
-#' Prints all the elements of an object fitted with the 'survbin()' function.
+#' Prints all the elements of an object fitted with the 'MetaAnalyticSurvCat()' function.
 #'
-#' @method print survbin
+#' @method print MetaAnalyticSurvCat
 #'
-#' @param x An object of class 'survbin' fitted with the 'survbin()' function.
+#' @param x An object of class 'MetaAnalyticSurvCat' fitted with the 'MetaAnalyticSurvCat()' function.
 #' @param ... ...
 #'
 #' @return The surrogacy measures with their 95% confidence intervals and the estimated treament effect on the surrogate and true endpoint.
@@ -733,12 +732,12 @@ summary.survbin <- function(object,...){
 #'
 #' @examples
 #' \dontrun{
-#' data("colorectal")
-#' fit_bin <- survbin(data = colorectal, true = surv, trueind = SURVIND, surrog = responder,
-#'                    trt = TREAT, center = CENTER, trial = TRIAL, patientid = patientid)
-#' print(fit_bin)
+#' data("colorectal4")
+#' fit <- MetaAnalyticSurvCat(data = colorectal4, true = truend, trueind = trueind, surrog = surrogend,
+#'                trt = treatn, center = center, trial = trialend, patientid = patid)
+#' print(fit)
 #' }
-print.survbin <- function(x,...){
+print.MetaAnalyticSurvCat <- function(x,...){
   cat("Surrogacy measures with 95% confidence interval \n\n")
   cat("Individual level surrogacy: ", "\n\n")
   cat("Global Odds: ", sprintf("%.4f", x$Indiv.GlobalOdds[1,1]), "[", sprintf("%.4f", x$Indiv.GlobalOdds[1,2]),";", sprintf("%.4f", x$Indiv.GlobalOdds[1,3]) , "]", "\n\n")
@@ -749,11 +748,11 @@ print.survbin <- function(x,...){
   print(x$EstTreatEffects[,c(1,2,3,4,5,7)], row.names = FALSE)
 }
 
-#' Generates a plot of the estimated treatment effects for the surrogate endpoint versus the estimated treatment effects for the true endpoint for an object fitted with the 'survbin()' function.
+#' Generates a plot of the estimated treatment effects for the surrogate endpoint versus the estimated treatment effects for the true endpoint for an object fitted with the 'MetaAnalyticSurvCat()' function.
 #'
-#' @method plot survbin
+#' @method plot MetaAnalyticSurvCat
 #'
-#' @param x An object of class 'survbin' fitted with the 'survbin()' function.
+#' @param x An object of class 'MetaAnalyticSurvCat' fitted with the 'MetaAnalyticSurvCat()' function.
 #' @param ... ...
 #'
 #' @return A plot of the type ggplot
@@ -761,13 +760,13 @@ print.survbin <- function(x,...){
 #'
 #' @examples
 #' \dontrun{
-#' data("colorectal")
-#' fit_bin <- survbin(data = colorectal, true = surv, trueind = SURVIND, surrog = responder,
-#'                    trt = TREAT, center = CENTER, trial = TRIAL, patientid = patientid)
-#' plot(fit_bin)
+#' data("colorectal4")
+#' fit <- MetaAnalyticSurvCat(data = colorectal4, true = truend, trueind = trueind, surrog = surrogend,
+#'                trt = treatn, center = center, trial = trialend, patientid = patid)
+#' plot(fit)
 #' }
 #'
-plot.survbin <- function(x,...){
+plot.MetaAnalyticSurvCat <- function(x,...){
   if (requireNamespace("ggplot2", quietly = TRUE)) {
     resp_est <- surv_est <- sample_size <- NULL
     estimated_treatment_effects <- x$EstTreatEffects
@@ -788,5 +787,3 @@ plot.survbin <- function(x,...){
     stop("ggplot2 is not installed. Please install ggplot2 to use this function.")
   }
 }
-
-
