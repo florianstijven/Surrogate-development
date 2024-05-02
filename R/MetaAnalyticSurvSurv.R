@@ -38,7 +38,7 @@
 #' @param trial Trial indicator.
 #' @param patientid Patient indicator.
 #' @param copula The copula that is used, either "Clayton", "Hougaard" or "Plackett"
-#' @param adjustment The adjusment that should be made for the trial-level surrogacy, either "unadjusted", "weighted" or "adjusted"
+#' @param adjustment The adjustment that should be made for the trial-level surrogacy, either "unadjusted", "weighted" or "adjusted"
 #'
 #' @return
 #' @export
@@ -224,26 +224,6 @@ MetaAnalyticSurvSurv_clayton <- function(data_m) {
 
   nlm_output <- nlm(loglik, par0 , hessian=TRUE, iterlim = 1000)
 
-  # if(nlm_output$code == 1) {
-  #   message(paste(nlm_output$code,": relative gradient is close to zero, current iterate is probably solution."))
-  # }
-  #
-  # if(nlm_output$code == 2) {
-  #   message(paste(nlm_output$code,": successive iterates within tolerance, current iterate is probably solution."))
-  # }
-  #
-  # if(nlm_output$code == 3) {
-  #   message(paste(nlm_output$code,": last global step failed to locate a point lower than estimate. Either estimate is an approximate local minimum of the function or steptol is too small."))
-  # }
-  #
-  # if(nlm_output$code == 4) {
-  #   stop(paste(nlm_output$code,": iteration limit exceeded."))
-  # }
-  #
-  # if(nlm_output$code == 5) {
-  #   stop(paste(nlm_output$code,": maximum step size stepmax exceeded five consecutive times. Either the function is unbounded below, becomes asymptotic to a finite value from above in some direction or stepmax is too small."))
-  # }
-
   est <- nlm_output$estimate
 
   hess<-nlm_output$hessian
@@ -419,26 +399,6 @@ MetaAnalyticSurvSurv_hougaard <- function(data_m) {
   par0 <- initp(lnalpha0)
 
   nlm_output <- nlm(loglik, par0 , hessian=TRUE, iterlim = 1000)
-
-  # if(nlm_output$code == 1) {
-  #   message(paste(nlm_output$code,": relative gradient is close to zero, current iterate is probably solution."))
-  # }
-  #
-  # if(nlm_output$code == 2) {
-  #   message(paste(nlm_output$code,": successive iterates within tolerance, current iterate is probably solution."))
-  # }
-  #
-  # if(nlm_output$code == 3) {
-  #   message(paste(nlm_output$code,": last global step failed to locate a point lower than estimate. Either estimate is an approximate local minimum of the function or steptol is too small."))
-  # }
-  #
-  # if(nlm_output$code == 4) {
-  #   stop(paste(nlm_output$code,": iteration limit exceeded."))
-  # }
-  #
-  # if(nlm_output$code == 5) {
-  #   stop(paste(nlm_output$code,": maximum step size stepmax exceeded five consecutive times. Either the function is unbounded below, becomes asymptotic to a finite value from above in some direction or stepmax is too small."))
-  # }
 
   est <- nlm_output$estimate
 
@@ -890,26 +850,6 @@ MetaAnalyticSurvSurv_plackett <- function(data_m) {
   par0 <- initp(theta0)
 
   nlm_output <- nlm(loglik, par0 , hessian=TRUE, iterlim = 1000)
-
-  # if(nlm_output$code == 1) {
-  #   message(paste(nlm_output$code,": relative gradient is close to zero, current iterate is probably solution."))
-  # }
-  #
-  # if(nlm_output$code == 2) {
-  #   message(paste(nlm_output$code,": successive iterates within tolerance, current iterate is probably solution."))
-  # }
-  #
-  # if(nlm_output$code == 3) {
-  #   message(paste(nlm_output$code,": last global step failed to locate a point lower than estimate. Either estimate is an approximate local minimum of the function or steptol is too small."))
-  # }
-  #
-  # if(nlm_output$code == 4) {
-  #   stop(paste(nlm_output$code,": iteration limit exceeded."))
-  # }
-  #
-  # if(nlm_output$code == 5) {
-  #   stop(paste(nlm_output$code,": maximum step size stepmax exceeded five consecutive times. Either the function is unbounded below, becomes asymptotic to a finite value from above in some direction or stepmax is too small."))
-  # }
 
   est <- nlm_output$estimate
 

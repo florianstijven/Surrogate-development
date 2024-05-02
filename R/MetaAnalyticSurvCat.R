@@ -34,6 +34,7 @@
 #' @param center Center indicator (equal to trial if there are no different centers).
 #' @param trial Trial indicator.
 #' @param patientid Patient indicator.
+#' @param adjustment The adjustment that should be made for the trial-level surrogacy, either "unadjusted", "weighted" or "adjusted"
 #'
 #' @return Returns an object of class "MetaAnalyticSurvCat" that can be used to evaluate surrogacy and contains the following elements:
 #'
@@ -50,13 +51,13 @@
 #' \dontrun{
 #' data("colorectal4")
 #' fit <- MetaAnalyticSurvCat(data = colorectal4, true = truend, trueind = trueind, surrog = surrogend,
-#'                trt = treatn, center = center, trial = trialend, patientid = patid)
+#'                trt = treatn, center = center, trial = trialend, patientid = patid, adjustment="unadjusted")
 #' print(fit)
 #' summary(fit)
 #' plot(fit)
 #' }
 MetaAnalyticSurvCat <- function(data, true, trueind, surrog,
-                    trt, center, trial, patientid) {
+                    trt, center, trial, patientid, adjustment) {
   resp_est <- surv_est <- sample_size <- Center_ID <- p <- shape <- variable <- NULL
   dataset1xxy <- data
   dataset1xxy$surv <- data[[substitute(true)]]
@@ -611,7 +612,7 @@ MetaAnalyticSurvCat <- function(data, true, trueind, surrog,
   initial_parameters <- initparm(5)
 
   par0 <- as.vector(initial_parameters)
-  nlm_output <- nlm(loglik, par0 , hessian=TRUE, iterlim = 10000)
+  suppressWarnings(nlm_output <- nlm(loglik, par0 , hessian=TRUE, iterlim = 10000))
 
   hessian_m <-nlm_output$hessian
   fisher_info<-solve(hessian_m)
@@ -642,37 +643,116 @@ MetaAnalyticSurvCat <- function(data, true, trueind, surrog,
   up_th <- up[1]
 
   #Trial level surrogacy
-  surv_eff <- subset(memo, select = c(center, surv_est))
-  colnames(surv_eff)[2] <- "effect"
-  surv_eff$endp <- "MAIN"
-  surv_eff
+  if(adjustment == "adjusted"){
+    #### some additional functions
+    R2TrialFun <- function(D) {
+      R2.trial <- D[1, 2] ^ 2 / prod(diag(D))
+      return(R2.trial)
+    }
+    R2IndFun <- function(Sigma) {
+      R2.ind <- Sigma[1, 2]^2/(Sigma[1, 1] * Sigma[2, 2])
+      return(R2.ind)
+    }
+    pdDajustment = function(D) {
+      EigenD <- eigen(D)
+      E <- diag(EigenD$values)
+      diag(E)[diag(E) <= 0] <- 1e-04
+      L <- EigenD$vector
+      DH <- L %*% tcrossprod(E, L)
+      return(DH)
+    }
 
-  pfs_eff <- subset(memo, select = c(center, resp_est))
-  colnames(pfs_eff)[2] <- "effect"
-  pfs_eff$endp <- "SURR"
+    n <- as.numeric(memo$weight)
+    Trial.ID <- memo$center
+    N <- length(Trial.ID)
 
-  shihco <- rbind(surv_eff, pfs_eff)
-  shihco$center <- as.numeric(shihco$center)
+    BetaH_i = memo[,c(2,4)]
+    a_i = n/sum(n)
+    a_i.2 = (n - 2)/sum(n - 2)
+    BetaH = apply(t(BetaH_i), 1, weighted.mean, w = a_i)
+    N = length(a_i)
+    b_i <- t(BetaH_i) - tcrossprod(BetaH, matrix(1, N, 1))
+    Sb = tcrossprod(b_i)
+    num = 1 - 2 * a_i + sum(a_i^2)
+    denom = sum(num)
 
-  shihco <- shihco[order(shihco$center, shihco$endp), ]
-  shihco$endp <- as.factor(shihco$endp)
-  shihco$effect <- as.numeric(shihco$effect)
 
-  invisible(capture.output(model <- nlme::gls(effect ~ -1 + factor(endp), data = shihco,
-                                        correlation = nlme::corCompSymm(form = ~ 1 | center),
-                                        weights = nlme::varIdent(form = ~ 1 | endp),
-                                        method = "ML",
-                                        control = nlme::glsControl(maxIter = 25, msVerbose = TRUE))))
+    R.list <- list()
 
-  rsquared <- nlme::intervals(model, which = "var-cov")$corStruct^2
-  R2 <- as.vector(rsquared)[2]
-  lo_R2 <- as.vector(rsquared)[1]
-  up_R2 <- as.vector(rsquared)[3]
+    for (i in 1:nrow(memo)) {
+      se1_sq <- memo$surv_se[i]^2
+      se2_sq <- memo$resp_se[i]^2
+      cov <- memo$cova[i]
 
-  Trial.R2 <- data.frame(cbind(R2, lo_R2, up_R2), stringsAsFactors = TRUE)
-  colnames(Trial.R2) <- c("R2 Trial", "CI lower limit",
-                          "CI upper limit")
-  rownames(Trial.R2) <- c(" ")
+      var_cov_matrix <- matrix(c(se1_sq, cov, cov, se2_sq), nrow = 2, byrow = TRUE)
+
+      R.list[[i]] <- var_cov_matrix
+    }
+
+    DH = (Sb - Reduce("+", mapply(function(X, x) {
+      X * x
+    }, R.list, num, SIMPLIFY = F)))/denom
+    DH.pd = min(eigen(DH, only.values = T)$values) > 0
+    if (!DH.pd) {
+      DH = pdDajustment(DH)
+      warning(paste("The estimate of D is non-positive definite. Adjustment for non-positive definiteness was required"))
+    }
+    R2 <- DH[1, 2] ^ 2 / prod(diag(DH))
+    R2.sd <- sqrt((4 * R2 * (1 - R2)^2)/(N - 3))
+    Alpha <- 0.05
+    lo_R2 <- max(0, R2 + qnorm(Alpha/2) * (R2.sd))
+    up_R2 <- min(1, R2 + qnorm(1 - Alpha/2) * (R2.sd))
+    Trial.R2 <- data.frame(cbind(R2, lo_R2, up_R2), stringsAsFactors = TRUE)
+
+    colnames(Trial.R2) <- c("R2 Trial (adjusted)", "CI lower limit",
+                            "CI upper limit")
+    rownames(Trial.R2) <- c(" ")
+  }
+
+  if(adjustment == "weighted"){
+    model <- lm(surv_est ~ resp_est,
+                data =memo, weights = weight)
+
+    R2 <- summary(model)$r.squared
+
+    ### based on cortinas
+    Trial.ID <- memo$center
+    N <- length(Trial.ID)
+    R2.sd <- sqrt((4 * R2 * (1 - R2)^2)/(N - 3))
+    lo_R2 <- max(0, R2 + qnorm(0.05/2) * (R2.sd))
+    up_R2 <- min(1, R2 + qnorm(1 - 0.05/2) * (R2.sd))
+
+    Trial.R2 <- data.frame(cbind(R2, lo_R2, up_R2), stringsAsFactors = TRUE)
+    colnames(Trial.R2) <- c("R2 Trial (weighted)", "CI lower limit",
+                            "CI upper limit")
+    rownames(Trial.R2) <- c(" ")
+  }
+
+  if(adjustment == "unadjusted"){
+    surv_eff <- subset(memo, select = c(center, surv_est))
+    colnames(surv_eff)[2] <- "effect"
+    surv_eff$endp <- "MAIN"
+    resp_eff <- subset(memo, select = c(center, resp_est))
+    colnames(resp_eff)[2] <- "effect"
+    resp_eff$endp <- "SURR"
+    shihco <- rbind(surv_eff, resp_eff)
+    shihco$center <- as.numeric(shihco$center)
+    shihco <- shihco[order(shihco$center, shihco$endp), ]
+    shihco$endp <- as.factor(shihco$endp)
+    shihco$effect <- as.numeric(shihco$effect)
+    invisible(capture.output(model <- nlme::gls(effect ~ -1 +
+                                                  factor(endp), data = shihco, correlation = nlme::corCompSymm(form = ~1 |
+                                                                                                                 center), weights = nlme::varIdent(form = ~1 | endp),
+                                                method = "ML", control = nlme::glsControl(maxIter = 25,
+                                                                                          msVerbose = TRUE))))
+    rsquared <- nlme::intervals(model, which = "var-cov")$corStruct^2
+    R2 <- as.vector(rsquared)[2]
+    lo_R2 <- as.vector(rsquared)[1]
+    up_R2 <- as.vector(rsquared)[3]
+    Trial.R2 <- data.frame(cbind(R2, lo_R2, up_R2), stringsAsFactors = TRUE)
+    colnames(Trial.R2) <- c("R2 Trial (unadjusted)", "CI lower limit", "CI upper limit")
+    rownames(Trial.R2) <- c(" ")
+  }
 
   Indiv.GlobalOdds <- data.frame(cbind(theta, lo_th, up_th), stringsAsFactors = TRUE)
   colnames(Indiv.GlobalOdds) <- c("Global Odds", "CI lower limit",
@@ -708,7 +788,7 @@ MetaAnalyticSurvCat <- function(data, true, trueind, surrog,
 #' \dontrun{
 #' data("colorectal4")
 #' fit <- MetaAnalyticSurvCat(data = colorectal4, true = truend, trueind = trueind, surrog = surrogend,
-#'                trt = treatn, center = center, trial = trialend, patientid = patid)
+#'                trt = treatn, center = center, trial = trialend, patientid = patid, adjustment="unadjusted")
 #' summary(fit)
 #' }
 
@@ -734,7 +814,7 @@ summary.MetaAnalyticSurvCat <- function(object,...){
 #' \dontrun{
 #' data("colorectal4")
 #' fit <- MetaAnalyticSurvCat(data = colorectal4, true = truend, trueind = trueind, surrog = surrogend,
-#'                trt = treatn, center = center, trial = trialend, patientid = patid)
+#'                trt = treatn, center = center, trial = trialend, patientid = patid, adjustment="unadjusted")
 #' print(fit)
 #' }
 print.MetaAnalyticSurvCat <- function(x,...){
@@ -762,7 +842,7 @@ print.MetaAnalyticSurvCat <- function(x,...){
 #' \dontrun{
 #' data("colorectal4")
 #' fit <- MetaAnalyticSurvCat(data = colorectal4, true = truend, trueind = trueind, surrog = surrogend,
-#'                trt = treatn, center = center, trial = trialend, patientid = patid)
+#'                trt = treatn, center = center, trial = trialend, patientid = patid, adjustment="unadjusted")
 #' plot(fit)
 #' }
 #'
