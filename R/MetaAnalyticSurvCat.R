@@ -55,7 +55,7 @@
 #' summary(fit)
 #' plot(fit)
 #' }
-MetaAnalyticMetaAnalyticSurvCat <- function(data, true, trueind, surrog,
+MetaAnalyticSurvCat <- function(data, true, trueind, surrog,
                     trt, center, trial, patientid) {
   resp_est <- surv_est <- sample_size <- Center_ID <- p <- shape <- variable <- NULL
   dataset1xxy <- data
