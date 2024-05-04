@@ -655,6 +655,8 @@ MetaAnalyticSurvBin <- function(data, true, trueind, surrog,
       return(DH)
     }
 
+    memo <- as.data.frame(apply(memo, 2, as.numeric))
+
     n <- as.numeric(memo$weight)
     Trial.ID <- memo$center
     N <- length(Trial.ID)
@@ -703,6 +705,8 @@ MetaAnalyticSurvBin <- function(data, true, trueind, surrog,
   }
 
   if(adjustment == "weighted"){
+    memo <- as.data.frame(apply(memo, 2, as.numeric))
+
     model <- lm(surv_est ~ resp_est,
                 data =memo, weights = weight)
 
@@ -722,6 +726,8 @@ MetaAnalyticSurvBin <- function(data, true, trueind, surrog,
   }
 
   if(adjustment == "unadjusted"){
+    memo <- as.data.frame(apply(memo, 2, as.numeric))
+
     surv_eff <- subset(memo, select = c(center, surv_est))
     colnames(surv_eff)[2] <- "effect"
     surv_eff$endp <- "MAIN"
@@ -832,7 +838,8 @@ print.MetaAnalyticSurvBin <- function(x,...){
 #' \dontrun{
 #' data("colorectal")
 #' fit_bin <- MetaAnalyticSurvBin(data = colorectal, true = surv, trueind = SURVIND, surrog = responder,
-#'                    trt = TREAT, center = CENTER, trial = TRIAL, patientid = patientid, adjustment="unadjusted")
+#'                                trt = TREAT, center = CENTER, trial = TRIAL, patientid = patientid,
+#'                                adjustment="unadjusted")
 #' plot(fit_bin)
 #' }
 #'

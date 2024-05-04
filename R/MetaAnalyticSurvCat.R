@@ -51,7 +51,8 @@
 #' \dontrun{
 #' data("colorectal4")
 #' fit <- MetaAnalyticSurvCat(data = colorectal4, true = truend, trueind = trueind, surrog = surrogend,
-#'                trt = treatn, center = center, trial = trialend, patientid = patid, adjustment="unadjusted")
+#'                            trt = treatn, center = center, trial = trialend, patientid = patid,
+#'                            adjustment="unadjusted")
 #' print(fit)
 #' summary(fit)
 #' plot(fit)
@@ -662,6 +663,8 @@ MetaAnalyticSurvCat <- function(data, true, trueind, surrog,
       return(DH)
     }
 
+    memo <- as.data.frame(apply(memo, 2, as.numeric))
+
     n <- as.numeric(memo$weight)
     Trial.ID <- memo$center
     N <- length(Trial.ID)
@@ -710,6 +713,8 @@ MetaAnalyticSurvCat <- function(data, true, trueind, surrog,
   }
 
   if(adjustment == "weighted"){
+    memo <- as.data.frame(apply(memo, 2, as.numeric))
+
     model <- lm(surv_est ~ resp_est,
                 data =memo, weights = weight)
 
@@ -729,6 +734,8 @@ MetaAnalyticSurvCat <- function(data, true, trueind, surrog,
   }
 
   if(adjustment == "unadjusted"){
+    memo <- as.data.frame(apply(memo, 2, as.numeric))
+
     surv_eff <- subset(memo, select = c(center, surv_est))
     colnames(surv_eff)[2] <- "effect"
     surv_eff$endp <- "MAIN"
@@ -807,7 +814,7 @@ summary.MetaAnalyticSurvCat <- function(object,...){
 #' @param x An object of class 'MetaAnalyticSurvCat' fitted with the 'MetaAnalyticSurvCat()' function.
 #' @param ... ...
 #'
-#' @return The surrogacy measures with their 95% confidence intervals and the estimated treament effect on the surrogate and true endpoint.
+#' @return The surrogacy measures with their 95% confidence intervals and the estimated treatment effect on the surrogate and true endpoint.
 #' @export
 #'
 #' @examples
