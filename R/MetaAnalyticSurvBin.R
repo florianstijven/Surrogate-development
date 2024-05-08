@@ -22,7 +22,7 @@
 #' * a column with the binary surrogate endpoint: 1 or 2
 #' * a column with the treatment indicator: 0 or 1
 #' * a column with the trial indicator
-#' * a column with the center indicator. If there are no different centers within each trial, the center indicator is equal to the trial indicator
+#' * a column with the center indicator. If there are no different centers within each trial, the center indicator can be equal to the trial indicator
 #' * a column with the patient indicator
 #'
 #' @references Burzykowski, T., Molenberghs, G., & Buyse, M. (2004). The validation of surrogate end points by using data from randomized clinical trials: a case-study in advanced colorectal cancer. Journal of the Royal Statistical Society Series A: Statistics in Society, 167(1), 103-124.
@@ -30,19 +30,19 @@
 #' @param data A data frame with the correct columns (See details).
 #' @param true Observed time-to-event (true endpoint).
 #' @param trueind Time-to-event indicator.
-#' @param surrog Binary surrogate endpoint.
-#' @param trt Treatment indicator.
-#' @param center Center indicator (equal to trial if there are no different centers).
-#' @param trial Trial indicator.
+#' @param surrog Binary surrogate endpoint, coded as 1 or 2.
+#' @param trt Treatment indicator, coded as 0 or 1.
+#' @param center Center indicator (equal to trial if there are no different centers). This is the unit for which specific treatment effects are estimated.
+#' @param trial Trial indicator. This is the unit for which common baselines are to be used.
 #' @param patientid Patient indicator.
 #' @param adjustment The adjustment that should be made for the trial-level surrogacy, either "unadjusted", "weighted" or "adjusted"
 #'
 #' @return Returns an object of class "MetaAnalyticSurvBin" that can be used to evaluate surrogacy and contains the following elements:
 #'
-#' * Indiv.GlobalOdds: a data frame that contains the Global Odds and 95% confidence interval to evaluate surrogacy at the individual level.
+#' * Indiv.GlobalOdds: a data frame that contains the global odds ratio and 95% confidence interval to evaluate surrogacy at the individual level.
 #' * Trial.R2: a data frame that contains the correlation coefficient and 95% confidence interval to evaluate surrogacy at the trial level.
 #' * EstTreatEffects: a data frame that contains the estimated treatment effects and sample size for each trial.
-#' * fit_output: output of the maximization procedure to maximize the likelihood.
+#' * fit_output: output of the maximization procedure (nlm) to maximize the likelihood function.
 #'
 #' @export
 #'
@@ -755,7 +755,7 @@ MetaAnalyticSurvBin <- function(data, true, trueind, surrog,
 
   Indiv.GlobalOdds <- data.frame(cbind(theta, lo_th, up_th),
                                  stringsAsFactors = TRUE)
-  colnames(Indiv.GlobalOdds) <- c("Global Odds", "CI lower limit",
+  colnames(Indiv.GlobalOdds) <- c("Global Odds Ratio", "CI lower limit",
                                   "CI upper limit")
   rownames(Indiv.GlobalOdds) <- c(" ")
   EstTreatEffects <- memo
@@ -791,7 +791,7 @@ MetaAnalyticSurvBin <- function(data, true, trueind, surrog,
 summary.MetaAnalyticSurvBin <- function(object,...){
   cat("Surrogacy measures with 95% confidence interval \n\n")
   cat("Individual level surrogacy: ", "\n\n")
-  cat("Global Odds: ", sprintf("%.4f", object$Indiv.GlobalOdds[1,1]), "[", sprintf("%.4f", object$Indiv.GlobalOdds[1,2]),";", sprintf("%.4f", object$Indiv.GlobalOdds[1,3]) , "]", "\n\n")
+  cat("Global Odds Ratio: ", sprintf("%.4f", object$Indiv.GlobalOdds[1,1]), "[", sprintf("%.4f", object$Indiv.GlobalOdds[1,2]),";", sprintf("%.4f", object$Indiv.GlobalOdds[1,3]) , "]", "\n\n")
   cat("Trial level surrogacy: ", "\n\n")
   cat("R Square: ", sprintf("%.4f", object$Trial.R2[1,1]),"[", sprintf("%.4f", object$Trial.R2[1,2]),";", sprintf("%.4f", object$Trial.R2[1,3]) , "]", "\n\n")
 }
@@ -816,7 +816,7 @@ summary.MetaAnalyticSurvBin <- function(object,...){
 print.MetaAnalyticSurvBin <- function(x,...){
   cat("Surrogacy measures with 95% confidence interval \n\n")
   cat("Individual level surrogacy: ", "\n\n")
-  cat("Global Odds: ", sprintf("%.4f", x$Indiv.GlobalOdds[1,1]), "[", sprintf("%.4f", x$Indiv.GlobalOdds[1,2]),";", sprintf("%.4f", x$Indiv.GlobalOdds[1,3]) , "]", "\n\n")
+  cat("Global Odds Ratio: ", sprintf("%.4f", x$Indiv.GlobalOdds[1,1]), "[", sprintf("%.4f", x$Indiv.GlobalOdds[1,2]),";", sprintf("%.4f", x$Indiv.GlobalOdds[1,3]) , "]", "\n\n")
   cat("Trial level surrogacy: ", "\n\n")
   cat("R Square: ", sprintf("%.4f", x$Trial.R2[1,1]),"[", sprintf("%.4f", x$Trial.R2[1,2]),";", sprintf("%.4f", x$Trial.R2[1,3]) , "]", "\n\n")
 
@@ -853,12 +853,12 @@ plot.MetaAnalyticSurvBin <- function(x,...){
     estimated_treatment_effects$resp_est <- as.numeric(estimated_treatment_effects$resp_est)
 
     # Create the scatter plot
-    ggplot2::ggplot(data = estimated_treatment_effects, ggplot2::aes(x = resp_est, y = surv_est, size = sample_size)) +
+    suppressWarnings(ggplot2::ggplot(data = estimated_treatment_effects, ggplot2::aes(x = resp_est, y = surv_est, size = sample_size)) +
       ggplot2::geom_point() +
       ggplot2::geom_smooth(method = "lm", se = FALSE, color = "royalblue3") +
       ggplot2::labs(x = "Treatment effect on surrogate", y = "Treatment effect on true") +
       ggplot2::ggtitle("Treatment effect on true endpoint vs. treatment effect on surrogate endpoint") +
-      ggplot2::theme(legend.position="none")
+      ggplot2::theme(legend.position="none"))
 
   } else {
     stop("ggplot2 is not installed. Please install ggplot2 to use this function.")
