@@ -118,6 +118,7 @@ export(marginal_gof_scr_S_plot, marginal_gof_scr_T_plot,
 export(sensitivity_intervals_Dvine)
 export(MetaAnalyticSurvBin)
 export(MetaAnalyticSurvCat)
+export(MetaAnalyticSurvSurv)
 
 
 S3method(plot, Fano.BinBin)
@@ -203,4 +204,9 @@ S3method(summary,MetaAnalyticSurvBin)
 S3method(plot,MetaAnalyticSurvCat)
 S3method(print,MetaAnalyticSurvCat)
 S3method(summary,MetaAnalyticSurvCat)
+
+S3method(plot,MetaAnalyticSurvSurv)
+S3method(print,MetaAnalyticSurvSurv)
+S3method(summary,MetaAnalyticSurvSurv)
+
 
