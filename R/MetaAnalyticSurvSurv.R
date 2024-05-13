@@ -11,16 +11,16 @@
 #' In the model developed by Burzykowski et al. (2001), a copula-based model is used for the true time-to-event endpoint and the surrogate time-to-event endpoint.
 #' More specifically, three copulas can be used: the Clayton copula, Hougaard copula and Plackett copula. The marginal model for the true and surrogate endpoint is the proportional hazard model.
 #' The quality of the surrogate at the individual level can be evaluated by looking at the copula parameter.
-#' The quality of the surrogate at the trial level can be evaluated by considering the correlation coefficient between the estimated treatment effects.
+#' The quality of the surrogate at the trial level can be evaluated by considering the \eqn{R^2_{trial}} between the estimated treatment effects.
 #'
 #' # Data Format
 #'
 #' The data frame must contains the following columns:
 #'
 #' * a column with the observed time-to-event for the true endpoint
-#' * a column with the time-to-event indicator for the true endpoint: 1 if true event is observed, 0 otherwise
+#' * a column with the time-to-event indicator for the true endpoint: 1 if the event is observed, 0 otherwise
 #' * a column with the observed time-to-event for the surrogate endpoint
-#' * a column with the time-to-event indicator for the surrogate endpoint: 1 if true event is observed, 0 otherwise
+#' * a column with the time-to-event indicator for the surrogate endpoint: 1 if the event is observed, 0 otherwise
 #' * a column with the treatment indicator: 0 or 1
 #' * a column with the trial indicator
 #' * a column with the center indicator. If there are no different centers within each trial, the center indicator is equal to the trial indicator
@@ -28,7 +28,7 @@
 #'
 #' @references Burzykowski T, Molenberghs G, Buyse M, Geys H, Renard D (2001). “Validation of surrogate end points in multiple randomized clinical trials with failure time end points.” Journal of the Royal Statistical Society Series C: Applied Statistics, 50(4), 405–422
 #'
-#' @param data A data frame with the correct columns (See details).
+#' @param data A data frame with the correct columns (See Data Format).
 #' @param true Observed time-to-event for true endpoint.
 #' @param trueind Time-to-event indicator for the true endpoint.
 #' @param surrog Observed time-to-event for surrogate endpoint.
@@ -43,9 +43,9 @@
 #' @return Returns an object of class "MetaAnalyticSurvSurv" that can be used to evaluate surrogacy and contains the following elements:
 #'
 #' * Indiv.Surrogacy: a data frame that contains the measure for the individual level surrogacy and 95% confidence interval.
-#' * Trial.R2: a data frame that contains the correlation coefficient and 95% confidence interval to evaluate surrogacy at the trial level.
+#' * Trial.R2: a data frame that contains the \eqn{R^2_{trial}} and 95% confidence interval to evaluate surrogacy at the trial level.
 #' * EstTreatEffects: a data frame that contains the estimated treatment effects and sample size for each trial.
-#' * fit_output: output of the maximization procedure (nlm) to maximize the likelihood.
+#' * nlm.output: output of the maximization procedure (nlm) to maximize the likelihood.
 #'
 #' @export
 #'
@@ -53,10 +53,10 @@
 #'
 #' @examples
 #' \dontrun{
-#' data("colorectal4")
-#' fit <- MetaAnalyticSurvCat(data = colorectal4, true = truend, trueind = trueind, surrog = surrogend,
-#'                            trt = treatn, center = center, trial = trialend, patientid = patid,
-#'                            adjustment="unadjusted")
+#' data("Ovarian")
+#' fit <- MetaAnalyticSurvSurv(data=Ovarian,true=Surv,trueind=SurvInd,surrog=Pfs,surrogind=PfsInd,
+#'                             trt=Treat,center=Center,trial=Center,patientid=Patient,
+#'                             copula="Plackett",adjustment="unadjusted")
 #' print(fit)
 #' summary(fit)
 #' plot(fit)
@@ -73,8 +73,7 @@ MetaAnalyticSurvSurv <- function(data, true, trueind, surrog, surrogind,
   data_m$trial <- data[[substitute(trial)]]
   data_m$patientid <- data[[substitute(patientid)]]
 
-  data_m <- data_m %>%
-    select(patientid, treat, center, survind, pfsind, trial, pfs, surv)
+  data_m <- dplyr::select(data_m, patientid, treat, center, survind, pfsind, trial, pfs, surv)
 
   #some functions
   MetaAnalyticSurvSurv_clayton <- function(data_m) {
@@ -181,7 +180,7 @@ MetaAnalyticSurvSurv <- function(data, true, trueind, surrog, surrogind,
     lnalpha0 <- lndelta
     par0 <- initp(lnalpha0)
 
-    nlm_output <- nlm(loglik, par0 , hessian=TRUE, iterlim = 1000)
+    suppressWarnings(nlm_output <- nlm(loglik, par0 , hessian=TRUE, iterlim = 1000))
 
     est <- nlm_output$estimate
 
@@ -357,7 +356,7 @@ MetaAnalyticSurvSurv <- function(data, true, trueind, surrog, surrogind,
     lnalpha0 <- lndelta
     par0 <- initp(lnalpha0)
 
-    nlm_output <- nlm(loglik, par0 , hessian=TRUE, iterlim = 1000)
+    nlm_output <- nlm(loglik, par0 , hessian=TRUE, iterlim = 10000)
 
     est <- nlm_output$estimate
 
@@ -808,7 +807,7 @@ MetaAnalyticSurvSurv <- function(data, true, trueind, surrog, surrogind,
     theta0 <- theta
     par0 <- initp(theta0)
 
-    nlm_output <- nlm(loglik, par0 , hessian=TRUE, iterlim = 1000)
+    suppressWarnings(nlm_output <- nlm(loglik, par0 , hessian=TRUE, iterlim = 10000))
 
     est <- nlm_output$estimate
 
@@ -862,7 +861,7 @@ MetaAnalyticSurvSurv <- function(data, true, trueind, surrog, surrogind,
                           "CI upper limit")
     rownames(rho_df) <- c(" ")
 
-    output_list <- list(copula_parameter = theta_df, Indiv.Surrogacy=rho_df, memo=memo, fit_output=nlm_output)
+    output_list <- list(copula_parameter = theta_df, Indiv.Surrogacy=rho_df, memo=memo, nlm.output=nlm_output)
     return(output_list)
 
 
@@ -920,7 +919,7 @@ MetaAnalyticSurvSurv <- function(data, true, trueind, surrog, surrogind,
     lo_R2 <- max(0, R2 + qnorm(0.05/2) * (R2.sd))
     up_R2 <- min(1, R2 + qnorm(1 - 0.05/2) * (R2.sd))
 
-    Trial.R2.weighted <- data.frame(cbind(R2, lo_R2, up_R2), stringsAsFactors = TRUE)
+    Trial.R2 <- data.frame(cbind(R2, lo_R2, up_R2), stringsAsFactors = TRUE)
     colnames(Trial.R2) <- c("R2 Trial (weighted)", "CI lower limit",
                                      "CI upper limit")
     rownames(Trial.R2) <- c(" ")
@@ -1050,10 +1049,13 @@ MetaAnalyticSurvSurv <- function(data, true, trueind, surrog, surrogind,
     }
   }
 
+  memo <- stage1$memo
+  colnames(memo) <- c("center", "surv_est", "surv_se", "surro_est", "surro_se", "cova", "sample_size")
+
   output_list <- list(Indiv.Surrogacy = stage1$Indiv.Surrogacy,
                       Trial.R2 = stage2$Trial.R2,
-                      EstTreatEffects = stage1$memo,
-                      fit_output = stage1$fit_output,
+                      EstTreatEffects = memo,
+                      nlm.output = stage1$nlm.output,
                       Call = match.call())
 
   class(output_list) <- "MetaAnalyticSurvSurv"
@@ -1081,9 +1083,10 @@ MetaAnalyticSurvSurv <- function(data, true, trueind, surrog, surrogind,
 #' }
 
 summary.MetaAnalyticSurvSurv <- function(object,...){
+  indiv.name <- colnames(object$Indiv.Surrogacy[1])
   cat("Surrogacy measures with 95% confidence interval \n\n")
   cat("Individual level surrogacy: ", "\n\n")
-  cat("Measure: ", sprintf("%.4f", object$Indiv.Surrogacy[1,1]), "[", sprintf("%.4f", object$Indiv.Surrogacy[1,2]),";", sprintf("%.4f", object$Indiv.Surrogacy[1,3]) , "]", "\n\n")
+  cat(sprintf(indiv.name), ": ", sprintf("%.4f", object$Indiv.Surrogacy[1,1]), "[", sprintf("%.4f", object$Indiv.Surrogacy[1,2]),";", sprintf("%.4f", object$Indiv.Surrogacy[1,3]) , "]", "\n\n")
   cat("Trial level surrogacy: ", "\n\n")
   cat("R Square: ", sprintf("%.4f", object$Trial.R2[1,1]),"[", sprintf("%.4f", object$Trial.R2[1,2]),";", sprintf("%.4f", object$Trial.R2[1,3]) , "]", "\n\n")
 }
@@ -1106,13 +1109,14 @@ summary.MetaAnalyticSurvSurv <- function(object,...){
 #' print(fit)
 #' }
 print.MetaAnalyticSurvSurv <- function(x,...){
+  indiv.name <- colnames(x$Indiv.Surrogacy[1])
   cat("Surrogacy measures with 95% confidence interval \n\n")
   cat("Individual level surrogacy: ", "\n\n")
-  cat("Global Odds: ", sprintf("%.4f", x$Indiv.GlobalOdds[1,1]), "[", sprintf("%.4f", x$Indiv.GlobalOdds[1,2]),";", sprintf("%.4f", x$Indiv.GlobalOdds[1,3]) , "]", "\n\n")
+  cat(sprintf(indiv.name), ": ", sprintf("%.4f", x$Indiv.Surrogacy[1,1]), "[", sprintf("%.4f", x$Indiv.Surrogacy[1,2]),";", sprintf("%.4f", x$Indiv.Surrogacy[1,3]) , "]", "\n\n")
   cat("Trial level surrogacy: ", "\n\n")
   cat("R Square: ", sprintf("%.4f", x$Trial.R2[1,1]),"[", sprintf("%.4f", x$Trial.R2[1,2]),";", sprintf("%.4f", x$Trial.R2[1,3]) , "]", "\n\n")
 
-  cat("Estimated treatment effects on surrogate (pfs_est) and survival (surv_est) endpoint: \n\n")
+  cat("Estimated treatment effects on surrogate (surro_est) and survival (surv_est) endpoint: \n\n")
   print(x$EstTreatEffects[,c(1,2,3,4,5,7)], row.names = FALSE)
 }
 
@@ -1136,20 +1140,22 @@ print.MetaAnalyticSurvSurv <- function(x,...){
 #'
 plot.MetaAnalyticSurvSurv <- function(x,...){
   if (requireNamespace("ggplot2", quietly = TRUE)) {
-    pfs_est <- surv_est <- sample_size <- NULL
+    surro_est <- surv_est <- sample_size <- NULL
     estimated_treatment_effects <- x$EstTreatEffects
 
     estimated_treatment_effects$sample_size <- as.numeric(estimated_treatment_effects$sample_size)
     estimated_treatment_effects$surv_est <- as.numeric(estimated_treatment_effects$surv_est)
-    estimated_treatment_effects$pfs_est <- as.numeric(estimated_treatment_effects$pfs_est)
+    estimated_treatment_effects$surro_est <- as.numeric(estimated_treatment_effects$surro_est)
 
     # Create the scatter plot
-    ggplot2::ggplot(data = estimated_treatment_effects, ggplot2::aes(x = pfs_est, y = surv_est, size = sample_size)) +
+    suppressWarnings({p <- ggplot2::ggplot(data = estimated_treatment_effects, ggplot2::aes(x = surro_est, y = surv_est, size = sample_size)) +
       ggplot2::geom_point() +
       ggplot2::geom_smooth(method = "lm", se = FALSE, color = "royalblue3") +
       ggplot2::labs(x = "Treatment effect on surrogate", y = "Treatment effect on true") +
       ggplot2::ggtitle("Treatment effect on true endpoint vs. treatment effect on surrogate endpoint") +
       ggplot2::theme(legend.position="none")
+      })
+    suppressWarnings(print(p))
 
   } else {
     stop("ggplot2 is not installed. Please install ggplot2 to use this function.")

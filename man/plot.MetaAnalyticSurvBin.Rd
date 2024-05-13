@@ -21,7 +21,8 @@ Generates a plot of the estimated treatment effects for the surrogate endpoint v
 \dontrun{
 data("colorectal")
 fit_bin <- MetaAnalyticSurvBin(data = colorectal, true = surv, trueind = SURVIND, surrog = responder,
-                   trt = TREAT, center = CENTER, trial = TRIAL, patientid = patientid)
+                               trt = TREAT, center = CENTER, trial = TRIAL, patientid = patientid,
+                               adjustment="unadjusted")
 plot(fit_bin)
 }
 

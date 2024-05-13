@@ -4,32 +4,44 @@
 \alias{MetaAnalyticSurvCat}
 \title{Compute surrogacy measures for a categorical (ordinal) surrogate and a time-to-event true endpoint in the meta-analytic multiple-trial setting.}
 \usage{
-MetaAnalyticSurvCat(data, true, trueind, surrog, trt, center, trial, patientid)
+MetaAnalyticSurvCat(
+  data,
+  true,
+  trueind,
+  surrog,
+  trt,
+  center,
+  trial,
+  patientid,
+  adjustment
+)
 }
 \arguments{
-\item{data}{A data frame with the correct columns (See details).}
+\item{data}{A data frame with the correct columns (See Data Format).}
 
 \item{true}{Observed time-to-event (true endpoint).}
 
 \item{trueind}{Time-to-event indicator.}
 
-\item{surrog}{Ordinal surrogate endpoint.}
+\item{surrog}{Ordinal surrogate endpoint, coded as 1 2 3 ... K.}
 
-\item{trt}{Treatment indicator.}
+\item{trt}{Treatment indicator, coded as 0 or 1.}
 
-\item{center}{Center indicator (equal to trial if there are no different centers).}
+\item{center}{Center indicator (equal to trial if there are no different centers). This is the unit for which specific treatment effects are estimated.}
 
-\item{trial}{Trial indicator.}
+\item{trial}{Trial indicator. This is the unit for which common baselines are to be used.}
 
 \item{patientid}{Patient indicator.}
+
+\item{adjustment}{The adjustment that should be made for the trial-level surrogacy, either "unadjusted", "weighted" or "adjusted"}
 }
 \value{
 Returns an object of class "MetaAnalyticSurvCat" that can be used to evaluate surrogacy and contains the following elements:
 \itemize{
-\item Indiv.GlobalOdds: a data frame that contains the Global Odds and 95\% confidence interval to evaluate surrogacy at the individual level.
-\item Trial.R2: a data frame that contains the correlation coefficient and 95\% confidence interval to evaluate surrogacy at the trial level.
+\item Indiv.Surrogacy: a data frame that contains the Global Odds and 95\% confidence interval to evaluate surrogacy at the individual level.
+\item Trial.R2: a data frame that contains the \eqn{R^2_{trial}} and 95\% confidence interval to evaluate surrogacy at the trial level.
 \item EstTreatEffects: a data frame that contains the estimated treatment effects and sample size for each trial.
-\item fit_output: output of the maximization procedure to maximize the likelihood.
+\item nlm.output: output of the maximization procedure (nlm) to maximize the likelihood function.
 }
 }
 \description{
@@ -38,8 +50,8 @@ The function 'MetaAnalyticSurvCat()' fits the model for a categorical (ordinal) 
 \section{Model}{
 In the model developed by Burzykowski et al. (2004), a copula-based model is used for the true endpoint and a latent continuous variable, underlying the surrogate endpoint.
 More specifically, the Plackett copula is used. The marginal model for the surrogate endpoint is a proportional odds model. For the true endpoint, the proportional hazards model is used.
-The quality of the surrogate at the individual level can be evaluated by using the copula parameter Theta, which takes the form of a global odds ratio.
-The quality of the surrogate at the trial level can be evaluated by considering the correlation coefficient between the estimated treatment effects, while adjusting for the estimation error.
+The quality of the surrogate at the individual level can be evaluated by using the copula parameter \eqn{\Theta}, which takes the form of a global odds ratio.
+The quality of the surrogate at the trial level can be evaluated by considering the \eqn{R^2_{trial}} between the estimated treatment effects.
 }
 
 \section{Data Format}{
@@ -59,7 +71,8 @@ The data frame must contains the following columns:
 \dontrun{
 data("colorectal4")
 fit <- MetaAnalyticSurvCat(data = colorectal4, true = truend, trueind = trueind, surrog = surrogend,
-               trt = treatn, center = center, trial = trialend, patientid = patid)
+                           trt = treatn, center = center, trial = trialend, patientid = patid,
+                           adjustment="unadjusted")
 print(fit)
 summary(fit)
 plot(fit)

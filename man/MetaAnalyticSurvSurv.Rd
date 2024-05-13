@@ -19,24 +19,54 @@ MetaAnalyticSurvSurv(
 )
 }
 \arguments{
-\item{adjustment}{}
+\item{data}{A data frame with the correct columns (See Data Format).}
+
+\item{true}{Observed time-to-event for true endpoint.}
+
+\item{trueind}{Time-to-event indicator for the true endpoint.}
+
+\item{surrog}{Observed time-to-event for surrogate endpoint.}
+
+\item{surrogind}{Time-to-event indicator for the surrogate endpoint.}
+
+\item{trt}{Treatment indicator.}
+
+\item{center}{Center indicator (equal to trial if there are no different centers). This is the unit for which specific treatment effects are estimated.}
+
+\item{trial}{Trial indicator. This is the unit for which common baselines are to be used.}
+
+\item{patientid}{Patient indicator.}
+
+\item{copula}{The copula that is used, either "Clayton", "Hougaard" or "Plackett"}
+
+\item{adjustment}{The adjustment that should be made for the trial-level surrogacy, either "unadjusted", "weighted" or "adjusted"}
+}
+\value{
+Returns an object of class "MetaAnalyticSurvSurv" that can be used to evaluate surrogacy and contains the following elements:
+\itemize{
+\item Indiv.Surrogacy: a data frame that contains the measure for the individual level surrogacy and 95\% confidence interval.
+\item Trial.R2: a data frame that contains the \eqn{R^2_{trial}} and 95\% confidence interval to evaluate surrogacy at the trial level.
+\item EstTreatEffects: a data frame that contains the estimated treatment effects and sample size for each trial.
+\item nlm.output: output of the maximization procedure (nlm) to maximize the likelihood.
+}
 }
 \description{
-The function 'MetaAnalyticSurvSurv_MA()' fits the model for a time-to-event surrogate and time-to-event true endpoint developed by Burzykowski et al. (2001) in the meta-analytic multiple-trial setting.
+The function 'MetaAnalyticSurvSurv()' fits the model for a time-to-event surrogate and time-to-event true endpoint developed by Burzykowski et al. (2001) in the meta-analytic multiple-trial setting.
 }
 \section{Model}{
-In the model developed by Burzykowski et al. (2004), a copula-based model is used for the true endpoint and a latent continuous variable, underlying the surrogate endpoint.
-More specifically, the Plackett copula is used. The marginal model for the surrogate endpoint is a logistic regression model. For the true endpoint, the proportional hazard model is used.
-The quality of the surrogate at the individual level can be evaluated by using the copula parameter Theta, which takes the form of a global odds ratio.
-The quality of the surrogate at the trial level can be evaluated by considering the correlation coefficient between the estimated treatment effects, while adjusting for the estimation error.
+In the model developed by Burzykowski et al. (2001), a copula-based model is used for the true time-to-event endpoint and the surrogate time-to-event endpoint.
+More specifically, three copulas can be used: the Clayton copula, Hougaard copula and Plackett copula. The marginal model for the true and surrogate endpoint is the proportional hazard model.
+The quality of the surrogate at the individual level can be evaluated by looking at the copula parameter.
+The quality of the surrogate at the trial level can be evaluated by considering the \eqn{R^2_{trial}} between the estimated treatment effects.
 }
 
 \section{Data Format}{
 The data frame must contains the following columns:
 \itemize{
-\item a column with the observed time-to-event (true endpoint)
-\item a column with the time-to-event indicator: 1 if true event is observed, 0 otherwise
-\item a column with the binary surrogate endpoint: 1 or 2
+\item a column with the observed time-to-event for the true endpoint
+\item a column with the time-to-event indicator for the true endpoint: 1 if true event is observed, 0 otherwise
+\item a column with the observed time-to-event for the surrogate endpoint
+\item a column with the time-to-event indicator for the surrogate endpoint: 1 if true event is observed, 0 otherwise
 \item a column with the treatment indicator: 0 or 1
 \item a column with the trial indicator
 \item a column with the center indicator. If there are no different centers within each trial, the center indicator is equal to the trial indicator
@@ -44,6 +74,20 @@ The data frame must contains the following columns:
 }
 }
 
+\examples{
+\dontrun{
+data("Ovarian")
+fit <- MetaAnalyticSurvSurv(data=Ovarian,true=Surv,trueind=SurvInd,surrog=Pfs,surrogind=PfsInd,
+                            trt=Treat,center=Center,trial=Center,patientid=Patient,
+                            copula="Plackett",adjustment="unadjusted")
+print(fit)
+summary(fit)
+plot(fit)
+}
+}
 \references{
 Burzykowski T, Molenberghs G, Buyse M, Geys H, Renard D (2001). “Validation of surrogate end points in multiple randomized clinical trials with failure time end points.” Journal of the Royal Statistical Society Series C: Applied Statistics, 50(4), 405–422
+}
+\author{
+Dries De Witte
 }

@@ -4,32 +4,44 @@
 \alias{MetaAnalyticSurvBin}
 \title{Compute surrogacy measures for a binary surrogate and a time-to-event true endpoint in the meta-analytic multiple-trial setting.}
 \usage{
-MetaAnalyticSurvBin(data, true, trueind, surrog, trt, center, trial, patientid)
+MetaAnalyticSurvBin(
+  data,
+  true,
+  trueind,
+  surrog,
+  trt,
+  center,
+  trial,
+  patientid,
+  adjustment
+)
 }
 \arguments{
-\item{data}{A data frame with the correct columns (See details).}
+\item{data}{A data frame with the correct columns (See Data Format).}
 
 \item{true}{Observed time-to-event (true endpoint).}
 
 \item{trueind}{Time-to-event indicator.}
 
-\item{surrog}{Binary surrogate endpoint.}
+\item{surrog}{Binary surrogate endpoint, coded as 1 or 2.}
 
-\item{trt}{Treatment indicator.}
+\item{trt}{Treatment indicator, coded as 0 or 1.}
 
-\item{center}{Center indicator (equal to trial if there are no different centers).}
+\item{center}{Center indicator (equal to trial if there are no different centers). This is the unit for which specific treatment effects are estimated.}
 
-\item{trial}{Trial indicator.}
+\item{trial}{Trial indicator. This is the unit for which common baselines are to be used.}
 
 \item{patientid}{Patient indicator.}
+
+\item{adjustment}{The adjustment that should be made for the trial-level surrogacy, either "unadjusted", "weighted" or "adjusted"}
 }
 \value{
 Returns an object of class "MetaAnalyticSurvBin" that can be used to evaluate surrogacy and contains the following elements:
 \itemize{
-\item Indiv.GlobalOdds: a data frame that contains the Global Odds and 95\% confidence interval to evaluate surrogacy at the individual level.
-\item Trial.R2: a data frame that contains the correlation coefficient and 95\% confidence interval to evaluate surrogacy at the trial level.
+\item Indiv.Surrogacy: a data frame that contains the global odds ratio and 95\% confidence interval to evaluate surrogacy at the individual level.
+\item Trial.R2: a data frame that contains the \eqn{R^2_{trial}} and 95\% confidence interval to evaluate surrogacy at the trial level.
 \item EstTreatEffects: a data frame that contains the estimated treatment effects and sample size for each trial.
-\item fit_output: output of the maximization procedure to maximize the likelihood.
+\item nlm.output: output of the maximization procedure (nlm) to maximize the likelihood function.
 }
 }
 \description{
@@ -38,8 +50,8 @@ The function 'MetaAnalyticSurvBin()' fits the model for a binary surrogate and t
 \section{Model}{
 In the model developed by Burzykowski et al. (2004), a copula-based model is used for the true endpoint and a latent continuous variable, underlying the surrogate endpoint.
 More specifically, the Plackett copula is used. The marginal model for the surrogate endpoint is a logistic regression model. For the true endpoint, the proportional hazard model is used.
-The quality of the surrogate at the individual level can be evaluated by using the copula parameter Theta, which takes the form of a global odds ratio.
-The quality of the surrogate at the trial level can be evaluated by considering the correlation coefficient between the estimated treatment effects, while adjusting for the estimation error.
+The quality of the surrogate at the individual level can be evaluated by using the copula parameter \eqn{\Theta}, which takes the form of a global odds ratio.
+The quality of the surrogate at the trial level can be evaluated by considering the \eqn{R^2_{trial}} between the estimated treatment effects.
 }
 
 \section{Data Format}{
@@ -50,7 +62,7 @@ The data frame must contains the following columns:
 \item a column with the binary surrogate endpoint: 1 or 2
 \item a column with the treatment indicator: 0 or 1
 \item a column with the trial indicator
-\item a column with the center indicator. If there are no different centers within each trial, the center indicator is equal to the trial indicator
+\item a column with the center indicator. If there are no different centers within each trial, the center indicator can be equal to the trial indicator
 \item a column with the patient indicator
 }
 }
@@ -59,7 +71,7 @@ The data frame must contains the following columns:
 \dontrun{
 data("colorectal")
 fit_bin <- MetaAnalyticSurvBin(data = colorectal, true = surv, trueind = SURVIND, surrog = responder,
-                   trt = TREAT, center = CENTER, trial = TRIAL, patientid = patientid)
+                   trt = TREAT, center = CENTER, trial = TRIAL, patientid = patientid, adjustment="unadjusted")
 print(fit_bin)
 summary(fit_bin)
 plot(fit_bin)

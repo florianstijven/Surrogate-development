@@ -21,7 +21,7 @@ Generates a plot of the estimated treatment effects for the surrogate endpoint v
 \dontrun{
 data("colorectal4")
 fit <- MetaAnalyticSurvCat(data = colorectal4, true = truend, trueind = trueind, surrog = surrogend,
-               trt = treatn, center = center, trial = trialend, patientid = patid)
+               trt = treatn, center = center, trial = trialend, patientid = patid, adjustment="unadjusted")
 plot(fit)
 }
 

@@ -12,7 +12,7 @@
 \item{...}{...}
 }
 \value{
-The surrogacy measures with their 95\% confidence intervals and the estimated treament effect on the surrogate and true endpoint.
+The surrogacy measures with their 95\% confidence intervals and the estimated treatment effect on the surrogate and true endpoint.
 }
 \description{
 Prints all the elements of an object fitted with the 'MetaAnalyticSurvCat()' function.
@@ -21,7 +21,7 @@ Prints all the elements of an object fitted with the 'MetaAnalyticSurvCat()' fun
 \dontrun{
 data("colorectal4")
 fit <- MetaAnalyticSurvCat(data = colorectal4, true = truend, trueind = trueind, surrog = surrogend,
-               trt = treatn, center = center, trial = trialend, patientid = patid)
+               trt = treatn, center = center, trial = trialend, patientid = patid, adjustment="unadjusted")
 print(fit)
 }
 }
