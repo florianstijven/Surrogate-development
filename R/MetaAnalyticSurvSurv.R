@@ -10,7 +10,7 @@
 #'
 #' In the model developed by Burzykowski et al. (2001), a copula-based model is used for the true time-to-event endpoint and the surrogate time-to-event endpoint.
 #' More specifically, three copulas can be used: the Clayton copula, Hougaard copula and Plackett copula. The marginal model for the true and surrogate endpoint is the proportional hazard model.
-#' The quality of the surrogate at the individual level can be evaluated by looking at the copula parameter.
+#' The quality of the surrogate at the individual level can be evaluated by by either Kendall's \eqn{\tau} or Spearman's \eqn{\rho}, depending on which copula function is used.
 #' The quality of the surrogate at the trial level can be evaluated by considering the \eqn{R^2_{trial}} between the estimated treatment effects.
 #'
 #' # Data Format
@@ -180,11 +180,11 @@ MetaAnalyticSurvSurv <- function(data, true, trueind, surrog, surrogind,
     lnalpha0 <- lndelta
     par0 <- initp(lnalpha0)
 
-    suppressWarnings(nlm_output <- nlm(loglik, par0 , hessian=TRUE, iterlim = 1000))
+    suppressWarnings(nlm.output <- nlm(loglik, par0 , hessian=TRUE, iterlim = 1000))
 
-    est <- nlm_output$estimate
+    est <- nlm.output$estimate
 
-    hess<-nlm_output$hessian
+    hess<-nlm.output$hessian
     fisher_info<-solve(hess)
     se <-sqrt(diag(fisher_info))
 
@@ -257,7 +257,7 @@ MetaAnalyticSurvSurv <- function(data, true, trueind, surrog, surrogind,
     memo <- as.data.frame(memo)
 
     output_list <- list(copula_parameter = alpha_delta_df,
-                        Indiv.Surrogacy = tau_delta_df, memo=memo, nlm_output=nlm_output)
+                        Indiv.Surrogacy = tau_delta_df, memo=memo, nlm.output=nlm.output)
     return(output_list)
 
 
@@ -356,11 +356,11 @@ MetaAnalyticSurvSurv <- function(data, true, trueind, surrog, surrogind,
     lnalpha0 <- lndelta
     par0 <- initp(lnalpha0)
 
-    nlm_output <- nlm(loglik, par0 , hessian=TRUE, iterlim = 10000)
+    nlm.output <- nlm(loglik, par0 , hessian=TRUE, iterlim = 10000)
 
-    est <- nlm_output$estimate
+    est <- nlm.output$estimate
 
-    hess<-nlm_output$hessian
+    hess<-nlm.output$hessian
     fisher_info<-solve(hess)
     se <-sqrt(diag(fisher_info))
 
@@ -433,7 +433,7 @@ MetaAnalyticSurvSurv <- function(data, true, trueind, surrog, surrogind,
     memo <- as.data.frame(memo)
 
     output_list <- list(copula_parameter = alpha_delta_df,
-                        Indiv.Surrogacy = tau_delta_df, memo=memo, nlm_output=nlm_output)
+                        Indiv.Surrogacy = tau_delta_df, memo=memo, nlm.output=nlm.output)
     return(output_list)
 
 
@@ -807,11 +807,11 @@ MetaAnalyticSurvSurv <- function(data, true, trueind, surrog, surrogind,
     theta0 <- theta
     par0 <- initp(theta0)
 
-    suppressWarnings(nlm_output <- nlm(loglik, par0 , hessian=TRUE, iterlim = 10000))
+    suppressWarnings(nlm.output <- nlm(loglik, par0 , hessian=TRUE, iterlim = 10000))
 
-    est <- nlm_output$estimate
+    est <- nlm.output$estimate
 
-    hess<-nlm_output$hessian
+    hess<-nlm.output$hessian
     fisher_info<-solve(hess)
     se <-sqrt(diag(fisher_info))
 
@@ -861,7 +861,7 @@ MetaAnalyticSurvSurv <- function(data, true, trueind, surrog, surrogind,
                           "CI upper limit")
     rownames(rho_df) <- c(" ")
 
-    output_list <- list(copula_parameter = theta_df, Indiv.Surrogacy=rho_df, memo=memo, nlm.output=nlm_output)
+    output_list <- list(copula_parameter = theta_df, Indiv.Surrogacy=rho_df, memo=memo, nlm.output=nlm.output)
     return(output_list)
 
 
