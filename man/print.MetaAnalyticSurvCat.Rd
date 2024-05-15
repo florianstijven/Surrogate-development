@@ -21,7 +21,8 @@ Prints all the elements of an object fitted with the 'MetaAnalyticSurvCat()' fun
 \dontrun{
 data("colorectal4")
 fit <- MetaAnalyticSurvCat(data = colorectal4, true = truend, trueind = trueind, surrog = surrogend,
-               trt = treatn, center = center, trial = trialend, patientid = patid, adjustment="unadjusted")
+                           trt = treatn, center = center, trial = trialend, patientid = patid,
+                           adjustment="unadjusted")
 print(fit)
 }
 }

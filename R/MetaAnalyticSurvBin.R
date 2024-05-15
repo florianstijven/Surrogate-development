@@ -51,8 +51,10 @@
 #' @examples
 #' \dontrun{
 #' data("colorectal")
-#' fit_bin <- MetaAnalyticSurvBin(data = colorectal, true = surv, trueind = SURVIND, surrog = responder,
-#'                    trt = TREAT, center = CENTER, trial = TRIAL, patientid = patientid, adjustment="unadjusted")
+#' fit_bin <- MetaAnalyticSurvBin(data = colorectal, true = surv, trueind = SURVIND,
+#'                                surrog = responder, trt = TREAT, center = CENTER,
+#'                                trial = TRIAL, patientid = patientid,
+#'                                adjustment="unadjusted")
 #' print(fit_bin)
 #' summary(fit_bin)
 #' plot(fit_bin)
@@ -783,8 +785,10 @@ MetaAnalyticSurvBin <- function(data, true, trueind, surrog,
 #' @examples
 #' \dontrun{
 #' data("colorectal")
-#' fit <- MetaAnalyticSurvBin(data = colorectal, true = surv, trueind = SURVIND, surrog = responder,
-#'                    trt = TREAT, center = CENTER, trial = TRIAL, patientid = patientid, adjustment="unadjusted")
+#' fit_bin <- MetaAnalyticSurvBin(data = colorectal, true = surv, trueind = SURVIND,
+#'                                surrog = responder, trt = TREAT, center = CENTER,
+#'                                trial = TRIAL, patientid = patientid,
+#'                                adjustment="unadjusted")
 #' summary(fit)
 #' }
 
@@ -809,8 +813,10 @@ summary.MetaAnalyticSurvBin <- function(object,...){
 #' @examples
 #' \dontrun{
 #' data("colorectal")
-#' fit_bin <- MetaAnalyticSurvBin(data = colorectal, true = surv, trueind = SURVIND, surrog = responder,
-#'                    trt = TREAT, center = CENTER, trial = TRIAL, patientid = patientid, adjustment="unadjusted")
+#' fit_bin <- MetaAnalyticSurvBin(data = colorectal, true = surv, trueind = SURVIND,
+#'                                surrog = responder, trt = TREAT, center = CENTER,
+#'                                trial = TRIAL, patientid = patientid,
+#'                                adjustment="unadjusted")
 #' print(fit_bin)
 #' }
 print.MetaAnalyticSurvBin <- function(x,...){
@@ -837,8 +843,9 @@ print.MetaAnalyticSurvBin <- function(x,...){
 #' @examples
 #' \dontrun{
 #' data("colorectal")
-#' fit_bin <- MetaAnalyticSurvBin(data = colorectal, true = surv, trueind = SURVIND, surrog = responder,
-#'                                trt = TREAT, center = CENTER, trial = TRIAL, patientid = patientid,
+#' fit_bin <- MetaAnalyticSurvBin(data = colorectal, true = surv, trueind = SURVIND,
+#'                                surrog = responder, trt = TREAT, center = CENTER,
+#'                                trial = TRIAL, patientid = patientid,
 #'                                adjustment="unadjusted")
 #' plot(fit_bin)
 #' }

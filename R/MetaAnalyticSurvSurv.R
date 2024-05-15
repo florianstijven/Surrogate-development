@@ -63,6 +63,7 @@
 #' }
 MetaAnalyticSurvSurv <- function(data, true, trueind, surrog, surrogind,
                      trt, center, trial, patientid, copula, adjustment) {
+  treat <- survind <- pfsind <- pfs <- surv <- NULL
   data_m <- data
   data_m$surv <- data[[substitute(true)]]
   data_m$survind <- data[[substitute(trueind)]]
@@ -868,6 +869,7 @@ MetaAnalyticSurvSurv <- function(data, true, trueind, surrog, surrogind,
   }
 
   trial_level_secondstage_unadjusted <- function(memo) {
+    surv_est <- weight <- pfs_est <- NULL
     surv_eff <- subset(memo, select = c(center, surv_est, weight))
     colnames(surv_eff)[2] <- "effect"
     surv_eff$endp <- "MAIN"
@@ -907,6 +909,7 @@ MetaAnalyticSurvSurv <- function(data, true, trueind, surrog, surrogind,
   }
 
   trial_level_secondstage_weighted <- function(memo) {
+    weight <- NULL
     model <- lm(surv_est ~ pfs_est,
                 data =memo, weights = weight)
 
@@ -1077,8 +1080,9 @@ MetaAnalyticSurvSurv <- function(data, true, trueind, surrog, surrogind,
 #' @examples
 #' \dontrun{
 #' data("colorectal")
-#' fit <- MetaAnalyticSurvSurv(data = colorectal4, true = truend, trueind = trueind, surrog = surrogend,
-#'                trt = treatn, center = center, trial = trialend, patientid = patid, adjustment="unadjusted")
+#' fit <- MetaAnalyticSurvSurv(data=Ovarian,true=Surv,trueind=SurvInd,surrog=Pfs,surrogind=PfsInd,
+#'                             trt=Treat,center=Center,trial=Center,patientid=Patient,
+#'                             copula="Plackett",adjustment="unadjusted")
 #' summary(fit)
 #' }
 
@@ -1104,8 +1108,9 @@ summary.MetaAnalyticSurvSurv <- function(object,...){
 #' @examples
 #' \dontrun{
 #' data("colorectal4")
-#' fit <- MetaAnalyticSurvSurv(data = colorectal4, true = truend, trueind = trueind, surrog = surrogend,
-#'                trt = treatn, center = center, trial = trialend, patientid = patid, adjustment="unadjusted")
+#' fit <- MetaAnalyticSurvSurv(data=Ovarian,true=Surv,trueind=SurvInd,surrog=Pfs,surrogind=PfsInd,
+#'                             trt=Treat,center=Center,trial=Center,patientid=Patient,
+#'                             copula="Plackett",adjustment="unadjusted")
 #' print(fit)
 #' }
 print.MetaAnalyticSurvSurv <- function(x,...){
@@ -1133,8 +1138,9 @@ print.MetaAnalyticSurvSurv <- function(x,...){
 #' @examples
 #' \dontrun{
 #' data("colorectal4")
-#' fit <- MetaAnalyticSurvSurv(data = colorectal4, true = truend, trueind = trueind, surrog = surrogend,
-#'                trt = treatn, center = center, trial = trialend, patientid = patid, adjustment="unadjusted")
+#' fit <- MetaAnalyticSurvSurv(data=Ovarian,true=Surv,trueind=SurvInd,surrog=Pfs,surrogind=PfsInd,
+#'                             trt=Treat,center=Center,trial=Center,patientid=Patient,
+#'                             copula="Plackett",adjustment="unadjusted")
 #' plot(fit)
 #' }
 #'

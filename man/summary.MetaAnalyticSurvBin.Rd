@@ -20,8 +20,10 @@ Provides a summary of the surrogacy measures for an object fitted with the 'Meta
 \examples{
 \dontrun{
 data("colorectal")
-fit <- MetaAnalyticSurvBin(data = colorectal, true = surv, trueind = SURVIND, surrog = responder,
-                   trt = TREAT, center = CENTER, trial = TRIAL, patientid = patientid, adjustment="unadjusted")
+fit_bin <- MetaAnalyticSurvBin(data = colorectal, true = surv, trueind = SURVIND,
+                               surrog = responder, trt = TREAT, center = CENTER,
+                               trial = TRIAL, patientid = patientid,
+                               adjustment="unadjusted")
 summary(fit)
 }
 }

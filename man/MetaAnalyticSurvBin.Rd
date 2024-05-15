@@ -58,7 +58,7 @@ The quality of the surrogate at the trial level can be evaluated by considering 
 The data frame must contains the following columns:
 \itemize{
 \item a column with the observed time-to-event (true endpoint)
-\item a column with the time-to-event indicator: 1 if true event is observed, 0 otherwise
+\item a column with the time-to-event indicator: 1 if the event is observed, 0 otherwise
 \item a column with the binary surrogate endpoint: 1 or 2
 \item a column with the treatment indicator: 0 or 1
 \item a column with the trial indicator
@@ -70,8 +70,10 @@ The data frame must contains the following columns:
 \examples{
 \dontrun{
 data("colorectal")
-fit_bin <- MetaAnalyticSurvBin(data = colorectal, true = surv, trueind = SURVIND, surrog = responder,
-                   trt = TREAT, center = CENTER, trial = TRIAL, patientid = patientid, adjustment="unadjusted")
+fit_bin <- MetaAnalyticSurvBin(data = colorectal, true = surv, trueind = SURVIND,
+                               surrog = responder, trt = TREAT, center = CENTER,
+                               trial = TRIAL, patientid = patientid,
+                               adjustment="unadjusted")
 print(fit_bin)
 summary(fit_bin)
 plot(fit_bin)

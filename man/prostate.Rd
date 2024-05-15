@@ -25,6 +25,6 @@ Alonso A, Bigirumurame T, Burzykowski T, Buyse M, Molenberghs G, Muchene L, Peru
 \examples{
 data(prostate)
 str(prostate)
-head(prostates)
+head(prostate)
 }
 \keyword{datasets}

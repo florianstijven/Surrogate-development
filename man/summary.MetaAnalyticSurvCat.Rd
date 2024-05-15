@@ -21,7 +21,8 @@ Provides a summary of the surrogacy measures for an object fitted with the 'Meta
 \dontrun{
 data("colorectal4")
 fit <- MetaAnalyticSurvCat(data = colorectal4, true = truend, trueind = trueind, surrog = surrogend,
-               trt = treatn, center = center, trial = trialend, patientid = patid, adjustment="unadjusted")
+                           trt = treatn, center = center, trial = trialend, patientid = patid,
+                           adjustment="unadjusted")
 summary(fit)
 }
 }

@@ -20,8 +20,9 @@ Generates a plot of the estimated treatment effects for the surrogate endpoint v
 \examples{
 \dontrun{
 data("colorectal4")
-fit <- MetaAnalyticSurvSurv(data = colorectal4, true = truend, trueind = trueind, surrog = surrogend,
-               trt = treatn, center = center, trial = trialend, patientid = patid, adjustment="unadjusted")
+fit <- MetaAnalyticSurvSurv(data=Ovarian,true=Surv,trueind=SurvInd,surrog=Pfs,surrogind=PfsInd,
+                            trt=Treat,center=Center,trial=Center,patientid=Patient,
+                            copula="Plackett",adjustment="unadjusted")
 plot(fit)
 }
 

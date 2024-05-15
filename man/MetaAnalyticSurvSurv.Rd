@@ -56,7 +56,7 @@ The function 'MetaAnalyticSurvSurv()' fits the model for a time-to-event surroga
 \section{Model}{
 In the model developed by Burzykowski et al. (2001), a copula-based model is used for the true time-to-event endpoint and the surrogate time-to-event endpoint.
 More specifically, three copulas can be used: the Clayton copula, Hougaard copula and Plackett copula. The marginal model for the true and surrogate endpoint is the proportional hazard model.
-The quality of the surrogate at the individual level can be evaluated by looking at the copula parameter.
+The quality of the surrogate at the individual level can be evaluated by by either Kendall's \eqn{\tau} or Spearman's \eqn{\rho}, depending on which copula function is used.
 The quality of the surrogate at the trial level can be evaluated by considering the \eqn{R^2_{trial}} between the estimated treatment effects.
 }
 
@@ -64,9 +64,9 @@ The quality of the surrogate at the trial level can be evaluated by considering 
 The data frame must contains the following columns:
 \itemize{
 \item a column with the observed time-to-event for the true endpoint
-\item a column with the time-to-event indicator for the true endpoint: 1 if true event is observed, 0 otherwise
+\item a column with the time-to-event indicator for the true endpoint: 1 if the event is observed, 0 otherwise
 \item a column with the observed time-to-event for the surrogate endpoint
-\item a column with the time-to-event indicator for the surrogate endpoint: 1 if true event is observed, 0 otherwise
+\item a column with the time-to-event indicator for the surrogate endpoint: 1 if the event is observed, 0 otherwise
 \item a column with the treatment indicator: 0 or 1
 \item a column with the trial indicator
 \item a column with the center indicator. If there are no different centers within each trial, the center indicator is equal to the trial indicator

@@ -795,7 +795,8 @@ MetaAnalyticSurvCat <- function(data, true, trueind, surrog,
 #' \dontrun{
 #' data("colorectal4")
 #' fit <- MetaAnalyticSurvCat(data = colorectal4, true = truend, trueind = trueind, surrog = surrogend,
-#'                trt = treatn, center = center, trial = trialend, patientid = patid, adjustment="unadjusted")
+#'                            trt = treatn, center = center, trial = trialend, patientid = patid,
+#'                            adjustment="unadjusted")
 #' summary(fit)
 #' }
 
@@ -821,7 +822,8 @@ summary.MetaAnalyticSurvCat <- function(object,...){
 #' \dontrun{
 #' data("colorectal4")
 #' fit <- MetaAnalyticSurvCat(data = colorectal4, true = truend, trueind = trueind, surrog = surrogend,
-#'                trt = treatn, center = center, trial = trialend, patientid = patid, adjustment="unadjusted")
+#'                            trt = treatn, center = center, trial = trialend, patientid = patid,
+#'                            adjustment="unadjusted")
 #' print(fit)
 #' }
 print.MetaAnalyticSurvCat <- function(x,...){
@@ -849,7 +851,8 @@ print.MetaAnalyticSurvCat <- function(x,...){
 #' \dontrun{
 #' data("colorectal4")
 #' fit <- MetaAnalyticSurvCat(data = colorectal4, true = truend, trueind = trueind, surrog = surrogend,
-#'                trt = treatn, center = center, trial = trialend, patientid = patid, adjustment="unadjusted")
+#'                            trt = treatn, center = center, trial = trialend, patientid = patid,
+#'                            adjustment="unadjusted")
 #' plot(fit)
 #' }
 #'
