@@ -30,6 +30,7 @@ Imports: MASS, lattice, latticeExtra, survival, nlme, lme4, msm,
         logistf, rms, ks, extraDistr, pbapply,
         flexsurv, rvinecopulib, maxLik,
         purrr, MBESS, tidyr,dplyr, numDeriv, optimx, tibble
+Depends: R (>= 3.5.0)
 License: GPL (>= 2)
 Repository: CRAN
 NeedsCompilation: no
