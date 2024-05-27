@@ -121,6 +121,10 @@ export(MetaAnalyticSurvBin)
 export(MetaAnalyticSurvCat)
 export(MetaAnalyticSurvSurv)
 export(MetaAnalyticSurvCont)
+export(FederatedApproachStage1)
+export(FederatedApproachStage2)
+
+
 
 
 S3method(plot, Fano.BinBin)
@@ -214,5 +218,8 @@ S3method(summary,MetaAnalyticSurvSurv)
 S3method(plot,MetaAnalyticSurvCont)
 S3method(print,MetaAnalyticSurvCont)
 S3method(summary,MetaAnalyticSurvCont)
+
+S3method(summary,FederatedApproachStage2)
+
 
 
