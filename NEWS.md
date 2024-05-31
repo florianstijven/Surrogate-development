@@ -2,6 +2,11 @@
 
 # Surrogate 3.2
 
+## Surrogate 3.2.6
+
+* Updated functions for the surrogate predictive function in the binary-continuous
+setting (information-theoretic causal inference framework).
+
 ## Surrogate 3.2.5
 
 * Added functions `survbin()` and `survcat()` to evaluate categorical surrogates 
