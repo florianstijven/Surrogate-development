@@ -4,9 +4,9 @@ test_that("Survival- Survival model works for ovarian data",
             data("Ovarian")
 
             Ovarian2 <- Ovarian %>%
-              group_by(Center) %>%
-              filter(sum(Treat == 1) >= 3 & sum(Treat == 0) >= 3) %>%
-              ungroup()
+              dplyr::group_by(Center) %>%
+              dplyr::filter(sum(Treat == 1) >= 3 & sum(Treat == 0) >= 3) %>%
+              dplyr::ungroup()
 
             fitted_model =  MetaAnalyticSurvSurv(data=Ovarian2,true=Surv,trueind=SurvInd,surrog=Pfs,surrogind=PfsInd,
                                                  trt=Treat,center=Center,trial=Center,patientid=Patient,
