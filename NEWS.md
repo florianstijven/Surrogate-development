@@ -1,5 +1,13 @@
 # Surrogate (development version)
 
+# Surrogate 3.3
+
+## Surrogate 3.3.0
+
+* Added and updated functions for the survival-categorical, survival-binary, and
+survival-continuous settings in the meta-analytic framework.
+* Added functions to perform the two-stage federated surrogacy evaluation.
+
 # Surrogate 3.2
 
 ## Surrogate 3.2.6
