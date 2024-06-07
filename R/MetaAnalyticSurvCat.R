@@ -1,7 +1,7 @@
 
 #' Compute surrogacy measures for a categorical (ordinal) surrogate and a time-to-event true endpoint in the meta-analytic multiple-trial setting.
 #'
-#'The function 'survcat()' fits the model for a categorical (ordinal) surrogate and time-to-event true endpoint developed by Burzykowski et al. (2004) in the meta-analytic multiple-trial setting.
+#'The function 'MetaAnalyticSurvCat()' fits the model for a categorical (ordinal) surrogate and time-to-event true endpoint developed by Burzykowski et al. (2004) in the meta-analytic multiple-trial setting.
 #'
 #' @details
 #'
@@ -9,15 +9,15 @@
 #'
 #' In the model developed by Burzykowski et al. (2004), a copula-based model is used for the true endpoint and a latent continuous variable, underlying the surrogate endpoint.
 #' More specifically, the Plackett copula is used. The marginal model for the surrogate endpoint is a proportional odds model. For the true endpoint, the proportional hazards model is used.
-#' The quality of the surrogate at the individual level can be evaluated by using the copula parameter Theta, which takes the form of a global odds ratio.
-#' The quality of the surrogate at the trial level can be evaluated by considering the correlation coefficient between the estimated treatment effects, while adjusting for the estimation error.
+#' The quality of the surrogate at the individual level can be evaluated by using the copula parameter \eqn{\Theta}, which takes the form of a global odds ratio.
+#' The quality of the surrogate at the trial level can be evaluated by considering the \eqn{R^2_{trial}} between the estimated treatment effects.
 #'
 #' # Data Format
 #'
 #' The data frame must contains the following columns:
 #'
 #' * a column with the observed time-to-event (true endpoint)
-#' * a column with the time-to-event indicator: 1 if true event is observed, 0 otherwise
+#' * a column with the time-to-event indicator: 1 if the event is observed, 0 otherwise
 #' * a column with the ordinal surrogate endpoint: 1 2 3 ... K
 #' * a column with the treatment indicator: 0 or 1
 #' * a column with the trial indicator
@@ -26,20 +26,22 @@
 #'
 #' @references Burzykowski, T., Molenberghs, G., & Buyse, M. (2004). The validation of surrogate end points by using data from randomized clinical trials: a case-study in advanced colorectal cancer. Journal of the Royal Statistical Society Series A: Statistics in Society, 167(1), 103-124.
 #'
-#' @param data A data frame with the correct columns (See details).
+#' @param data A data frame with the correct columns (See Data Format).
 #' @param true Observed time-to-event (true endpoint).
 #' @param trueind Time-to-event indicator.
-#' @param surrog Ordinal surrogate endpoint.
-#' @param trt Treatment indicator.
-#' @param center Center indicator (equal to trial if there are no different centers).
-#' @param trial Trial indicator.
+#' @param surrog Ordinal surrogate endpoint, coded as 1 2 3 ... K.
+#' @param trt Treatment indicator, coded as 0 or 1.
+#' @param center Center indicator (equal to trial if there are no different centers). This is the unit for which specific treatment effects are estimated.
+#' @param trial Trial indicator. This is the unit for which common baselines are to be used.
 #' @param patientid Patient indicator.
+#' @param adjustment The adjustment that should be made for the trial-level surrogacy, either "unadjusted", "weighted" or "adjusted"
 #'
-#' @return Returns an object of class "survcat" that can be used to evaluate surrogacy and contains the following elements:
+#' @return Returns an object of class "MetaAnalyticSurvCat" that can be used to evaluate surrogacy and contains the following elements:
 #'
-#' * Indiv.GlobalOdds: a data frame that contains the Global Odds and 95% confidence interval to evaluate surrogacy at the individual level.
-#' * Trial.R2: a data frame that contains the correlation coefficient and 95% confidence interval to evaluate surrogacy at the trial level.
+#' * Indiv.Surrogacy: a data frame that contains the Global Odds and 95% confidence interval to evaluate surrogacy at the individual level.
+#' * Trial.R2: a data frame that contains the \eqn{R^2_{trial}} and 95% confidence interval to evaluate surrogacy at the trial level.
 #' * EstTreatEffects: a data frame that contains the estimated treatment effects and sample size for each trial.
+#' * nlm.output: output of the maximization procedure (nlm) to maximize the likelihood function.
 #'
 #' @export
 #'
@@ -48,14 +50,15 @@
 #' @examples
 #' \dontrun{
 #' data("colorectal4")
-#' fit <- survcat(data = colorectal4, true = truend, trueind = trueind, surrog = surrogend,
-#'                trt = treatn, center = center, trial = trialend, patientid = patid)
+#' fit <- MetaAnalyticSurvCat(data = colorectal4, true = truend, trueind = trueind, surrog = surrogend,
+#'                            trt = treatn, center = center, trial = trialend, patientid = patid,
+#'                            adjustment="unadjusted")
 #' print(fit)
 #' summary(fit)
 #' plot(fit)
 #' }
-survcat <- function(data, true, trueind, surrog,
-                    trt, center, trial, patientid) {
+MetaAnalyticSurvCat <- function(data, true, trueind, surrog,
+                    trt, center, trial, patientid, adjustment) {
   resp_est <- surv_est <- sample_size <- Center_ID <- p <- shape <- variable <- NULL
   dataset1xxy <- data
   dataset1xxy$surv <- data[[substitute(true)]]
@@ -587,7 +590,7 @@ survcat <- function(data, true, trueind, surrog,
       lik <- lik + sum(deltai * log(pgi) + (1 - deltai) * log(cGi))
     }
 
-    return(lik)
+    return(-lik)
   }
 
   initparm <- function(theta0) {
@@ -609,25 +612,14 @@ survcat <- function(data, true, trueind, surrog,
 
   initial_parameters <- initparm(5)
 
-  negll <- function(param){
-    loglike <- loglik(param)
-    val <- -loglike
-    return(val)
-  }
+  par0 <- as.vector(initial_parameters)
+  suppressWarnings(nlm_output <- nlm(loglik, par0 , hessian=TRUE, iterlim = 10000))
 
-  numgrad <- numDeriv::grad(x = initial_parameters, func = negll)
-  suppressWarnings(opt_BFGS <- optimx::optimx(par = as.vector(initial_parameters), fn=negll, hessian = TRUE,
-                     method = "BFGS",
-                     control = list(trace = 0, maxit=10000)))
-  if(opt_BFGS$convcode != 0) {
-    stop(paste("Optimization algorithm did not converge: convcode of optimx-function is equal to", opt_BFGS$convcode))
-  }
-
-  hessian_m <- attributes(opt_BFGS)$details["BFGS", "nhatend"][[1]]
-  fisher_info <- solve(hessian_m, tol = 1e-35)
-  prop_se <- sqrt(diag(fisher_info))
-  coef_BFGS <- coef(opt_BFGS)["BFGS",]
-  coef_se <- cbind(coef_BFGS, prop_se)
+  hessian_m <-nlm_output$hessian
+  fisher_info<-solve(hessian_m)
+  se <-sqrt(diag(fisher_info))
+  est <- nlm_output$estimate
+  coef_se <- cbind(est, se)
 
   endp1 <- coef_se[(2*numtri+1+1):(2*numtri+1+numcents), ]
   endp2 <- coef_se[(1+3*numtri+numcents+(K-1)-1+1):nrow(coef_se), ]
@@ -637,77 +629,163 @@ survcat <- function(data, true, trueind, surrog,
     weight[i, ] <- nrow(as.matrix(which(center == cents[i])))
   }
 
-  cova <- diag(fisher_info[(2*numtri+1+1):(2*numtri+1+numcents), (1+3*numtri+numcents+(K-1)-1+1):length(coef_BFGS)])
+  cova <- diag(fisher_info[(2*numtri+1+1):(2*numtri+1+numcents), (1+3*numtri+numcents+(K-1)-1+1):length(est)])
 
   memo <- cbind(cents, endp1, endp2, cova, weight)
   colnames(memo) <- c("center", "surv_est", "surv_se", "resp_est", "resp_se", "cova", "weight")
   memo <- as.data.frame(memo)
 
   #Individual level surrogacy
-  lo <- coef_BFGS - qnorm(0.975) * prop_se
-  up <- coef_BFGS + qnorm(0.975) * prop_se
-  theta <- coef_BFGS[1]
-  se_th <- prop_se[1]
+  lo <- est - qnorm(0.975) * se
+  up <- est + qnorm(0.975) * se
+  theta <- est[1]
+  se_th <- se[1]
   lo_th <- lo[1]
   up_th <- up[1]
 
   #Trial level surrogacy
-  surv_eff <- subset(memo, select = c(center, surv_est))
-  colnames(surv_eff)[2] <- "effect"
-  surv_eff$endp <- "MAIN"
-  surv_eff
+  if(adjustment == "adjusted"){
+    #### some additional functions
+    R2TrialFun <- function(D) {
+      R2.trial <- D[1, 2] ^ 2 / prod(diag(D))
+      return(R2.trial)
+    }
+    R2IndFun <- function(Sigma) {
+      R2.ind <- Sigma[1, 2]^2/(Sigma[1, 1] * Sigma[2, 2])
+      return(R2.ind)
+    }
+    pdDajustment = function(D) {
+      EigenD <- eigen(D)
+      E <- diag(EigenD$values)
+      diag(E)[diag(E) <= 0] <- 1e-04
+      L <- EigenD$vector
+      DH <- L %*% tcrossprod(E, L)
+      return(DH)
+    }
 
-  pfs_eff <- subset(memo, select = c(center, resp_est))
-  colnames(pfs_eff)[2] <- "effect"
-  pfs_eff$endp <- "SURR"
+    memo <- as.data.frame(apply(memo, 2, as.numeric))
 
-  shihco <- rbind(surv_eff, pfs_eff)
-  shihco$center <- as.numeric(shihco$center)
+    n <- as.numeric(memo$weight)
+    Trial.ID <- memo$center
+    N <- length(Trial.ID)
 
-  shihco <- shihco[order(shihco$center, shihco$endp), ]
-  shihco$endp <- as.factor(shihco$endp)
-  shihco$effect <- as.numeric(shihco$effect)
+    BetaH_i = memo[,c(2,4)]
+    a_i = n/sum(n)
+    a_i.2 = (n - 2)/sum(n - 2)
+    BetaH = apply(t(BetaH_i), 1, weighted.mean, w = a_i)
+    N = length(a_i)
+    b_i <- t(BetaH_i) - tcrossprod(BetaH, matrix(1, N, 1))
+    Sb = tcrossprod(b_i)
+    num = 1 - 2 * a_i + sum(a_i^2)
+    denom = sum(num)
 
-  invisible(capture.output(model <- nlme::gls(effect ~ -1 + factor(endp), data = shihco,
-                                        correlation = nlme::corCompSymm(form = ~ 1 | center),
-                                        weights = nlme::varIdent(form = ~ 1 | endp),
-                                        method = "ML",
-                                        control = nlme::glsControl(maxIter = 25, msVerbose = TRUE))))
 
-  rsquared <- intervals(model, which = "var-cov")$corStruct^2
-  R2 <- as.vector(rsquared)[2]
-  lo_R2 <- as.vector(rsquared)[1]
-  up_R2 <- as.vector(rsquared)[3]
+    R.list <- list()
 
-  Trial.R2 <- data.frame(cbind(R2, lo_R2, up_R2), stringsAsFactors = TRUE)
-  colnames(Trial.R2) <- c("R2 Trial", "CI lower limit",
-                          "CI upper limit")
-  rownames(Trial.R2) <- c(" ")
+    for (i in 1:nrow(memo)) {
+      se1_sq <- memo$surv_se[i]^2
+      se2_sq <- memo$resp_se[i]^2
+      cov <- memo$cova[i]
 
-  Indiv.GlobalOdds <- data.frame(cbind(theta, lo_th, up_th), stringsAsFactors = TRUE)
-  colnames(Indiv.GlobalOdds) <- c("Global Odds", "CI lower limit",
+      var_cov_matrix <- matrix(c(se1_sq, cov, cov, se2_sq), nrow = 2, byrow = TRUE)
+
+      R.list[[i]] <- var_cov_matrix
+    }
+
+    DH = (Sb - Reduce("+", mapply(function(X, x) {
+      X * x
+    }, R.list, num, SIMPLIFY = F)))/denom
+    DH.pd = min(eigen(DH, only.values = T)$values) > 0
+    if (!DH.pd) {
+      DH = pdDajustment(DH)
+      warning(paste("The estimate of D is non-positive definite. Adjustment for non-positive definiteness was required"))
+    }
+    R2 <- DH[1, 2] ^ 2 / prod(diag(DH))
+    R2.sd <- sqrt((4 * R2 * (1 - R2)^2)/(N - 3))
+    Alpha <- 0.05
+    lo_R2 <- max(0, R2 + qnorm(Alpha/2) * (R2.sd))
+    up_R2 <- min(1, R2 + qnorm(1 - Alpha/2) * (R2.sd))
+    Trial.R2 <- data.frame(cbind(R2, lo_R2, up_R2), stringsAsFactors = TRUE)
+
+    colnames(Trial.R2) <- c("R2 Trial (adjusted)", "CI lower limit",
+                            "CI upper limit")
+    rownames(Trial.R2) <- c(" ")
+  }
+
+  if(adjustment == "weighted"){
+    memo <- as.data.frame(apply(memo, 2, as.numeric))
+
+    model <- lm(surv_est ~ resp_est,
+                data =memo, weights = weight)
+
+    R2 <- summary(model)$r.squared
+
+    ### based on cortinas
+    Trial.ID <- memo$center
+    N <- length(Trial.ID)
+    R2.sd <- sqrt((4 * R2 * (1 - R2)^2)/(N - 3))
+    lo_R2 <- max(0, R2 + qnorm(0.05/2) * (R2.sd))
+    up_R2 <- min(1, R2 + qnorm(1 - 0.05/2) * (R2.sd))
+
+    Trial.R2 <- data.frame(cbind(R2, lo_R2, up_R2), stringsAsFactors = TRUE)
+    colnames(Trial.R2) <- c("R2 Trial (weighted)", "CI lower limit",
+                            "CI upper limit")
+    rownames(Trial.R2) <- c(" ")
+  }
+
+  if(adjustment == "unadjusted"){
+    memo <- as.data.frame(apply(memo, 2, as.numeric))
+
+    surv_eff <- subset(memo, select = c(center, surv_est))
+    colnames(surv_eff)[2] <- "effect"
+    surv_eff$endp <- "MAIN"
+    resp_eff <- subset(memo, select = c(center, resp_est))
+    colnames(resp_eff)[2] <- "effect"
+    resp_eff$endp <- "SURR"
+    shihco <- rbind(surv_eff, resp_eff)
+    shihco$center <- as.numeric(shihco$center)
+    shihco <- shihco[order(shihco$center, shihco$endp), ]
+    shihco$endp <- as.factor(shihco$endp)
+    shihco$effect <- as.numeric(shihco$effect)
+    invisible(capture.output(model <- nlme::gls(effect ~ -1 +
+                                                  factor(endp), data = shihco, correlation = nlme::corCompSymm(form = ~1 |
+                                                                                                                 center), weights = nlme::varIdent(form = ~1 | endp),
+                                                method = "ML", control = nlme::glsControl(maxIter = 25,
+                                                                                          msVerbose = TRUE))))
+    rsquared <- nlme::intervals(model, which = "var-cov")$corStruct^2
+    R2 <- as.vector(rsquared)[2]
+    lo_R2 <- as.vector(rsquared)[1]
+    up_R2 <- as.vector(rsquared)[3]
+    Trial.R2 <- data.frame(cbind(R2, lo_R2, up_R2), stringsAsFactors = TRUE)
+    colnames(Trial.R2) <- c("R2 Trial (unadjusted)", "CI lower limit", "CI upper limit")
+    rownames(Trial.R2) <- c(" ")
+  }
+
+  Indiv.Surrogacy <- data.frame(cbind(theta, lo_th, up_th), stringsAsFactors = TRUE)
+  colnames(Indiv.Surrogacy) <- c("Global Odds Ratio", "CI lower limit",
                                   "CI upper limit")
-  rownames(Indiv.GlobalOdds) <- c(" ")
+  rownames(Indiv.Surrogacy) <- c(" ")
 
   EstTreatEffects <- memo
   rownames(EstTreatEffects) <- NULL
   colnames(EstTreatEffects) <- c("trial", "surv_est", "surv_se", "resp_est", "resp_se", "cova", "sample_size")
 
-  output_list <- list(Indiv.GlobalOdds = Indiv.GlobalOdds,
-                      Trial.R2 = Trial.R2, EstTreatEffects=EstTreatEffects, Call = match.call())
+  output_list <- list(Indiv.Surrogacy = Indiv.Surrogacy,
+                      Trial.R2 = Trial.R2, EstTreatEffects=EstTreatEffects, nlm.output = nlm_output,
+                      Call = match.call())
 
-  class(output_list) <- "survcat"
+  class(output_list) <- "MetaAnalyticSurvCat"
 
   return(output_list)
 
 
 }
 
-#' Provides a summary of the surrogacy measures for an object fitted with the 'survcat()' function.
+#' Provides a summary of the surrogacy measures for an object fitted with the 'MetaAnalyticSurvCat()' function.
 #'
-#' @method summary survcat
+#' @method summary MetaAnalyticSurvCat
 #'
-#' @param object An object of class 'survcat' fitted with the 'survcat()' function.
+#' @param object An object of class 'MetaAnalyticSurvCat' fitted with the 'MetaAnalyticSurvCat()' function.
 #' @param ... ...
 #'
 #' @return The surrogacy measures with their 95% confidence intervals.
@@ -716,40 +794,42 @@ survcat <- function(data, true, trueind, surrog,
 #' @examples
 #' \dontrun{
 #' data("colorectal4")
-#' fit <- survcat(data = colorectal4, true = truend, trueind = trueind, surrog = surrogend,
-#'                trt = treatn, center = center, trial = trialend, patientid = patid)
+#' fit <- MetaAnalyticSurvCat(data = colorectal4, true = truend, trueind = trueind, surrog = surrogend,
+#'                            trt = treatn, center = center, trial = trialend, patientid = patid,
+#'                            adjustment="unadjusted")
 #' summary(fit)
 #' }
 
-summary.survcat <- function(object,...){
+summary.MetaAnalyticSurvCat <- function(object,...){
   cat("Surrogacy measures with 95% confidence interval \n\n")
   cat("Individual level surrogacy: ", "\n\n")
-  cat("Global Odds: ", sprintf("%.4f", object$Indiv.GlobalOdds[1,1]), "[", sprintf("%.4f", object$Indiv.GlobalOdds[1,2]),";", sprintf("%.4f", object$Indiv.GlobalOdds[1,3]) , "]", "\n\n")
+  cat("Global Odds Ratio: ", sprintf("%.4f", object$Indiv.Surrogacy[1,1]), "[", sprintf("%.4f", object$Indiv.Surrogacy[1,2]),";", sprintf("%.4f", object$Indiv.Surrogacy[1,3]) , "]", "\n\n")
   cat("Trial level surrogacy: ", "\n\n")
   cat("R Square: ", sprintf("%.4f", object$Trial.R2[1,1]),"[", sprintf("%.4f", object$Trial.R2[1,2]),";", sprintf("%.4f", object$Trial.R2[1,3]) , "]", "\n\n")
 }
 
-#' Prints all the elements of an object fitted with the 'survcat()' function.
+#' Prints all the elements of an object fitted with the 'MetaAnalyticSurvCat()' function.
 #'
-#' @method print survcat
+#' @method print MetaAnalyticSurvCat
 #'
-#' @param x An object of class 'survcat' fitted with the 'survcat()' function.
+#' @param x An object of class 'MetaAnalyticSurvCat' fitted with the 'MetaAnalyticSurvCat()' function.
 #' @param ... ...
 #'
-#' @return The surrogacy measures with their 95% confidence intervals and the estimated treament effect on the surrogate and true endpoint.
+#' @return The surrogacy measures with their 95% confidence intervals and the estimated treatment effect on the surrogate and true endpoint.
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' data("colorectal4")
-#' fit <- survcat(data = colorectal4, true = truend, trueind = trueind, surrog = surrogend,
-#'                trt = treatn, center = center, trial = trialend, patientid = patid)
+#' fit <- MetaAnalyticSurvCat(data = colorectal4, true = truend, trueind = trueind, surrog = surrogend,
+#'                            trt = treatn, center = center, trial = trialend, patientid = patid,
+#'                            adjustment="unadjusted")
 #' print(fit)
 #' }
-print.survcat <- function(x,...){
+print.MetaAnalyticSurvCat <- function(x,...){
   cat("Surrogacy measures with 95% confidence interval \n\n")
   cat("Individual level surrogacy: ", "\n\n")
-  cat("Global Odds: ", sprintf("%.4f", x$Indiv.GlobalOdds[1,1]), "[", sprintf("%.4f", x$Indiv.GlobalOdds[1,2]),";", sprintf("%.4f", x$Indiv.GlobalOdds[1,3]) , "]", "\n\n")
+  cat("Global Odds Ratio: ", sprintf("%.4f", x$Indiv.Surrogacy[1,1]), "[", sprintf("%.4f", x$Indiv.Surrogacy[1,2]),";", sprintf("%.4f", x$Indiv.Surrogacy[1,3]) , "]", "\n\n")
   cat("Trial level surrogacy: ", "\n\n")
   cat("R Square: ", sprintf("%.4f", x$Trial.R2[1,1]),"[", sprintf("%.4f", x$Trial.R2[1,2]),";", sprintf("%.4f", x$Trial.R2[1,3]) , "]", "\n\n")
 
@@ -757,11 +837,11 @@ print.survcat <- function(x,...){
   print(x$EstTreatEffects[,c(1,2,3,4,5,7)], row.names = FALSE)
 }
 
-#' Generates a plot of the estimated treatment effects for the surrogate endpoint versus the estimated treatment effects for the true endpoint for an object fitted with the 'survcat()' function.
+#' Generates a plot of the estimated treatment effects for the surrogate endpoint versus the estimated treatment effects for the true endpoint for an object fitted with the 'MetaAnalyticSurvCat()' function.
 #'
-#' @method plot survcat
+#' @method plot MetaAnalyticSurvCat
 #'
-#' @param x An object of class 'survcat' fitted with the 'survcat()' function.
+#' @param x An object of class 'MetaAnalyticSurvCat' fitted with the 'MetaAnalyticSurvCat()' function.
 #' @param ... ...
 #'
 #' @return A plot of the type ggplot
@@ -770,12 +850,13 @@ print.survcat <- function(x,...){
 #' @examples
 #' \dontrun{
 #' data("colorectal4")
-#' fit <- survcat(data = colorectal4, true = truend, trueind = trueind, surrog = surrogend,
-#'                trt = treatn, center = center, trial = trialend, patientid = patid)
+#' fit <- MetaAnalyticSurvCat(data = colorectal4, true = truend, trueind = trueind, surrog = surrogend,
+#'                            trt = treatn, center = center, trial = trialend, patientid = patid,
+#'                            adjustment="unadjusted")
 #' plot(fit)
 #' }
 #'
-plot.survcat <- function(x,...){
+plot.MetaAnalyticSurvCat <- function(x,...){
   if (requireNamespace("ggplot2", quietly = TRUE)) {
     resp_est <- surv_est <- sample_size <- NULL
     estimated_treatment_effects <- x$EstTreatEffects
@@ -785,12 +866,13 @@ plot.survcat <- function(x,...){
     estimated_treatment_effects$resp_est <- as.numeric(estimated_treatment_effects$resp_est)
 
     # Create the scatter plot
-    ggplot2::ggplot(data = estimated_treatment_effects, ggplot2::aes(x = resp_est, y = surv_est, size = sample_size)) +
+    suppressWarnings(p <- ggplot2::ggplot(data = estimated_treatment_effects, ggplot2::aes(x = resp_est, y = surv_est, size = sample_size)) +
       ggplot2::geom_point() +
       ggplot2::geom_smooth(method = "lm", se = FALSE, color = "royalblue3") +
       ggplot2::labs(x = "Treatment effect on surrogate", y = "Treatment effect on true") +
       ggplot2::ggtitle("Treatment effect on true endpoint vs. treatment effect on surrogate endpoint") +
-      ggplot2::theme(legend.position="none")
+      ggplot2::theme(legend.position="none"))
+    suppressWarnings(print(p))
 
   } else {
     stop("ggplot2 is not installed. Please install ggplot2 to use this function.")

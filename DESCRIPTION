@@ -6,6 +6,7 @@ Authors@R: c(
   person("Wim", "Van Der Elst", email = "wim.vanderelst@gmail.com", role = c("cre", "aut")),
   person("Florian", "Stijven", email = "florian.stijven@kuleuven.be", role = "aut"),
   person("Fenny", "Ong", role = "aut"),
+  person("Dries", "De Witte", role = "aut"),
   person("Paul", "Meyvisch", role = "aut"),
   person("Alvaro", "Poveda", role = "aut"),
   person("Ariel", "Alonso", role = "aut"),

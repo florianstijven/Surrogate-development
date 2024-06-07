@@ -5,12 +5,12 @@ importFrom(nlme, intervals)
 importFrom(nlme, corCompSymm)
 importFrom(nlme, glsControl)
 importFrom(nlme, varIdent)
-importFrom(optimx, optimx)
 importFrom(numDeriv, grad)
 importFrom(tidyr, pivot_longer)
 importFrom(dplyr, mutate)
 importFrom(dplyr, arrange)
 importFrom(dplyr, case_when)
+importFrom(dplyr, select)
 importFrom(tibble, add_row)
 importFrom("stats", "nlm")
 importFrom("stats", "as.formula")
@@ -117,8 +117,14 @@ export(sensitivity_analysis_BinCont_copula, fit_copula_model_BinCont)
 export(marginal_gof_scr_S_plot, marginal_gof_scr_T_plot,
        prob_dying_without_progression_plot, mean_S_before_T_plot_scr)
 export(sensitivity_intervals_Dvine)
-export(survbin)
-export(survcat)
+export(MetaAnalyticSurvBin)
+export(MetaAnalyticSurvCat)
+export(MetaAnalyticSurvSurv)
+export(MetaAnalyticSurvCont)
+export(FederatedApproachStage1)
+export(FederatedApproachStage2)
+
+
 
 
 S3method(plot, Fano.BinBin)
@@ -197,11 +203,23 @@ S3method(summary, MumixedContCont.MultS)
 S3method(print, vine_copula_SurvSurv_fit)
 S3method(print, sensitivity_intervals_Dvine)
 
-S3method(plot,survbin)
-S3method(print,survbin)
-S3method(summary,survbin)
+S3method(plot,MetaAnalyticSurvBin)
+S3method(print,MetaAnalyticSurvBin)
+S3method(summary,MetaAnalyticSurvBin)
 
-S3method(plot,survcat)
-S3method(print,survcat)
-S3method(summary,survcat)
+S3method(plot,MetaAnalyticSurvCat)
+S3method(print,MetaAnalyticSurvCat)
+S3method(summary,MetaAnalyticSurvCat)
+
+S3method(plot,MetaAnalyticSurvSurv)
+S3method(print,MetaAnalyticSurvSurv)
+S3method(summary,MetaAnalyticSurvSurv)
+
+S3method(plot,MetaAnalyticSurvCont)
+S3method(print,MetaAnalyticSurvCont)
+S3method(summary,MetaAnalyticSurvCont)
+
+S3method(summary,FederatedApproachStage2)
+
+
 
