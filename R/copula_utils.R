@@ -18,9 +18,11 @@
 #'  * `d2[i] = 1` if `v[i]` corresponds to non-censored value
 #'  * `d2[i] = 0` if `v[i]` corresponds to right-censored value
 #'  * `d2[i] = -1` if `v[i]` corresponds to left-censored value
+#' @param return_sum Return the sum of the individual loglikelihoods? If `FALSE`,
+#' a vector with the individual loglikelihood contributions is returned.
 #'
 #' @return Value of the copula loglikelihood evaluated in `theta`.
-clayton_loglik_copula_scale <- function(theta, u, v, d1, d2) {
+clayton_loglik_copula_scale <- function(theta, u, v, d1, d2, return_sum = TRUE) {
   # Natural logarithm of copula evaluated in u and v.
   log_C = -(1 / theta) * log(u ** (-theta) + v ** (-theta) - 1)
   # Log likelihood contribution for uncensored observations.
@@ -69,7 +71,9 @@ clayton_loglik_copula_scale <- function(theta, u, v, d1, d2) {
                   0)
 
   loglik_copula <-
-    sum(part1 + part2 + part3 + part4 + part5 + part6 + part7 + part8 + part9)
+    part1 + part2 + part3 + part4 + part5 + part6 + part7 + part8 + part9
+  if (return_sum)
+    loglik_copula = sum(loglik_copula)
 
   return(loglik_copula)
 }
@@ -83,7 +87,7 @@ clayton_loglik_copula_scale <- function(theta, u, v, d1, d2) {
 #' @inheritParams clayton_loglik_copula_scale
 #'
 #' @return Value of the copula loglikelihood evaluated in `theta`.
-frank_loglik_copula_scale <- function(theta, u, v, d1, d2){
+frank_loglik_copula_scale <- function(theta, u, v, d1, d2, return_sum = TRUE){
 
   # For efficiency purposes, some quantities that are needed multiple times are
   # first precomputed. In this way, we do not waste resources on computing the
@@ -139,7 +143,9 @@ frank_loglik_copula_scale <- function(theta, u, v, d1, d2){
                   0)
 
   loglik_copula <-
-    sum(part1 + part2 + part3 + part4 + part5 + part6 + part7 + part8 + part9)
+    part1 + part2 + part3 + part4 + part5 + part6 + part7 + part8 + part9
+  if (return_sum)
+    loglik_copula = sum(loglik_copula)
 
   return(loglik_copula)
 }
@@ -152,7 +158,7 @@ frank_loglik_copula_scale <- function(theta, u, v, d1, d2){
 #'
 #' @inheritParams clayton_loglik_copula_scale
 #' @return Value of the copula loglikelihood evaluated in `theta`.
-gumbel_loglik_copula_scale <- function(theta, u, v, d1, d2){
+gumbel_loglik_copula_scale <- function(theta, u, v, d1, d2, return_sum = TRUE){
   # For efficiency purposes, some quantities that are needed multiple times are
   # first precomputed. In this way, we do not waste resources on computing the
   # same quantity multiple times.
@@ -206,7 +212,9 @@ gumbel_loglik_copula_scale <- function(theta, u, v, d1, d2){
                   0)
 
   loglik_copula <-
-    sum(part1 + part2 + part3 + part4 + part5 + part6 + part7 + part8 + part9)
+    part1 + part2 + part3 + part4 + part5 + part6 + part7 + part8 + part9
+  if (return_sum)
+    loglik_copula = sum(loglik_copula)
 
   return(loglik_copula)
 }
@@ -221,7 +229,7 @@ gumbel_loglik_copula_scale <- function(theta, u, v, d1, d2){
 #' @inheritParams clayton_loglik_copula_scale
 #'
 #' @return Value of the copula loglikelihood evaluated in `theta`.
-gaussian_loglik_copula_scale <- function(theta, u, v, d1, d2){
+gaussian_loglik_copula_scale <- function(theta, u, v, d1, d2, return_sum = TRUE){
   requireNamespace("mvtnorm")
   # For efficiency purposes, some quantities that are needed multiple times are
   # first precomputed. In this way, we do not waste resources on computing the
@@ -326,7 +334,9 @@ gaussian_loglik_copula_scale <- function(theta, u, v, d1, d2){
                   0)
 
   loglik_copula <-
-    sum(part1 + part2 + part3 + part4 + part5 + part6 + part7 + part8 + part9)
+    part1 + part2 + part3 + part4 + part5 + part6 + part7 + part8 + part9
+  if (return_sum)
+    loglik_copula = sum(loglik_copula)
 
   return(loglik_copula)
 }
@@ -349,7 +359,7 @@ gaussian_loglik_copula_scale <- function(theta, u, v, d1, d2){
 #'   help files of the dedicated functions named `copula_loglik_copula_scale()`.
 #'
 #' @return Value of the copula loglikelihood evaluated in `theta`.
-loglik_copula_scale <- function(theta, u, v, d1, d2, copula_family, r = 0L){
+loglik_copula_scale <- function(theta, u, v, d1, d2, copula_family, r = 0L, return_sum = TRUE){
   # The specific copula loglikelihood functions have been implemented for the
   # non-rotated case. By changing u, v, d1, and d2, we can compute the
   # corresponding loglikelihoods for the rotated copulas.
@@ -372,10 +382,10 @@ loglik_copula_scale <- function(theta, u, v, d1, d2, copula_family, r = 0L){
   )
   loglik_copula = switch(
     copula_family,
-    "clayton" = clayton_loglik_copula_scale(theta, u, v, d1, d2),
-    "frank" = frank_loglik_copula_scale(theta, u, v, d1, d2),
-    "gumbel" = gumbel_loglik_copula_scale(theta, u, v, d1, d2),
-    "gaussian" = gaussian_loglik_copula_scale(theta, u, v, d1, d2)
+    "clayton" = clayton_loglik_copula_scale(theta, u, v, d1, d2, return_sum = return_sum),
+    "frank" = frank_loglik_copula_scale(theta, u, v, d1, d2, return_sum = return_sum),
+    "gumbel" = gumbel_loglik_copula_scale(theta, u, v, d1, d2, return_sum = return_sum),
+    "gaussian" = gaussian_loglik_copula_scale(theta, u, v, d1, d2, return_sum = return_sum)
   )
 
   return(loglik_copula)
