@@ -4,7 +4,16 @@
 \alias{loglik_copula_scale}
 \title{Loglikelihood on the Copula Scale}
 \usage{
-loglik_copula_scale(theta, u, v, d1, d2, copula_family, r = 0L)
+loglik_copula_scale(
+  theta,
+  u,
+  v,
+  d1,
+  d2,
+  copula_family,
+  r = 0L,
+  return_sum = TRUE
+)
 }
 \arguments{
 \item{theta}{Copula parameter}
@@ -42,6 +51,9 @@ right-censored,
 
 The parameterization of the respective copula families can be found in the
 help files of the dedicated functions named \code{copula_loglik_copula_scale()}.}
+
+\item{return_sum}{Return the sum of the individual loglikelihoods? If \code{FALSE},
+a vector with the individual loglikelihood contributions is returned.}
 }
 \value{
 Value of the copula loglikelihood evaluated in \code{theta}.
