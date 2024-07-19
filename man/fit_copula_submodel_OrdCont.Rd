@@ -13,6 +13,7 @@ fit_copula_submodel_OrdCont(
   start_copula,
   method = "BFGS",
   K,
+  names_XY = c("Surr", "True"),
   twostep = FALSE
 )
 }

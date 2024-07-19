@@ -1,3 +1,60 @@
+#' Fit ordinal-ordinal vine copula model
+#'
+#' @param K_S Number of categories in the true endpoint.
+#' @inheritParams fit_copula_OrdCont
+#'
+#' @return Returns an S3 object that can be used to perform the sensitivity
+#'   analysis with [sensitivity_analysis_copula()].
+#' @export
+#'
+#' @author Florian Stijven
+#'
+#' @seealso [sensitivity_analysis_copula()]
+fit_copula_OrdOrd = function(data,
+                              copula_family,
+                              K_S,
+                              K_T,
+                              start_copula,
+                              method = "BFGS",
+                              maxit = 500) {
+  # If copula_family is length 1, we repeat the same copula family.
+  if (length(copula_family) == 1) {
+    copula_family = rep(copula_family, 2)
+  }
+
+  # Column names are added to make the intrepretation of the further code
+  # easier. Pfs refers to the surrogate, Surv refers to the true endpoint.
+  colnames(data) = c("surr", "true", "treat")
+
+  # Split original dataset into two data sets, one for each treatment group.
+  data0 = data[data$treat == 0, ]
+  data1 = data[data$treat == 1, ]
+
+  submodel_0 = fit_copula_submodel_OrdOrd(
+    X = data0$surr,
+    Y = data0$true,
+    copula_family = copula_family[1],
+    K_X = K_S,
+    K_Y = K_T,
+    start_copula = start_copula,
+    method = method
+  )
+  submodel_1 = fit_copula_submodel_OrdOrd(
+    X = data1$surr,
+    Y = data1$true,
+    copula_family = copula_family[2],
+    K_X = K_S,
+    K_Y = K_T,
+    start_copula = start_copula,
+    method = method
+  )
+
+  return(
+    new_vine_copula_fit(submodel_0, submodel_1, c("ordinal", "ordinal"))
+  )
+}
+
+
 #' Fit ordinal-continuous copula submodel
 #'
 #' The `fit_copula_submodel_OrdOrd()` function fits the copula (sub)model for an
@@ -12,6 +69,7 @@ fit_copula_submodel_OrdOrd = function(X,
                                       method = "BFGS",
                                       K_X,
                                       K_Y,
+                                      names_XY = c("Surr", "True"),
                                       twostep = FALSE) {
   # Number of parameters for X.
   p1 = K_X - 1
@@ -37,7 +95,8 @@ fit_copula_submodel_OrdOrd = function(X,
   # scale.
   param_X = qnorm(cumsum(props_X[-length(props_X)]))
   names(param_X) = paste0(
-    "X[",
+    names_XY[1],
+    "[",
     1:p1,
     "]"
   )
@@ -48,7 +107,8 @@ fit_copula_submodel_OrdOrd = function(X,
   })
   param_Y = qnorm(cumsum(props_Y[-length(props_Y)]))
   names(param_Y) = paste0(
-    "Y[",
+    names_XY[2],
+    "[",
     1:p2,
     "]"
   )
@@ -74,7 +134,8 @@ fit_copula_submodel_OrdOrd = function(X,
     )
     start_copula = coef(two_step_fit$ml_fit)[p1 + p2 + 1]
   }
-  start = c(param_X, param_Y, "theta (copula)" = start_copula)
+  start = c(param_X, param_Y, start_copula)
+  names(start)[length(start)] = "theta (copula)"
   suppressWarnings({
     ml_fit = maxLik::maxLik(
       logLik = log_lik_function,
@@ -92,7 +153,9 @@ fit_copula_submodel_OrdOrd = function(X,
     ml_fit = ml_fit,
     marginal_X = marginal_ord_constructor(est_X),
     marginal_Y = marginal_ord_constructor(est_Y),
-    copula_family = copula_family
+    copula_family = copula_family,
+    data = data.frame(X = X, Y = Y),
+    names_XY = names_XY
   )
   return(submodel_fit)
 }

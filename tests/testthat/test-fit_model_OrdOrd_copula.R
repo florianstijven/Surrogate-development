@@ -83,3 +83,39 @@ test_that("fit_copula_submodel_OrdOrd() works for the full estimator", {
     c(2, 3, 4, 5, 5)
   )
 })
+
+
+test_that("fit_copula_OrdOrd() works for the full estimator", {
+  S0 = c(1, 2, 2, 5, 3, 6, 4)
+  S0 = rep(S0, 10)
+  S1 = c(1, 4, 2, 5, 2, 6, 4)
+  S1 = rep(S1, 10)
+  K_S = 6
+
+  T0 = c(2, 1, 2, 5, 3, 5, 4)
+  T0 = rep(T0, 10)
+  T1 = c(1, 3, 2, 4, 2, 5, 4)
+  T1 = rep(T1, 10)
+  K_T = 5
+
+  data = data.frame(
+    surrogate = c(S0, S1),
+    true = c(T0, T1),
+    treat = c(
+      rep(0, 70),
+      rep(1, 70)
+    )
+  )
+
+  fitted_model = fit_copula_OrdOrd(
+    data = data,
+    copula_family = "clayton",
+    K_S = K_S,
+    K_T = K_T,
+    start_copula = 0.5
+  )
+  expect_equal(
+    fitted_model$fit_0$ml_fit$maximum,
+    -193.005983363
+  )
+})

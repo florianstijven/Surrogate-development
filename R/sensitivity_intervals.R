@@ -192,6 +192,7 @@ new_sensitivity_intervals_Dvine = function(fitted_model,
   )
 }
 
+#' @export
 print.sensitivity_intervals_Dvine = function(x, ...) {
   cat("Sensitivity analysis based on the D-vine copula model\n\n")
   cat("Identifiable Copula Family (c12 and c34): "); cat(x$fitted_model$copula_family); cat("\n")

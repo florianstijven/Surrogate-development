@@ -14,6 +14,7 @@ fit_copula_submodel_ContCont(
   start_Y,
   start_copula,
   method = "BFGS",
+  names_XY = c("Surr", "True"),
   twostep = FALSE
 )
 }

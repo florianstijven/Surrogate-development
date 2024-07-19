@@ -1,3 +1,64 @@
+#' Fit ordinal-continuous vine copula model
+#'
+#' @param K_T Number of categories in the true endpoint.
+#' @inheritParams fit_model_SurvSurv
+#'
+#' @return Returns an S3 object that can be used to perform the sensitivity
+#'   analysis with [sensitivity_analysis_copula()].
+#' @export
+#'
+#' @author Florian Stijven
+#'
+#' @seealso [sensitivity_analysis_copula()]
+fit_copula_OrdCont = function(data,
+                               copula_family,
+                               marginal_S0,
+                               marginal_S1,
+                               K_T,
+                               start_copula,
+                               method = "BFGS",
+                               maxit = 500) {
+  # If copula_family is length 1, we repeat the same copula family.
+  if (length(copula_family) == 1) {
+    copula_family = rep(copula_family, 2)
+  }
+
+  # Column names are added to make the intrepretation of the further code
+  # easier. Pfs refers to the surrogate, Surv refers to the true endpoint.
+  colnames(data) = c("surr", "true", "treat")
+
+  # Split original dataset into two data sets, one for each treatment group.
+  data0 = data[data$treat == 0, ]
+  data1 = data[data$treat == 1, ]
+
+  submodel_0 = fit_copula_submodel_OrdCont(
+    X = data0$true,
+    Y = data0$surr,
+    copula_family = copula_family[1],
+    marginal_Y = marginal_S0,
+    K = K_T,
+    start_Y = rep(1, marginal_S0[[4]]),
+    start_copula = start_copula,
+    method = method,
+    names_XY = c("True", "Surr")
+  )
+  submodel_1 = fit_copula_submodel_OrdCont(
+    X = data1$true,
+    Y = data1$surr,
+    copula_family = copula_family[2],
+    marginal_Y = marginal_S1,
+    K = K_T,
+    start_Y = rep(1, marginal_S1[[4]]),
+    start_copula = start_copula,
+    method = method,
+    names_XY = c("True", "Surr")
+  )
+
+  return(
+    new_vine_copula_fit(submodel_0, submodel_1, c("ordinal", "continuous"))
+  )
+}
+
 #' Fit ordinal-continuous copula submodel
 #'
 #' The `fit_copula_submodel_OrdCont()` function fits the copula (sub)model for a
@@ -20,6 +81,7 @@ fit_copula_submodel_OrdCont = function(X,
                                        start_copula,
                                        method = "BFGS",
                                        K,
+                                       names_XY = c("Surr", "True"),
                                        twostep = FALSE) {
   # Number of parameters for X.
   p1 = K - 1
@@ -45,7 +107,8 @@ fit_copula_submodel_OrdCont = function(X,
   # scale.
   param_X = qnorm(cumsum(props[-length(props)]))
   names(param_X) = paste0(
-    "X[",
+    names_XY[1],
+    "[",
     1:p1,
     "]"
   )
@@ -53,7 +116,8 @@ fit_copula_submodel_OrdCont = function(X,
   # Estimate marginal distribution of Y.
   param_Y = estimate_marginal(Y, marginal_Y, start_Y)
   names(param_Y) = paste0(
-    "Y[",
+    names_XY[2],
+    "[",
     1:p2,
     "]"
   )
@@ -72,7 +136,8 @@ fit_copula_submodel_OrdCont = function(X,
     two_step_fit = fit_copula_submodel_OrdCont(X, Y, copula_family, marginal_Y, start_Y, start_copula, K = K, twostep = TRUE)
     start_copula = coef(two_step_fit$ml_fit)[p1 + p2 + 1]
     }
-  start = c(param_X, param_Y, "theta (copula)" = start_copula)
+  start = c(param_X, param_Y, start_copula)
+  names(start)[length(start)] = "theta (copula)"
 
   suppressWarnings({
     ml_fit = maxLik::maxLik(
@@ -91,7 +156,9 @@ fit_copula_submodel_OrdCont = function(X,
     ml_fit = ml_fit,
     marginal_X = marginal_ord_constructor(est_X),
     marginal_Y = marginal_cont_constructor(marginal_Y, est_Y),
-    copula_family = copula_family
+    copula_family = copula_family,
+    data = data.frame(X = X, Y = Y),
+    names_XY = names_XY
   )
   return(submodel_fit)
 }

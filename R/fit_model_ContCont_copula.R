@@ -1,3 +1,65 @@
+#' Fit continuous-continuous vine copula model
+#'
+#' @inheritParams fit_model_SurvSurv
+#'
+#' @return Returns an S3 object that can be used to perform the sensitivity
+#'   analysis with [sensitivity_analysis_copula()].
+#' @export
+#'
+#' @author Florian Stijven
+#'
+#' @seealso [sensitivity_analysis_copula()]
+fit_copula_ContCont = function(data,
+                              copula_family,
+                              marginal_S0,
+                              marginal_S1,
+                              marginal_T0,
+                              marginal_T1,
+                              start_copula,
+                              method = "BFGS",
+                              maxit = 500) {
+  # If copula_family is length 1, we repeat the same copula family.
+  if (length(copula_family) == 1) {
+    copula_family = rep(copula_family, 2)
+  }
+
+  # Column names are added to make the intrepretation of the further code
+  # easier. Pfs refers to the surrogate, Surv refers to the true endpoint.
+  colnames(data) = c("surr", "true", "treat")
+
+  # Split original dataset into two data sets, one for each treatment group.
+  data0 = data[data$treat == 0, ]
+  data1 = data[data$treat == 1, ]
+
+  submodel_0 = fit_copula_submodel_ContCont(
+    X = data0$surr,
+    Y = data0$true,
+    copula_family = copula_family[1],
+    marginal_X = marginal_S0,
+    marginal_Y = marginal_T0,
+    start_X = c(1, 1),
+    start_Y = c(1, 1),
+    start_copula = start_copula,
+    method = method
+  )
+  submodel_1 = fit_copula_submodel_ContCont(
+    X = data1$surr,
+    Y = data1$true,
+    copula_family = copula_family[2],
+    marginal_X = marginal_S1,
+    marginal_Y = marginal_T1,
+    start_X = c(1, 1),
+    start_Y = c(1, 1),
+    start_copula = start_copula,
+    method = method
+  )
+
+
+  return(
+    new_vine_copula_fit(submodel_0, submodel_1, c("continuous", "continuous"))
+  )
+}
+
 #' Fit ordinal-continuous copula submodel
 #'
 #' The `fit_copula_submodel_ContCont()` function fits the copula (sub)model for a
@@ -15,6 +77,7 @@ fit_copula_submodel_ContCont = function(X,
                                         start_Y,
                                         start_copula,
                                         method = "BFGS",
+                                        names_XY = c("Surr", "True"),
                                         twostep = FALSE)
 {
   # Number of parameters for X.
@@ -36,14 +99,16 @@ fit_copula_submodel_ContCont = function(X,
   # Estimate marginal distribution of X.
   param_X = estimate_marginal(X, marginal_X, start_X)
   names(param_X) = paste0(
-    "X[",
+    names_XY[1],
+    "[",
     1:p1,
     "]"
   )
   # Estimate marginal distribution of Y.
   param_Y = estimate_marginal(Y, marginal_Y, start_Y)
   names(param_Y) = paste0(
-    "Y[",
+    names_XY[2],
+    "[",
     1:p2,
     "]"
   )
@@ -59,20 +124,20 @@ fit_copula_submodel_ContCont = function(X,
     fixed = NULL
     # Starting values for the full estimator are determined by the twostage
     # estimates.
-    two_step_fit = fit_copula_submodel_ContCont(
-      X,
-      Y,
-      copula_family,
-      marginal_X,
-      marginal_Y,
-      start_X,
-      start_Y,
-      start_copula,
-      twostep = TRUE
-    )
+    two_step_fit = fit_copula_submodel_ContCont(X,
+                                                Y,
+                                                copula_family,
+                                                marginal_X,
+                                                marginal_Y,
+                                                start_X,
+                                                start_Y,
+                                                start_copula,
+                                                twostep = TRUE)
+
     start_copula = coef(two_step_fit$ml_fit)[p1 + p2 + 1]
   }
-  start = c(param_X, param_Y, "theta (copula)" = start_copula)
+  start = c(param_X, param_Y, start_copula)
+  names(start)[length(start)] = "theta (copula)"
 
   suppressWarnings({
     ml_fit = maxLik::maxLik(
@@ -91,7 +156,9 @@ fit_copula_submodel_ContCont = function(X,
     ml_fit = ml_fit,
     marginal_X = marginal_cont_constructor(marginal_X, est_X),
     marginal_Y = marginal_cont_constructor(marginal_Y, est_Y),
-    copula_family = copula_family
+    copula_family = copula_family,
+    data = data.frame(X = X, Y = Y),
+    names_XY = names_XY
   )
   return(submodel_fit)
 }

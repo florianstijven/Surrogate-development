@@ -504,11 +504,13 @@ estimate_marginal = function(Y, marginal_Y, starting_values) {
     sum(log(marginal_Y[[1]](Y, para)))
   }
 
-  estimates = coef(maxLik::maxLik(
-    logLik = log_lik_function,
-    start = starting_values,
-    method = "NR"
-  ))
+  suppressWarnings({
+    estimates = coef(maxLik::maxLik(
+      logLik = log_lik_function,
+      start = starting_values,
+      method = "NR"
+    ))
+  })
   return(estimates)
 }
 
@@ -535,4 +537,70 @@ ordinal_to_cutpoints = function(x, cutpoints, strict) {
     cutpoints = c(cutpoints, +Inf)
   }
   return(cutpoints[x])
+}
+
+
+#' Constructor for vine copula model
+#'
+#' @param fit_0 list returned by [fit_copula_submodel_OrdCont()],
+#' [fit_copula_submodel_ContCont()], or [fit_copula_submodel_OrdOrd()].
+#' @param fit_1 list returned by [fit_copula_submodel_OrdCont()],
+#' [fit_copula_submodel_ContCont()], or [fit_copula_submodel_OrdOrd()].
+#'
+#' @return S3 object
+#'
+#' @examples
+#' #should not be used be the user
+new_vine_copula_fit = function(fit_0, fit_1, endpoint_types) {
+  structure(.Data = list(fit_0 = fit_0, fit_1 = fit_1, endpoint_types = endpoint_types),
+            class = "vine_copula_fit")
+}
+#' @export
+print.vine_copula_fit = function(x, ...) {
+  cat("Maximum Likelihood Estimate for Vine Copula Model ("); cat(x$endpoint_types[1]); cat("-"); cat(x$endpoints_types[2]); cat("\n")
+  cat("Copula Family: "); cat(x$fit_0$copula_family); cat(" and "); cat(x$fit_1$copula_family); cat("\n")
+  cat("Summary of Maximum Likelihood fit for Treat = 0:\n")
+  print(summary(x$fit_0$ml_fit))
+  cat("Summary of Maximum Likelihood fit for Treat = 1:\n")
+  print(summary(x$fit_1$ml_fit))
+}
+
+#' @export
+plot.vine_copula_fit = function(x, ...) {
+  # Marginal GoF plots.
+  marginal_gof_copula(x$fit_0$marginal_X, x$fit_0$data$X, x$fit_0$names_XY[1], x$endpoint_types[1], 0)
+  marginal_gof_copula(x$fit_0$marginal_Y, x$fit_0$data$Y, x$fit_0$names_XY[2], x$endpoint_types[2], 0)
+
+  marginal_gof_copula(x$fit_1$marginal_X, x$fit_1$data$X, x$fit_1$names_XY[1], x$endpoint_types[1], 0)
+  marginal_gof_copula(x$fit_1$marginal_Y, x$fit_1$data$Y, x$fit_1$names_XY[2], x$endpoint_types[2], 0)
+  # GoF for the copula itself.
+}
+
+marginal_gof_copula = function(marginal, observed, name, type, treat) {
+  if (type == "ordinal") {
+    K = length(unique(observed))
+    plot(1:K, marginal$pmf(1:K),
+         xlab = "Category",
+         ylab = "Probability Mass Function",
+         main = paste0(name, ", Treat = ", treat))
+    lines(1:K, marginal$pmf(1:K))
+    points(1:K, sapply(1:K, function(x) mean(observed == x)), col = "red")
+    # legend(
+    #   x = "topright",
+    #   lty = 1,
+    #   col = c("red", "black"),
+    #   legend = c("Model-Based", "Empirical")
+    # )
+  }
+  if (type == "continuous") {
+    grid = seq(from = min(observed), to = max(observed), length.out = 2e2)
+    hist(observed, main = paste0(name, ", Treat = ", treat), freq = FALSE)
+    lines(grid, marginal$pdf(grid), col = "red")
+    # legend(
+    #   x = "topright",
+    #   lty = 1,
+    #   col = c("red"),
+    #   legend = c("Model-Based Density"),
+    # )
+  }
 }
