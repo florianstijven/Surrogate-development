@@ -58,7 +58,7 @@ Returns an object of class "FederatedApproachStage2()" that can be used to evalu
 The function 'FederatedApproachStage2()' fits the second stage model of the two-stage federated data analysis approach to assess surrogacy.
 }
 \section{Model}{
-The two-stage federated data analysis approach developed by XXX can be used to assess surrogacy in the meta-analytic multiple-trial setting
+The two-stage federated data analysis approach that can be used to assess surrogacy in the meta-analytic multiple-trial setting
 (Continuous-continuous case), but without the need of sharing data. Instead, each organization conducts separate analyses on their data set
 using the so-called "first stage" model. The results of these analyses are then aggregated at a central analysis hub,
 where the aggregated results are analyzed using a "second stage" model and the necessary metrics (\eqn{R^2_{trial}} and \eqn{R^2_{indiv}})

@@ -2,7 +2,7 @@
 % Please edit documentation in R/fit_model_OrdCont_copula.R
 \name{ordinal_continuous_loglik}
 \alias{ordinal_continuous_loglik}
-\title{Loglikelihood function for binary-continuous copula model}
+\title{Loglikelihood function for ordinal-continuous copula model}
 \usage{
 ordinal_continuous_loglik(para, X, Y, copula_family, marginal_Y, K)
 }
@@ -28,12 +28,12 @@ ordinal_continuous_loglik(para, X, Y, copula_family, marginal_Y, K)
 \item \code{"gaussian"}
 }}
 
-\item{marginal_Y}{List with the following three elements (in order):
+\item{marginal_Y}{List with the following four elements (in order):
 \itemize{
 \item Density function with first argument \code{x} and second argument \code{para} the parameter
 vector for this distribution.
-\item Distribution function with first argument \code{x} and second argument \code{para} the parameter
-vector for this distribution.
+\item Distribution function with first argument \code{x} and second argument \code{para}.
+\item Inverse distribution function with first argument \code{p} and second argument \code{para}.
 \item The number of elements in \code{para}.
 }}
 

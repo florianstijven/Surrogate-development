@@ -23,6 +23,14 @@
 #'
 #' @return Value of the copula loglikelihood evaluated in `theta`.
 clayton_loglik_copula_scale <- function(theta, u, v, d1, d2, return_sum = TRUE) {
+  # Replace entries that correspond to zero or one probabilities with NAs. This
+  # avoids NaN warnings.
+  zero_indicator = detect_zero_probs(u, v, d1, d2)
+  one_indicator = detect_one_probs(u, v, d1, d2)
+  zero_or_one = zero_indicator | one_indicator
+  u[zero_or_one] = NA; v[zero_or_one] = NA
+  d1[zero_or_one] = NA; d2[zero_or_one] = NA
+
   # Natural logarithm of copula evaluated in u and v.
   log_C = -(1 / theta) * log(u ** (-theta) + v ** (-theta) - 1)
   # Log likelihood contribution for uncensored observations.
@@ -72,6 +80,8 @@ clayton_loglik_copula_scale <- function(theta, u, v, d1, d2, return_sum = TRUE) 
 
   loglik_copula <-
     part1 + part2 + part3 + part4 + part5 + part6 + part7 + part8 + part9
+  loglik_copula[zero_indicator] = -Inf
+  loglik_copula[one_indicator] = 0
   if (return_sum)
     loglik_copula = sum(loglik_copula)
 
@@ -88,6 +98,13 @@ clayton_loglik_copula_scale <- function(theta, u, v, d1, d2, return_sum = TRUE) 
 #'
 #' @return Value of the copula loglikelihood evaluated in `theta`.
 frank_loglik_copula_scale <- function(theta, u, v, d1, d2, return_sum = TRUE){
+  # Replace entries that correspond to zero or one probabilities with NAs. This
+  # avoids NaN warnings.
+  zero_indicator = detect_zero_probs(u, v, d1, d2)
+  one_indicator = detect_one_probs(u, v, d1, d2)
+  zero_or_one = zero_indicator | one_indicator
+  u[zero_or_one] = NA; v[zero_or_one] = NA
+  d1[zero_or_one] = NA; d2[zero_or_one] = NA
 
   # For efficiency purposes, some quantities that are needed multiple times are
   # first precomputed. In this way, we do not waste resources on computing the
@@ -144,6 +161,8 @@ frank_loglik_copula_scale <- function(theta, u, v, d1, d2, return_sum = TRUE){
 
   loglik_copula <-
     part1 + part2 + part3 + part4 + part5 + part6 + part7 + part8 + part9
+  loglik_copula[zero_indicator] = -Inf
+  loglik_copula[one_indicator] = 0
   if (return_sum)
     loglik_copula = sum(loglik_copula)
 
@@ -159,6 +178,14 @@ frank_loglik_copula_scale <- function(theta, u, v, d1, d2, return_sum = TRUE){
 #' @inheritParams clayton_loglik_copula_scale
 #' @return Value of the copula loglikelihood evaluated in `theta`.
 gumbel_loglik_copula_scale <- function(theta, u, v, d1, d2, return_sum = TRUE){
+  # Replace entries that correspond to zero or one probabilities with NAs. This
+  # avoids NaN warnings.
+  zero_indicator = detect_zero_probs(u, v, d1, d2)
+  one_indicator = detect_one_probs(u, v, d1, d2)
+  zero_or_one = zero_indicator | one_indicator
+  u[zero_or_one] = NA; v[zero_or_one] = NA
+  d1[zero_or_one] = NA; d2[zero_or_one] = NA
+
   # For efficiency purposes, some quantities that are needed multiple times are
   # first precomputed. In this way, we do not waste resources on computing the
   # same quantity multiple times.
@@ -213,6 +240,8 @@ gumbel_loglik_copula_scale <- function(theta, u, v, d1, d2, return_sum = TRUE){
 
   loglik_copula <-
     part1 + part2 + part3 + part4 + part5 + part6 + part7 + part8 + part9
+  loglik_copula[zero_indicator] = -Inf
+  loglik_copula[one_indicator] = 0
   if (return_sum)
     loglik_copula = sum(loglik_copula)
 
@@ -230,6 +259,15 @@ gumbel_loglik_copula_scale <- function(theta, u, v, d1, d2, return_sum = TRUE){
 #'
 #' @return Value of the copula loglikelihood evaluated in `theta`.
 gaussian_loglik_copula_scale <- function(theta, u, v, d1, d2, return_sum = TRUE){
+  # Replace entries that correspond to zero or one probabilities with defaults.
+  # This avoids NaN warnings. We don't use NAs here because the functions from
+  # mvtnorm cannot handle NAs.
+  zero_indicator = detect_zero_probs(u, v, d1, d2)
+  one_indicator = detect_one_probs(u, v, d1, d2)
+  zero_or_one = zero_indicator | one_indicator
+  u[zero_or_one] = 0.5; v[zero_or_one] = 0.5
+  d1[zero_or_one] = 0; d2[zero_or_one] = 0
+
   requireNamespace("mvtnorm")
   # For efficiency purposes, some quantities that are needed multiple times are
   # first precomputed. In this way, we do not waste resources on computing the
@@ -335,6 +373,8 @@ gaussian_loglik_copula_scale <- function(theta, u, v, d1, d2, return_sum = TRUE)
 
   loglik_copula <-
     part1 + part2 + part3 + part4 + part5 + part6 + part7 + part8 + part9
+  loglik_copula[zero_indicator] = -Inf
+  loglik_copula[one_indicator] = 0
   if (return_sum)
     loglik_copula = sum(loglik_copula)
 
@@ -391,3 +431,107 @@ loglik_copula_scale <- function(theta, u, v, d1, d2, copula_family, r = 0L, retu
   return(loglik_copula)
 }
 
+
+detect_zero_probs = function(u, v, d1, d2) {
+  # If U = 1 and there is right-censoring, the probability is zero.
+  zero_probs_indicator = ifelse(((u == 1) &
+                                   (d1 == 0)) | ((v == 1) & (d2 == 0)), TRUE, FALSE)
+  # If U = 0 and there is left-censoring, the probability is zero.
+  zero_probs_indicator = zero_probs_indicator |
+    ifelse(((u == 0) &
+              (d1 == -1)) | ((v == 0) & (d2 == -1)), TRUE, FALSE)
+  return(zero_probs_indicator)
+}
+
+detect_one_probs = function(u, v, d1, d2) {
+  # If U = 0 and V = 0 and there is right-censoring, the probability is one.
+  zero_probs_indicator = ifelse(((u == 0) &
+                                   (d1 == 0)) & ((v == 0) & (d2 == 0)), TRUE, FALSE)
+  # If U = 1 and V = 1 and there is left-censoring, the probability is one.
+  zero_probs_indicator = zero_probs_indicator |
+    ifelse(((u == 1) &
+              (d1 == -1)) & ((v == 1) & (d2 == -1)), TRUE, FALSE)
+  return(zero_probs_indicator)
+}
+
+marginal_ord_constructor = function(param) {
+  cum_probs = c(pnorm(param), 1)
+  probs = cum_probs - c(0, cum_probs[-length(cum_probs)])
+  K = length(param) + 1
+  cdf = function(x) {
+    cum_probs[x]
+  }
+  pmf = function(x) {
+    probs[x]
+  }
+  inv_cdf = function(p) {
+    sapply(p, function(p) {
+      max((1:K)[c(0, cum_probs) < p])
+    })
+  }
+  list(
+    pmf = pmf,
+    cdf = cdf,
+    inv_cdf = inv_cdf
+  )
+}
+
+marginal_cont_constructor = function(marginal_Y, param) {
+  pdf = function(x) {
+    marginal_Y[[1]](x, param)
+  }
+  cdf = function(x) {
+    marginal_Y[[2]](x, param)
+  }
+  inv_cdf = function(p) {
+    marginal_Y[[3]](p, param)
+  }
+  return(list(
+    pdf = pdf,
+    cdf = cdf,
+    inv_cdf = inv_cdf
+  ))
+}
+
+#' Estimate marginal distribution using ML
+#'
+#' @inheritParams fit_copula_submodel_OrdCont_twostep
+#'
+#' @return Estimated parameters
+estimate_marginal = function(Y, marginal_Y, starting_values) {
+  # Define log-likelihood function (as a function of the parameters).
+  log_lik_function = function(para) {
+    sum(log(marginal_Y[[1]](Y, para)))
+  }
+
+  coef(maxLik::maxLik(
+    logLik = log_lik_function,
+    start = starting_values,
+    method = "NR"
+  ))
+}
+
+#' Convert Ordinal Observations to Latent Cutpoints
+#'
+#' [ordinal_to_cutpoints()] converts the ordinal endpoints to the corresponding
+#' cutpoints of the underlying latent continuous variable. Let
+#' \eqn{P(x \le k) = G(c_k)} where \eqn{G} is the distribution function of the
+#' latent variable. [ordinal_to_cutpoints()] converts \eqn{x} to \eqn{c_k} (or to
+#' \eqn{c_{k - 1}} if `strict = TRUE`.
+#'
+#' @param x Integer vector with values in `1:(length(cutpoints) + 1)`.
+#' @param cutpoints The cutpoints on the latent scale corresponding to
+#' \eqn{\boldsymbol{c} = c(c_1, \cdots, c_{K - 1})}.
+#'
+#' @return Numeric vector with cutpoints corresponding to the values in `x`.
+ordinal_to_cutpoints = function(x, cutpoints, strict) {
+  if (strict) {
+    # Add c_0 to the cutpoints
+    cutpoints = c(-Inf, cutpoints)
+  }
+  else {
+    # Add c_K to the cutpoints
+    cutpoints = c(cutpoints, +Inf)
+  }
+  return(cutpoints[x])
+}

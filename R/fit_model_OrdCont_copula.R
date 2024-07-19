@@ -1,4 +1,93 @@
-#' Loglikelihood function for binary-continuous copula model
+#' Fit ordinal-continuous copula submodel
+#'
+#' The `fit_copula_submodel_OrdCont()` function fits the copula (sub)model for a
+#' continuous surrogate and an ordinal true endpoint with maximum likelihood.
+#'
+#' @param name description
+#' @inheritParams ordinal_continuous_loglik
+#'
+#' @return A list with four elements:
+#' * ml_fit: object of class `maxLik::maxLik` that contains the estimated copula
+#'  model.
+#' * marginal_X: list with the estimated cdf, pdf, and inverse cdf for X.
+#' * marginal_Y: list with the estimated cdf, pdf, and inverse cdf for X.
+#' * copula_family: string that indicates the copula family
+fit_copula_submodel_OrdCont = function(X,
+                                       Y,
+                                       copula_family,
+                                       marginal_Y,
+                                       start_Y,
+                                       start_copula,
+                                       method = "BFGS",
+                                       K,
+                                       twostep = FALSE) {
+  # Number of parameters for X.
+  p1 = K - 1
+  # Number of parameters for Y.
+  p2 = marginal_Y[[4]]
+
+  # loglikelihood function to be maximized.
+  log_lik_function = function(para) {
+    ordinal_continuous_loglik(
+      para = para,
+      X = X,
+      Y = Y,
+      copula_family = copula_family,
+      marginal_Y = marginal_Y,
+      K = K
+    )
+  }
+  # Compute empirical proportions for X.
+  props = sapply(1:K, function(category) {
+    mean(X == category)
+  })
+  # Compute cumulative probabilities. These are transformed to the normal cdf
+  # scale.
+  param_X = qnorm(cumsum(props[-length(props)]))
+
+  # Estimate marginal distribution of Y.
+  param_Y = estimate_marginal(Y, marginal_Y, start_Y)
+
+  # If twostep is TRUE, we compute the estimate in two stages. The marginal
+  # distributions have already been estimated (param_X and param_Y). The
+  # estimates are fixed in the twostage estimator.
+
+  if (twostep) {
+    fixed = 1:(p1 + p2)
+  }
+  else {
+    fixed = NULL
+    # Starting values for the full estimator are determined by the twostage
+    # estimates.
+    two_step_fit = fit_copula_submodel_OrdCont(X, Y, copula_family, marginal_Y, start_Y, start_copula, K = K, twostep = TRUE)
+    start_copula = coef(two_step_fit$ml_fit)[p1 + p2 + 1]
+    }
+  start = c(param_X, param_Y, "theta (copula)" = start_copula)
+
+  suppressWarnings({
+    ml_fit = maxLik::maxLik(
+      logLik = log_lik_function,
+      start = start,
+      method = method,
+      fixed = fixed
+    )
+  })
+
+  est_X = coef(ml_fit)[1:p1]
+  est_Y = coef(ml_fit)[(p1 + 1):(p1 + p2)]
+  # Return a list with the marginal surrogate distribution, fit object for
+  # copula parameter, and element to indicate the copula family.
+  submodel_fit = list(
+    ml_fit = ml_fit,
+    marginal_X = marginal_ord_constructor(est_X),
+    marginal_Y = marginal_cont_constructor(marginal_Y, est_Y),
+    copula_family = copula_family
+  )
+  return(submodel_fit)
+}
+
+
+#' Loglikelihood function for ordinal-continuous copula model
 #'
 #' [ordinal_continuous_loglik()] computes the observed-data loglikelihood for a
 #' bivariate copula model with a continuous and an ordinal endpoint. The model
@@ -76,11 +165,11 @@
 #' * `para[p1 + p2 + 1]`: copula parameter
 #' @param X First variable (Ordinal with \eqn{K} categories)
 #' @param Y Second variable (Continuous)
-#' @param marginal_Y List with the following three elements (in order):
+#' @param marginal_Y List with the following four elements (in order):
 #' * Density function with first argument `x` and second argument `para` the parameter
 #' vector for this distribution.
-#' * Distribution function with first argument `x` and second argument `para` the parameter
-#' vector for this distribution.
+#' * Distribution function with first argument `x` and second argument `para`.
+#' * Inverse distribution function with first argument `p` and second argument `para`.
 #' * The number of elements in `para`.
 #' @param K Number of categories in `X`.
 #' @inheritParams loglik_copula_scale
@@ -92,7 +181,7 @@ ordinal_continuous_loglik <- function(para, X, Y, copula_family, marginal_Y, K){
   # Parameters for the distribution of X.
   para_X = para[1:p1]
   # Number of parameters for the distribution of Y.
-  p2 = marginal_Y[[3]]
+  p2 = marginal_Y[[4]]
   # Parameters for the distribution of Y.
   para_Y = para[(p1 + 1):(p1 + p2)]
   # Vector of copula parameters.
@@ -150,29 +239,5 @@ ordinal_continuous_loglik <- function(para, X, Y, copula_family, marginal_Y, K){
   return(loglik)
 }
 
-#' Convert Ordinal Observations to Latent Cutpoints
-#'
-#' [ordinal_to_cutpoints()] converts the ordinal endpoints to the corresponding
-#' cutpoints of the underlying latent continuous variable. Let
-#' \eqn{P(x \le k) = G(c_k)} where \eqn{G} is the distribution function of the
-#' latent variable. [ordinal_to_cutpoints()] converts \eqn{x} to \eqn{c_k} (or to
-#' \eqn{c_{k - 1}} if `strict = TRUE`.
-#'
-#' @param x Integer vector with values in `1:(length(cutpoints) + 1)`.
-#' @param cutpoints The cutpoints on the latent scale corresponding to
-#' \eqn{\boldsymbol{c} = c(c_1, \cdots, c_{K - 1})}.
-#'
-#' @return Numeric vector with cutpoints corresponding to the values in `x`.
-ordinal_to_cutpoints = function(x, cutpoints, strict) {
-  if (strict) {
-    # Add c_0 to the cutpoints
-    cutpoints = c(-Inf, cutpoints)
-  }
-  else {
-    # Add c_K to the cutpoints
-    cutpoints = c(cutpoints, +Inf)
-  }
-  return(cutpoints[x])
-}
 
 
