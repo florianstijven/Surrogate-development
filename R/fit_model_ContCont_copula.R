@@ -187,7 +187,7 @@ fit_copula_submodel_ContCont = function(X,
 #' @inheritParams loglik_copula_scale
 #'
 #' @return (numeric) loglikelihood value evaluated in `para`.
-continuous_continuous_loglik <- function(para, X, Y, copula_family, marginal_X, marginal_Y){
+continuous_continuous_loglik <- function(para, X, Y, copula_family, marginal_X, marginal_Y, return_sum = TRUE){
   # Number of parameters for the distribution of X.
   p1 = marginal_X[[4]]
   # Parameters for the distribution of X.
@@ -226,8 +226,49 @@ continuous_continuous_loglik <- function(para, X, Y, copula_family, marginal_X, 
       cdf_X = cdf_X,
       cdf_Y = cdf_Y,
       pdf_X = pdf_X,
-      pdf_Y = pdf_Y
+      pdf_Y = pdf_Y,
+      return_sum = return_sum
     )
 
   return(loglik)
+}
+
+conditional_mean_copula_ContCont = function(fitted_submodel, grid) {
+  para = coef(fitted_submodel$ml_fit)
+  pdf_x = fitted_submodel$marginal_X$pdf
+  marginal_X = attr(fitted_submodel$marginal_X, "constructor")
+  marginal_Y = attr(fitted_submodel$marginal_Y, "constructor")
+  # Compute the expected value through numerical integration. First, define a
+  # helper function that computes the bivariate estimated density.
+  dens_joint = function(x, y) {
+    dens = exp(
+      continuous_continuous_loglik(
+        para = para,
+        X = x,
+        Y = y,
+        copula_family = fitted_submodel$copula_family,
+        marginal_X = marginal_X,
+        marginal_Y = marginal_Y,
+        return_sum = FALSE
+      )
+    )
+    dens[is.nan(dens)] = 0
+    return(dens)
+  }
+
+  conditional_mean = sapply(grid,
+         function(x) {
+           constant = pdf_x(x)
+           integrand = function(y) {
+             y * dens_joint(rep(x, length(y)), y) / constant
+           }
+
+           cond_mean = stats::integrate(
+             f = integrand,
+             lower = -Inf,
+             upper = +Inf
+           )$value
+           return(cond_mean)
+         })
+  return(conditional_mean)
 }

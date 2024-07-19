@@ -252,7 +252,7 @@ fit_copula_submodel_OrdCont = function(X,
 #' @inheritParams loglik_copula_scale
 #'
 #' @return (numeric) loglikelihood value evaluated in `para`.
-ordinal_continuous_loglik <- function(para, X, Y, copula_family, marginal_Y, K){
+ordinal_continuous_loglik <- function(para, X, Y, copula_family, marginal_Y, K, return_sum = TRUE){
   # Number of independent cut-points for the distribution of X.
   p1 = K - 1
   # Parameters for the distribution of X.
@@ -310,11 +310,39 @@ ordinal_continuous_loglik <- function(para, X, Y, copula_family, marginal_Y, K){
   # The individual likelihood contributions (corresponding to interval-censored
   # data) is the difference of the two right-censored contributions.
   lik = lik1 - lik2
-  # We take the log and sum to compute the observed-data log-likelihood.
-  loglik = sum(log(lik))
+  loglik = log(lik)
+  if (return_sum) loglik = sum(loglik)
 
   return(loglik)
 }
 
+conditional_mean_copula_OrdCont = function(fitted_submodel, grid) {
+  para = coef(fitted_submodel$ml_fit)
+  K = length(unique(fitted_submodel$data$X))
+  pdf_y = fitted_submodel$marginal_Y$pdf
+  marginal_Y = attr(fitted_submodel$marginal_Y, "constructor")
+  # Compute the expected value through numerical integration. First, define a
+  # helper function that computes the bivariate estimated density.
+  dens_joint = function(x, y) {
+    dens = exp(
+      ordinal_continuous_loglik(
+        para = para,
+        X = x,
+        Y = y,
+        copula_family = fitted_submodel$copula_family,
+        marginal_Y = marginal_Y,
+        K = K,
+        return_sum = FALSE
+      )
+    )
+    dens[is.nan(dens)] = 0
+    return(dens)
+  }
 
+  conditional_mean = sapply(grid,
+                            function(y) {
+                              sum(dens_joint(1:K, rep(y, K)) * 1:K) / pdf_y(y)
+                            })
+  return(conditional_mean)
+}
 

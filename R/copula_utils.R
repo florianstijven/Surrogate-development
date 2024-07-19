@@ -486,11 +486,13 @@ marginal_cont_constructor = function(marginal_Y, param) {
   inv_cdf = function(p) {
     marginal_Y[[3]](p, param)
   }
-  return(list(
+  marginal_list = list(
     pdf = pdf,
     cdf = cdf,
     inv_cdf = inv_cdf
-  ))
+  )
+  attr(marginal_list, "constructor") = marginal_Y
+  return(marginal_list)
 }
 
 #' Estimate marginal distribution using ML
@@ -603,4 +605,8 @@ marginal_gof_copula = function(marginal, observed, name, type, treat) {
     #   legend = c("Model-Based Density"),
     # )
   }
+}
+
+association_gof_copula = function(fitted_submodel) {
+
 }
