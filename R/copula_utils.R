@@ -504,11 +504,12 @@ estimate_marginal = function(Y, marginal_Y, starting_values) {
     sum(log(marginal_Y[[1]](Y, para)))
   }
 
-  coef(maxLik::maxLik(
+  estimates = coef(maxLik::maxLik(
     logLik = log_lik_function,
     start = starting_values,
     method = "NR"
   ))
+  return(estimates)
 }
 
 #' Convert Ordinal Observations to Latent Cutpoints

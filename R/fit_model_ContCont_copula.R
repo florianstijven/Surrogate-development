@@ -35,8 +35,18 @@ fit_copula_submodel_ContCont = function(X,
   }
   # Estimate marginal distribution of X.
   param_X = estimate_marginal(X, marginal_X, start_X)
+  names(param_X) = paste0(
+    "X[",
+    1:p1,
+    "]"
+  )
   # Estimate marginal distribution of Y.
   param_Y = estimate_marginal(Y, marginal_Y, start_Y)
+  names(param_Y) = paste0(
+    "Y[",
+    1:p2,
+    "]"
+  )
 
   # If twostep is TRUE, we compute the estimate in two stages. The marginal
   # distributions have already been estimated (param_X and param_Y). The

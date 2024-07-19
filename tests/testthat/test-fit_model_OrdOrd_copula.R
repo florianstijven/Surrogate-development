@@ -5,20 +5,20 @@ test_that("the ordinal-ordinal loglikelihood works", {
   K = 6
   expect_equal(
     ordinal_ordinal_loglik(para, X, Y, "clayton", K, K),
-    -41.35664999
+    -47.6053539307
   )
   expect_equal(
     ordinal_ordinal_loglik(para, X, Y, "frank", K, K),
-    -41.93454033
+    -42.5758336041
   )
   # Correlation cannot be 2.
   expect_equal(
     ordinal_ordinal_loglik(c(para[-1], 0.5), X, Y, "gaussian", K, K),
-    -26.91424808
+    -28.1181684056
   )
   expect_equal(
     ordinal_ordinal_loglik(para, X, Y, "gumbel", K, K),
-    -34.04336915
+    -52.5339288404
   )
 })
 

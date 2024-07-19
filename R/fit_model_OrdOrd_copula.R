@@ -36,12 +36,22 @@ fit_copula_submodel_OrdOrd = function(X,
   # Compute cumulative probabilities. These are transformed to the normal cdf
   # scale.
   param_X = qnorm(cumsum(props_X[-length(props_X)]))
+  names(param_X) = paste0(
+    "X[",
+    1:p1,
+    "]"
+  )
 
   # Do the same for Y.
   props_Y = sapply(1:K_Y, function(category) {
     mean(Y == category)
   })
   param_Y = qnorm(cumsum(props_Y[-length(props_Y)]))
+  names(param_Y) = paste0(
+    "Y[",
+    1:p2,
+    "]"
+  )
 
   # If twostep is TRUE, we compute the estimate in two stages. The marginal
   # distributions have already been estimated (param_X and param_Y). The
