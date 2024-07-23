@@ -11,7 +11,8 @@ fit_copula_OrdOrd(
   K_T,
   start_copula,
   method = "BFGS",
-  maxit = 500
+  maxit = 500,
+  ...
 )
 }
 \arguments{
@@ -24,9 +25,7 @@ should be integers starting from \code{1}.}
 \code{copula_family} corresponds to the control group, the second to the
 experimental group.}
 
-\item{K_S}{Number of categories in the true endpoint.}
-
-\item{K_T}{Number of categories in the true endpoint.}
+\item{K_S, K_T}{Number of categories in the surrogate and true endpoints.}
 
 \item{start_copula}{Starting value for the copula parameter.}
 
@@ -35,16 +34,49 @@ For all options, see \code{?maxLik::maxLik}. Defaults to \code{"BFGS"}.}
 
 \item{maxit}{Maximum number of iterations for the numeric optimization,
 defaults to 500.}
+
+\item{...}{Extra argument to pass onto maxLik::maxLik}
 }
 \value{
 Returns an S3 object that can be used to perform the sensitivity
 analysis with \code{\link[=sensitivity_analysis_copula]{sensitivity_analysis_copula()}}.
 }
 \description{
-Fit ordinal-ordinal vine copula model
+\code{\link[=fit_copula_OrdOrd]{fit_copula_OrdOrd()}} fits the ordinal-ordinal vine copula model. See
+Details for more information about this model.
+}
+\details{
+\subsection{Vine Copula Model for Ordinal Endpoints}{
+
+Following the Neyman-Rubin potential outcomes framework, we assume that each
+patient has four potential outcomes, two for each arm, represented by
+\eqn{\boldsymbol{Y} = (T_0, S_0, S_1, T_1)'}. Here, \eqn{\boldsymbol{Y_z} =
+(S_z, T_z)'} are the potential surrogate and true endpoints under treatment
+\eqn{Z = z}.
+
+The latent variable notation and D-vine copula model for \eqn{\boldsymbol{Y}}
+is a straightforward extension of the notation in
+\code{\link[=ordinal_continuous_loglik]{ordinal_continuous_loglik()}}.
+}
+
+\subsection{Observed-Data Likelihood}{
+
+In practice, we only observe \eqn{(S_0, T_0)'} or \eqn{(S_1, T_1)'}. Hence, to
+estimate the (identifiable) parameters of the D-vine copula model, we need
+to derive the observed-data likelihood. The observed-data loglikelihood for
+\eqn{(S_z, T_z)'} is as follows:
+\deqn{
+f_{\boldsymbol{Y_z}}(s, t; \boldsymbol{\beta}) =
+P \left( c^{S_z}_{s - 1} < \tilde{S}_z, c^{T_z}_{t - 1} < \tilde{T}_z  \right) - P \left( c^{S_z}_{s} < \tilde{S}_z, c^{T_z}_{t - 1} < \tilde{T}_z  \right)
+- P \left( c^{S_z}_{s - 1} < \tilde{S}_z, c^{T_z}_{t} < \tilde{T}_z  \right) + P \left( c^{S_z}_{s} < \tilde{S}_z, c^{T_z}_{t} < \tilde{T}_z  \right).
+}
+The above expression is used in \code{\link[=ordinal_ordinal_loglik]{ordinal_ordinal_loglik()}} to compute the
+loglikelihood for the observed values for \eqn{Z = 0} or \eqn{Z = 1}.
+}
 }
 \seealso{
-\code{\link[=sensitivity_analysis_copula]{sensitivity_analysis_copula()}}
+\code{\link[=sensitivity_analysis_copula]{sensitivity_analysis_copula()}}, \code{\link[=print.vine_copula_fitted]{print.vine_copula_fitted()}},
+\code{\link[=plot.vine_copula_fitted]{plot.vine_copula_fitted()}}
 }
 \author{
 Florian Stijven

@@ -1,22 +1,25 @@
 #' Fit ordinal-ordinal vine copula model
 #'
-#' @param K_S Number of categories in the true endpoint.
-#' @inheritParams fit_copula_OrdCont
+#' [fit_copula_OrdOrd()] fits the ordinal-ordinal vine copula model. See
+#' Details for more information about this model.
 #'
-#' @return Returns an S3 object that can be used to perform the sensitivity
-#'   analysis with [sensitivity_analysis_copula()].
+#' @param K_S,K_T Number of categories in the surrogate and true endpoints.
+#' @inheritParams fit_copula_OrdCont
+#' @inheritParams fit_copula_submodel_OrdOrd
+#' @inherit ordinal_ordinal_loglik details
+#'
+#' @inherit fit_copula_OrdCont return seealso
 #' @export
 #'
 #' @author Florian Stijven
-#'
-#' @seealso [sensitivity_analysis_copula()]
 fit_copula_OrdOrd = function(data,
                               copula_family,
                               K_S,
                               K_T,
                               start_copula,
                               method = "BFGS",
-                              maxit = 500) {
+                              maxit = 500,
+                              ...) {
   # If copula_family is length 1, we repeat the same copula family.
   if (length(copula_family) == 1) {
     copula_family = rep(copula_family, 2)
@@ -61,6 +64,7 @@ fit_copula_OrdOrd = function(data,
 #' ordinal surrogate and true endpoint with maximum likelihood.
 #'
 #' @inheritParams ordinal_ordinal_loglik
+#' @inheritParams fit_copula_submodel_OrdCont
 #' @inherit fit_copula_submodel_OrdCont return
 fit_copula_submodel_OrdOrd = function(X,
                                       Y,
@@ -70,7 +74,8 @@ fit_copula_submodel_OrdOrd = function(X,
                                       K_X,
                                       K_Y,
                                       names_XY = c("Surr", "True"),
-                                      twostep = FALSE) {
+                                      twostep = FALSE,
+                                      ...) {
   # Number of parameters for X.
   p1 = K_X - 1
   # Number of parameters for Y.
@@ -141,7 +146,8 @@ fit_copula_submodel_OrdOrd = function(X,
       logLik = log_lik_function,
       start = start,
       method = method,
-      fixed = fixed
+      fixed = fixed,
+      ...
     )
   })
 
@@ -167,7 +173,7 @@ fit_copula_submodel_OrdOrd = function(X,
 #' is based on a latent variable representation of the ordinal endpoints.
 #'
 #' @details
-#' # Vine Copula Model for Ordinal Endpoints
+#' ## Vine Copula Model for Ordinal Endpoints
 #'
 #' Following the Neyman-Rubin potential outcomes framework, we assume that each
 #' patient has four potential outcomes, two for each arm, represented by
@@ -179,18 +185,16 @@ fit_copula_submodel_OrdOrd = function(X,
 #' is a straightforward extension of the notation in
 #' [ordinal_continuous_loglik()].
 #'
-#' # Observed-Data Likelihood
+#' ## Observed-Data Likelihood
 #'
 #' In practice, we only observe \eqn{(S_0, T_0)'} or \eqn{(S_1, T_1)'}. Hence, to
 #' estimate the (identifiable) parameters of the D-vine copula model, we need
 #' to derive the observed-data likelihood. The observed-data loglikelihood for
 #' \eqn{(S_z, T_z)'} is as follows:
 #' \deqn{
-#' \begin{split}
-#' f_{\boldsymbol{Y_z}}(s, t; \boldsymbol{\beta}) = &
-#' P \left( c^{S_z}_{s - 1} < \Tilde{S}_z, c^{T_z}_{t - 1} < \Tilde{T}_z  \right) - P \left( c^{S_z}_{s} < \Tilde{S}_z, c^{T_z}_{t - 1} < \Tilde{T}_z  \right) \\
-#' & - P \left( c^{S_z}_{s - 1} < \Tilde{S}_z, c^{T_z}_{t} < \Tilde{T}_z  \right) + P \left( c^{S_z}_{s} < \Tilde{S}_z, c^{T_z}_{t} < \Tilde{T}_z  \right).
-#' \end{split}
+#' f_{\boldsymbol{Y_z}}(s, t; \boldsymbol{\beta}) =
+#' P \left( c^{S_z}_{s - 1} < \tilde{S}_z, c^{T_z}_{t - 1} < \tilde{T}_z  \right) - P \left( c^{S_z}_{s} < \tilde{S}_z, c^{T_z}_{t - 1} < \tilde{T}_z  \right)
+#' - P \left( c^{S_z}_{s - 1} < \tilde{S}_z, c^{T_z}_{t} < \tilde{T}_z  \right) + P \left( c^{S_z}_{s} < \tilde{S}_z, c^{T_z}_{t} < \tilde{T}_z  \right).
 #' }
 #' The above expression is used in [ordinal_ordinal_loglik()] to compute the
 #' loglikelihood for the observed values for \eqn{Z = 0} or \eqn{Z = 1}.

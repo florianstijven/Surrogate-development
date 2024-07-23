@@ -100,7 +100,7 @@ fit_copula_OrdCont = function(data,
 #' continuous surrogate and an ordinal true endpoint with maximum likelihood.
 #'
 #' @param names_XY Names for `X` and `Y`, respectively.
-#' @param two_step (boolean) If `TRUE`, the starting values are fixed for the
+#' @param twostep (boolean) If `TRUE`, the starting values are fixed for the
 #'   marginal distributions and only the copula parameter is estimated.
 #' @param start_Y Starting values for the marginal distribution paramters for `Y`.
 #' @param start_copula Starting value for the copula parameter.

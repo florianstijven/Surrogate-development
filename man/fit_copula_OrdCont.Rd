@@ -53,6 +53,8 @@ defaults to 500.}
   Arguments passed on to \code{\link[=fit_copula_submodel_OrdCont]{fit_copula_submodel_OrdCont}}
   \describe{
     \item{\code{names_XY}}{Names for \code{X} and \code{Y}, respectively.}
+    \item{\code{twostep}}{(boolean) If \code{TRUE}, the starting values are fixed for the
+marginal distributions and only the copula parameter is estimated.}
     \item{\code{start_Y}}{Starting values for the marginal distribution paramters for \code{Y}.}
     \item{\code{X}}{First variable (Ordinal with \eqn{K} categories)}
     \item{\code{Y}}{Second variable (Continuous)}

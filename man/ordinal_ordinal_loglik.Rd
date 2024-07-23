@@ -43,7 +43,9 @@ a vector with the individual loglikelihood contributions is returned.}
 bivariate copula model with two ordinal endpoints. The model
 is based on a latent variable representation of the ordinal endpoints.
 }
-\section{Vine Copula Model for Ordinal Endpoints}{
+\details{
+\subsection{Vine Copula Model for Ordinal Endpoints}{
+
 Following the Neyman-Rubin potential outcomes framework, we assume that each
 patient has four potential outcomes, two for each arm, represented by
 \eqn{\boldsymbol{Y} = (T_0, S_0, S_1, T_1)'}. Here, \eqn{\boldsymbol{Y_z} =
@@ -55,19 +57,18 @@ is a straightforward extension of the notation in
 \code{\link[=ordinal_continuous_loglik]{ordinal_continuous_loglik()}}.
 }
 
-\section{Observed-Data Likelihood}{
+\subsection{Observed-Data Likelihood}{
+
 In practice, we only observe \eqn{(S_0, T_0)'} or \eqn{(S_1, T_1)'}. Hence, to
 estimate the (identifiable) parameters of the D-vine copula model, we need
 to derive the observed-data likelihood. The observed-data loglikelihood for
 \eqn{(S_z, T_z)'} is as follows:
 \deqn{
-\begin{split}
-f_{\boldsymbol{Y_z}}(s, t; \boldsymbol{\beta}) = &
-P \left( c^{S_z}_{s - 1} < \Tilde{S}_z, c^{T_z}_{t - 1} < \Tilde{T}_z  \right) - P \left( c^{S_z}_{s} < \Tilde{S}_z, c^{T_z}_{t - 1} < \Tilde{T}_z  \right) \\
-& - P \left( c^{S_z}_{s - 1} < \Tilde{S}_z, c^{T_z}_{t} < \Tilde{T}_z  \right) + P \left( c^{S_z}_{s} < \Tilde{S}_z, c^{T_z}_{t} < \Tilde{T}_z  \right).
-\end{split}
+f_{\boldsymbol{Y_z}}(s, t; \boldsymbol{\beta}) =
+P \left( c^{S_z}_{s - 1} < \tilde{S}_z, c^{T_z}_{t - 1} < \tilde{T}_z  \right) - P \left( c^{S_z}_{s} < \tilde{S}_z, c^{T_z}_{t - 1} < \tilde{T}_z  \right)
+- P \left( c^{S_z}_{s - 1} < \tilde{S}_z, c^{T_z}_{t} < \tilde{T}_z  \right) + P \left( c^{S_z}_{s} < \tilde{S}_z, c^{T_z}_{t} < \tilde{T}_z  \right).
 }
 The above expression is used in \code{\link[=ordinal_ordinal_loglik]{ordinal_ordinal_loglik()}} to compute the
 loglikelihood for the observed values for \eqn{Z = 0} or \eqn{Z = 1}.
 }
-
+}

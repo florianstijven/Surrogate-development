@@ -52,10 +52,10 @@ For all options, see \code{?maxLik::maxLik}. Defaults to \code{"BFGS"}.}
 
 \item{names_XY}{Names for \code{X} and \code{Y}, respectively.}
 
-\item{...}{Extra argument to pass onto maxLik::maxLik}
-
-\item{two_step}{(boolean) If \code{TRUE}, the starting values are fixed for the
+\item{twostep}{(boolean) If \code{TRUE}, the starting values are fixed for the
 marginal distributions and only the copula parameter is estimated.}
+
+\item{...}{Extra argument to pass onto maxLik::maxLik}
 }
 \value{
 A list with five elements:

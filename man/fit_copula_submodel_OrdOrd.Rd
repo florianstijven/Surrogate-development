@@ -13,7 +13,8 @@ fit_copula_submodel_OrdOrd(
   K_X,
   K_Y,
   names_XY = c("Surr", "True"),
-  twostep = FALSE
+  twostep = FALSE,
+  ...
 )
 }
 \arguments{
@@ -29,9 +30,21 @@ fit_copula_submodel_OrdOrd(
 \item \code{"gaussian"}
 }}
 
+\item{start_copula}{Starting value for the copula parameter.}
+
+\item{method}{Optimization algorithm for maximizing the objective function.
+For all options, see \code{?maxLik::maxLik}. Defaults to \code{"BFGS"}.}
+
 \item{K_X}{Number of categories in \code{X}.}
 
 \item{K_Y}{Number of categories in \code{Y}.}
+
+\item{names_XY}{Names for \code{X} and \code{Y}, respectively.}
+
+\item{twostep}{(boolean) If \code{TRUE}, the starting values are fixed for the
+marginal distributions and only the copula parameter is estimated.}
+
+\item{...}{Extra argument to pass onto maxLik::maxLik}
 }
 \value{
 A list with five elements:
