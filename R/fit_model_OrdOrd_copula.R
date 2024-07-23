@@ -208,7 +208,7 @@ fit_copula_submodel_OrdOrd = function(X,
 #' @inheritParams loglik_copula_scale
 #'
 #' @return (numeric) loglikelihood value evaluated in `para`.
-ordinal_ordinal_loglik <- function(para, X, Y, copula_family, K_X, K_Y){
+ordinal_ordinal_loglik <- function(para, X, Y, copula_family, K_X, K_Y, return_sum = TRUE){
   # Number of independent cut-points for the distribution of X.
   p1 = K_X - 1
   # Parameters for the distribution of X.
@@ -292,8 +292,9 @@ ordinal_ordinal_loglik <- function(para, X, Y, copula_family, K_X, K_Y){
   # The individual likelihood contributions (corresponding to interval-censored
   # data) is the difference of the two right-censored contributions.
   lik = lik1 - lik2 - lik3 + lik4
+  loglik = log(lik)
   # We take the log and sum to compute the observed-data log-likelihood.
-  loglik = sum(log(lik))
+  if (return_sum) loglik = sum(loglik)
 
   return(loglik)
 }

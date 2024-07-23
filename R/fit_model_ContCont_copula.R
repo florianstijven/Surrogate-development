@@ -31,14 +31,33 @@ fit_copula_ContCont = function(data,
   data0 = data[data$treat == 0, ]
   data1 = data[data$treat == 1, ]
 
+  # Starting values may be specified in the marginal_S0 and marginal_S1 lists.
+  if (length(marginal_S0) >= 5) {
+    start_S0 = marginal_S0[[5]]
+  }
+  else start_S0 = rep(1, marginal_S0[[4]])
+  if (length(marginal_S1) >= 5) {
+    start_S1 = marginal_S1[[5]]
+  }
+  else start_S1 = rep(1, marginal_S1[[4]])
+
+  if (length(marginal_T0) >= 5) {
+    start_T0 = marginal_T0[[5]]
+  }
+  else start_T0 = rep(1, marginal_T0[[4]])
+  if (length(marginal_T1) >= 5) {
+    start_T1 = marginal_T1[[5]]
+  }
+  else start_T1 = rep(1, marginal_T1[[4]])
+
   submodel_0 = fit_copula_submodel_ContCont(
     X = data0$surr,
     Y = data0$true,
     copula_family = copula_family[1],
     marginal_X = marginal_S0,
     marginal_Y = marginal_T0,
-    start_X = c(1, 1),
-    start_Y = c(1, 1),
+    start_X = start_S0,
+    start_Y = start_T0,
     start_copula = start_copula,
     method = method
   )
@@ -48,8 +67,8 @@ fit_copula_ContCont = function(data,
     copula_family = copula_family[2],
     marginal_X = marginal_S1,
     marginal_Y = marginal_T1,
-    start_X = c(1, 1),
-    start_Y = c(1, 1),
+    start_X = start_S1,
+    start_Y = start_T1,
     start_copula = start_copula,
     method = method
   )
@@ -240,27 +259,25 @@ conditional_mean_copula_ContCont = function(fitted_submodel, grid) {
   marginal_Y = attr(fitted_submodel$marginal_Y, "constructor")
   # Compute the expected value through numerical integration. First, define a
   # helper function that computes the bivariate estimated density.
-  dens_joint = function(x, y) {
-    dens = exp(
-      continuous_continuous_loglik(
-        para = para,
-        X = x,
-        Y = y,
-        copula_family = fitted_submodel$copula_family,
-        marginal_X = marginal_X,
-        marginal_Y = marginal_Y,
-        return_sum = FALSE
-      )
+  log_dens_joint = function(x, y) {
+    log_dens = continuous_continuous_loglik(
+      para = para,
+      X = x,
+      Y = y,
+      copula_family = fitted_submodel$copula_family,
+      marginal_X = marginal_X,
+      marginal_Y = marginal_Y,
+      return_sum = FALSE
     )
-    dens[is.nan(dens)] = 0
-    return(dens)
+    log_dens[is.nan(log_dens)] = -Inf
+    return(log_dens)
   }
 
   conditional_mean = sapply(grid,
          function(x) {
-           constant = pdf_x(x)
+           constant = log(pdf_x(x))
            integrand = function(y) {
-             y * dens_joint(rep(x, length(y)), y) / constant
+             y * exp(log_dens_joint(rep(x, length(y)), y) - constant)
            }
 
            cond_mean = stats::integrate(

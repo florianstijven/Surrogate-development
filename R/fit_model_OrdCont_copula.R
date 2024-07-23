@@ -31,13 +31,23 @@ fit_copula_OrdCont = function(data,
   data0 = data[data$treat == 0, ]
   data1 = data[data$treat == 1, ]
 
+  # Starting values may be specified in the marginal_S0 and marginal_S1 lists.
+  if (length(marginal_S0) >= 5) {
+    start_S0 = marginal_S0[[5]]
+  }
+  else start_S0 = rep(1, marginal_S0[[4]])
+  if (length(marginal_S1) >= 5) {
+    start_S1 = marginal_S1[[5]]
+  }
+  else start_S1 = rep(1, marginal_S1[[4]])
+
   submodel_0 = fit_copula_submodel_OrdCont(
     X = data0$true,
     Y = data0$surr,
     copula_family = copula_family[1],
     marginal_Y = marginal_S0,
     K = K_T,
-    start_Y = rep(1, marginal_S0[[4]]),
+    start_Y = start_S0,
     start_copula = start_copula,
     method = method,
     names_XY = c("True", "Surr")
@@ -48,7 +58,7 @@ fit_copula_OrdCont = function(data,
     copula_family = copula_family[2],
     marginal_Y = marginal_S1,
     K = K_T,
-    start_Y = rep(1, marginal_S1[[4]]),
+    start_Y = start_S1,
     start_copula = start_copula,
     method = method,
     names_XY = c("True", "Surr")

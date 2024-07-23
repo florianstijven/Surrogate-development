@@ -573,104 +573,11 @@ plot.vine_copula_fit = function(x, ...) {
   marginal_gof_copula(x$fit_0$marginal_X, x$fit_0$data$X, x$fit_0$names_XY[1], x$endpoint_types[1], 0)
   marginal_gof_copula(x$fit_0$marginal_Y, x$fit_0$data$Y, x$fit_0$names_XY[2], x$endpoint_types[2], 0)
 
-  marginal_gof_copula(x$fit_1$marginal_X, x$fit_1$data$X, x$fit_1$names_XY[1], x$endpoint_types[1], 0)
-  marginal_gof_copula(x$fit_1$marginal_Y, x$fit_1$data$Y, x$fit_1$names_XY[2], x$endpoint_types[2], 0)
+  marginal_gof_copula(x$fit_1$marginal_X, x$fit_1$data$X, x$fit_1$names_XY[1], x$endpoint_types[1], 1)
+  marginal_gof_copula(x$fit_1$marginal_Y, x$fit_1$data$Y, x$fit_1$names_XY[2], x$endpoint_types[2], 1)
   # GoF for the copula itself.
-  association_gof_copula(x$fit_0, treat = 0)
-  association_gof_copula(x$fit_1, treat = 1)
+  association_gof_copula(x$fit_0, treat = 0, x$endpoint_types)
+  association_gof_copula(x$fit_1, treat = 1, x$endpoint_types)
 }
 
-marginal_gof_copula = function(marginal, observed, name, type, treat) {
-  if (type == "ordinal") {
-    K = length(unique(observed))
-    plot(1:K, marginal$pmf(1:K),
-         xlab = "Category",
-         ylab = "Probability Mass Function",
-         main = paste0(name, ", Treat = ", treat))
-    lines(1:K, marginal$pmf(1:K))
-    points(1:K, sapply(1:K, function(x) mean(observed == x)), col = "red")
-    # legend(
-    #   x = "topright",
-    #   lty = 1,
-    #   col = c("red", "black"),
-    #   legend = c("Model-Based", "Empirical")
-    # )
-  }
-  if (type == "continuous") {
-    grid = seq(from = min(observed), to = max(observed), length.out = 2e2)
-    hist(observed, main = paste0(name, ", Treat = ", treat), freq = FALSE)
-    lines(grid, marginal$pdf(grid), col = "red")
-    # legend(
-    #   x = "topright",
-    #   lty = 1,
-    #   col = c("red"),
-    #   legend = c("Model-Based Density"),
-    # )
-  }
-}
 
-association_gof_copula = function(fitted_submodel, treat) {
-  if (fitted_model$endpoint_types == c("ordinal", "continuous")) {
-    # Compute model-based regression function
-    grid = seq(from = min(fitted_submodel$data$Y), to = max(fitted_submodel$data$Y), length.out = 2e2)
-    cond_mean = conditional_mean_copula_OrdCont(fitted_submodel, grid)
-    # Compute semi-parametric regression function.
-    K = length(unique(fitted_submodel$data$X))
-    y = fitted_submodel$data$X
-    x = fitted_submodel$data$Y
-    fit_gam = mgcv::gam(y~s(x), family = stats::quasi())
-    predictions = mgcv::predict.gam(fit_gam, type = "response", newdata = data.frame(x = grid), se.fit = TRUE)
-
-    # Make plot.
-    plot(grid, cond_mean, type = "l", col = "red", ylim = c(0.5, K + 0.5),
-         xlab = "S",
-         ylab = "E(T | S)",
-         main = paste0("Treat = ", treat))
-    lines(
-      x = grid,
-      y = predictions$fit
-    )
-    lines(
-      x = grid,
-      y = predictions$fit + 1.96 * predictions$se.fit,
-      lty = 2
-    )
-    lines(
-      x = grid,
-      y = predictions$fit - 1.96 * predictions$se.fit,
-      lty = 2
-    )
-    points(x = x, y = y, col = "gray")
-  }
-  else if (fitted_model$endpoint_types == c("continuous", "continuous")) {
-    # Compute model-based regression function
-    grid = seq(from = min(fitted_submodel$data$X), to = max(fitted_submodel$data$X), length.out = 2e2)
-    cond_mean = conditional_mean_copula_ContCont(fitted_submodel, grid)
-    # Compute semi-parametric regression function.
-    x = fitted_submodel$data$X
-    y = fitted_submodel$data$Y
-    fit_gam = mgcv::gam(y~s(x), family = stats::quasi())
-    predictions = mgcv::predict.gam(fit_gam, type = "response", newdata = data.frame(x = grid), se.fit = TRUE)
-
-    # Make plot.
-    plot(grid, cond_mean, type = "l", col = "red", ylim = c(min(y), max(y)),
-         xlab = "S",
-         ylab = "E(T | S)",
-         main = paste0("Treat = ", treat))
-    lines(
-      x = grid,
-      y = predictions$fit
-    )
-    lines(
-      x = grid,
-      y = predictions$fit + 1.96 * predictions$se.fit,
-      lty = 2
-    )
-    lines(
-      x = grid,
-      y = predictions$fit - 1.96 * predictions$se.fit,
-      lty = 2
-    )
-    points(x = x, y = y, col = "gray")
-  }
-}

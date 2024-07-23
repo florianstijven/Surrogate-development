@@ -88,3 +88,4 @@ test_that("Gaussian copula likelihood works with left-censoring of second variab
   expect_equal(log_lik[1:3], c(-0.99967234, -0.28768207, -0.35667494))
 })
 
+
