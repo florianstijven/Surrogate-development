@@ -1,4 +1,17 @@
+#' Produce marginal GoF plot
+#'
+#' @param marginal Estimated marginal distribution represented by a list with
+#'   three elements in the following order: the estimated cdf, pdf, and inverse
+#'   cdf.
+#' @param observed Observed values. These are used for the histogram.
+#' @param name Name of the endpoint (used in the plot title).
+#' @param type Type of endpoint: `"ordinal"` or `"continuous"`
+#' @param treat Value for the treatment indicator.
+#'
+#' @seealso [plot.vine_copula_fit()]
+#' @return NULL
 marginal_gof_copula = function(marginal, observed, name, type, treat) {
+  # The type of plot depends on the type of endpoint.
   if (type == "ordinal") {
     K = length(unique(observed))
     plot(
@@ -54,6 +67,17 @@ marginal_gof_copula = function(marginal, observed, name, type, treat) {
   }
 }
 
+#' Produce Associational GoF plot
+#'
+#'
+#' @param fitted_submodel List returned by [fit_copula_submodel_OrdCont()],
+#' [fit_copula_submodel_ContCont()], or [fit_copula_submodel_OrdOrd()].
+#' @param endpoint_types Character vector with 2 elements indicating the type of endpoints. Each element is either
+#' `"ordinal"` or `"continuous"`.
+#' @inheritParams marginal_gof_copula
+#'
+#' @return NULL
+#' @seealso [plot.vine_copula_fit()]
 association_gof_copula = function(fitted_submodel, treat, endpoint_types) {
   if (all(endpoint_types == c("ordinal", "continuous"))) {
     # Compute model-based regression function
@@ -157,7 +181,9 @@ association_gof_copula = function(fitted_submodel, treat, endpoint_types) {
     cond_pmf = function(x, y) {
       joint_pmf(x, y) / marginal_prob_x[x]
     }
-
+    # Plote the conditional probabilities P(T = t | S). We have one plot for
+    # each possible value of T. In each plot, the conditional probabilities are
+    # plotted for all possible values of S.
     for (y_value in seq_along(1:K_Y)) {
       plot(
         1:K_X,
@@ -173,8 +199,9 @@ association_gof_copula = function(fitted_submodel, treat, endpoint_types) {
                fitted_submodel$data$Y == y_value) / marginal_prob_x_emp[x]
       })
       points(1:K_X, pi_cond, col = "red")
-
+      # number of observations for each conditional probality.
       n_X = marginal_prob_x_emp * n
+      # Add whiskers representing 95% CIs based on the empirical proportions.
       arrows(
         1:K_X,
         sapply(1:K_X, function(x) {
