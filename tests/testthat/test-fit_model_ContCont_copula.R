@@ -181,6 +181,125 @@ test_that("fit_copula_ContCont() works", {
 }
 )
 
+test_that("fit_copula_ContCont() works with the non-central ", {
+  data("Schizo")
+  na = is.na(Schizo$BPRS) | is.na(Schizo$PANSS)
+  X = Schizo$BPRS[!na]
+  Y = Schizo$PANSS[!na]
+  Treat = Schizo$Treat[!na]
+  Treat = ifelse(Treat == 1, 1, 0)
+  data = data.frame(X,
+                    Y,
+                    Treat)
+
+
+  marginal_S = list(
+    pdf_fun = function(x, para) {
+      sn::dsn(x, xi = para[1], omega = para[2], tau = para[3])
+    },
+    cdf_fun = function(x, para) {
+      sn::psn(x, xi = para[1], omega = para[2], tau = para[3])
+    },
+    q_fun = function(p, para) {
+      sn::qsn(x, xi = para[1], omega = para[2], tau = para[3])
+    },
+    n_para = 3,
+    start = c(mean(data$X), sd(data$X), 0)
+  )
+
+  marginal_T = list(
+    pdf_fun = function(x, para) {
+      sn::dsn(x, xi = para[1], omega = para[2], tau = para[3])
+    },
+    cdf_fun = function(x, para) {
+      sn::psn(x, xi = para[1], omega = para[2], tau = para[3])
+    },
+    q_fun = function(p, para) {
+      sn::qsn(x, xi = para[1], omega = para[2], tau = para[3])
+    },
+    n_para = 3,
+    start = c(mean(data$Y), sd(data$Y), 0)
+  )
+
+  fitted_model = fit_copula_ContCont(
+    data = data,
+    copula_family = "clayton",
+    marginal_S0 = marginal_S,
+    marginal_S1 = marginal_S,
+    marginal_T0 = marginal_T,
+    marginal_T1 = marginal_T,
+    start_copula = 5
+  )
+  expect_equal(
+    fitted_model$fit_0$ml_fit$maximum,
+    -294.088304226
+  )
+}
+)
+
+# test_that("fit_copula_ContCont() works with the skewed normal ", {
+#   data("Schizo")
+#   na = is.na(Schizo$BPRS) | is.na(Schizo$PANSS)
+#   X = Schizo$BPRS[!na]
+#   Y = Schizo$PANSS[!na]
+#   Treat = Schizo$Treat[!na]
+#   Treat = ifelse(Treat == 1, 1, 0)
+#   data = data.frame(X,
+#                     Y,
+#                     Treat)
+#
+#
+#   marginal_S0 = list(
+#     pdf_fun = function(x, para) {
+#       sn::dsn(x, xi = para[1], omega = exp(para[2]), alpha = para[3])
+#     },
+#     cdf_fun = function(x, para) {
+#       sn::psn(x, xi = para[1], omega = exp(para[2]), alpha = para[3])
+#     },
+#     q_fun = function(p, para) {
+#       sn::qsn(x, xi = para[1], omega = exp(para[2]), alpha = para[3])
+#     },
+#     n_para = 3,
+#     start = c(13.67444, 3.24893, -3.47)
+#   )
+#   marginal_S1 = marginal_S0
+#   marginal_S1[[5]] = c(mean(data$X[data$Treat == 1]), log(sd(data$X[data$Treat == 1])), 0)
+#
+#   marginal_T0 = list(
+#     pdf_fun = function(x, para) {
+#       sn::dsn(x, xi = para[1], omega = exp(para[2]), alpha = para[3])
+#     },
+#     cdf_fun = function(x, para) {
+#       sn::psn(x, xi = para[1], omega = exp(para[2]), alpha = para[3])
+#     },
+#     q_fun = function(p, para) {
+#       sn::qsn(x, xi = para[1], omega = exp(para[2]), alpha = para[3])
+#     },
+#     n_para = 3,
+#     start = c(23.14603, 3.78565, -3.16)
+#   )
+#   marginal_T1 = marginal_T0
+#   marginal_T1[[5]] = c(mean(data$Y[data$Treat == 1]), log(sd(data$Y[data$Treat == 1])), 0)
+#
+#   fitted_model = fit_copula_ContCont(
+#     data = data,
+#     copula_family = "clayton",
+#     marginal_S0 = marginal_S0,
+#     marginal_S1 = marginal_S1,
+#     marginal_T0 = marginal_T0,
+#     marginal_T1 = marginal_T1,
+#     start_copula = 6.5,
+#     method = "BFGS",
+#     finalHessian = "BHHH"
+#   )
+#   print.vine_copula_fit(fitted_model)
+#   expect_equal(
+#     fitted_model$fit_0$ml_fit$maximum,
+#     -294.088304226
+#   )
+# }
+# )
+
 test_that("GoF functions work", {
   S0 = c(1, 6, 2, 5, 3, 6, 4)
   S0 = rep(S0, 10)

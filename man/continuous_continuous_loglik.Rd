@@ -4,7 +4,15 @@
 \alias{continuous_continuous_loglik}
 \title{Loglikelihood function for continuous-continuous copula model}
 \usage{
-continuous_continuous_loglik(para, X, Y, copula_family, marginal_X, marginal_Y)
+continuous_continuous_loglik(
+  para,
+  X,
+  Y,
+  copula_family,
+  marginal_X,
+  marginal_Y,
+  return_sum = TRUE
+)
 }
 \arguments{
 \item{para}{Parameter vector. The parameters are ordered as follows:
@@ -38,6 +46,9 @@ vector for this distribution.
 }}
 
 \item{marginal_Y}{See \code{marginal_X}}
+
+\item{return_sum}{Return the sum of the individual loglikelihoods? If \code{FALSE},
+a vector with the individual loglikelihood contributions is returned.}
 }
 \value{
 (numeric) loglikelihood value evaluated in \code{para}.

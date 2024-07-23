@@ -252,12 +252,13 @@ fit_copula_submodel_OrdCont = function(X,
 #' * `para[p1 + p2 + 1]`: copula parameter
 #' @param X First variable (Ordinal with \eqn{K} categories)
 #' @param Y Second variable (Continuous)
-#' @param marginal_Y List with the following four elements (in order):
+#' @param marginal_Y List with the following five elements (in order):
 #' * Density function with first argument `x` and second argument `para` the parameter
 #' vector for this distribution.
 #' * Distribution function with first argument `x` and second argument `para`.
 #' * Inverse distribution function with first argument `p` and second argument `para`.
 #' * The number of elements in `para`.
+#' * Starting values for `para`.
 #' @param K Number of categories in `X`.
 #' @inheritParams loglik_copula_scale
 #'

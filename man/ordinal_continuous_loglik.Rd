@@ -4,7 +4,15 @@
 \alias{ordinal_continuous_loglik}
 \title{Loglikelihood function for ordinal-continuous copula model}
 \usage{
-ordinal_continuous_loglik(para, X, Y, copula_family, marginal_Y, K)
+ordinal_continuous_loglik(
+  para,
+  X,
+  Y,
+  copula_family,
+  marginal_Y,
+  K,
+  return_sum = TRUE
+)
 }
 \arguments{
 \item{para}{Parameter vector. The parameters are ordered as follows:
@@ -28,16 +36,20 @@ ordinal_continuous_loglik(para, X, Y, copula_family, marginal_Y, K)
 \item \code{"gaussian"}
 }}
 
-\item{marginal_Y}{List with the following four elements (in order):
+\item{marginal_Y}{List with the following five elements (in order):
 \itemize{
 \item Density function with first argument \code{x} and second argument \code{para} the parameter
 vector for this distribution.
 \item Distribution function with first argument \code{x} and second argument \code{para}.
 \item Inverse distribution function with first argument \code{p} and second argument \code{para}.
 \item The number of elements in \code{para}.
+\item Starting values for \code{para}.
 }}
 
 \item{K}{Number of categories in \code{X}.}
+
+\item{return_sum}{Return the sum of the individual loglikelihoods? If \code{FALSE},
+a vector with the individual loglikelihood contributions is returned.}
 }
 \value{
 (numeric) loglikelihood value evaluated in \code{para}.

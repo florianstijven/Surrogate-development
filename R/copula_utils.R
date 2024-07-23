@@ -497,7 +497,11 @@ marginal_cont_constructor = function(marginal_Y, param) {
 
 #' Estimate marginal distribution using ML
 #'
-#' @inheritParams fit_copula_submodel_OrdCont_twostep
+#' [estimate_marginal()] estimates the marginal distribution specified by
+#' `marginal_Y` using maximum likelihood. The optimizer is Newton-Raphson.
+#'
+#' @param Y Observations (continuous)
+#' @inheritParams fit_copula_submodel_OrdCont
 #'
 #' @return Estimated parameters
 estimate_marginal = function(Y, marginal_Y, starting_values) {
@@ -505,7 +509,6 @@ estimate_marginal = function(Y, marginal_Y, starting_values) {
   log_lik_function = function(para) {
     sum(log(marginal_Y[[1]](Y, para)))
   }
-
   suppressWarnings({
     estimates = coef(maxLik::maxLik(
       logLik = log_lik_function,

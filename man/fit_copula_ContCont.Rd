@@ -13,7 +13,9 @@ fit_copula_ContCont(
   marginal_T1,
   start_copula,
   method = "BFGS",
-  maxit = 500
+  maxit = 500,
+  copula_transform = function(x) x,
+  ...
 )
 }
 \arguments{

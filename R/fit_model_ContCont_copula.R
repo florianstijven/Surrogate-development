@@ -17,7 +17,9 @@ fit_copula_ContCont = function(data,
                               marginal_T1,
                               start_copula,
                               method = "BFGS",
-                              maxit = 500) {
+                              maxit = 500,
+                              copula_transform = function(x) x,
+                              ...) {
   # If copula_family is length 1, we repeat the same copula family.
   if (length(copula_family) == 1) {
     copula_family = rep(copula_family, 2)
@@ -59,7 +61,9 @@ fit_copula_ContCont = function(data,
     start_X = start_S0,
     start_Y = start_T0,
     start_copula = start_copula,
-    method = method
+    method = method,
+    copula_transform = copula_transform,
+    ...
   )
   submodel_1 = fit_copula_submodel_ContCont(
     X = data1$surr,
@@ -70,7 +74,9 @@ fit_copula_ContCont = function(data,
     start_X = start_S1,
     start_Y = start_T1,
     start_copula = start_copula,
-    method = method
+    method = method,
+    copula_transform = copula_transform,
+    ...
   )
 
 
@@ -97,7 +103,9 @@ fit_copula_submodel_ContCont = function(X,
                                         start_copula,
                                         method = "BFGS",
                                         names_XY = c("Surr", "True"),
-                                        twostep = FALSE)
+                                        twostep = FALSE,
+                                        copula_transform = function(x) x,
+                                        ...)
 {
   # Number of parameters for X.
   p1 = marginal_X[[4]]
@@ -106,13 +114,15 @@ fit_copula_submodel_ContCont = function(X,
 
   # loglikelihood function to be maximized.
   log_lik_function = function(para) {
+    para[p1 + p2 + 1] = copula_transform(para[p1 + p2 + 1])
     continuous_continuous_loglik(
       para = para,
       X = X,
       Y = Y,
       copula_family = copula_family,
       marginal_X = marginal_X,
-      marginal_Y = marginal_Y
+      marginal_Y = marginal_Y,
+      return_sum = FALSE
     )
   }
   # Estimate marginal distribution of X.
@@ -151,7 +161,8 @@ fit_copula_submodel_ContCont = function(X,
                                                 start_X,
                                                 start_Y,
                                                 start_copula,
-                                                twostep = TRUE)
+                                                twostep = TRUE,
+                                                copula_transform = copula_transform)
 
     start_copula = coef(two_step_fit$ml_fit)[p1 + p2 + 1]
   }
@@ -163,7 +174,8 @@ fit_copula_submodel_ContCont = function(X,
       logLik = log_lik_function,
       start = start,
       method = method,
-      fixed = fixed
+      fixed = fixed,
+      ...
     )
   })
 

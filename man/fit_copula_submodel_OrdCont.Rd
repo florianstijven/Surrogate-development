@@ -30,13 +30,14 @@ fit_copula_submodel_OrdCont(
 \item \code{"gaussian"}
 }}
 
-\item{marginal_Y}{List with the following four elements (in order):
+\item{marginal_Y}{List with the following five elements (in order):
 \itemize{
 \item Density function with first argument \code{x} and second argument \code{para} the parameter
 vector for this distribution.
 \item Distribution function with first argument \code{x} and second argument \code{para}.
 \item Inverse distribution function with first argument \code{p} and second argument \code{para}.
 \item The number of elements in \code{para}.
+\item Starting values for \code{para}.
 }}
 
 \item{K}{Number of categories in \code{X}.}

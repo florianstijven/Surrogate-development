@@ -1,6 +1,7 @@
+#' @export
 summary.TrialLevelMA <- function(object, ..., Object){
-  
-  if (missing(Object)){Object <- object} 
+
+  if (missing(Object)){Object <- object}
   cat("\nFunction call:\n\n")
   print(Object$Call)
   cat("\n\n# Data summary and descriptives")

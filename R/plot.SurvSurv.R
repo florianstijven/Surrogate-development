@@ -1,3 +1,4 @@
+#' @export
 plot.SurvSurv <- function(x, Trial.Level=TRUE, Weighted=TRUE,
 Indiv.Level.By.Trial=TRUE, Xlab.Indiv, Ylab.Indiv, Xlab.Trial,
 Ylab.Trial, Main.Trial, Main.Indiv,

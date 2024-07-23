@@ -6,9 +6,23 @@
 \usage{
 estimate_marginal(Y, marginal_Y, starting_values)
 }
+\arguments{
+\item{Y}{Observations (continuous)}
+
+\item{marginal_Y}{List with the following five elements (in order):
+\itemize{
+\item Density function with first argument \code{x} and second argument \code{para} the parameter
+vector for this distribution.
+\item Distribution function with first argument \code{x} and second argument \code{para}.
+\item Inverse distribution function with first argument \code{p} and second argument \code{para}.
+\item The number of elements in \code{para}.
+\item Starting values for \code{para}.
+}}
+}
 \value{
 Estimated parameters
 }
 \description{
-Estimate marginal distribution using ML
+\code{\link[=estimate_marginal]{estimate_marginal()}} estimates the marginal distribution specified by
+\code{marginal_Y} using maximum likelihood. The optimizer is Newton-Raphson.
 }

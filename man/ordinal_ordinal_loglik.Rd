@@ -4,7 +4,7 @@
 \alias{ordinal_ordinal_loglik}
 \title{Loglikelihood function for ordinal-ordinal copula model}
 \usage{
-ordinal_ordinal_loglik(para, X, Y, copula_family, K_X, K_Y)
+ordinal_ordinal_loglik(para, X, Y, copula_family, K_X, K_Y, return_sum = TRUE)
 }
 \arguments{
 \item{para}{Parameter vector. The parameters are ordered as follows:
@@ -31,6 +31,9 @@ ordinal_ordinal_loglik(para, X, Y, copula_family, K_X, K_Y)
 \item{K_X}{Number of categories in \code{X}.}
 
 \item{K_Y}{Number of categories in \code{Y}.}
+
+\item{return_sum}{Return the sum of the individual loglikelihoods? If \code{FALSE},
+a vector with the individual loglikelihood contributions is returned.}
 }
 \value{
 (numeric) loglikelihood value evaluated in \code{para}.

@@ -66,7 +66,7 @@ MICA.ContCont <- function(Trial.R, D.aa, D.bb, T0S0, T1S1, T0T0=1, T1T1=1, S0S0=
 }
 
 
-
+#' @export
 plot.MICA.ContCont <- function(x, ICA=TRUE, MICA=TRUE, Type="Percent", Labels=FALSE, Xlab.ICA, Main.ICA, Xlab.MICA, Main.MICA,
                                Par=par(oma=c(0, 0, 0, 0), mar=c(5.1, 4.1, 4.1, 2.1)), col, ...){
 
@@ -162,7 +162,7 @@ plot.MICA.ContCont <- function(x, ICA=TRUE, MICA=TRUE, Type="Percent", Labels=FA
   }
 }
 
-
+#' @export
 summary.MICA.ContCont <- function(object, ..., Object){
 
 

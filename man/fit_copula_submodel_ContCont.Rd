@@ -15,7 +15,9 @@ fit_copula_submodel_ContCont(
   start_copula,
   method = "BFGS",
   names_XY = c("Surr", "True"),
-  twostep = FALSE
+  twostep = FALSE,
+  copula_transform = function(x) x,
+  ...
 )
 }
 \arguments{
