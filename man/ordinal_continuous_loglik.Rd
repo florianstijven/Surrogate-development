@@ -59,7 +59,9 @@ a vector with the individual loglikelihood contributions is returned.}
 bivariate copula model with a continuous and an ordinal endpoint. The model
 is based on a latent variable representation of the ordinal endpoint.
 }
-\section{Vine Copula Model for Ordinal Endpoints}{
+\details{
+\subsection{Vine Copula Model for Ordinal Endpoints}{
+
 Following the Neyman-Rubin potential outcomes framework, we assume that each
 patient has four potential outcomes, two for each arm, represented by
 \eqn{\boldsymbol{Y} = (T_0, S_0, S_1, T_1)'}. Here, \eqn{\boldsymbol{Y_z} =
@@ -104,7 +106,8 @@ is the copula density of \eqn{(T_0, S_1)' \mid S_0}. We also make the
 simplifying assumption for all copulas.
 }
 
-\section{Observed-Data Likelihood}{
+\subsection{Observed-Data Likelihood}{
+
 In practice, we only observe \eqn{(S_0, T_0)'} or \eqn{(S_1, T_1)'}. Hence, to
 estimate the (identifiable) parameters of the D-vine copula model, we need
 to derive the observed-data likelihood. The observed-data loglikelihood for
@@ -119,4 +122,4 @@ function, \code{X} and \code{Y} correspond to \eqn{T_z} and \eqn{S_z} if \eqn{T_
 ordinal and \eqn{S_z} continuous. Otherwise, \code{X} and \code{Y} correspond to
 \eqn{S_z} and \eqn{T_z}.
 }
-
+}

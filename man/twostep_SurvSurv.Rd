@@ -45,7 +45,7 @@ If \code{length(n_knots) == 1}, the same number of knots are assumed for the
 four marginal distributions.}
 
 \item{method}{Optimization algorithm for maximizing the objective function.
-For all options, see \code{?maxLik::maxLik}. Defaults to \code{"BFGRS"}.}
+For all options, see \code{?maxLik::maxLik}. Defaults to \code{"BFGS"}.}
 }
 \value{
 A list with three elements:

@@ -26,8 +26,21 @@ fit_copula_ContCont(
 \code{copula_family} corresponds to the control group, the second to the
 experimental group.}
 
+\item{marginal_S0, marginal_S1, marginal_T0, marginal_T1}{List with the
+following three elements (in order):
+\itemize{
+\item Density function with first argument \code{x} and second argument \code{para} the parameter
+vector for this distribution.
+\item Distribution function with first argument \code{x} and second argument \code{para} the parameter
+vector for this distribution.
+\item Inverse distribution function with first argument \code{p} and second argument \code{para} the parameter
+vector for this distribution.
+\item The number of elements in \code{para}.
+\item A vector of starting values for \code{para}.
+}}
+
 \item{method}{Optimization algorithm for maximizing the objective function.
-For all options, see \code{?maxLik::maxLik}. Defaults to \code{"BFGRS"}.}
+For all options, see \code{?maxLik::maxLik}. Defaults to \code{"BFGS"}.}
 
 \item{maxit}{Maximum number of iterations for the numeric optimization,
 defaults to 500.}

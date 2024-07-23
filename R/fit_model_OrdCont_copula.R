@@ -1,7 +1,25 @@
 #' Fit ordinal-continuous vine copula model
 #'
+#' [fit_copula_OrdCont()] fits the ordinal-continuous vine copula model. See
+#' Details for more information about this model.
+#'
+#' @param data data frame with three columns in the following order: surrogate
+#'   endpoint, true endpoint, and treatment indicator (0/1 coding). Ordinal endpoints
+#'   should be integers starting from `1`.
 #' @param K_T Number of categories in the true endpoint.
-#' @inheritParams fit_model_SurvSurv
+#' @param marginal_S0,marginal_S1 List with the
+#'   following three elements (in order):
+#' * Density function with first argument `x` and second argument `para` the parameter
+#'   vector for this distribution.
+#' * Distribution function with first argument `x` and second argument `para` the parameter
+#'   vector for this distribution.
+#' * Inverse distribution function with first argument `p` and second argument `para` the parameter
+#'   vector for this distribution.
+#' * The number of elements in `para`.
+#' * A vector of starting values for `para`.
+#' @inheritParams fit_copula_ContCont
+#' @inheritParams fit_copula_submodel_OrdCont
+#' @inherit ordinal_continuous_loglik details
 #'
 #' @return Returns an S3 object that can be used to perform the sensitivity
 #'   analysis with [sensitivity_analysis_copula()].
@@ -9,15 +27,17 @@
 #'
 #' @author Florian Stijven
 #'
-#' @seealso [sensitivity_analysis_copula()]
+#' @seealso [sensitivity_analysis_copula()], [print.vine_copula_fitted()],
+#'   [plot.vine_copula_fitted()]
 fit_copula_OrdCont = function(data,
-                               copula_family,
-                               marginal_S0,
-                               marginal_S1,
-                               K_T,
-                               start_copula,
-                               method = "BFGS",
-                               maxit = 500) {
+                              copula_family,
+                              marginal_S0,
+                              marginal_S1,
+                              K_T,
+                              start_copula,
+                              method = "BFGS",
+                              maxit = 500
+) {
   # If copula_family is length 1, we repeat the same copula family.
   if (length(copula_family) == 1) {
     copula_family = rep(copula_family, 2)
@@ -74,15 +94,23 @@ fit_copula_OrdCont = function(data,
 #' The `fit_copula_submodel_OrdCont()` function fits the copula (sub)model for a
 #' continuous surrogate and an ordinal true endpoint with maximum likelihood.
 #'
-#' @param name description
+#' @param names_XY Names for `X` and `Y`, respectively.
+#' @param two_step (boolean) If `TRUE`, the starting values are fixed for the
+#'   marginal distributions and only the copula parameter is estimated.
+#' @param start_Y Starting values for the marginal distribution paramters for `Y`.
+#' @param start_copula Starting value for the copula parameter.
 #' @inheritParams ordinal_continuous_loglik
+#' @inheritParams fit_model_SurvSurv
 #'
 #' @return A list with four elements:
 #' * ml_fit: object of class `maxLik::maxLik` that contains the estimated copula
 #'  model.
-#' * marginal_X: list with the estimated cdf, pdf, and inverse cdf for X.
-#' * marginal_Y: list with the estimated cdf, pdf, and inverse cdf for X.
+#' * marginal_X: list with the estimated cdf, pdf/pmf, and inverse cdf for X.
+#' * marginal_Y: list with the estimated cdf, pdf/pmf, and inverse cdf for X.
 #' * copula_family: string that indicates the copula family
+#' * data: data frame containing `X` and `Y`
+#' * names_XY: The names (i.e., `"Surr"` and `"True"`) for `X` and `Y`
+#' @seealso [ordinal_continuous_loglik()]
 fit_copula_submodel_OrdCont = function(X,
                                        Y,
                                        copula_family,
@@ -181,7 +209,8 @@ fit_copula_submodel_OrdCont = function(X,
 #' is based on a latent variable representation of the ordinal endpoint.
 #'
 #' @details
-#' # Vine Copula Model for Ordinal Endpoints
+#'
+#' ## Vine Copula Model for Ordinal Endpoints
 #'
 #' Following the Neyman-Rubin potential outcomes framework, we assume that each
 #' patient has four potential outcomes, two for each arm, represented by
@@ -227,7 +256,7 @@ fit_copula_submodel_OrdCont = function(X,
 #' is the copula density of \eqn{(T_0, S_1)' \mid S_0}. We also make the
 #' simplifying assumption for all copulas.
 #'
-#' # Observed-Data Likelihood
+#' ## Observed-Data Likelihood
 #'
 #' In practice, we only observe \eqn{(S_0, T_0)'} or \eqn{(S_1, T_1)'}. Hence, to
 #' estimate the (identifiable) parameters of the D-vine copula model, we need
@@ -252,6 +281,7 @@ fit_copula_submodel_OrdCont = function(X,
 #' * `para[p1 + p2 + 1]`: copula parameter
 #' @param X First variable (Ordinal with \eqn{K} categories)
 #' @param Y Second variable (Continuous)
+#' @param K Number of categories in `X`.
 #' @param marginal_Y List with the following five elements (in order):
 #' * Density function with first argument `x` and second argument `para` the parameter
 #' vector for this distribution.
@@ -259,7 +289,6 @@ fit_copula_submodel_OrdCont = function(X,
 #' * Inverse distribution function with first argument `p` and second argument `para`.
 #' * The number of elements in `para`.
 #' * Starting values for `para`.
-#' @param K Number of categories in `X`.
 #' @inheritParams loglik_copula_scale
 #'
 #' @return (numeric) loglikelihood value evaluated in `para`.

@@ -36,16 +36,17 @@ continuous_continuous_loglik(
 \item \code{"gaussian"}
 }}
 
-\item{marginal_X}{List with the following three elements (in order):
+\item{marginal_X, marginal_Y}{List with the following three elements (in order):
 \itemize{
 \item Density function with first argument \code{x} and second argument \code{para} the parameter
 vector for this distribution.
 \item Distribution function with first argument \code{x} and second argument \code{para} the parameter
 vector for this distribution.
+\item Inverse distribution function with first argument \code{p} and second argument \code{para} the parameter
+vector for this distribution.
 \item The number of elements in \code{para}.
+\item A vector of starting values for \code{para}.
 }}
-
-\item{marginal_Y}{See \code{marginal_X}}
 
 \item{return_sum}{Return the sum of the individual loglikelihoods? If \code{FALSE},
 a vector with the individual loglikelihood contributions is returned.}

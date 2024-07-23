@@ -38,9 +38,11 @@ A list with four elements:
 \itemize{
 \item ml_fit: object of class \code{maxLik::maxLik} that contains the estimated copula
 model.
-\item marginal_X: list with the estimated cdf, pdf, and inverse cdf for X.
-\item marginal_Y: list with the estimated cdf, pdf, and inverse cdf for X.
+\item marginal_X: list with the estimated cdf, pdf/pmf, and inverse cdf for X.
+\item marginal_Y: list with the estimated cdf, pdf/pmf, and inverse cdf for X.
 \item copula_family: string that indicates the copula family
+\item data: data frame containing \code{X} and \code{Y}
+\item names_XY: The names (i.e., \code{"Surr"} and \code{"True"}) for \code{X} and \code{Y}
 }
 }
 \description{

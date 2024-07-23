@@ -363,7 +363,7 @@ model_fit_measures = function(fitted_model){
 #' * `1L` if true endpoint event ocurred.
 #' * `0L` if censored.
 #' @param method Optimization algorithm for maximizing the objective function.
-#'   For all options, see `?maxLik::maxLik`. Defaults to `"BFGRS"`.
+#'   For all options, see `?maxLik::maxLik`. Defaults to `"BFGS"`.
 #'
 #' @inheritParams loglik_copula_scale
 #' @inheritParams fit_model_SurvSurv

@@ -33,16 +33,17 @@ fit_copula_submodel_ContCont(
 \item \code{"gaussian"}
 }}
 
-\item{marginal_X}{List with the following three elements (in order):
+\item{marginal_X, marginal_Y}{List with the following three elements (in order):
 \itemize{
 \item Density function with first argument \code{x} and second argument \code{para} the parameter
 vector for this distribution.
 \item Distribution function with first argument \code{x} and second argument \code{para} the parameter
 vector for this distribution.
+\item Inverse distribution function with first argument \code{p} and second argument \code{para} the parameter
+vector for this distribution.
 \item The number of elements in \code{para}.
+\item A vector of starting values for \code{para}.
 }}
-
-\item{marginal_Y}{See \code{marginal_X}}
 
 \item{name}{description}
 }
@@ -51,9 +52,11 @@ A list with four elements:
 \itemize{
 \item ml_fit: object of class \code{maxLik::maxLik} that contains the estimated copula
 model.
-\item marginal_X: list with the estimated cdf, pdf, and inverse cdf for X.
-\item marginal_Y: list with the estimated cdf, pdf, and inverse cdf for X.
+\item marginal_X: list with the estimated cdf, pdf/pmf, and inverse cdf for X.
+\item marginal_Y: list with the estimated cdf, pdf/pmf, and inverse cdf for X.
 \item copula_family: string that indicates the copula family
+\item data: data frame containing \code{X} and \code{Y}
+\item names_XY: The names (i.e., \code{"Surr"} and \code{"True"}) for \code{X} and \code{Y}
 }
 }
 \description{

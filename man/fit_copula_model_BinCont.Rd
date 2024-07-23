@@ -39,7 +39,7 @@ for when a model is repeatedly fitted, e.g., in a bootstrap.}
 defaults to 500.}
 
 \item{method}{Optimization algorithm for maximizing the objective function.
-For all options, see \code{?maxLik::maxLik}. Defaults to \code{"BFGRS"}.}
+For all options, see \code{?maxLik::maxLik}. Defaults to \code{"BFGS"}.}
 }
 \value{
 WIP

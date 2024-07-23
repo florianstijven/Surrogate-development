@@ -1,5 +1,15 @@
 #' Fit continuous-continuous vine copula model
 #'
+#' @param marginal_S0,marginal_S1,marginal_T0,marginal_T1 List with the
+#'   following three elements (in order):
+#' * Density function with first argument `x` and second argument `para` the parameter
+#'   vector for this distribution.
+#' * Distribution function with first argument `x` and second argument `para` the parameter
+#'   vector for this distribution.
+#' * Inverse distribution function with first argument `p` and second argument `para` the parameter
+#'   vector for this distribution.
+#' * The number of elements in `para`.
+#' * A vector of starting values for `para`.
 #' @inheritParams fit_model_SurvSurv
 #'
 #' @return Returns an S3 object that can be used to perform the sensitivity
@@ -208,13 +218,15 @@ fit_copula_submodel_ContCont = function(X,
 #' * `para[p1 + p2 + 1]`: copula parameter
 #' @param X First variable (Continuous)
 #' @param Y Second variable (Continuous)
-#' @param marginal_X List with the following three elements (in order):
+#' @param marginal_X,marginal_Y List with the following three elements (in order):
 #' * Density function with first argument `x` and second argument `para` the parameter
 #' vector for this distribution.
 #' * Distribution function with first argument `x` and second argument `para` the parameter
 #' vector for this distribution.
+#' * Inverse distribution function with first argument `p` and second argument `para` the parameter
+#' vector for this distribution.
 #' * The number of elements in `para`.
-#' @param marginal_Y See `marginal_X`
+#' * A vector of starting values for `para`.
 #' @inheritParams loglik_copula_scale
 #'
 #' @return (numeric) loglikelihood value evaluated in `para`.

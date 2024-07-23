@@ -40,18 +40,30 @@ vector for this distribution.
 \item Starting values for \code{para}.
 }}
 
+\item{start_Y}{Starting values for the marginal distribution paramters for \code{Y}.}
+
+\item{start_copula}{Starting value for the copula parameter.}
+
+\item{method}{Optimization algorithm for maximizing the objective function.
+For all options, see \code{?maxLik::maxLik}. Defaults to \code{"BFGS"}.}
+
 \item{K}{Number of categories in \code{X}.}
 
-\item{name}{description}
+\item{names_XY}{Names for \code{X} and \code{Y}, respectively.}
+
+\item{two_step}{(boolean) If \code{TRUE}, the starting values are fixed for the
+marginal distributions and only the copula parameter is estimated.}
 }
 \value{
 A list with four elements:
 \itemize{
 \item ml_fit: object of class \code{maxLik::maxLik} that contains the estimated copula
 model.
-\item marginal_X: list with the estimated cdf, pdf, and inverse cdf for X.
-\item marginal_Y: list with the estimated cdf, pdf, and inverse cdf for X.
+\item marginal_X: list with the estimated cdf, pdf/pmf, and inverse cdf for X.
+\item marginal_Y: list with the estimated cdf, pdf/pmf, and inverse cdf for X.
 \item copula_family: string that indicates the copula family
+\item data: data frame containing \code{X} and \code{Y}
+\item names_XY: The names (i.e., \code{"Surr"} and \code{"True"}) for \code{X} and \code{Y}
 }
 }
 \description{

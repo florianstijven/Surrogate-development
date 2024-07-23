@@ -15,7 +15,9 @@ fit_copula_OrdOrd(
 )
 }
 \arguments{
-\item{data}{A data frame in the correct format (See details).}
+\item{data}{data frame with three columns in the following order: surrogate
+endpoint, true endpoint, and treatment indicator (0/1 coding). Ordinal endpoints
+should be integers starting from \code{1}.}
 
 \item{copula_family}{One of the following parametric copula families:
 \code{"clayton"}, \code{"frank"}, \code{"gaussian"}, or \code{"gumbel"}. The first element in
@@ -26,8 +28,10 @@ experimental group.}
 
 \item{K_T}{Number of categories in the true endpoint.}
 
+\item{start_copula}{Starting value for the copula parameter.}
+
 \item{method}{Optimization algorithm for maximizing the objective function.
-For all options, see \code{?maxLik::maxLik}. Defaults to \code{"BFGRS"}.}
+For all options, see \code{?maxLik::maxLik}. Defaults to \code{"BFGS"}.}
 
 \item{maxit}{Maximum number of iterations for the numeric optimization,
 defaults to 500.}
