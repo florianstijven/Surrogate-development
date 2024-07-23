@@ -19,7 +19,9 @@ fit_copula_ContCont(
 )
 }
 \arguments{
-\item{data}{A data frame in the correct format (See details).}
+\item{data}{data frame with three columns in the following order: surrogate
+endpoint, true endpoint, and treatment indicator (0/1 coding). Ordinal endpoints
+should be integers starting from \code{1}.}
 
 \item{copula_family}{One of the following parametric copula families:
 \code{"clayton"}, \code{"frank"}, \code{"gaussian"}, or \code{"gumbel"}. The first element in
@@ -39,21 +41,27 @@ vector for this distribution.
 \item A vector of starting values for \code{para}.
 }}
 
+\item{start_copula}{Starting value for the copula parameter.}
+
 \item{method}{Optimization algorithm for maximizing the objective function.
 For all options, see \code{?maxLik::maxLik}. Defaults to \code{"BFGS"}.}
 
 \item{maxit}{Maximum number of iterations for the numeric optimization,
 defaults to 500.}
+
+\item{...}{Extra argument to pass onto maxLik::maxLik}
 }
 \value{
 Returns an S3 object that can be used to perform the sensitivity
 analysis with \code{\link[=sensitivity_analysis_copula]{sensitivity_analysis_copula()}}.
 }
 \description{
-Fit continuous-continuous vine copula model
+\code{\link[=fit_copula_ContCont]{fit_copula_ContCont()}} fits the continuous-continuous vine copula model. See
+Details for more information about this model.
 }
 \seealso{
-\code{\link[=sensitivity_analysis_copula]{sensitivity_analysis_copula()}}
+\code{\link[=sensitivity_analysis_copula]{sensitivity_analysis_copula()}}, \code{\link[=print.vine_copula_fitted]{print.vine_copula_fitted()}},
+\code{\link[=plot.vine_copula_fitted]{plot.vine_copula_fitted()}}
 }
 \author{
 Florian Stijven

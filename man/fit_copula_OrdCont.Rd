@@ -12,7 +12,8 @@ fit_copula_OrdCont(
   K_T,
   start_copula,
   method = "BFGS",
-  maxit = 500
+  maxit = 500,
+  ...
 )
 }
 \arguments{
@@ -47,6 +48,25 @@ For all options, see \code{?maxLik::maxLik}. Defaults to \code{"BFGS"}.}
 
 \item{maxit}{Maximum number of iterations for the numeric optimization,
 defaults to 500.}
+
+\item{...}{
+  Arguments passed on to \code{\link[=fit_copula_submodel_OrdCont]{fit_copula_submodel_OrdCont}}
+  \describe{
+    \item{\code{names_XY}}{Names for \code{X} and \code{Y}, respectively.}
+    \item{\code{start_Y}}{Starting values for the marginal distribution paramters for \code{Y}.}
+    \item{\code{X}}{First variable (Ordinal with \eqn{K} categories)}
+    \item{\code{Y}}{Second variable (Continuous)}
+    \item{\code{K}}{Number of categories in \code{X}.}
+    \item{\code{marginal_Y}}{List with the following five elements (in order):
+\itemize{
+\item Density function with first argument \code{x} and second argument \code{para} the parameter
+vector for this distribution.
+\item Distribution function with first argument \code{x} and second argument \code{para}.
+\item Inverse distribution function with first argument \code{p} and second argument \code{para}.
+\item The number of elements in \code{para}.
+\item Starting values for \code{para}.
+}}
+  }}
 }
 \value{
 Returns an S3 object that can be used to perform the sensitivity

@@ -34,7 +34,7 @@ fit_copula_submodel_OrdOrd(
 \item{K_Y}{Number of categories in \code{Y}.}
 }
 \value{
-A list with four elements:
+A list with five elements:
 \itemize{
 \item ml_fit: object of class \code{maxLik::maxLik} that contains the estimated copula
 model.

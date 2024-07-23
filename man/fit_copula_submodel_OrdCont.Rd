@@ -14,7 +14,8 @@ fit_copula_submodel_OrdCont(
   method = "BFGS",
   K,
   names_XY = c("Surr", "True"),
-  twostep = FALSE
+  twostep = FALSE,
+  ...
 )
 }
 \arguments{
@@ -51,11 +52,13 @@ For all options, see \code{?maxLik::maxLik}. Defaults to \code{"BFGS"}.}
 
 \item{names_XY}{Names for \code{X} and \code{Y}, respectively.}
 
+\item{...}{Extra argument to pass onto maxLik::maxLik}
+
 \item{two_step}{(boolean) If \code{TRUE}, the starting values are fixed for the
 marginal distributions and only the copula parameter is estimated.}
 }
 \value{
-A list with four elements:
+A list with five elements:
 \itemize{
 \item ml_fit: object of class \code{maxLik::maxLik} that contains the estimated copula
 model.
@@ -69,4 +72,7 @@ model.
 \description{
 The \code{fit_copula_submodel_OrdCont()} function fits the copula (sub)model for a
 continuous surrogate and an ordinal true endpoint with maximum likelihood.
+}
+\seealso{
+\code{\link[=ordinal_continuous_loglik]{ordinal_continuous_loglik()}}
 }

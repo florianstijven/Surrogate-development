@@ -17,8 +17,10 @@
 #'   vector for this distribution.
 #' * The number of elements in `para`.
 #' * A vector of starting values for `para`.
+#' @inheritParams fit_model_SurvSurv
 #' @inheritParams fit_copula_ContCont
 #' @inheritParams fit_copula_submodel_OrdCont
+#' @inheritDotParams fit_copula_submodel_OrdCont
 #' @inherit ordinal_continuous_loglik details
 #'
 #' @return Returns an S3 object that can be used to perform the sensitivity
@@ -36,7 +38,8 @@ fit_copula_OrdCont = function(data,
                               K_T,
                               start_copula,
                               method = "BFGS",
-                              maxit = 500
+                              maxit = 500,
+                              ...
 ) {
   # If copula_family is length 1, we repeat the same copula family.
   if (length(copula_family) == 1) {
@@ -70,7 +73,8 @@ fit_copula_OrdCont = function(data,
     start_Y = start_S0,
     start_copula = start_copula,
     method = method,
-    names_XY = c("True", "Surr")
+    names_XY = c("True", "Surr"),
+    ...
   )
   submodel_1 = fit_copula_submodel_OrdCont(
     X = data1$true,
@@ -81,7 +85,8 @@ fit_copula_OrdCont = function(data,
     start_Y = start_S1,
     start_copula = start_copula,
     method = method,
-    names_XY = c("True", "Surr")
+    names_XY = c("True", "Surr"),
+    ...
   )
 
   return(
@@ -99,10 +104,11 @@ fit_copula_OrdCont = function(data,
 #'   marginal distributions and only the copula parameter is estimated.
 #' @param start_Y Starting values for the marginal distribution paramters for `Y`.
 #' @param start_copula Starting value for the copula parameter.
+#' @param ... Extra argument to pass onto maxLik::maxLik
 #' @inheritParams ordinal_continuous_loglik
 #' @inheritParams fit_model_SurvSurv
 #'
-#' @return A list with four elements:
+#' @return A list with five elements:
 #' * ml_fit: object of class `maxLik::maxLik` that contains the estimated copula
 #'  model.
 #' * marginal_X: list with the estimated cdf, pdf/pmf, and inverse cdf for X.
@@ -120,7 +126,8 @@ fit_copula_submodel_OrdCont = function(X,
                                        method = "BFGS",
                                        K,
                                        names_XY = c("Surr", "True"),
-                                       twostep = FALSE) {
+                                       twostep = FALSE,
+                                       ...) {
   # Number of parameters for X.
   p1 = K - 1
   # Number of parameters for Y.
@@ -182,7 +189,8 @@ fit_copula_submodel_OrdCont = function(X,
       logLik = log_lik_function,
       start = start,
       method = method,
-      fixed = fixed
+      fixed = fixed,
+      ...
     )
   })
 

@@ -45,10 +45,25 @@ vector for this distribution.
 \item A vector of starting values for \code{para}.
 }}
 
-\item{name}{description}
+\item{start_X, start_Y}{Starting values corresponding to \code{marginal_X} and
+\code{marginal_Y}.}
+
+\item{start_copula}{Starting value for the copula parameter.}
+
+\item{method}{Optimization algorithm for maximizing the objective function.
+For all options, see \code{?maxLik::maxLik}. Defaults to \code{"BFGS"}.}
+
+\item{names_XY}{Names for \code{X} and \code{Y}, respectively.}
+
+\item{copula_transform}{Used for reparameterizing the copula parameter.
+\code{\link[=copula_transform]{copula_transform()}} backtransforms the transformed copula parameter to the
+original scale. Note that \code{start_copula} should be specified on the
+transformed scale.}
+
+\item{...}{Extra argument to pass onto maxLik::maxLik}
 }
 \value{
-A list with four elements:
+A list with five elements:
 \itemize{
 \item ml_fit: object of class \code{maxLik::maxLik} that contains the estimated copula
 model.
@@ -60,6 +75,9 @@ model.
 }
 }
 \description{
-The \code{fit_copula_submodel_ContCont()} function fits the copula (sub)model for a
-continuous surrogate and true endpoint with maximum likelihood.
+The \code{fit_copula_submodel_ContCont()} function fits the copula (sub)model for
+a continuous surrogate and true endpoint with maximum likelihood.
+}
+\seealso{
+\code{\link[=continuous_continuous_loglik]{continuous_continuous_loglik()}}
 }

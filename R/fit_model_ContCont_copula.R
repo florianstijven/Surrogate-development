@@ -1,5 +1,8 @@
 #' Fit continuous-continuous vine copula model
 #'
+#' [fit_copula_ContCont()] fits the continuous-continuous vine copula model. See
+#' Details for more information about this model.
+#'
 #' @param marginal_S0,marginal_S1,marginal_T0,marginal_T1 List with the
 #'   following three elements (in order):
 #' * Density function with first argument `x` and second argument `para` the parameter
@@ -10,7 +13,8 @@
 #'   vector for this distribution.
 #' * The number of elements in `para`.
 #' * A vector of starting values for `para`.
-#' @inheritParams fit_model_SurvSurv
+#' @inheritParams fit_copula_OrdCont
+#' @inherit continuous_continuous_loglik details
 #'
 #' @return Returns an S3 object that can be used to perform the sensitivity
 #'   analysis with [sensitivity_analysis_copula()].
@@ -18,7 +22,8 @@
 #'
 #' @author Florian Stijven
 #'
-#' @seealso [sensitivity_analysis_copula()]
+#' @seealso [sensitivity_analysis_copula()], [print.vine_copula_fitted()],
+#'   [plot.vine_copula_fitted()]
 fit_copula_ContCont = function(data,
                               copula_family,
                               marginal_S0,
@@ -97,12 +102,20 @@ fit_copula_ContCont = function(data,
 
 #' Fit ordinal-continuous copula submodel
 #'
-#' The `fit_copula_submodel_ContCont()` function fits the copula (sub)model for a
-#' continuous surrogate and true endpoint with maximum likelihood.
+#' The `fit_copula_submodel_ContCont()` function fits the copula (sub)model for
+#' a continuous surrogate and true endpoint with maximum likelihood.
 #'
-#' @param name description
+#' @param start_X,start_Y Starting values corresponding to `marginal_X` and
+#'   `marginal_Y`.
+#' @param copula_transform Used for reparameterizing the copula parameter.
+#'   [copula_transform()] backtransforms the transformed copula parameter to the
+#'   original scale. Note that `start_copula` should be specified on the
+#'   transformed scale.
 #' @inheritParams continuous_continuous_loglik
+#' @inheritParams fit_copula_submodel_OrdCont
+#'
 #' @inherit fit_copula_submodel_OrdCont return
+#' @seealso [continuous_continuous_loglik()]
 fit_copula_submodel_ContCont = function(X,
                                         Y,
                                         copula_family,
