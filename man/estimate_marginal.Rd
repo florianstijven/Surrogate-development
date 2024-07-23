@@ -18,6 +18,8 @@ vector for this distribution.
 \item The number of elements in \code{para}.
 \item Starting values for \code{para}.
 }}
+
+\item{starting_values}{Starting values for \code{marginal_Y}}
 }
 \value{
 Estimated parameters

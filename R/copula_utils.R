@@ -501,6 +501,7 @@ marginal_cont_constructor = function(marginal_Y, param) {
 #' `marginal_Y` using maximum likelihood. The optimizer is Newton-Raphson.
 #'
 #' @param Y Observations (continuous)
+#' @param starting_values Starting values for `marginal_Y`
 #' @inheritParams fit_copula_submodel_OrdCont
 #'
 #' @return Estimated parameters
@@ -525,7 +526,7 @@ estimate_marginal = function(Y, marginal_Y, starting_values) {
 #' cutpoints of the underlying latent continuous variable. Let
 #' \eqn{P(x \le k) = G(c_k)} where \eqn{G} is the distribution function of the
 #' latent variable. [ordinal_to_cutpoints()] converts \eqn{x} to \eqn{c_k} (or to
-#' \eqn{c_{k - 1}} if `strict = TRUE`.
+#' \eqn{c_{k - 1}}) if `strict = TRUE`.
 #'
 #' @param x Integer vector with values in `1:(length(cutpoints) + 1)`.
 #' @param cutpoints The cutpoints on the latent scale corresponding to
@@ -552,9 +553,8 @@ ordinal_to_cutpoints = function(x, cutpoints, strict) {
 #' @param fit_1 list returned by [fit_copula_submodel_OrdCont()],
 #' [fit_copula_submodel_ContCont()], or [fit_copula_submodel_OrdOrd()].
 #'
-#' @return S3 object
-#'
-#' @examples
+#' @return S3 object of the class `vine_copula_fit`.
+#' @seealso [print.vine_copula_fit()], [plot.vine_copula_fit()]
 #' #should not be used be the user
 new_vine_copula_fit = function(fit_0, fit_1, endpoint_types) {
   structure(.Data = list(fit_0 = fit_0, fit_1 = fit_1, endpoint_types = endpoint_types),
@@ -570,6 +570,62 @@ print.vine_copula_fit = function(x, ...) {
   print(summary(x$fit_1$ml_fit))
 }
 
+
+#' Goodness-of-fit plots for the fitted copula models
+#'
+#' [plot.vine_copula_fit()] plots simple goodness-of-fit plots for the vine
+#' copula model fitted with [fit_copula_ContCont()], [fit_copula_OrdCont()], and
+#' [fit_copula_OrdOrd()].
+#'
+#' @details
+#' # Marginal Goodness-of-Fit
+#'
+#' ## Continuous Endpoints
+#'
+#' The estimated model-based marginal density for each continuous endpoint is plotted
+#' alongside a histogram based on the observed data.
+#'
+#' ## Ordinal Endpoints
+#'
+#' The estimated model-based marginal probabilities for each ordinal endpoint is plotted
+#' alongside the empirical proportions (red). Red whiskers represent the
+#' 95% confidence intervals for the empirical proportions. These are based on
+#' the delta method with the logit transformation for the proportion.
+#'
+#' # Goodness-of-Fit of Association Structure
+#'
+#' ## Ordinal-Ordinal
+#'
+#' For each possible value for the surrogate, a plot is produced with (i) the
+#' model-based estimated conditional probabilities, \eqn{P(T = t | S)}, and (ii)
+#' the corresponding empirical conditional probabilities (red). Red whiskers
+#' represent the 95% confidence intervals for these empirical proportions. These
+#' are based on the delta method with the logit transformation for the
+#' proportion.
+#'
+#' ## Ordinal-Continuous
+#'
+#' The model-based estimated regression function \eqn{E(T | S = s)} is plotted
+#' alongside a semiparametric estimate using ` mgcv::gam(y~s(x), family =
+#' stats::quasi())` (red). Dashed lines represent pointwise 95% confidence
+#' intervals based on the semiparametric estimate. These confidence intervals
+#' are not trustworthy as they are based on a constant variance assumption.
+#'
+#'
+#' ## Continuous-Continuous
+#'
+#' The model-based estimated regression function \eqn{E(T | S = s)} is plotted
+#' alongside a semiparametric estimate using ` mgcv::gam(y~s(x), family =
+#' stats::quasi())` (red). Dashed lines represent pointwise 95% confidence
+#' intervals based on the semiparametric estimate.
+#'
+#'
+#'
+#' @param x S3 object returned by [fit_copula_ContCont()],
+#'   [fit_copula_OrdCont()], or [fit_copula_OrdOrd()].
+#' @param ... Additional parameters. Currently not implemented.
+#'
+#' @return NULL
 #' @export
 plot.vine_copula_fit = function(x, ...) {
   # Marginal GoF plots.

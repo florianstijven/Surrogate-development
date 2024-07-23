@@ -14,11 +14,12 @@ new_vine_copula_fit(fit_0, fit_1, endpoint_types)
 \code{\link[=fit_copula_submodel_ContCont]{fit_copula_submodel_ContCont()}}, or \code{\link[=fit_copula_submodel_OrdOrd]{fit_copula_submodel_OrdOrd()}}.}
 }
 \value{
-S3 object
+S3 object of the class \code{vine_copula_fit}.
 }
 \description{
 Constructor for vine copula model
 }
-\examples{
+\seealso{
+\code{\link[=print.vine_copula_fit]{print.vine_copula_fit()}}, \code{\link[=plot.vine_copula_fit]{plot.vine_copula_fit()}}
 #should not be used be the user
 }

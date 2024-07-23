@@ -20,5 +20,5 @@ Numeric vector with cutpoints corresponding to the values in \code{x}.
 cutpoints of the underlying latent continuous variable. Let
 \eqn{P(x \le k) = G(c_k)} where \eqn{G} is the distribution function of the
 latent variable. \code{\link[=ordinal_to_cutpoints]{ordinal_to_cutpoints()}} converts \eqn{x} to \eqn{c_k} (or to
-\eqn{c_{k - 1}} if \code{strict = TRUE}.
+\eqn{c_{k - 1}}) if \code{strict = TRUE}.
 }
