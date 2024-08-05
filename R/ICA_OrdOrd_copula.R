@@ -1,0 +1,133 @@
+estimate_mutual_information_OrdOrd = function(delta_S, delta_T) {
+  # Estimate marginal pmf for Delta S
+  support_delta_S = unique(delta_S)
+  props_delta_S = sapply(
+    X = support_delta_S,
+    FUN = function(x) mean(delta_S == x)
+  )
+  pmf_delta_S = function(x) {
+    sapply(
+      X = x,
+      FUN = function(x)
+        props_delta_S[support_delta_S == x]
+    )
+  }
+  # Estimate marginal pmf for Delta T
+  support_delta_T = unique(delta_T)
+  props_delta_T = sapply(
+    X = support_delta_T,
+    FUN = function(x) mean(delta_T == x)
+  )
+  pmf_delta_T = function(x) {
+    sapply(
+      X = x,
+      FUN = function(x)
+        props_delta_T[support_delta_T == x]
+    )
+  }
+  # Estimated joint pmf
+  joint_pmf = function(x, y) {
+    pmf = mapply(x = x, y = y, function(x, y) {
+      mean((delta_S == x) & (delta_T == y))
+    })
+    return(as.numeric(pmf))
+  }
+
+
+  # Compute entropy of joint distribution
+  x = expand.grid(support_delta_T, support_delta_S)[, 1]
+  y = expand.grid(support_delta_T, support_delta_S)[, 2]
+  integrand = ifelse(
+    joint_pmf(x, y) > 0,
+    -1 * log(joint_pmf(x, y)) * joint_pmf(x, y),
+    0
+  )
+  joint_entropy = sum(as.numeric(integrand))
+  # Compute entropy of Delta S
+  integrand = ifelse(
+    pmf_delta_S(support_delta_S) > 0,
+    -1 * log(pmf_delta_S(support_delta_S)) * pmf_delta_S(support_delta_S),
+    0
+  )
+  entropy_delta_S = sum(integrand)
+  # Compute entropy of Delta T
+  integrand = ifelse(
+    pmf_delta_T(support_delta_T) > 0,
+    -1 * log(pmf_delta_T(support_delta_T)) * pmf_delta_T(support_delta_T),
+    0
+  )
+  entropy_delta_T = sum(integrand)
+
+  mutual_information = entropy_delta_T + entropy_delta_S - joint_entropy
+  return(mutual_information)
+}
+
+#' #' Estimate ICA in Ordinal-Continuous Setting
+#' #'
+#' #' `estimate_ICA_OrdCont()` estimates the individual causal association (ICA)
+#' #' for a sample of individual causal treatment effects with a continuous
+#' #' surrogate and an ordinal true endpoint. The ICA in this setting is defined as
+#' #' follows, \deqn{R^2_H = \frac{I(\Delta S; \Delta T)}{H(\Delta T)}} where
+#' #' \eqn{I(\Delta S; \Delta T)} is the mutual information and \eqn{H(\Delta T)}
+#' #' the entropy.
+#' #'
+#' #' @param delta_S (numeric) Vector of individual causal treatment effects on the
+#' #'   surrogate.
+#' #' @param delta_T (integer) Vector of individual causal treatment effects on the true
+#' #'   endpoint.
+#' #'
+#' #' @return (numeric) Estimated ICA
+#' estimate_ICA_OrdCont = function(delta_S, delta_T) {
+#'   # Compute marginal probabilities for distribution of Delta T.
+#'   support_delta_T = unique(delta_T)
+#'   props_delta_T = sapply(
+#'     X = support_delta_T,
+#'     FUN = function(x) mean(delta_T == x)
+#'   )
+#'   # Compute ICA
+#'   ICA = estimate_mutual_information_OrdCont(delta_S, delta_T) /
+#'     compute_entropy(props_delta_T)
+#'   return(ICA)
+#' }
+#'
+#'
+#'
+#'
+#' #' Compute Individual Causal Association for a given D-vine copula model in the
+#' #' Ordinal-Continuous Setting
+#' #'
+#' #' The [compute_ICA_OrdCont()] function computes the individual causal
+#' #' association for a fully identified D-vine copula model in the setting with a
+#' #' continuous surrogate endpoint and an ordinal true endpoint.
+#' #'
+#' #' @inheritParams compute_ICA_ContCont
+#' #'
+#' #' @inherit compute_ICA_ContCont return
+#' compute_ICA_OrdCont = function(copula_par,
+#'                                rotation_par,
+#'                                copula_family1,
+#'                                copula_family2 = copula_family1,
+#'                                n_prec,
+#'                                q_S0,
+#'                                q_T0,
+#'                                q_S1,
+#'                                q_T1,
+#'                                marginal_sp_rho = TRUE,
+#'                                seed = 1)
+#' {
+#'   # We can use the ICA function for the continuous-continuous setting with an
+#'   # alternative mutual information estimator.
+#'   compute_ICA_ContCont(copula_par = copula_par,
+#'                        rotation_par = rotation_par,
+#'                        copula_family1 = copula_family1,
+#'                        copula_family2 = copula_family2,
+#'                        n_prec = n_prec,
+#'                        q_S0 = q_S0,
+#'                        q_T0 = q_T0,
+#'                        q_S1 = q_S1,
+#'                        q_T1 = q_T1,
+#'                        marginal_sp_rho = marginal_sp_rho,
+#'                        seed = seed,
+#'                        mutinfo_estimator = estimate_mutual_information_OrdCont,
+#'                        plot_deltas = FALSE)
+#' }
