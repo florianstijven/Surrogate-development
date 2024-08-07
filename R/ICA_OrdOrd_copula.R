@@ -100,44 +100,48 @@ estimate_ICA_OrdOrd = function(delta_S, delta_T) {
   return(ICA)
 }
 
+
+
+
+#' Compute Individual Causal Association for a given D-vine copula model in the
+#' Ordinal-Ordinal Setting
 #'
+#' The [compute_ICA_OrdOrd()] function computes the individual causal
+#' association for a fully identified D-vine copula model in the setting with an
+#' ordinal surrogate and true endpoint.
 #'
+#' @inheritParams compute_ICA_ContCont
 #'
-#' #' Compute Individual Causal Association for a given D-vine copula model in the
-#' #' Ordinal-Continuous Setting
-#' #'
-#' #' The [compute_ICA_OrdCont()] function computes the individual causal
-#' #' association for a fully identified D-vine copula model in the setting with a
-#' #' continuous surrogate endpoint and an ordinal true endpoint.
-#' #'
-#' #' @inheritParams compute_ICA_ContCont
-#' #'
-#' #' @inherit compute_ICA_ContCont return
-#' compute_ICA_OrdCont = function(copula_par,
-#'                                rotation_par,
-#'                                copula_family1,
-#'                                copula_family2 = copula_family1,
-#'                                n_prec,
-#'                                q_S0,
-#'                                q_T0,
-#'                                q_S1,
-#'                                q_T1,
-#'                                marginal_sp_rho = TRUE,
-#'                                seed = 1)
-#' {
-#'   # We can use the ICA function for the continuous-continuous setting with an
-#'   # alternative mutual information estimator.
-#'   compute_ICA_ContCont(copula_par = copula_par,
-#'                        rotation_par = rotation_par,
-#'                        copula_family1 = copula_family1,
-#'                        copula_family2 = copula_family2,
-#'                        n_prec = n_prec,
-#'                        q_S0 = q_S0,
-#'                        q_T0 = q_T0,
-#'                        q_S1 = q_S1,
-#'                        q_T1 = q_T1,
-#'                        marginal_sp_rho = marginal_sp_rho,
-#'                        seed = seed,
-#'                        mutinfo_estimator = estimate_mutual_information_OrdCont,
-#'                        plot_deltas = FALSE)
-#' }
+#' @inherit compute_ICA_ContCont return
+compute_ICA_OrdOrd = function(copula_par,
+                              rotation_par,
+                              copula_family1,
+                              copula_family2 = copula_family1,
+                              n_prec,
+                              q_S0,
+                              q_T0,
+                              q_S1,
+                              q_T1,
+                              marginal_sp_rho = TRUE,
+                              seed = 1)
+{
+  # We can use the ICA function for the continuous-continuous setting with an
+  # alternative mutual information estimator.
+  compute_ICA_ContCont(
+    copula_par = copula_par,
+    rotation_par = rotation_par,
+    copula_family1 = copula_family1,
+    copula_family2 = copula_family2,
+    n_prec = n_prec,
+    q_S0 = q_S0,
+    q_T0 = q_T0,
+    q_S1 = q_S1,
+    q_T1 = q_T1,
+    marginal_sp_rho = marginal_sp_rho,
+    seed = seed,
+    mutinfo_estimator = function(...) {
+      (-0.5) * log(1 - estimate_ICA_OrdOrd(...))
+    },
+    plot_deltas = FALSE
+  )
+}
