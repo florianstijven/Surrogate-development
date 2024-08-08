@@ -123,8 +123,15 @@ compute_ICA_OrdOrd = function(copula_par,
                               q_S1,
                               q_T1,
                               marginal_sp_rho = TRUE,
-                              seed = 1)
+                              seed = 1,
+                              mutinfo_estimator = NULL)
 {
+  if(is.null(mutinfo_estimator)) {
+    mutinfo_estimator = function(...) {
+      (-0.5) * log(1 - estimate_ICA_OrdOrd(...))
+    }
+  }
+
   # We can use the ICA function for the continuous-continuous setting with an
   # alternative mutual information estimator.
   compute_ICA_ContCont(
@@ -139,9 +146,7 @@ compute_ICA_OrdOrd = function(copula_par,
     q_T1 = q_T1,
     marginal_sp_rho = marginal_sp_rho,
     seed = seed,
-    mutinfo_estimator = function(...) {
-      (-0.5) * log(1 - estimate_ICA_OrdOrd(...))
-    },
+    mutinfo_estimator = mutinfo_estimator,
     plot_deltas = FALSE
   )
 }
