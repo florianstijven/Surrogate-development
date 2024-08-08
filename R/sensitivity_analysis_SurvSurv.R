@@ -261,7 +261,7 @@ sensitivity_analysis_SurvSurv_copula = function(fitted_model,
   # If copula_family2 contains only 1 element, this vector is appended to
   # the correct length.
   copula_family1 = fitted_model$copula_family
-  if(length(copula_family1) == 1) copula_family1 = rep(copula_family2, 2)
+  if(length(copula_family1) == 1) copula_family1 = rep(copula_family1, 2)
   if(length(copula_family2) == 1) copula_family2 = rep(copula_family2, 4)
   # Extract relevant estimated parameters/objects for the fitted copula model.
 
