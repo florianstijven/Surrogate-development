@@ -16,7 +16,8 @@ compute_ICA_OrdOrd(
   q_S1,
   q_T1,
   marginal_sp_rho = TRUE,
-  seed = 1
+  seed = 1,
+  mutinfo_estimator = NULL
 )
 }
 \arguments{
@@ -53,6 +54,11 @@ matrix? Defaults to \code{TRUE}.}
 
 \item{seed}{Seed for Monte Carlo sampling. This seed does not affect the global
 environment.}
+
+\item{mutinfo_estimator}{Function that estimates the mutual information
+between the first two arguments which are numeric vectors. Defaults to
+\code{FNN::mutinfo()} with default arguments.
+@param plot_deltas (logical) Plot the sampled individual treatment effects?}
 }
 \value{
 (numeric) A Named vector with the following elements:
