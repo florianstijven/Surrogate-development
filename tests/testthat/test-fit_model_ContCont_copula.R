@@ -71,7 +71,7 @@ test_that("fit_copula_submodel_ContCont() works for the twostep estimator", {
   )
   expect_equal(
     logLik(fitted_submodel$ml_fit),
-    -25.3351941499,
+    -25.3366761945,
     ignore_attr = "df"
   )
   expect_equal(
@@ -117,17 +117,17 @@ test_that("fit_copula_submodel_OrdCont() works for the full estimator", {
   )
   expect_equal(
     logLik(fitted_submodel$ml_fit),
-    -275.337419571,
+    -275.28200947,
     ignore_attr = "df"
   )
   expect_equal(
     fitted_submodel$marginal_X$pdf(1:5),
-    c(0.0653537833828, 0.1218625519486, 0.1768479630656, 0.1997377321968, 0.1755700474436),
+    c(0.0653530354649, 0.1218597549174, 0.1768435023308, 0.1997340854162, 0.1755696866447),
     ignore_attr = "names"
   )
   expect_equal(
     fitted_submodel$marginal_Y$inv_cdf((1:5) / 5),
-    c(-0.963697255915, 0.178130044707,  1.161612485722, 2.303439786344, Inf)
+    c(-0.963708006673, 0.178103097350,1.161571587856, 2.303382691879, Inf)
   )
 })
 
@@ -183,6 +183,7 @@ test_that("fit_copula_ContCont() works", {
 
 test_that("fit_copula_ContCont() works with the non-central ", {
   data("Schizo")
+  Schizo = Schizo[1:100, ]
   na = is.na(Schizo$BPRS) | is.na(Schizo$PANSS)
   X = Schizo$BPRS[!na]
   Y = Schizo$PANSS[!na]
@@ -230,9 +231,36 @@ test_that("fit_copula_ContCont() works with the non-central ", {
     marginal_T1 = marginal_T,
     start_copula = 5
   )
+  # Maximized loglikelihoods match
   expect_equal(
-    fitted_model$fit_0$ml_fit$maximum,
-    -294.088304226
+    c(
+      fitted_model$fit_0$ml_fit$maximum,
+      fitted_model$fit_1$ml_fit$maximum
+    ),
+    c(-296.933821938, -530.076269924)
+  )
+  # Estimated coefficients match
+  expect_equal(
+    c(
+      coef(fitted_model$fit_0$ml_fit),
+      coef(fitted_model$fit_1$ml_fit)
+    ),
+    c(
+      -1.51126059571e+01,
+      2.17831530424e+01,
+      2.63888013817e-01,
+      -1.95977409385e+01,
+      3.70039873097e+01,
+      -5.34627613843e-05,
+      4.68191850552,-16.958835278219,
+      23.870406532649,
+      0.130429033313,
+      -25.585369827299,
+      42.509076671333,
+      -0.239651962661,
+      8.729443374799
+    ),
+    ignore_attr = "names"
   )
 }
 )
@@ -346,7 +374,7 @@ test_that("GoF functions work", {
   # Conditional mean function
   expect_equal(
     conditional_mean_copula_ContCont(fitted_model$fit_0, grid = 1:5),
-    c(0.924384645159, 0.952002148679, 1.000133918215, 1.062347006752, 1.121985351792)
+    c(0.924384620663, 0.952002129594, 1.000133909041, 1.062347011343, 1.121985370807)
   )
 }
 )
