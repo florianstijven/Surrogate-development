@@ -40,7 +40,9 @@ fit_copula_OrdOrd = function(data,
     K_X = K_S,
     K_Y = K_T,
     start_copula = start_copula,
-    method = method
+    method = method,
+    maxit = maxit,
+    ...
   )
   submodel_1 = fit_copula_submodel_OrdOrd(
     X = data1$surr,
@@ -49,7 +51,9 @@ fit_copula_OrdOrd = function(data,
     K_X = K_S,
     K_Y = K_T,
     start_copula = start_copula,
-    method = method
+    method = method,
+    maxit = maxit,
+    ...
   )
 
   return(
@@ -75,6 +79,7 @@ fit_copula_submodel_OrdOrd = function(X,
                                       K_Y,
                                       names_XY = c("Surr", "True"),
                                       twostep = FALSE,
+                                      maxit,
                                       ...) {
   # Number of parameters for X.
   p1 = K_X - 1

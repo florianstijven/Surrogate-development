@@ -74,6 +74,7 @@ fit_copula_OrdCont = function(data,
     start_copula = start_copula,
     method = method,
     names_XY = c("True", "Surr"),
+    maxit = maxit,
     ...
   )
   submodel_1 = fit_copula_submodel_OrdCont(
@@ -86,6 +87,7 @@ fit_copula_OrdCont = function(data,
     start_copula = start_copula,
     method = method,
     names_XY = c("True", "Surr"),
+    maxit = maxit,
     ...
   )
 
@@ -127,6 +129,7 @@ fit_copula_submodel_OrdCont = function(X,
                                        K,
                                        names_XY = c("Surr", "True"),
                                        twostep = FALSE,
+                                       maxit,
                                        ...) {
   # Number of parameters for X.
   p1 = K - 1
