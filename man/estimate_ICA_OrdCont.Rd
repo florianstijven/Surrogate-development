@@ -24,3 +24,36 @@ follows, \deqn{R^2_H = \frac{I(\Delta S; \Delta T)}{H(\Delta T)}} where
 \eqn{I(\Delta S; \Delta T)} is the mutual information and \eqn{H(\Delta T)}
 the entropy.
 }
+\section{Individual Causal Association}{
+Many association measures can operationalize the ICA. For each setting, we
+consider one 'main' definition for the ICA which follows from the mutual
+information.
+\subsection{Continuous-Continuous}{
+
+The ICA is defined as the squared informational coefficient of correlation
+(SICC or \eqn{R^2_H}), which is a transformation of the mutual information
+to the unit interval: \deqn{R^2_h = 1 - e^{-2 \cdot I(\Delta S; \Delta T)}}
+where 0 indicates independence, and 1 a functional relationship between
+\eqn{\Delta S} and \eqn{\Delta T}. If \eqn{(\Delta S, \Delta T)'} is bivariate
+normal, the ICA equals the Pearson correlation between \eqn{\Delta S} and
+\eqn{\Delta T}.
+}
+
+\subsection{Ordinal-Continuous}{
+
+The ICA is defined as the following transformation of the mutual information:
+\deqn{R^2_H = \frac{I(\Delta S; \Delta T)}{H(\Delta T)},}
+where \eqn{I(\Delta S; \Delta T)} is the mutual information and \eqn{H(\Delta T)}
+the entropy.
+}
+
+\subsection{Ordinal-Ordinal}{
+
+The ICA is defined as the following transformation of the mutual information:
+\deqn{R^2_H = \frac{I(\Delta S; \Delta T)}{\min \{H(\Delta S), H(\Delta T) \}},}
+where \eqn{I(\Delta S; \Delta T)} is the mutual information, and \eqn{H(\Delta S)}
+and \eqn{H(\Delta T)} the entropy of \eqn{\Delta S} and \eqn{\Delta T},
+respectively.
+}
+}
+

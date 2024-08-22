@@ -1,22 +1,25 @@
 #' Perform Sensitivity Analysis for the Individual Causal Association based on a
 #' D-vine copula model
-
-#' @details
-#' To add
 #'
+#' @inheritSection sensitivity_analysis_SurvSurv_copula Information-Theoretic Causal Inference Framework
+#' @inheritSection estimate_ICA_OrdCont Individual Causal Association
+#' @inheritSection sensitivity_analysis_SurvSurv_copula Sensitivity Analysis
+#' @inheritSection sensitivity_analysis_SurvSurv_copula Additional Assumptions
 #'
 #' @param fitted_model Returned value from [fit_copula_model_OrdOrd()],
 #'   [fit_copula_model_OrdCont()], or [fit_copula_model_ContCont()]. This object
 #'   contains the estimated identifiable part of the joint distribution for the
 #'   potential outcomes.
+#' @param mutinfo_estimator Function that estimates the mutual information
+#'  between the first two arguments which are numeric vectors. Defaults to
+#'  `FNN::mutinfo()` for the continuous-continuous setting.
 #' @inheritParams sensitivity_analysis_SurvSurv_copula
 #' @inheritParams sample_copula_parameters
 #'
 #' @return A data frame is returned. Each row represents one replication in the
 #'   sensitivity analysis. The returned data frame always contains the following
 #'   columns:
-#' * `R2H`, `sp_rho`, `minfo`: ICA as quantified by \eqn{R^2_H}, Spearman's rho, and
-#'   Kendall's tau, respectively.
+#' * `R2H`, `sp_rho`: ICA as quantified by \eqn{R^2_H} and Spearman's rho, respectively.
 #' * `c12`, `c34`: estimated copula parameters.
 #' * `c23`, `c13_2`, `c24_3`, `c14_23`: sampled copula parameters of the
 #'   unidentifiable copulas in the D-vine copula. The parameters correspond to
@@ -34,6 +37,16 @@
 #' associations refer to the observable potential outcomes. In contrast, the
 #' estimated association parameters from [fit_copula_model_OrdOrd()] and
 #' [fit_copula_model_OrdCont] refer to associations on a latent scale.
+#' @export
+#'
+#' @references
+#' Alonso, A. (2018). An information-theoretic approach for the evaluation of
+#' surrogate endpoints. In Wiley StatsRef: Statistics Reference Online. John
+#' Wiley & Sons, Ltd.
+#'
+#' Alonso, A., Van der Elst, W., Molenberghs, G., Buyse, M., and Burzykowski, T.
+#' (2015). On the relationship between the causal-inference and meta-analytic
+#' paradigms for the validation of surrogate endpoints. Biometrics 71, 15–24.
 sensitivity_analysis_copula = function(fitted_model,
                                        n_sim,
                                        eq_cond_association = TRUE,
