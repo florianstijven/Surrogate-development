@@ -478,6 +478,7 @@ marginal_ord_constructor = function(param) {
 }
 
 marginal_cont_constructor = function(marginal_Y, param) {
+  force(marginal_Y)
   pdf = function(x) {
     marginal_Y[[1]](x, param)
   }

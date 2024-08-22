@@ -1,4 +1,5 @@
 estimate_mutual_information_OrdCont = function(delta_S, delta_T) {
+
   requireNamespace("cubature")
   # Estimate conditional densities for all possible values of delta T.
   support_delta_T = unique(delta_T)
