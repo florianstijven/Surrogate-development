@@ -217,11 +217,11 @@ gumbel_loglik_copula_scale <- function(theta, u, v, d1, d2, return_sum = TRUE){
   part4 <- ifelse((d1 == -1) & (d2 == -1), log_C, 0)
   # Log likelihood contribution for second observation right-censored.
   part5 <- ifelse((d1 == 1) & (d2 == 0),
-                  log(1 - (exp(log_C) / u) * (log(u - exp(log_C)) ** (theta - 1))),
+                  log(1 - (exp(log_C) / u) * (-1 * min_log_u / log_C) ** (theta - 1)),
                   0)
   # Log likelihood contribution for first observation right-censored.
   part6 <- ifelse((d1 == 0) & (d2 == 1),
-                  log(1 - (exp(log_C) / v) * (log(v - exp(log_C)) ** (theta - 1))),
+                  log(1 - (exp(log_C) / v) * (-1 * min_log_v / log_C) ** (theta - 1)),
                   0)
   # Log likelihood contribution for both observations right-censored.
   part7 <- ifelse((d1 == 0) & (d2 == 0),
