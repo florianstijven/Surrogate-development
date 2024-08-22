@@ -185,7 +185,13 @@ sensitivity_analysis_copula = function(fitted_model,
 
   colnames(c) = c("c12", "c23", "c34", "c13_2", "c24_3", "c14_23")
   colnames(r) = c("r12", "r23", "r34", "r13_2", "r24_3", "r14_23")
-  # Return a data frame with the results of the sensiviity analysis.
-  return(cbind(as.data.frame(measures_df), c, r))
+
+  sens_results = cbind(as.data.frame(measures_df), c, r)
+
+  attr(sens_results, which = "copula_family1") = copula_family1
+  attr(sens_results, which = "copula_family2") = copula_family2
+  attr(sens_results, which = "composite") = FALSE
+  # Return a data frame with the results of the sensitivity analysis.
+  return(sens_results)
 
 }
