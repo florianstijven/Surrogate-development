@@ -158,7 +158,10 @@ compute_ICA_OrdCont = function(copula_par,
                                seed = 1,
                                mutinfo_estimator = NULL)
 {
-  if (is.null(mutinfo_estimator)) mutinfo_estimator = estimate_mutual_information_OrdCont
+  if (is.null(mutinfo_estimator)) mutinfo_estimator = function(delta_S, delta_T) {
+    ICA = estimate_ICA_OrdCont(delta_S, delta_T)
+    return(-0.5 * log(1 - ICA))
+  }
   # We can use the ICA function for the continuous-continuous setting with an
   # alternative mutual information estimator.
   compute_ICA_ContCont(copula_par = copula_par,
