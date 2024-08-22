@@ -472,7 +472,8 @@ marginal_ord_constructor = function(param) {
   list(
     pmf = pmf,
     cdf = cdf,
-    inv_cdf = inv_cdf
+    inv_cdf = inv_cdf,
+    n_param = length(param)
   )
 }
 
@@ -489,7 +490,8 @@ marginal_cont_constructor = function(marginal_Y, param) {
   marginal_list = list(
     pdf = pdf,
     cdf = cdf,
-    inv_cdf = inv_cdf
+    inv_cdf = inv_cdf,
+    n_param = length(param)
   )
   attr(marginal_list, "constructor") = marginal_Y
   return(marginal_list)
