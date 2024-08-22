@@ -44,7 +44,7 @@ sens_results_comp = sensitivity_analysis_SurvSurv_copula(
   n_sim = 20,
   n_prec = 1e4,
   restr_time = 1,
-  mutinfo_estimator = function(x, y) -0.5 * exp(1 - stats::cor(x, y, method = "spearman"))
+  mutinfo_estimator = function(x, y) -0.5 *  log(1 - stats::cor(x, y, method = "spearman"))
 )
 # Save results to file.
 saveRDS(sens_results_comp, file = "tests/testthat/fixtures/sens-results-ovarian-gaussian-comp-sprho-restr.rds")
