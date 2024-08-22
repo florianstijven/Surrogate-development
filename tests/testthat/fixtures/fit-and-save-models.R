@@ -1,3 +1,4 @@
+devtools::load_all()
 # D-vine models for Ovarian data ------------------------------------------
 # Load the Ovarian data.
 data("Ovarian")
@@ -57,7 +58,9 @@ marginal_X = list(
   cdf_fun = function(x, para) {
     pnorm(x, mean = para[1], sd = para[2])
   },
-  NA,
+  inv_cdf = function(p, para) {
+    qnorm(p, mean = para[1], sd = para[2])
+  },
   n_para = 2,
   start = c(-25, 28)
 )
