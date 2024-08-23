@@ -32,7 +32,6 @@ fit_copula_ContCont = function(data,
                               marginal_T1,
                               start_copula,
                               method = "BFGS",
-                              maxit = 500,
                               copula_transform = function(x) x,
                               ...) {
   # If copula_family is length 1, we repeat the same copula family.
@@ -77,8 +76,7 @@ fit_copula_ContCont = function(data,
     start_Y = start_T0,
     start_copula = start_copula,
     method = method,
-    copula_transform = copula_transform,,
-    maxit = maxit,
+    copula_transform = copula_transform,
     ...
   )
   submodel_1 = fit_copula_submodel_ContCont(
@@ -92,7 +90,6 @@ fit_copula_ContCont = function(data,
     start_copula = start_copula,
     method = method,
     copula_transform = copula_transform,
-    maxit = maxit,
     ...
   )
 
@@ -129,7 +126,6 @@ fit_copula_submodel_ContCont = function(X,
                                         method = "BFGS",
                                         names_XY = c("Surr", "True"),
                                         twostep = FALSE,
-                                        maxit,
                                         copula_transform = function(x) x,
                                         ...)
 {

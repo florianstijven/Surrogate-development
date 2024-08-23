@@ -12,7 +12,6 @@ fit_copula_OrdCont(
   K_T,
   start_copula,
   method = "BFGS",
-  maxit = 500,
   ...
 )
 }
@@ -45,9 +44,6 @@ vector for this distribution.
 
 \item{method}{Optimization algorithm for maximizing the objective function.
 For all options, see \code{?maxLik::maxLik}. Defaults to \code{"BFGS"}.}
-
-\item{maxit}{Maximum number of iterations for the numeric optimization,
-defaults to 500.}
 
 \item{...}{
   Arguments passed on to \code{\link[=fit_copula_submodel_OrdCont]{fit_copula_submodel_OrdCont}}

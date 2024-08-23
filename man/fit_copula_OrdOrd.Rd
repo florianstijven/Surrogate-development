@@ -11,7 +11,6 @@ fit_copula_OrdOrd(
   K_T,
   start_copula,
   method = "BFGS",
-  maxit = 500,
   ...
 )
 }
@@ -31,9 +30,6 @@ experimental group.}
 
 \item{method}{Optimization algorithm for maximizing the objective function.
 For all options, see \code{?maxLik::maxLik}. Defaults to \code{"BFGS"}.}
-
-\item{maxit}{Maximum number of iterations for the numeric optimization,
-defaults to 500.}
 
 \item{...}{Extra argument to pass onto maxLik::maxLik}
 }

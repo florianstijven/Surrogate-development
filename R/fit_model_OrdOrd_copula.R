@@ -18,7 +18,6 @@ fit_copula_OrdOrd = function(data,
                               K_T,
                               start_copula,
                               method = "BFGS",
-                              maxit = 500,
                               ...) {
   # If copula_family is length 1, we repeat the same copula family.
   if (length(copula_family) == 1) {
@@ -41,7 +40,6 @@ fit_copula_OrdOrd = function(data,
     K_Y = K_T,
     start_copula = start_copula,
     method = method,
-    maxit = maxit,
     ...
   )
   submodel_1 = fit_copula_submodel_OrdOrd(
@@ -52,7 +50,6 @@ fit_copula_OrdOrd = function(data,
     K_Y = K_T,
     start_copula = start_copula,
     method = method,
-    maxit = maxit,
     ...
   )
 
@@ -79,7 +76,6 @@ fit_copula_submodel_OrdOrd = function(X,
                                       K_Y,
                                       names_XY = c("Surr", "True"),
                                       twostep = FALSE,
-                                      maxit,
                                       ...) {
   # Number of parameters for X.
   p1 = K_X - 1
@@ -94,7 +90,8 @@ fit_copula_submodel_OrdOrd = function(X,
       Y = Y,
       copula_family = copula_family,
       K_X = K_X,
-      K_Y = K_Y
+      K_Y = K_Y,
+      return_sum = FALSE
     )
   }
   # Compute empirical proportions for X.

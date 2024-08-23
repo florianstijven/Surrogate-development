@@ -13,7 +13,7 @@ summary_level_bootstrap_ICA(
   B,
   measure = "ICA",
   mutinfo_estimator = NULL,
-  composite,
+  composite = FALSE,
   seed,
   restr_time = +Inf,
   ncores = 1

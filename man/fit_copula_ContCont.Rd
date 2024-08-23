@@ -13,7 +13,6 @@ fit_copula_ContCont(
   marginal_T1,
   start_copula,
   method = "BFGS",
-  maxit = 500,
   copula_transform = function(x) x,
   ...
 )
@@ -45,9 +44,6 @@ vector for this distribution.
 
 \item{method}{Optimization algorithm for maximizing the objective function.
 For all options, see \code{?maxLik::maxLik}. Defaults to \code{"BFGS"}.}
-
-\item{maxit}{Maximum number of iterations for the numeric optimization,
-defaults to 500.}
 
 \item{...}{Extra argument to pass onto maxLik::maxLik}
 }
