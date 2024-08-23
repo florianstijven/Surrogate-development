@@ -233,7 +233,8 @@ compute_ICA  = function(endpoint_types, ...) {
 #' @export
 constructor_ICA_estimator = function(endpoint_types, ICA_def) {
   if (all(endpoint_types == c("continuous", "continuous"))) {
-    mut_info_estimator = compute_ICA_ContCont(...)
+    requireNamespace("FNN", quietly = FALSE)
+    mut_info_estimator = FNN::mutinfo
     entropy_estimator_Delta_S = function(x) return(NA)
     entropy_estimator_Delta_T = function(x) return(NA)
   }

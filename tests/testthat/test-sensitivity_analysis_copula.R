@@ -103,3 +103,246 @@ test_that("basic sensitivity analysis works for continuous-continuous, ordinal-c
   )
   }
 })
+
+test_that("sensitivity analysis works for continuous-continuous, ordinal-continuous, and ordinal-ordinal with
+          default user-specified definition of the ICA", {
+  # Load fitted copula model.
+  fitted_model_contcont = readRDS(test_path("fixtures", "schizo-dvine-clayton-ContCont.rds"))
+  fitted_model_ordcont = readRDS(test_path("fixtures", "schizo-dvine-clayton-OrdCont.rds"))
+  fitted_model_ordord = readRDS(test_path("fixtures", "schizo-dvine-gaussian-OrdOrd.rds"))
+
+
+  # Perform sensitivity analysis without a user-specified definition of the ICA.
+  {
+  set.seed(1)
+  results_contcont = sensitivity_analysis_copula(
+    fitted_model = fitted_model_contcont,
+    n_sim = 5,
+    eq_cond_association = FALSE,
+    lower = rep(0.2, 4),
+    upper = rep(0.8, 4),
+    degrees = 0,
+    marg_association = TRUE,
+    copula_family2 = "clayton",
+    n_prec = 2e3,
+    ncores = 1
+  )
+  set.seed(1)
+  results_ordcont = sensitivity_analysis_copula(
+    fitted_model = fitted_model_ordcont,
+    n_sim = 5,
+    eq_cond_association = TRUE,
+    lower = rep(0.2, 4),
+    upper = rep(0.8, 4),
+    degrees = 0,
+    marg_association = FALSE,
+    copula_family2 = "frank",
+    n_prec = 2e3,
+    ncores = 1
+  )
+  set.seed(1)
+  results_ordord = sensitivity_analysis_copula(
+    fitted_model = fitted_model_ordord,
+    n_sim = 5,
+    eq_cond_association = FALSE,
+    lower = rep(0.2, 4),
+    upper = rep(0.8, 4),
+    degrees = 0,
+    marg_association = TRUE,
+    copula_family2 = "gumbel",
+    n_prec = 2e3,
+    ncores = 1
+  )
+  }
+  # Perform sensitivity analysis with user-specified definition of the ICA that correspond to the defaults.
+  {
+  set.seed(1)
+  results_contcont_default = sensitivity_analysis_copula(
+    fitted_model = fitted_model_contcont,
+    n_sim = 5,
+    eq_cond_association = FALSE,
+    lower = rep(0.2, 4),
+    upper = rep(0.8, 4),
+    degrees = 0,
+    marg_association = TRUE,
+    copula_family2 = "clayton",
+    n_prec = 2e3,
+    ncores = 1,
+    ICA_estimator = constructor_ICA_estimator(
+      c("continuous", "continuous"),
+      function(mutinfo, H_DeltaS, H_DeltaT) {
+        1 - exp(-2 * mutinfo)
+      }
+      )
+  )
+  set.seed(1)
+  results_ordcont_default = sensitivity_analysis_copula(
+    fitted_model = fitted_model_ordcont,
+    n_sim = 5,
+    eq_cond_association = TRUE,
+    lower = rep(0.2, 4),
+    upper = rep(0.8, 4),
+    degrees = 0,
+    marg_association = FALSE,
+    copula_family2 = "frank",
+    n_prec = 2e3,
+    ncores = 1,
+    ICA_estimator = constructor_ICA_estimator(
+      c("ordinal", "continuous"),
+      function(mutinfo, H_DeltaS, H_DeltaT) {
+        mutinfo / H_DeltaT
+      }
+    )
+  )
+  set.seed(1)
+  results_ordord_default = sensitivity_analysis_copula(
+    fitted_model = fitted_model_ordord,
+    n_sim = 5,
+    eq_cond_association = FALSE,
+    lower = rep(0.2, 4),
+    upper = rep(0.8, 4),
+    degrees = 0,
+    marg_association = TRUE,
+    copula_family2 = "gumbel",
+    n_prec = 2e3,
+    ncores = 1,
+    ICA_estimator = constructor_ICA_estimator(
+      c("ordinal", "ordinal"),
+      function(mutinfo, H_DeltaS, H_DeltaT) {
+        mutinfo / min(H_DeltaS, H_DeltaT)
+      }
+    )
+  )
+  }
+
+  # The results of the sensitivity analyses above should be identitical.
+  {
+    expect_equal(
+      results_contcont,
+      results_contcont_default
+    )
+    expect_equal(
+      results_ordcont,
+      results_ordcont_default
+    )
+    expect_equal(
+      results_ordord,
+      results_ordord_default
+    )
+  }
+
+
+
+
+
+})
+
+test_that("sensitivity analysis works for continuous-continuous, ordinal-continuous, and ordinal-ordinal with
+          default user-specified definition of the ICA", {
+  # Load fitted copula model.
+  fitted_model_contcont = readRDS(test_path("fixtures", "schizo-dvine-clayton-ContCont.rds"))
+  fitted_model_ordcont = readRDS(test_path("fixtures", "schizo-dvine-clayton-OrdCont.rds"))
+  fitted_model_ordord = readRDS(test_path("fixtures", "schizo-dvine-gaussian-OrdOrd.rds"))
+
+
+  # Perform sensitivity analysis with a non-default user-specified definition of
+  # the ICA.
+  {
+    set.seed(1)
+    results_contcont = sensitivity_analysis_copula(
+      fitted_model = fitted_model_contcont,
+      n_sim = 5,
+      eq_cond_association = FALSE,
+      lower = rep(0.2, 4),
+      upper = rep(0.8, 4),
+      degrees = 0,
+      marg_association = TRUE,
+      copula_family2 = "clayton",
+      n_prec = 2e3,
+      ncores = 1,
+      ICA_estimator = constructor_ICA_estimator(
+        c("continuous", "continuous"),
+        function(mutinfo, H_DeltaS, H_DeltaT) {
+          sqrt(1 - exp(-2 * mutinfo))
+        }
+      )
+    )
+    set.seed(1)
+    results_ordcont = sensitivity_analysis_copula(
+      fitted_model = fitted_model_ordcont,
+      n_sim = 5,
+      eq_cond_association = TRUE,
+      lower = rep(0.2, 4),
+      upper = rep(0.8, 4),
+      degrees = 0,
+      marg_association = FALSE,
+      copula_family2 = "frank",
+      n_prec = 2e3,
+      ncores = 1,
+      ICA_estimator = constructor_ICA_estimator(
+        c("ordinal", "continuous"),
+        function(mutinfo, H_DeltaS, H_DeltaT) {
+          (1 - exp(-2 * mutinfo)) / (1 - exp(-2 * H_DeltaT))
+        }
+      )
+    )
+    set.seed(1)
+    results_ordord = sensitivity_analysis_copula(
+      fitted_model = fitted_model_ordord,
+      n_sim = 5,
+      eq_cond_association = FALSE,
+      lower = rep(0.2, 4),
+      upper = rep(0.8, 4),
+      degrees = 0,
+      marg_association = TRUE,
+      copula_family2 = "gumbel",
+      n_prec = 2e3,
+      ncores = 1,
+      ICA_estimator = constructor_ICA_estimator(
+        c("ordinal", "ordinal"),
+        function(mutinfo, H_DeltaS, H_DeltaT) {
+          (1 - exp(-2 * mutinfo)) / (1 - exp(-2 * min(H_DeltaS, H_DeltaT)))
+        }
+      )
+    )
+  }
+
+  # Check the computed ICAs in the sensitivity analyses.
+  {
+    expect_equal(
+      results_contcont[, 1],
+      c(
+        0.897523161865,
+        0.896939848914,
+        0.910489119652,
+        0.602310581906,
+        0.921462825605
+      )
+    )
+    expect_equal(
+      results_ordcont[, 1],
+      c(
+        0.2475845548787,
+        0.2334619837987,
+        0.0546455966377,
+        0.0210433689901,
+        0.1345990831075
+      )
+    )
+    expect_equal(
+      results_ordord[, 1],
+      c(
+        0.332139509278,
+        0.330488272383,
+        0.354290465704,
+        0.242721743253,
+        0.347879741871
+      )
+    )
+  }
+
+
+
+
+
+})
