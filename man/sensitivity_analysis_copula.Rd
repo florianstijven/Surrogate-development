@@ -16,7 +16,7 @@ sensitivity_analysis_copula(
   copula_family2 = fitted_model$copula_family[1],
   n_prec = 10000,
   ncores = 1,
-  mutinfo_estimator = NULL
+  ICA_estimator = NULL
 )
 }
 \arguments{
@@ -73,9 +73,9 @@ of the ICA in each replication of the sensitivity analysis.}
 computations are computationally heavy, and this option can speed things up
 considerably.}
 
-\item{mutinfo_estimator}{Function that estimates the mutual information
-between the first two arguments which are numeric vectors. Defaults to
-\code{FNN::mutinfo()} for the continuous-continuous setting.}
+\item{ICA_estimator}{Function that estimates the ICA between the first two
+arguments which are numeric vectors. See also \code{\link[=compute_ICA_OrdOrd]{compute_ICA_OrdOrd()}},
+\code{\link[=compute_ICA_OrdCont]{compute_ICA_OrdCont()}}, and \code{\link[=compute_ICA_ContCont]{compute_ICA_ContCont()}}.}
 }
 \value{
 A data frame is returned. Each row represents one replication in the
@@ -139,7 +139,7 @@ are well-known, simple and rank-based measures of association.
 
 \section{Individual Causal Association}{
 Many association measures can operationalize the ICA. For each setting, we
-consider one 'main' definition for the ICA which follows from the mutual
+consider one default definition for the ICA which follows from the mutual
 information.
 \subsection{Continuous-Continuous}{
 

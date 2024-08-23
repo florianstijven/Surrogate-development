@@ -10,9 +10,9 @@
 #'   [fit_copula_model_OrdCont()], or [fit_copula_model_ContCont()]. This object
 #'   contains the estimated identifiable part of the joint distribution for the
 #'   potential outcomes.
-#' @param mutinfo_estimator Function that estimates the mutual information
-#'  between the first two arguments which are numeric vectors. Defaults to
-#'  `FNN::mutinfo()` for the continuous-continuous setting.
+#' @param ICA_estimator Function that estimates the ICA between the first two
+#'   arguments which are numeric vectors. See also [compute_ICA_OrdOrd()],
+#'   [compute_ICA_OrdCont()], and [compute_ICA_ContCont()].
 #' @inheritParams sensitivity_analysis_SurvSurv_copula
 #' @inheritParams sample_copula_parameters
 #'
@@ -57,7 +57,7 @@ sensitivity_analysis_copula = function(fitted_model,
                                        copula_family2 = fitted_model$copula_family[1],
                                        n_prec = 1e4,
                                        ncores = 1,
-                                       mutinfo_estimator = NULL
+                                       ICA_estimator = NULL
 ) {
   # Extract relevant estimated parameters/objects for the fitted copula model.
 
@@ -129,19 +129,9 @@ sensitivity_analysis_copula = function(fitted_model,
     q_T1 = q_T1,
     marginal_sp_rho = marg_association,
     seed = 1,
-    mutinfo_estimator = mutinfo_estimator
+    ICA_estimator = ICA_estimator,
+    endpoint_types = fitted_model$endpoint_types
   )
-
-  # Determine which ICA to compute.
-  if (all(fitted_model$endpoint_types == c("continuous", "continuous"))) {
-    compute_ICA = compute_ICA_ContCont
-  }
-  if (all(fitted_model$endpoint_types == c("ordinal", "continuous"))) {
-    compute_ICA = compute_ICA_OrdCont
-  }
-  if (all(fitted_model$endpoint_types == c("ordinal", "ordinal"))) {
-    compute_ICA = compute_ICA_OrdOrd
-  }
 
   if (ncores > 1 & requireNamespace("parallel")) {
     cl  <- parallel::makeCluster(ncores)
@@ -194,4 +184,74 @@ sensitivity_analysis_copula = function(fitted_model,
   # Return a data frame with the results of the sensitivity analysis.
   return(sens_results)
 
+}
+
+#' Compute Individual Causal Association for a given D-vine copula model in the
+#' setting of choice.
+#'
+#' The [compute_ICA()] function computes the individual causal
+#' association for a fully identified D-vine copula model. See details for the
+#' default definition of the ICA in each setting.
+#'
+#' @param endpoint_types (character) vector with two elements indicating the
+#' endpoint types: `"continuous"` or `"ordinal"`.
+#' @param ... Arguments to pass onto [compute_ICA_ContCont()],
+#' [compute_ICA_OrdCont()], or [compute_ICA_OrdOrd()]
+#'
+#'
+#' @inherit compute_ICA_ContCont return
+compute_ICA  = function(endpoint_types, ...) {
+  # Determine which ICA to compute.
+  if (all(endpoint_types == c("continuous", "continuous"))) {
+    ICA = compute_ICA_ContCont(...)
+  }
+  if (all(endpoint_types == c("ordinal", "continuous")) |
+      all(endpoint_types == c("continuous", "ordinal"))) {
+    ICA = compute_ICA_OrdCont(...)
+  }
+  if (all(endpoint_types == c("ordinal", "ordinal"))) {
+    ICA = compute_ICA_OrdOrd(...)
+  }
+  return(ICA)
+}
+
+#' Function constructor to estimate the ICA given a set of sampled patient-level
+#' treatment effects
+#'
+#' The [constructor_ICA_estimator()] function returns a function the estimates
+#' the ICA as a user-specified function of \eqn{I(\Delta S; \Delta T)},
+#' \eqn{\Delta S}, and \eqn{\Delta T}.
+#'
+#' @inheritParams compute_ICA
+#' @param ICA_def function that takes the following arguments: \eqn{I(\Delta S;
+#'   \Delta T)}, \eqn{\Delta S}, and \eqn{\Delta T}. It returns the ICA as a
+#'   function of these information-theoretic quantities.
+#'
+#' @return A function that estimates the user-defined definition of the ICA.
+#'   This function can be used as `ICA_estimator` in
+#'   [sensitivity_analysis_copula()].
+#' @export
+constructor_ICA_estimator = function(endpoint_types, ICA_def) {
+  if (all(endpoint_types == c("continuous", "continuous"))) {
+    mut_info_estimator = compute_ICA_ContCont(...)
+    entropy_estimator_Delta_S = function(x) return(NA)
+    entropy_estimator_Delta_T = function(x) return(NA)
+  }
+  if (all(endpoint_types == c("ordinal", "continuous"))) {
+    mut_info_estimator = estimate_mutual_information_OrdCont
+    entropy_estimator_Delta_S = function(x) return(NA)
+    entropy_estimator_Delta_T = estimate_entropy
+  }
+  if (all(endpoint_types == c("ordinal", "ordinal"))) {
+    mut_info_estimator = estimate_mutual_information_OrdOrd
+    entropy_estimator_Delta_S = estimate_entropy
+    entropy_estimator_Delta_T = estimate_entropy
+  }
+  ICA_estimator = function(Delta_S, Delta_T) {
+    mut_info = mut_info_estimator(Delta_S, Delta_T)
+    H_Delta_S = entropy_estimator_Delta_S(Delta_S)
+    H_Delta_T = entropy_estimator_Delta_T(Delta_T)
+    return(ICA_def(mut_info, H_Delta_S, H_Delta_T))
+  }
+  return(ICA_estimator)
 }

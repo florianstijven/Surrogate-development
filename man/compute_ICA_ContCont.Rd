@@ -17,7 +17,7 @@ compute_ICA_ContCont(
   q_T1,
   marginal_sp_rho = TRUE,
   seed = 1,
-  mutinfo_estimator = NULL,
+  ICA_estimator = NULL,
   plot_deltas = FALSE
 )
 }
@@ -56,9 +56,10 @@ matrix? Defaults to \code{TRUE}.}
 \item{seed}{Seed for Monte Carlo sampling. This seed does not affect the global
 environment.}
 
-\item{mutinfo_estimator}{Function that estimates the mutual information
-between the first two arguments which are numeric vectors. Defaults to
-\code{FNN::mutinfo()} with default arguments.}
+\item{ICA_estimator}{Function that estimates the ICA between the first two
+arguments which are numeric vectors. Defaults to \code{NULL} which corresponds
+to estimating the mutual information with \code{FNN::mutinfo()} and transforming
+the estimate to the squared informational coefficient of correlation.}
 
 \item{plot_deltas}{(logical) Plot the sampled individual treatment effects?}
 }

@@ -5,6 +5,10 @@
 #' association (and associated quantities) for a fully identified D-vine copula
 #' model in the continuous-continuous setting.
 #'
+#' @param ICA_estimator Function that estimates the ICA between the first two
+#'   arguments which are numeric vectors. Defaults to `NULL` which corresponds
+#'   to estimating the mutual information with `FNN::mutinfo()` and transforming
+#'   the estimate to the squared informational coefficient of correlation.
 #' @inheritParams compute_ICA_SurvSurv
 #'
 #' @return (numeric) A Named vector with the following elements:
@@ -25,8 +29,23 @@ compute_ICA_ContCont = function(copula_par,
                                 q_T1,
                                 marginal_sp_rho = TRUE,
                                 seed = 1,
-                                mutinfo_estimator = NULL,
+                                ICA_estimator = NULL,
                                 plot_deltas = FALSE) {
+  # If ICA_estimator is null, we proceed and compute_ICA_SurvSurv will compute
+  # the SICC as ICA. Otherwise, we convert the ICA_estimator to a new function
+  # which corresponds to the transformation from the SICC to the mutual
+  # information. This ensures that the ICA returned by compute_ICA_SurvSurv() is
+  # the ICA estimated by ICA_estimator().
+  if (is.null(ICA_estimator)) {
+    mutinfo_estimator = NULL
+  }
+  else {
+    mutinfo_estimator = function(...) {
+      -0.5 * log(1 - ICA_estimator(...))
+    }
+  }
+
+
   computed_ICA = compute_ICA_SurvSurv(
     copula_par = copula_par,
     rotation_par = rotation_par,

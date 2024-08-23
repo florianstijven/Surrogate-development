@@ -26,7 +26,7 @@ the entropy.
 }
 \section{Individual Causal Association}{
 Many association measures can operationalize the ICA. For each setting, we
-consider one 'main' definition for the ICA which follows from the mutual
+consider one default definition for the ICA which follows from the mutual
 information.
 \subsection{Continuous-Continuous}{
 

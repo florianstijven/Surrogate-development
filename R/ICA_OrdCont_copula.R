@@ -85,7 +85,7 @@ estimate_mutual_information_OrdCont = function(delta_S, delta_T) {
 #' # Individual Causal Association
 #'
 #' Many association measures can operationalize the ICA. For each setting, we
-#' consider one 'main' definition for the ICA which follows from the mutual
+#' consider one default definition for the ICA which follows from the mutual
 #' information.
 #'
 #' ## Continuous-Continuous
@@ -143,6 +143,9 @@ estimate_ICA_OrdCont = function(delta_S, delta_T) {
 #' association for a fully identified D-vine copula model in the setting with a
 #' continuous surrogate endpoint and an ordinal true endpoint.
 #'
+#' @param ICA_estimator Function that estimates the ICA between the first two
+#'   arguments which are numeric vectors. Defaults to `NULL` which corresponds
+#'   to using [estimate_ICA_OrdCont()].
 #' @inheritParams compute_ICA_ContCont
 #'
 #' @inherit compute_ICA_ContCont return
@@ -157,12 +160,12 @@ compute_ICA_OrdCont = function(copula_par,
                                q_T1,
                                marginal_sp_rho = TRUE,
                                seed = 1,
-                               mutinfo_estimator = NULL)
+                               ICA_estimator = NULL)
 {
-  if (is.null(mutinfo_estimator)) mutinfo_estimator = function(delta_S, delta_T) {
-    ICA = estimate_ICA_OrdCont(delta_S, delta_T)
-    return(-0.5 * log(1 - ICA))
+  if (is.null(ICA_estimator)) {
+    ICA_estimator = estimate_ICA_OrdCont
   }
+
   # We can use the ICA function for the continuous-continuous setting with an
   # alternative mutual information estimator.
   compute_ICA_ContCont(copula_par = copula_par,
@@ -176,6 +179,6 @@ compute_ICA_OrdCont = function(copula_par,
                        q_T1 = q_T1,
                        marginal_sp_rho = marginal_sp_rho,
                        seed = seed,
-                       mutinfo_estimator = mutinfo_estimator,
+                       ICA_estimator = ICA_estimator,
                        plot_deltas = FALSE)
 }
