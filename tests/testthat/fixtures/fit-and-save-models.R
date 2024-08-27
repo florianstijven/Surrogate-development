@@ -96,7 +96,8 @@ fitted_model = fit_copula_OrdCont(
   marginal_S0 = marginal_X,
   marginal_S1 = marginal_X,
   K_T = 2,
-  start_copula = 3
+  start_copula = 3,
+  method = "BHHH"
 )
 saveRDS(fitted_model, file = "tests/testthat/fixtures/schizo-dvine-clayton-OrdCont.rds")
 
