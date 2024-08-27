@@ -11,6 +11,8 @@ ordinal_to_cutpoints(x, cutpoints, strict)
 
 \item{cutpoints}{The cutpoints on the latent scale corresponding to
 \eqn{\boldsymbol{c} = c(c_1, \cdots, c_{K - 1})}.}
+
+\item{strict}{(boolean) See function description.}
 }
 \value{
 Numeric vector with cutpoints corresponding to the values in \code{x}.

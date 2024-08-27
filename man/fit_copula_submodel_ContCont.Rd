@@ -59,7 +59,7 @@ For all options, see \code{?maxLik::maxLik}. Defaults to \code{"BFGS"}.}
 marginal distributions and only the copula parameter is estimated.}
 
 \item{copula_transform}{Used for reparameterizing the copula parameter.
-\code{\link[=copula_transform]{copula_transform()}} backtransforms the transformed copula parameter to the
+\code{copula_transform()} backtransforms the transformed copula parameter to the
 original scale. Note that \code{start_copula} should be specified on the
 transformed scale.}
 

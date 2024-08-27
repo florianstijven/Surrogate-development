@@ -12,6 +12,9 @@ new_vine_copula_fit(fit_0, fit_1, endpoint_types)
 
 \item{fit_1}{list returned by \code{\link[=fit_copula_submodel_OrdCont]{fit_copula_submodel_OrdCont()}},
 \code{\link[=fit_copula_submodel_ContCont]{fit_copula_submodel_ContCont()}}, or \code{\link[=fit_copula_submodel_OrdOrd]{fit_copula_submodel_OrdOrd()}}.}
+
+\item{endpoint_types}{Character vector with 2 elements indicating the type of
+endpoints. Each element is either \code{"ordinal"} or \code{"continuous"}.}
 }
 \value{
 S3 object of the class \code{vine_copula_fit}.

@@ -534,6 +534,7 @@ estimate_marginal = function(Y, marginal_Y, starting_values) {
 #' @param x Integer vector with values in `1:(length(cutpoints) + 1)`.
 #' @param cutpoints The cutpoints on the latent scale corresponding to
 #' \eqn{\boldsymbol{c} = c(c_1, \cdots, c_{K - 1})}.
+#' @param strict (boolean) See function description.
 #'
 #' @return Numeric vector with cutpoints corresponding to the values in `x`.
 ordinal_to_cutpoints = function(x, cutpoints, strict) {
@@ -555,6 +556,8 @@ ordinal_to_cutpoints = function(x, cutpoints, strict) {
 #' [fit_copula_submodel_ContCont()], or [fit_copula_submodel_OrdOrd()].
 #' @param fit_1 list returned by [fit_copula_submodel_OrdCont()],
 #' [fit_copula_submodel_ContCont()], or [fit_copula_submodel_OrdOrd()].
+#' @param endpoint_types Character vector with 2 elements indicating the type of
+#'   endpoints. Each element is either `"ordinal"` or `"continuous"`.
 #'
 #' @return S3 object of the class `vine_copula_fit`.
 #' @seealso [print.vine_copula_fit()], [plot.vine_copula_fit()]
@@ -563,6 +566,13 @@ new_vine_copula_fit = function(fit_0, fit_1, endpoint_types) {
   structure(.Data = list(fit_0 = fit_0, fit_1 = fit_1, endpoint_types = endpoint_types),
             class = "vine_copula_fit")
 }
+
+#' Print summary of fitted copula model
+#'
+#' @param x Fitted-model object returned by [fit_copula_ContCont()],
+#' [fit_copula_OrdCont()], or [fit_copula_OrdOrd()].
+#' @param ... not used
+#'
 #' @export
 print.vine_copula_fit = function(x, ...) {
   cat("Maximum Likelihood Estimate for Vine Copula Model ("); cat(x$endpoint_types[1]); cat("-"); cat(x$endpoints_types[2]); cat("\n")

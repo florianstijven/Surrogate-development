@@ -139,8 +139,8 @@ ordinal and \eqn{S_z} continuous. Otherwise, \code{X} and \code{Y} correspond to
 }
 }
 \seealso{
-\code{\link[=sensitivity_analysis_copula]{sensitivity_analysis_copula()}}, \code{\link[=print.vine_copula_fitted]{print.vine_copula_fitted()}},
-\code{\link[=plot.vine_copula_fitted]{plot.vine_copula_fitted()}}
+\code{\link[=sensitivity_analysis_copula]{sensitivity_analysis_copula()}}, \code{\link[=print.vine_copula_fit]{print.vine_copula_fit()}},
+\code{\link[=plot.vine_copula_fit]{plot.vine_copula_fit()}}
 }
 \author{
 Florian Stijven

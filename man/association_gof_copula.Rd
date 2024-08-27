@@ -4,7 +4,14 @@
 \alias{association_gof_copula}
 \title{Produce Associational GoF plot}
 \usage{
-association_gof_copula(fitted_submodel, treat, endpoint_types)
+association_gof_copula(
+  fitted_submodel,
+  treat,
+  endpoint_types,
+  return_data = FALSE,
+  grid = NULL,
+  ...
+)
 }
 \arguments{
 \item{fitted_submodel}{List returned by \code{\link[=fit_copula_submodel_OrdCont]{fit_copula_submodel_OrdCont()}},
@@ -12,12 +19,42 @@ association_gof_copula(fitted_submodel, treat, endpoint_types)
 
 \item{treat}{Value for the treatment indicator.}
 
-\item{endpoint_types}{Character vector with 2 elements indicating the type of endpoints. Each element is either
-\code{"ordinal"} or \code{"continuous"}.}
+\item{endpoint_types}{Character vector with 2 elements indicating the type of
+endpoints. Each element is either \code{"ordinal"} or \code{"continuous"}.}
+
+\item{return_data}{(boolean) Return the data used in the goodness-of-fit plot
+(without the plot itself). This is useful when the user wants to customize the
+plots, e.g., using \code{ggplot2}. See Details.}
+
+\item{grid}{(numeric) vector of values for the (surrogate) endpoint at which
+the regression function is evaluated.}
+
+\item{...}{Extra argument passed onto \code{\link[=plot]{plot()}}.}
 }
 \description{
 Produce Associational GoF plot
 }
+\section{Semi-Parametric Regression estimates}{
+See the documentation of \code{\link[=plot.vine_copula_fit]{plot.vine_copula_fit()}} for the default
+semi-parametric estimators.
+}
+
+\section{Return Plotting Data}{
+If \code{return_data} is \code{TRUE}, this function will return a data frame that can
+be used to create customized plots. The following variables are present in
+the returned data frame:
+\itemize{
+\item \code{observed}: The semi-parametric estimate of the regression function
+\deqn{E(T | S)}.
+\item \code{upper_ci}, \code{lower_ci}: Upper and lower limit of the pointwise 95\%
+confidence interval for the semi-parametric estimate of the regression
+function.
+\item \code{value}: Value for the surrogate endpoint at which the estimates for the
+regression function are evaluated.
+\item \code{model_based}: Model-based estimate of the regression function.
+}
+}
+
 \seealso{
 \code{\link[=plot.vine_copula_fit]{plot.vine_copula_fit()}}
 }

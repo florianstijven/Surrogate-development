@@ -48,7 +48,14 @@ information.}
 
 \item{mutinfo_estimator}{Function that estimates the mutual information
 between the first two arguments which are numeric vectors. Defaults to
-\code{FNN::mutinfo()} with default arguments.}
+\code{FNN::mutinfo()} with default arguments in the survival-survival setting. This
+argument is not used for non-survival-survival settings.}
+
+\item{ICA_estimator}{Function that estimates the ICA between the first two
+arguments which are numeric vectors. Defaults to \code{NULL} which corresponds
+to using \code{\link[=estimate_ICA_ContCont]{estimate_ICA_ContCont()}}, \code{\link[=estimate_ICA_OrdCont]{estimate_ICA_OrdCont()}}, or
+\code{\link[=estimate_ICA_OrdOrd]{estimate_ICA_OrdOrd()}} (depending on the endpoint types). This argument is
+not used in the survival-survival setting.}
 
 \item{composite}{(boolean)  If \code{composite} is \code{TRUE}, then the surrogate
 endpoint is a composite of both a "pure" surrogate endpoint and the true

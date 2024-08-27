@@ -6,8 +6,8 @@
 #' @inheritSection sensitivity_analysis_SurvSurv_copula Sensitivity Analysis
 #' @inheritSection sensitivity_analysis_SurvSurv_copula Additional Assumptions
 #'
-#' @param fitted_model Returned value from [fit_copula_model_OrdOrd()],
-#'   [fit_copula_model_OrdCont()], or [fit_copula_model_ContCont()]. This object
+#' @param fitted_model Returned value from [fit_copula_OrdOrd()],
+#'   [fit_copula_OrdCont()], or [fit_copula_ContCont()]. This object
 #'   contains the estimated identifiable part of the joint distribution for the
 #'   potential outcomes.
 #' @param ICA_estimator Function that estimates the ICA between the first two
@@ -35,8 +35,8 @@
 #' * `sp_s0s1`, `sp_s0t0`, `sp_s0t1`, `sp_s1t0`, `sp_s1t1`, `sp_t0t1`:
 #' Spearman's rho between the corresponding potential outcomes. Note that these
 #' associations refer to the observable potential outcomes. In contrast, the
-#' estimated association parameters from [fit_copula_model_OrdOrd()] and
-#' [fit_copula_model_OrdCont] refer to associations on a latent scale.
+#' estimated association parameters from [fit_copula_OrdOrd()] and
+#' [fit_copula_OrdCont] refer to associations on a latent scale.
 #' @export
 #'
 #' @references

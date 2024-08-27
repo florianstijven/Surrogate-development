@@ -13,7 +13,6 @@ fit_copula_ContCont(
   marginal_T1,
   start_copula,
   method = "BFGS",
-  copula_transform = function(x) x,
   ...
 )
 }
@@ -56,8 +55,8 @@ analysis with \code{\link[=sensitivity_analysis_copula]{sensitivity_analysis_cop
 Details for more information about this model.
 }
 \seealso{
-\code{\link[=sensitivity_analysis_copula]{sensitivity_analysis_copula()}}, \code{\link[=print.vine_copula_fitted]{print.vine_copula_fitted()}},
-\code{\link[=plot.vine_copula_fitted]{plot.vine_copula_fitted()}}
+\code{\link[=sensitivity_analysis_copula]{sensitivity_analysis_copula()}}, \code{\link[=print.vine_copula_fit]{print.vine_copula_fit()}},
+\code{\link[=plot.vine_copula_fit]{plot.vine_copula_fit()}}
 }
 \author{
 Florian Stijven

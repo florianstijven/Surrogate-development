@@ -29,8 +29,8 @@
 #'
 #' @author Florian Stijven
 #'
-#' @seealso [sensitivity_analysis_copula()], [print.vine_copula_fitted()],
-#'   [plot.vine_copula_fitted()]
+#' @seealso [sensitivity_analysis_copula()], [print.vine_copula_fit()],
+#'   [plot.vine_copula_fit()]
 fit_copula_OrdCont = function(data,
                               copula_family,
                               marginal_S0,

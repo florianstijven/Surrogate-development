@@ -37,12 +37,11 @@ compute_ICA_ContCont = function(copula_par,
   # information. This ensures that the ICA returned by compute_ICA_SurvSurv() is
   # the ICA estimated by ICA_estimator().
   if (is.null(ICA_estimator)) {
-    mutinfo_estimator = NULL
+    ICA_estimator = estimate_ICA_ContCont
   }
-  else {
-    mutinfo_estimator = function(...) {
-      -0.5 * log(1 - ICA_estimator(...))
-    }
+
+  mutinfo_estimator = function(...) {
+    -0.5 * log(1 - ICA_estimator(...))
   }
 
 
@@ -66,4 +65,24 @@ compute_ICA_ContCont = function(copula_par,
   # Remove the computed population strata for survival which don't make sense in
   # the continuous-continuous setting.
   return(computed_ICA[1:8])
+}
+
+
+#' Estimate ICA in Ordinal-Ordinal Setting
+#'
+#' `estimate_ICA_ContCont()` estimates the individual causal association (ICA) for
+#' a sample of individual causal treatment effects with a continuous surrogate and
+#' true endpoint. The ICA in this setting is defined as the squared informational
+#' coefficient of correlation, which is a transformation of the mutual information.
+#' The mutual information is estimated with `fnn::mutinfo()`.
+#'
+#' @param delta_S (numeric) Vector of individual causal treatment effects on the
+#'   surrogate.
+#' @param delta_T (numeric) Vector of individual causal treatment effects on the
+#'   true endpoint.
+#'
+#' @return (numeric) Estimated ICA
+estimate_ICA_ContCont = function(delta_S, delta_T) {
+  requireNamespace("FNN", quietly = FALSE)
+  1 - exp(-2 * FNN::mutinfo(delta_S, delta_T))
 }

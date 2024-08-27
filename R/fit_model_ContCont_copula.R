@@ -22,8 +22,8 @@
 #'
 #' @author Florian Stijven
 #'
-#' @seealso [sensitivity_analysis_copula()], [print.vine_copula_fitted()],
-#'   [plot.vine_copula_fitted()]
+#' @seealso [sensitivity_analysis_copula()], [print.vine_copula_fit()],
+#'   [plot.vine_copula_fit()]
 fit_copula_ContCont = function(data,
                               copula_family,
                               marginal_S0,
@@ -32,7 +32,6 @@ fit_copula_ContCont = function(data,
                               marginal_T1,
                               start_copula,
                               method = "BFGS",
-                              copula_transform = function(x) x,
                               ...) {
   # If copula_family is length 1, we repeat the same copula family.
   if (length(copula_family) == 1) {
@@ -65,6 +64,10 @@ fit_copula_ContCont = function(data,
     start_T1 = marginal_T1[[5]]
   }
   else start_T1 = rep(1, marginal_T1[[4]])
+
+  # copula_transform is a function that allows one to reparameterize the copula.
+  # This option is currently not used, but could be implemented in the future.
+  copula_transform = function(x) x
 
   submodel_0 = fit_copula_submodel_ContCont(
     X = data0$surr,
@@ -107,7 +110,7 @@ fit_copula_ContCont = function(data,
 #' @param start_X,start_Y Starting values corresponding to `marginal_X` and
 #'   `marginal_Y`.
 #' @param copula_transform Used for reparameterizing the copula parameter.
-#'   [copula_transform()] backtransforms the transformed copula parameter to the
+#'   `copula_transform()` backtransforms the transformed copula parameter to the
 #'   original scale. Note that `start_copula` should be specified on the
 #'   transformed scale.
 #' @inheritParams continuous_continuous_loglik

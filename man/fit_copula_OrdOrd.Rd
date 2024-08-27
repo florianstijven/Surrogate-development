@@ -71,8 +71,8 @@ loglikelihood for the observed values for \eqn{Z = 0} or \eqn{Z = 1}.
 }
 }
 \seealso{
-\code{\link[=sensitivity_analysis_copula]{sensitivity_analysis_copula()}}, \code{\link[=print.vine_copula_fitted]{print.vine_copula_fitted()}},
-\code{\link[=plot.vine_copula_fitted]{plot.vine_copula_fitted()}}
+\code{\link[=sensitivity_analysis_copula]{sensitivity_analysis_copula()}}, \code{\link[=print.vine_copula_fit]{print.vine_copula_fit()}},
+\code{\link[=plot.vine_copula_fit]{plot.vine_copula_fit()}}
 }
 \author{
 Florian Stijven
