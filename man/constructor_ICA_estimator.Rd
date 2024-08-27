@@ -17,9 +17,11 @@ function of these information-theoretic quantities.}
 }
 \value{
 A function that estimates the user-defined definition of the ICA.
+This function can be used as \code{ICA_estimator} in
+\code{\link[=sensitivity_analysis_copula]{sensitivity_analysis_copula()}}.
 }
 \description{
-The \code{\link[=constructor_ICA_estimator]{constructor_ICA_estimator()}} function returns a function the estimates the
-ICA as a user-specified function of \eqn{I(\Delta S; \Delta T)},
+The \code{\link[=constructor_ICA_estimator]{constructor_ICA_estimator()}} function returns a function the estimates
+the ICA as a user-specified function of \eqn{I(\Delta S; \Delta T)},
 \eqn{\Delta S}, and \eqn{\Delta T}.
 }

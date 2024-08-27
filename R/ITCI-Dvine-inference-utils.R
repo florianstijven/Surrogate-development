@@ -130,6 +130,7 @@ summary_level_bootstrap_ICA = function(fitted_model,
                                        B,
                                        measure = "ICA",
                                        mutinfo_estimator = NULL,
+                                       ICA_estimator = NULL,
                                        composite = FALSE,
                                        seed,
                                        restr_time = +Inf,
@@ -173,6 +174,7 @@ summary_level_bootstrap_ICA = function(fitted_model,
     n_prec = force(n_prec),
     measure = force(measure),
     mutinfo_estimator = force(mutinfo_estimator),
+    ICA_estimator = force(ICA_estimator),
     composite = force(composite),
     seed = force(seed),
     restr_time = force(restr_time)
@@ -265,7 +267,7 @@ summary_level_bootstrap_ICA = function(fitted_model,
 }
 
 #' Constructor for the function that returns that ICA as a function of the
-#' identifiable parameters
+#' identifiable parameters for survival-survival
 #'
 #' [ICA_given_model_constructor_SurvSurv()] returns a function fixes the unidentifiable
 #' parameters at user-specified values and takes the identifiable parameters as
@@ -284,7 +286,8 @@ summary_level_bootstrap_ICA = function(fitted_model,
 #'
 #' @return A function that computes the ICA as a function of the identifiable
 #'   parameters. In this computation, the unidentifiable parameters are fixed at
-#'   the values supplied as arguments to [ICA_given_model_constructor_SurvSurv()]
+#'   the values supplied as arguments to [ICA_given_model_constructor_SurvSurv()] or
+#'   [ICA_given_model_constructor()].
 ICA_given_model_constructor_SurvSurv = function(fitted_model,
                                        copula_par_unid,
                                        copula_family2,
@@ -385,14 +388,34 @@ ICA_given_model_constructor_SurvSurv = function(fitted_model,
   return(ICA_given_model)
 }
 
-# WIP
+
+#' Constructor for the function that returns that ICA as a function of the
+#' identifiable parameters
+#'
+#' [ICA_given_model_constructor()] returns a function fixes the unidentifiable
+#' parameters at user-specified values and takes the identifiable parameters as
+#' argument.
+#'
+#' @param mutinfo_estimator Function that estimates the mutual information
+#'  between the first two arguments which are numeric vectors. Defaults to
+#'  `FNN::mutinfo()` with default arguments in the survival-survival setting. This
+#'  argument is not used for non-survival-survival settings.
+#' @param ICA_estimator Function that estimates the ICA between the first two
+#'   arguments which are numeric vectors. Defaults to `NULL` which corresponds
+#'   to using [estimate_ICA_ContCont()], [estimate_ICA_OrdCont()], or
+#'   [estimate_ICA_OrdOrd()] (depending on the endpoint types). This argument is
+#'   not used in the survival-survival setting.
+#'
+#' @inheritParams ICA_given_model_constructor_SurvSurv
+#' @inherit ICA_given_model_constructor_SurvSurv return
 ICA_given_model_constructor = function(fitted_model,
                                        copula_par_unid,
                                        copula_family2,
                                        rotation_par_unid,
                                        n_prec,
                                        measure = "ICA",
-                                       mutinfo_estimator,
+                                       mutinfo_estimator = NULL,
+                                       ICA_estimator = NULL,
                                        seed,
                                        composite = NULL,
                                        restr_time = +Inf) {
@@ -439,7 +462,7 @@ ICA_given_model_constructor = function(fitted_model,
     marginal_sp_rho = TRUE
     if (measure %in% c("ICA", "sp_rho")) marginal_sp_rho = FALSE
 
-    force(n_prec); force(mutinfo_estimator); force(copula_par_unid)
+    force(n_prec); force(ICA_estimator); force(copula_par_unid)
     force(copula_family2); force(rotation_par_unid); force(composite)
     force(seed); force(restr_time)
 
@@ -515,7 +538,7 @@ ICA_given_model_constructor = function(fitted_model,
         q_T0 = q_T0,
         q_S1 = q_S1,
         q_T1 = q_T1,
-        mutinfo_estimator = mutinfo_estimator,
+        ICA_estimator = ICA_estimator,
         seed = seed,
         marginal_sp_rho = marginal_sp_rho
       )[measure]
