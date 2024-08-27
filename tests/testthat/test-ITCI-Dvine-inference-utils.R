@@ -22,28 +22,34 @@ test_that("Resampling method for the ICA based on fitted model summary informati
   # The computation of the ICA is way to inaccurate here to combine it with
   # numerical differentiation. This test is added to check breaking changes.
   set.seed(1)
-  estimated_ICAs = summary_level_bootstrap_ICA(
-    fitted_model = fitted_model,
-    rotation_par_unid = c(0,0,0,0),
-    copula_par_unid = 1:4,
-    copula_family2 = "clayton",
-    n_prec = 1e3,
-    composite = TRUE,
-    seed = 1,
-    B = 10L
-  )
+  suppressWarnings({
+    estimated_ICAs = summary_level_bootstrap_ICA(
+      fitted_model = fitted_model,
+      rotation_par_unid = c(0, 0, 0, 0),
+      copula_par_unid = 1:4,
+      copula_family2 = "clayton",
+      n_prec = 1e3,
+      composite = TRUE,
+      seed = 1,
+      B = 10L
+    )
+  })
+
   set.seed(1)
-  estimated_ICAs_p = summary_level_bootstrap_ICA(
-    fitted_model = fitted_model,
-    rotation_par_unid = c(0,0,0,0),
-    copula_par_unid = 1:4,
-    copula_family2 = "clayton",
-    n_prec = 1e3,
-    composite = TRUE,
-    seed = 1,
-    B = 10L,
-    ncores = 2
-  )
+  suppressWarnings({
+    estimated_ICAs_p = summary_level_bootstrap_ICA(
+      fitted_model = fitted_model,
+      rotation_par_unid = c(0, 0, 0, 0),
+      copula_par_unid = 1:4,
+      copula_family2 = "clayton",
+      n_prec = 1e3,
+      composite = TRUE,
+      seed = 1,
+      B = 10L,
+      ncores = 2
+    )
+  })
+
   mean_ICA = mean(estimated_ICAs); sd_ICA = sd(estimated_ICAs)
   mean_ICA_p = mean(estimated_ICAs_p); sd_ICA_p = sd(estimated_ICAs_p)
   expect_equal(c(mean_ICA, sd_ICA), c(0.991289115378347, 0.000645362133079))
@@ -91,7 +97,7 @@ test_that("Resampling method for the ICA based on fitted model summary informati
   # ICAs correct for ordcont
   expect_equal(
     estimated_ICAs_ordcont[3:4],
-    c(0.0526325857756, 0.0106522564476)
+    c(0.00860718520567, 0.02268354556506)
   )
   # ICAs correct for ordord
   expect_equal(

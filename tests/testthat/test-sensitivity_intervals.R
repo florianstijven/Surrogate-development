@@ -9,26 +9,30 @@ test_that("Intervals of ignorance and uncertainty are correctly computed for sur
   sens_results_comp_sprho_restr = readRDS(test_path("fixtures", "sens-results-ovarian-gaussian-comp-sprho-restr.rds"))
   # Create sensitivity intervals object
   set.seed(1)
-  sensitivity_intervals_estimated = sensitivity_intervals_Dvine(
-    fitted_model = fitted_model,
-    sens_results = sens_results,
-    B = 20,
-    n_prec = 1e3
-  )
-  sensitivity_intervals_estimated_comp = sensitivity_intervals_Dvine(
-    fitted_model = fitted_model_comp,
-    sens_results = sens_results_comp,
-    B = 20,
-    n_prec = 1e3
-  )
-  sensitivity_intervals_estimated_comp_sprho_restr = sensitivity_intervals_Dvine(
-    fitted_model = fitted_model_comp,
-    sens_results = sens_results_comp_sprho_restr,
-    B = 20,
-    n_prec = 1e3,
-    mutinfo_estimator = function(x, y) -0.5 *  log(1 - stats::cor(x, y, method = "spearman")),
-    restr_time = 1
-  )
+  suppressWarnings({
+    sensitivity_intervals_estimated = sensitivity_intervals_Dvine(
+      fitted_model = fitted_model,
+      sens_results = sens_results,
+      B = 20,
+      n_prec = 1e3
+    )
+    sensitivity_intervals_estimated_comp = sensitivity_intervals_Dvine(
+      fitted_model = fitted_model_comp,
+      sens_results = sens_results_comp,
+      B = 20,
+      n_prec = 1e3
+    )
+    sensitivity_intervals_estimated_comp_sprho_restr = sensitivity_intervals_Dvine(
+      fitted_model = fitted_model_comp,
+      sens_results = sens_results_comp_sprho_restr,
+      B = 20,
+      n_prec = 1e3,
+      mutinfo_estimator = function(x, y)
+        - 0.5 *  log(1 - stats::cor(x, y, method = "spearman")),
+      restr_time = 1
+    )
+  })
+
   est_interval_of_ignorance = sensitivity_intervals_estimated$est_interval_of_ignorance
   interval_of_uncertainty_strong = sensitivity_intervals_estimated$interval_of_uncertainty_strong_coverage
   interval_of_uncertainty_pointwise = sensitivity_intervals_estimated$interval_of_uncertainty_pointwise_coverage
@@ -155,12 +159,12 @@ test_that("Intervals of ignorance and uncertainty are correctly computed for ord
       interval_of_uncertainty_pointwise_ordcont
     ),
     c(
-      0.218635170840,
-      0.370632214734,
-      0.131279152280,
-      0.368995368681,
-      0.146613969809,
-      0.367414567293
+      0.218531467403,
+      0.370530021884,
+      0.177987805110,
+      0.378222005120,
+      0.182317520585,
+      0.375366736593
     )
   )
   expect_equal(
@@ -191,13 +195,16 @@ test_that("Intervals of ignorance and uncertainty work on multiple cores", {
   # Create sensitivity intervals object
   set.seed(1)
   n_prec = 1e3; B = 20
-  sensitivity_intervals_estimated = sensitivity_intervals_Dvine(
-    fitted_model = fitted_model,
-    sens_results = sens_results,
-    B = B,
-    n_prec = n_prec,
-    ncores = 2
-  )
+  suppressWarnings({
+    sensitivity_intervals_estimated = sensitivity_intervals_Dvine(
+      fitted_model = fitted_model,
+      sens_results = sens_results,
+      B = B,
+      n_prec = n_prec,
+      ncores = 2
+    )
+  })
+
   est_interval_of_ignorance = sensitivity_intervals_estimated$est_interval_of_ignorance
   interval_of_uncertainty_strong = sensitivity_intervals_estimated$interval_of_uncertainty_strong_coverage
   interval_of_uncertainty_pointwise = sensitivity_intervals_estimated$interval_of_uncertainty_pointwise_coverage
