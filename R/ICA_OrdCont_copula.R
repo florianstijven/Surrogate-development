@@ -15,6 +15,11 @@ estimate_mutual_information_OrdCont = function(delta_S, delta_T) {
   dens_delta_S_given_delta_T =
     lapply(X = support_delta_T,
            FUN = function(x) {
+             if (sum(delta_T == x) <= 3) {
+               # If there are to few observations for a certain delta T, we
+               # "drop" that conditional density.
+               return(function(x) 0)
+             }
              densfun = density(delta_S[delta_T == x],
                      from = lower_S,
                      to = upper_S,
