@@ -406,8 +406,11 @@ ICA_given_model_constructor_SurvSurv = function(fitted_model,
 #'   to using [estimate_ICA_ContCont()], [estimate_ICA_OrdCont()], or
 #'   [estimate_ICA_OrdOrd()] (depending on the endpoint types). This argument is
 #'   not used in the survival-survival setting.
-#'
 #' @inheritParams ICA_given_model_constructor_SurvSurv
+#' @inheritParams sensitivity_intervals_Dvine
+#' @inheritParams compute_ICA_SurvSurv
+#' @inheritParams sensitivity_analysis_copula
+#'
 #' @inherit ICA_given_model_constructor_SurvSurv return
 ICA_given_model_constructor = function(fitted_model,
                                        copula_par_unid,

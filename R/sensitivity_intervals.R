@@ -53,6 +53,7 @@
 #' @inheritParams Dvine_ICA_confint
 #' @inheritParams summary_level_bootstrap_ICA
 #' @inheritParams sensitivity_analysis_SurvSurv_copula
+#' @inheritParams ICA_given_model_constructor
 #'
 #' @return An S3 object of the class `sensitivity_intervals_Dvine` which can be
 #' printed.
@@ -69,6 +70,7 @@ sensitivity_intervals_Dvine = function(fitted_model,
                                        alpha = 0.05,
                                        n_prec = 5e3,
                                        mutinfo_estimator = NULL,
+                                       ICA_estimator = NULL,
                                        restr_time = +Inf,
                                        ncores = 1) {
   # Select row with the smallest value for the ICA.
@@ -96,6 +98,7 @@ sensitivity_intervals_Dvine = function(fitted_model,
     seed = 1,
     measure = measure,
     mutinfo_estimator = mutinfo_estimator,
+    ICA_estimator = ICA_estimator,
     restr_time = restr_time,
     ncores = ncores
   )
@@ -112,6 +115,7 @@ sensitivity_intervals_Dvine = function(fitted_model,
     seed = 1,
     measure = measure,
     mutinfo_estimator = mutinfo_estimator,
+    ICA_estimator = ICA_estimator,
     restr_time = restr_time,
     ncores = ncores
   )
@@ -197,7 +201,9 @@ print.sensitivity_intervals_Dvine = function(x, ...) {
   cat("Sensitivity analysis based on the D-vine copula model\n\n")
   cat("Identifiable Copula Family (c12 and c34): "); cat(x$fitted_model$copula_family); cat("\n")
   cat("Unidentifiable Copula Family (c23, c13_2, c24_3, and c14_23): "); cat(x$copula_family2); cat("\n")
-  cat("Number of Internal Knots: "); cat(length(x$fitted_model$knots0) - 2)
+
+  # cat("Number of Internal Knots: "); cat(length(x$fitted_model$knots0) - 2)
+
   cat("\n\n")
   cat("Estimated interval of ignorance: "); print_interval(x$est_interval_of_ignorance); cat("\n")
   cat("Interval of uncertainty (pointwise): "); print_interval(x$interval_of_uncertainty_pointwise_coverage); cat("\n")

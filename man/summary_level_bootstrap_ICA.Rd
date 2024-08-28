@@ -21,7 +21,8 @@ summary_level_bootstrap_ICA(
 )
 }
 \arguments{
-\item{fitted_model}{Returned value from \code{\link[=fit_model_SurvSurv]{fit_model_SurvSurv()}}. This object
+\item{fitted_model}{Returned value from \code{\link[=fit_copula_OrdOrd]{fit_copula_OrdOrd()}},
+\code{\link[=fit_copula_OrdCont]{fit_copula_OrdCont()}}, or \code{\link[=fit_copula_ContCont]{fit_copula_ContCont()}}. This object
 contains the estimated identifiable part of the joint distribution for the
 potential outcomes.}
 
