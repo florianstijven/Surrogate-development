@@ -1,38 +1,46 @@
 #' Assess surrogacy using a Rényi divergence based family of metrics in the causal-inference single-trial setting in normal case
 #'
 #' The function [ICA_alpha_ContCont()] is a set of metrics to evaluate surrogacy. ICA_alpha have the similar
-#' mathematical properties with [ICA.ContCont()]. 
+#' mathematical properties with [ICA.ContCont()].
 #'
-#' @param alpha (numeric) is order `alpha in [0, infinity]` 
+#' @param alpha (numeric) is order `alpha in [0, infinity]`
 #' @param T0S0 A scalar or vector that specifies the correlation(s) between the surrogate and the true endpoint in the control treatment condition
 #' @param T1S1 A scalar or vector that specifies the correlation(s) between the surrogate and the true endpoint in the control treatment condition
 #' @param T0T0 A scalar that specifies the variance of the true endpoint in the control treatment condition
 #' @param T1T1 A scalar that specifies the variance of the true endpoint in the control treatment condition
 #' @param S0S0 A scalar that specifies the variance of the true endpoint in the control treatment condition
 #' @param S1S1 A scalar that specifies the variance of the true endpoint in the control treatment condition
-#' @param T0T1 A scalar or vector that contains the correlation(s) between the counterfactuals T0 and T1 
-#' @param T0S1 A scalar or vector that contains the correlation(s) between the counterfactuals T0 and S1 
-#' @param T1S0 A scalar or vector that contains the correlation(s) between the counterfactuals T1 and S0 
-#' @param S0S1 A scalar or vector that contains the correlation(s) between the counterfactuals S0 and S1 
+#' @param T0T1 A scalar or vector that contains the correlation(s) between the counterfactuals T0 and T1
+#' @param T0S1 A scalar or vector that contains the correlation(s) between the counterfactuals T0 and S1
+#' @param T1S0 A scalar or vector that contains the correlation(s) between the counterfactuals T1 and S0
+#' @param S0S1 A scalar or vector that contains the correlation(s) between the counterfactuals S0 and S1
 
 
 
 
-#' @return (numeric) Vector with the limits of the two-sided `1 - alpha`
-#'   confidence interval.
+#' @return
+#'
+#' * Total.Num.Matrices: An object of class numeric that contains the total number of matrices that can be formed as based on the user-specified correlations in the function call.
+#' * Pos.Def: A data.frame that contains the positive definite matrices that can be formed based on the user-specified correlations. These matrices are used to compute the vector of the \eqn{\rho_{\Delta}} values.
+#' * rho: A scalar or vector that contains the individual causal association \eqn{\rho_{\Delta}}
+#' * ICA: A scalar or vector that contains the individual causal association \eqn{\rho_{\Delta}^2=ICA}
+#' * ICA_alpha: A scalar or vector that contains the individual causal association \eqn{ICA_{\alpha}}
+#' * Sigmas: A data.frame that contains the \eqn{\sigma_{\Delta T}} and \eqn{\sigma_{\Delta S}}
+#'
+
 
 ICA_alpha_ContCont <- function(alpha, T0S0, T1S1, T0T0=1, T1T1=1, S0S0=1, S1S1=1,
                          T0T1=seq(-1, 1, by=.1), T0S1=seq(-1, 1, by=.1), T1S0=seq(-1, 1, by=.1),
                          S0S1=seq(-1, 1, by=.1)) {
-  
+
   T0S0_hier <- T0S0[1]
   T1S1_hier <- T1S1[1]
-  
-  Results <- na.exclude(matrix(NA, 1, 9))
-  colnames(Results) <- c("T0T1", "T0S0", "T0S1", "T1S0", "T1S1", "S0S1", "ICA", "Sigma.Delta.T", "delta")
+
+  Results <- na.exclude(matrix(NA, 1, 11))
+  colnames(Results) <- c("T0T1", "T0S0", "T0S1", "T1S0", "T1S1", "S0S1", "rho", "ICA", "ICA_alpha", "sigma.delta.T", "sigma.delta.S")
   combins <- expand.grid(T0T1, T0S0_hier, T0S1, T1S0, T1S1_hier, S0S1)
   lengte <- dim(combins)[1]
-  
+
   if (length(T0S0)>1){
     if (length(T0S0)<lengte){stop("The specified vector for T0S0 should be larger than ", lengte) }
     T0S0_vector <- T0S0[1:lengte] # sample
@@ -43,8 +51,8 @@ ICA_alpha_ContCont <- function(alpha, T0S0, T1S1, T0T0=1, T1T1=1, S0S0=1, S1S1=1
     T1S1_vector <- T1S1[1:lengte] # sample
     combins[,5] <- T1S1_vector
   }
-  
-  
+
+
   for (i in 1: nrow(combins)) {
     T0T1 <- combins[i, 1]
     T0S0 <- combins[i, 2]
@@ -65,27 +73,52 @@ ICA_alpha_ContCont <- function(alpha, T0S0, T1S1, T0T0=1, T1T1=1, S0S0=1, S1S1=1
     Sigma_c[4,4] <- S1S1
     Cor_c <- cov2cor(Sigma_c)
     Min.Eigen.Cor <- try(min(eigen(Cor_c)$values), TRUE)
-    
+
     if (Min.Eigen.Cor > 0) {
       rho <- ((sqrt(S0S0*T0T0)*Cor_c[3,1])+(sqrt(S1S1*T1T1)*Cor_c[4,2])-(sqrt(S0S0*T1T1)*Cor_c[3,2])-(sqrt(S1S1*T0T0)*Cor_c[4,1]))/(sqrt((T0T0+T1T1-(2*sqrt(T0T0*T1T1)*Cor_c[2,1]))*(S0S0+S1S1-(2*sqrt(S0S0*S1S1)*Cor_c[4,3]))))
       ICA<- rho^2
       if ((is.finite(ICA))==TRUE){
         sigma.delta.T <- T0T0 + T1T1 - (2 * sqrt(T0T0*T1T1) * Cor_c[2,1])
         sigma.delta.S <- S0S0 + S1S1 - (2 * sqrt(S0S0*S1S1) * Cor_c[3,4])
+        if( (alpha=1)==TRUE)  { ICA_alpha<- ICA  }
         ICA_alpha<- 1-(1-rho^2)*(1-(1-alpha)^2*rho^2)^(-1/(1-alpha))
         results.part <- as.vector(cbind(T0T1, T0S0, T0S1, T1S0, T1S1, S0S1, rho, ICA, ICA_alpha, sigma.delta.T, sigma.delta.S))
         Results <- rbind(Results, results.part)
+      if( (alpha > 1+(1/abs(rho)))==TRUE)  { print(" alpha does not meet specific condition ")  }
         rownames(Results) <- NULL}
     }
   }
   Results <- data.frame(Results)
   rownames(Results) <- NULL
   Total.Num.Matrices <- nrow(combins)
-  
+
   fit <-
-    list(Total.Num.Matrices=Total.Num.Matrices, Pos.Def=Results[,1:6], ICA=Results$ICA, ICA_alpha=Results$ICA_alpha, Sigmas=Results[,10:11], Call=match.call())
-  
+    list(Total.Num.Matrices=Total.Num.Matrices, Pos.Def=Results[,1:6], rho=Results$rho, ICA=Results$ICA, ICA_alpha=Results$ICA_alpha, Sigmas=Results[,10:11], Call=match.call())
+
   class(fit) <- "ICA_alpha_ContCont"
   fit
-  
+
 }
+
+
+
+
+#' @details
+#' # New family of surrogacy metrics \eqn{ICA_{\alpha}}
+#'
+#'ICA was extended as ICA_alpha by proposing a new family of surrogacy metrics derived from Rényi divergence.
+#' The Rényi divergence is defined as:
+#' \eqn{ D_{\alpha}[f(\Delta T,\Delta S),f(\Delta T)f(\Delta S)]= {\displaystyle\dfrac{1}{\alpha-1} \ln{ \int f(\Delta T,\Delta S )^{\alpha}  (f(\Delta T)f(\Delta S))^{1-\alpha}} \, d\Delta T d\Delta S}
+#'
+#' Based on this family of divergences, one can propose a more general set of surrogacy metrics defined as:
+#' \eqn{ ICA_{\alpha}=1-e^{-2D_{\alpha}[f(\Delta T,\Delta S),f(\Delta T)f(\Delta S)]}}
+#'
+#' However, under the normal causal inference model, i.e. when \eqn{\mathbf{Y} \sim \mathcal{N}(\boldsymbol{\mu}, \boldsymbol{\Sigma})}, the following lemma provides a closed-form expressions for both under specific conditions (\eqn{0 < \alpha < 1 + \dfrac{1}{|\rho_{\Delta}|}}):
+#'
+#' \eqn{D_\alpha=& -\frac{\ln(1 - \rho_{\Delta}^2)}{2} + \frac{\ln\left(1 - (1-\alpha)^2\rho_{\Delta}^2 \right ) }{ 2(1 - \alpha) }}
+#' \eqn{ICA_{\alpha} =& 1 - (1 - \rho_{\Delta}^2)\left( 1 - (1 - \alpha)^2 \rho_{\Delta}^2 \right)^{-\dfrac{1}{1 - \alpha}} }
+#'
+#' when \eqn{\alpha=1} then \eqn{ICA_{\alpha}=ICA}
+#' \eqn{ICA_{1}=1-e^{-2D_1[f(\Delta T,\Delta S),f(\Delta T)f(\Delta S)]}=1-e^{-2I(\Delta T, \Delta S)}=\rho_{\Delta}^2=ICA}
+#'
+
