@@ -22,8 +22,8 @@ jobs:
           - {os: windows-latest, r: 'release'}
           - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
           - {os: ubuntu-latest,   r: 'release'}
-          - {os: ubuntu-latest,   r: 'oldrel-1'}
-
+#         - {os: ubuntu-latest,   r: 'oldrel-1'} -> RMS cannot be installed for R < 4.4.0
+# The checks on olred-1 can be turned on again once the issue with installing RMS has been resolved.
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
