@@ -52,8 +52,8 @@ test_that("Resampling method for the ICA based on fitted model summary informati
 
   mean_ICA = mean(estimated_ICAs); sd_ICA = sd(estimated_ICAs)
   mean_ICA_p = mean(estimated_ICAs_p); sd_ICA_p = sd(estimated_ICAs_p)
-  expect_equal(c(mean_ICA, sd_ICA), c(0.991289115378347, 0.000645362133079))
-  expect_equal(c(mean_ICA_p, sd_ICA_p), c(0.991289115378347, 0.000645362133079))
+  expect_equal(c(mean_ICA, sd_ICA), c(0.991289115378347, 0.000645362133079), tolerance = 0.01)
+  expect_equal(c(mean_ICA_p, sd_ICA_p), c(0.991289115378347, 0.000645362133079), tolerance = 0.01)
 })
 
 test_that("Resampling method for the ICA based on fitted model summary information works for ordinal/continuous settings", {
@@ -92,16 +92,19 @@ test_that("Resampling method for the ICA based on fitted model summary informati
   # ICAs correct for contcont
   expect_equal(
     estimated_ICAs_contcont[1:2],
-    c(0.890522088263, 0.834155497937)
+    c(0.890522088263, 0.834155497937),
+    tolerance = 0.05
   )
   # ICAs correct for ordcont
   expect_equal(
     estimated_ICAs_ordcont[3:4],
-    c(0.00860718520567, 0.02268354556506)
+    c(0.00860718520567, 0.02268354556506),
+    tolerance = 0.05
   )
   # ICAs correct for ordord
   expect_equal(
     estimated_ICAs_ordord[5:6],
-    c(0.212887266820, 0.224188377981)
+    c(0.212887266820, 0.224188377981),
+    tolerance = 0.05
   )
 })

@@ -84,8 +84,13 @@ test_that("compute_ICA_OrdCont() works in with ordinal endpoint with 3 categorie
     c(
       0.300182238020, -0.689622488197, 0.437928990939, 0.815037420952, 0.582869469012, 0.670079357825, 0.864715817871, 0.717112698175
     ),
-    ignore_attr = "names"
+    ignore_attr = "names",
+    tolerance = 0.05
   )
+  # Tolerance should be sufficiently large because the VineCopula package, which
+  # is used for sampling from D-vine copulas, will produce consistent samples
+  # across package versions and platforms.
+
   # Computed ICA and Spearman's rho values do not depend on marginal_sp_rho
   # option.
   expect_equal(

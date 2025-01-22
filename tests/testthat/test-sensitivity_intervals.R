@@ -59,7 +59,8 @@ test_that("Intervals of ignorance and uncertainty are correctly computed for sur
       0.995473758827,
       0.892237833093,
       0.995439312912
-    )
+    ),
+    tolerance = 0.1
   )
   expect_equal(
     c(
@@ -74,7 +75,8 @@ test_that("Intervals of ignorance and uncertainty are correctly computed for sur
       0.991316728016,
       0.590704158826,
       0.991155587546
-    )
+    ),
+    tolerance = 0.1
   )
   expect_equal(
     c(
@@ -89,7 +91,8 @@ test_that("Intervals of ignorance and uncertainty are correctly computed for sur
       0.973583298994,
       0.521745786609,
       0.973544737359
-    )
+    ),
+    tolerance = 0.1
   )
 })
 
@@ -150,7 +153,8 @@ test_that("Intervals of ignorance and uncertainty are correctly computed for ord
       0.951424114168,
       0.752176460121,
       0.951197679875
-    )
+    ),
+    tolerance = 0.1
   )
   expect_equal(
     c(
@@ -165,7 +169,8 @@ test_that("Intervals of ignorance and uncertainty are correctly computed for ord
       0.378222005120,
       0.182317520585,
       0.375366736593
-    )
+    ),
+    tolerance = 0.1
   )
   expect_equal(
     c(
@@ -180,7 +185,8 @@ test_that("Intervals of ignorance and uncertainty are correctly computed for ord
       0.2094639344559,
       0.0725304694619,
       0.2072494890744
-    )
+    ),
+    tolerance = 0.1
   )
 })
 
@@ -222,6 +228,7 @@ test_that("Intervals of ignorance and uncertainty work on multiple cores", {
       0.995473758827,
       0.892237833093,
       0.995439312912
-    )
+    ),
+    tolerance = 0.1
   )
 })

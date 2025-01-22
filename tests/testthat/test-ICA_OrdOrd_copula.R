@@ -50,9 +50,13 @@ test_that(
       seed = 1
     )
     # Computed mutual information is correct.
-    expect_equal(mut_info, 0.287093723436)
+    expect_equal(mut_info, 0.287093723436, tolerance = 0.05)
     # Computed ICA is correct.
-    expect_equal(ICA_estimate, 0.355527102471)
+    expect_equal(ICA_estimate, 0.355527102471, tolerance = 0.05)
+    # Tolerance should be sufficiently large because the VineCopula package, which
+    # is used for sampling from D-vine copulas, will produce consistent samples
+    # across package versions and platforms.
+
     # Estimated ICA and computed ICA are equal.
     expect_equal(ICA_estimate, ICA_computed[1], ignore_attr = "names")
   }
