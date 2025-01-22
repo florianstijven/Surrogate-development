@@ -8,6 +8,12 @@
 survival-continuous settings in the meta-analytic framework.
 * Added functions to perform the two-stage federated surrogacy evaluation.
 
+## Surrogate 3.3.1
+
+* General implementation of the information-theoretic causal inference framework
+based on D-vine copula models for the ordinal-ordinal, ordinal-continuous, and
+continuous-continuous settings.
+
 # Surrogate 3.2
 
 ## Surrogate 3.2.6
