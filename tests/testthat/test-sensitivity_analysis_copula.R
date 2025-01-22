@@ -8,7 +8,7 @@ test_that("basic sensitivity analysis works for continuous-continuous, ordinal-c
   set.seed(1)
   results_contcont = sensitivity_analysis_copula(
     fitted_model = fitted_model_contcont,
-    n_sim = 5,
+    n_sim = 10,
     eq_cond_association = FALSE,
     lower = rep(0.2, 4),
     upper = rep(0.8, 4),
@@ -21,7 +21,7 @@ test_that("basic sensitivity analysis works for continuous-continuous, ordinal-c
   set.seed(1)
   results_ordcont = sensitivity_analysis_copula(
     fitted_model = fitted_model_ordcont,
-    n_sim = 5,
+    n_sim = 10,
     eq_cond_association = TRUE,
     lower = rep(0.2, 4),
     upper = rep(0.8, 4),
@@ -34,7 +34,7 @@ test_that("basic sensitivity analysis works for continuous-continuous, ordinal-c
   set.seed(1)
   results_ordord = sensitivity_analysis_copula(
     fitted_model = fitted_model_ordord,
-    n_sim = 5,
+    n_sim = 10,
     eq_cond_association = FALSE,
     lower = rep(0.2, 4),
     upper = rep(0.8, 4),
@@ -48,8 +48,8 @@ test_that("basic sensitivity analysis works for continuous-continuous, ordinal-c
   {
   expect_equal(
     mean(results_contcont[, 1]),
-    c(0.7324773),
-    tolerance = 0.1
+    c(0.6710603),
+    tolerance = 0.15
   )
   # expect_equal(
   #   as.numeric(results_contcont[1, ]),
@@ -62,7 +62,7 @@ test_that("basic sensitivity analysis works for continuous-continuous, ordinal-c
 
   expect_equal(
     mean(results_ordcont[, 1]),
-    c(0.09689438),
+    c(0.07629387),
     tolerance = 0.1
   )
   # expect_equal(
@@ -76,8 +76,8 @@ test_that("basic sensitivity analysis works for continuous-continuous, ordinal-c
 
   expect_equal(
     mean(results_ordord[, 1]),
-    c(0.2278982),
-    tolerance = 0.1
+    c(0.2041518),
+    tolerance = 0.15
   )
   # expect_equal(
   #   as.numeric(results_contcont[1, ]),

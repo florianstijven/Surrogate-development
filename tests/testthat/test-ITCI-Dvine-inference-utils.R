@@ -69,7 +69,7 @@ test_that("Resampling method for the ICA based on fitted model summary informati
     copula_family2 = "clayton",
     n_prec = 1e3,
     seed = 1,
-    B = 10L
+    B = 50L
   )
   estimated_ICAs_ordcont = summary_level_bootstrap_ICA(
     fitted_model = fitted_model_ordcont,
@@ -78,7 +78,7 @@ test_that("Resampling method for the ICA based on fitted model summary informati
     copula_family2 = "clayton",
     n_prec = 5e3,
     seed = 1,
-    B = 10L
+    B = 50L
   )
   estimated_ICAs_ordord = summary_level_bootstrap_ICA(
     fitted_model = fitted_model_ordord,
@@ -87,24 +87,24 @@ test_that("Resampling method for the ICA based on fitted model summary informati
     copula_family2 = "clayton",
     n_prec = 1e3,
     seed = 1,
-    B = 10L
+    B = 50L
   )
   # ICAs correct for contcont
   expect_equal(
     mean(estimated_ICAs_contcont),
-    c(0.8742195),
+    c(0.8764873),
     tolerance = 0.05
   )
   # ICAs correct for ordcont
   expect_equal(
     mean(estimated_ICAs_ordcont),
-    c(0.03083768),
+    c(0.02991634),
     tolerance = 0.05
   )
   # ICAs correct for ordord
   expect_equal(
     mean(estimated_ICAs_ordord),
-    c(0.2507742),
+    c(0.2494766),
     tolerance = 0.1
   )
 })

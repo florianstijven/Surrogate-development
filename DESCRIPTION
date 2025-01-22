@@ -47,7 +47,6 @@ Imports:
     MBESS,
     tidyr,
     dplyr,
-    numDeriv,
     tibble,
     lifecycle
 Depends: R (>= 3.5.0)
