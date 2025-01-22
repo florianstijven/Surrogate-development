@@ -1417,7 +1417,7 @@
     },
     "kde1d": {
       "Package": "kde1d",
-      "Version": "1.0.7",
+      "Version": "1.1.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1429,7 +1429,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "cdb8dccc8b8fd2eb247c4461d84a3c1a"
+      "Hash": "c15d02dac6d13d67a848ecba9b6192e5"
     },
     "kdecopula": {
       "Package": "kdecopula",
@@ -1896,14 +1896,14 @@
     },
     "mvtnorm": {
       "Package": "mvtnorm",
-      "Version": "1.2-6",
+      "Version": "1.3-1",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R",
         "stats"
       ],
-      "Hash": "b5b11e71e41d9d0eef7d8dc26903ed55"
+      "Hash": "77c61d51ce0f36e3c1a76e6b295aab31"
     },
     "nlme": {
       "Package": "nlme",
@@ -2594,7 +2594,7 @@
     },
     "rvinecopulib": {
       "Package": "rvinecopulib",
-      "Version": "0.6.3.1.1",
+      "Version": "0.7.1.1.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -2612,7 +2612,7 @@
         "utils",
         "wdm"
       ],
-      "Hash": "b54aca1e4114698063949d5204fba575"
+      "Hash": "acbb622cbb3aabc3ea88648aba8f7a1c"
     },
     "sandwich": {
       "Package": "sandwich",
@@ -3153,14 +3153,14 @@
     },
     "wdm": {
       "Package": "wdm",
-      "Version": "0.2.4",
+      "Version": "0.2.6",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R",
         "Rcpp"
       ],
-      "Hash": "b2433e44ad8445262093137e0d9c6afd"
+      "Hash": "8d98f4e70288c691c53df8089b1c022b"
     },
     "whisker": {
       "Package": "whisker",
