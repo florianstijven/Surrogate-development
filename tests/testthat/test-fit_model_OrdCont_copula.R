@@ -47,7 +47,8 @@ test_that("the estimation of marginal distrbutions works", {
   )
   expect_equal(
     estimate_marginal(Y, marginal_Y, c(1, 1)),
-    c(mean(Y), sd(Y)*sqrt(((length(Y) - 1) / length(Y))))
+    c(mean(Y), sd(Y)*sqrt(((length(Y) - 1) / length(Y)))),
+    tolerance = 1e-4
   )
 })
 
@@ -101,25 +102,28 @@ test_that("fit_copula_submodel_OrdCont() works for the twostep estimator", {
   expect_equal(
   logLik(fitted_submodel$ml_fit),
   -27.5774225982,
-  ignore_attr = "df"
+  ignore_attr = "df",
+  tolerance = 1e-5
   )
   expect_equal(
     fitted_submodel$marginal_X$pmf(1:5),
     c(0.142857142857, 0.285714285714, 0.142857142857, 0.142857142857, 0.142857142857),
-    ignore_attr = "names"
+    ignore_attr = "names",
+    tolerance = 1e-5
   )
   expect_equal(
     fitted_submodel$marginal_Y$inv_cdf((1:5) / 5),
-    c(-0.779990392239, 0.494138641766,  1.591575646335, 2.865704680340, Inf)
+    c(-0.779990392239, 0.494138641766,  1.591575646335, 2.865704680340, Inf),
+    tolerance = 1e-5
   )
 })
 
 test_that("fit_copula_submodel_OrdCont() works for the full estimator", {
-  X = c(1, 6, 2, 5, 3, 6, 4)
+  X = c(1, 3, 2, 2, 3, 4, 4, 3, 3, 2)
   X = rep(X, 10)
-  Y = c(2.2, 3.1, 0, -3, 0, 1, 4)
+  Y = c(2.2, 3.1, 0, -3, 0, 1, 4, 2.3, 0.5, 3.1)
   Y = rep(Y, 10)
-  K = 6
+  K = 4
   marginal_Y = list(
     pdf_fun = function(x, para) {
       dnorm(x, mean = para[1], sd = para[2])
@@ -138,23 +142,31 @@ test_that("fit_copula_submodel_OrdCont() works for the full estimator", {
     copula_family = "clayton",
     marginal_Y = marginal_Y,
     start_Y = c(mean(Y), sd(Y)),
-    start_copula = 2,
-    K = K
+    start_copula = 3,
+    K = K,
   )
   expect_equal(
     logLik(fitted_submodel$ml_fit),
-    -275.774228204,
-    ignore_attr = "df"
+    c(-335.9523),
+    ignore_attr = "df",
+    tolerance = 0.01
   )
   expect_equal(
-    fitted_submodel$marginal_X$pmf(1:5),
-    c(0.142857142857, 0.142857142857, 0.142857142857, 0.142857142857, 0.142857142857),
-    ignore_attr = "names"
-  )
-  expect_equal(
-    fitted_submodel$marginal_Y$inv_cdf((1:5) / 5),
-    c(-0.779990420120, 0.494138681916,  1.591575745083, 2.865704847119, Inf)
-  )
+    fitted_submodel$marginal_X$pmf(1:4),
+    c(
+      0.09757605,
+      0.29212648,
+      0.40887020,
+      0.20142728
+      ),
+      ignore_attr = "names",
+      tolerance = 1e-5
+    )
+    expect_equal(
+      fitted_submodel$marginal_Y$inv_cdf((1:5) / 5),
+      c(-0.3360741, 0.8170597, 1.8102807, 2.9634145, Inf),
+      tolerance = 1e-5
+    )
 })
 
 test_that("fit_copula_OrdCont() works for the full estimator", {

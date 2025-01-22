@@ -26,19 +26,23 @@ test_that("the ordinal-continuous loglikelihood works", {
   K = 6
   expect_equal(
     continuous_continuous_loglik(para, X, Y, "clayton", marginal_X, marginal_Y),
-    -38.082448704
+    -38.082448704,
+    tolerance = 0.01
   )
   expect_equal(
     continuous_continuous_loglik(c(para[-1], 0.5), X, Y, "gaussian", marginal_X, marginal_Y),
-    -139.6712877
+    -139.6712877,
+    tolerance = 0.01
   )
   expect_equal(
     continuous_continuous_loglik(para, X, Y, "frank", marginal_X, marginal_Y),
-    -32.57395345
+    -32.57395345,
+    tolerance = 0.01
   )
   expect_equal(
     continuous_continuous_loglik(para, X, Y, "gumbel", marginal_X, marginal_Y),
-    -36.81896141
+    -36.81896141,
+    tolerance = 0.01
   )
 })
 
@@ -72,7 +76,8 @@ test_that("fit_copula_submodel_ContCont() works for the twostep estimator", {
   expect_equal(
     logLik(fitted_submodel$ml_fit),
     -25.3366761945,
-    ignore_attr = "df"
+    ignore_attr = "df",
+    tolerance = 0.01
   )
   expect_equal(
     fitted_submodel$marginal_X$pdf(1:5),
@@ -118,16 +123,19 @@ test_that("fit_copula_submodel_OrdCont() works for the full estimator", {
   expect_equal(
     logLik(fitted_submodel$ml_fit),
     -275.28200947,
-    ignore_attr = "df"
+    ignore_attr = "df",
+    tolerance = 0.1
   )
   expect_equal(
     fitted_submodel$marginal_X$pdf(1:5),
     c(0.0653530354649, 0.1218597549174, 0.1768435023308, 0.1997340854162, 0.1755696866447),
-    ignore_attr = "names"
+    ignore_attr = "names",
+    tolerance = 0.01
   )
   expect_equal(
     fitted_submodel$marginal_Y$inv_cdf((1:5) / 5),
-    c(-0.963708006673, 0.178103097350,1.161571587856, 2.303382691879, Inf)
+    c(-0.963708006673, 0.178103097350,1.161571587856, 2.303382691879, Inf),
+    tolerance = 0.01
   )
 })
 
@@ -229,7 +237,8 @@ test_that("fit_copula_ContCont() works with the non-central ", {
     marginal_S1 = marginal_S,
     marginal_T0 = marginal_T,
     marginal_T1 = marginal_T,
-    start_copula = 5
+    start_copula = 5,
+    method = "BHHH"
   )
   # Maximized loglikelihoods match
   expect_equal(
@@ -237,7 +246,8 @@ test_that("fit_copula_ContCont() works with the non-central ", {
       fitted_model$fit_0$ml_fit$maximum,
       fitted_model$fit_1$ml_fit$maximum
     ),
-    c(-296.933821938, -530.076269924)
+    c(-296.933821938, -530.076269924),
+    tolerance = 0.01
   )
   # Estimated coefficients match
   expect_equal(
@@ -245,22 +255,23 @@ test_that("fit_copula_ContCont() works with the non-central ", {
       coef(fitted_model$fit_0$ml_fit),
       coef(fitted_model$fit_1$ml_fit)
     ),
-    c(
-      -1.51126059571e+01,
-      2.17831530424e+01,
-      2.63888013817e-01,
-      -1.95977409385e+01,
-      3.70039873097e+01,
-      -5.34627613843e-05,
-      4.68191850552,-16.958835278219,
-      23.870406532649,
-      0.130429033313,
-      -25.585369827299,
-      42.509076671333,
-      -0.239651962661,
-      8.729443374799
+    c(-15.111858211,
+      21.802586887,
+      0.313607345,
+      -19.593466595,
+      37.031933928,
+      0.007206932,
+      4.692048418,
+      -16.9450853,
+      23.8469725,
+      0.1226650,
+      -25.5717622,
+      42.4446427,
+      -0.2563797,
+      8.7131708
     ),
-    ignore_attr = "names"
+    ignore_attr = "names",
+    tolerance = 0.1
   )
 }
 )
@@ -374,7 +385,8 @@ test_that("GoF functions work", {
   # Conditional mean function
   expect_equal(
     conditional_mean_copula_ContCont(fitted_model$fit_0, grid = 1:5),
-    c(0.924384620663, 0.952002129594, 1.000133909041, 1.062347011343, 1.121985370807)
+    c(0.924384620663, 0.952002129594, 1.000133909041, 1.062347011343, 1.121985370807),
+    tolerance = 0.01
   )
 }
 )

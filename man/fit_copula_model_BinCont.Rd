@@ -41,10 +41,15 @@ defaults to 500.}
 \item{method}{Optimization algorithm for maximizing the objective function.
 For all options, see \code{?maxLik::maxLik}. Defaults to \code{"BFGS"}.}
 }
-\value{
-WIP
-}
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
+
+Development on \code{\link[=fit_copula_model_BinCont]{fit_copula_model_BinCont()}} is complete. For new code, we
+recommend switching to \code{\link[=fit_copula_OrdCont]{fit_copula_OrdCont()}}, which is a more general
+function (it allows for ordinal endpoints, not just binary) and is still
+under active development.
+}
+\details{
 The function \code{\link[=fit_copula_model_BinCont]{fit_copula_model_BinCont()}} fits the copula model for a
 continuous surrogate endpoint and binary true endpoint. Because the bivariate
 distributions of the surrogate-true endpoint pairs are functionally

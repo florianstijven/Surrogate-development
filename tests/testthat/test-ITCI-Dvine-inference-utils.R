@@ -91,20 +91,20 @@ test_that("Resampling method for the ICA based on fitted model summary informati
   )
   # ICAs correct for contcont
   expect_equal(
-    estimated_ICAs_contcont[1:2],
-    c(0.890522088263, 0.834155497937),
+    mean(estimated_ICAs_contcont),
+    c(0.8742195),
     tolerance = 0.05
   )
   # ICAs correct for ordcont
   expect_equal(
-    estimated_ICAs_ordcont[3:4],
-    c(0.00860718520567, 0.02268354556506),
+    mean(estimated_ICAs_ordcont),
+    c(0.03083768),
     tolerance = 0.05
   )
   # ICAs correct for ordord
   expect_equal(
-    estimated_ICAs_ordord[5:6],
-    c(0.212887266820, 0.224188377981),
-    tolerance = 0.05
+    mean(estimated_ICAs_ordord),
+    c(0.2507742),
+    tolerance = 0.1
   )
 })

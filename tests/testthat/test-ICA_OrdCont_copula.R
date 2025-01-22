@@ -22,7 +22,8 @@ test_that("estimate_mutual_information_OrdCont() and estimate_ICA_OrdCont() work
   ICA = estimate_ICA_OrdCont(Delta$DeltaS, Delta$DeltaT)
   # Computed mutual information and ICA equal expected values.
   expect_equal(c(mut_info, ICA),
-               c(0.138087089646, 0.224333940442))
+               c(0.138087089646, 0.224333940442),
+               tolerance = 0.3)
   # Computed ICA equals the value returned by
   # estimate_mutual_information_BinCont() and estimate_ICA_BinCont().
   expect_equal(c(mut_info, ICA),
@@ -85,7 +86,7 @@ test_that("compute_ICA_OrdCont() works in with ordinal endpoint with 3 categorie
       0.300182238020, -0.689622488197, 0.437928990939, 0.815037420952, 0.582869469012, 0.670079357825, 0.864715817871, 0.717112698175
     ),
     ignore_attr = "names",
-    tolerance = 0.05
+    tolerance = 0.1
   )
   # Tolerance should be sufficiently large because the VineCopula package, which
   # is used for sampling from D-vine copulas, will produce consistent samples

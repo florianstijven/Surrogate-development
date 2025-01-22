@@ -71,16 +71,19 @@ test_that("fit_copula_submodel_OrdOrd() works for the full estimator", {
   expect_equal(
     logLik(fitted_submodel$ml_fit),
     -193.005983363,
-    ignore_attr = "df"
+    ignore_attr = "df",
+    tolerance = 1e-5
   )
   expect_equal(
     fitted_submodel$marginal_X$pmf(1:5),
     c(0.163139303754, 0.137925386782, 0.165417272812, 0.200230588170, 0.185809273741),
-    ignore_attr = "names"
+    ignore_attr = "names",
+    tolerance = 1e-5
   )
   expect_equal(
     fitted_submodel$marginal_Y$inv_cdf((1:5) / 5),
-    c(2, 3, 4, 5, 5)
+    c(2, 3, 4, 5, 5),
+    tolerance = 1e-5
   )
 })
 

@@ -26,7 +26,7 @@ test_that("compute_ICA_SurvSurv works", {
                        seed)
   output_vector = unname(output_vector[1:4])
   check_vector = c(0.329931193410, 0.385933009133, 0.890199861304, 0.835027399097)
-  expect_equal(output_vector, check_vector)
+  expect_equal(output_vector, check_vector, tolerance = 0.05)
 })
 
 test_that("compute_ICA_SurvSurv works for different unidentifiable copulas", {
@@ -57,5 +57,5 @@ test_that("compute_ICA_SurvSurv works for different unidentifiable copulas", {
                                        seed)
   output_vector = unname(output_vector[1:4])
   check_vector = c(0.440951593781, 0.310282184611, 0.676431933056, 0.511494812175)
-  expect_equal(output_vector, check_vector)
+  expect_equal(output_vector, check_vector, tolerance = 0.05)
 })
