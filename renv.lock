@@ -853,17 +853,6 @@
       ],
       "Hash": "a1066cbc05caee9a4bf6d90f194ff4da"
     },
-    "expm": {
-      "Package": "expm",
-      "Version": "1.0-0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "Matrix",
-        "methods"
-      ],
-      "Hash": "a44b2810f36c1cda5d52eee6ec96cafa"
-    },
     "extraDistr": {
       "Package": "extraDistr",
       "Version": "1.10.0",
@@ -1817,18 +1806,6 @@
         "R"
       ],
       "Hash": "c83992ef63553d1e4b97162a4a753470"
-    },
-    "msm": {
-      "Package": "msm",
-      "Version": "1.7.1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "expm",
-        "mvtnorm",
-        "survival"
-      ],
-      "Hash": "473ac607cdbc7692f0d0edd82c66af8e"
     },
     "mstate": {
       "Package": "mstate",
