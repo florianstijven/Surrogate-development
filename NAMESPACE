@@ -1,4 +1,5 @@
 # Imported functions
+importFrom(lifecycle, deprecated)
 importFrom(stats, glm)
 importFrom(nlme, gls)
 importFrom(nlme, intervals)

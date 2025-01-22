@@ -12,7 +12,7 @@ deltamethod = function (g, mean, cov, ses = TRUE)
   syms <- paste("x", 1:n, sep = "")
   for (i in 1:n) assign(syms[i], mean[i])
   gdashmu <- t(sapply(g, function(form) {
-    as.numeric(attr(eval(deriv(form, syms)), "gradient"))
+    as.numeric(attr(eval(stats::deriv(form, syms)), "gradient"))
   }))
   new.covar <- gdashmu %*% cov %*% t(gdashmu)
   if (ses) {
