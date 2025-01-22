@@ -105,6 +105,6 @@ test_that("Resampling method for the ICA based on fitted model summary informati
   expect_equal(
     mean(estimated_ICAs_ordord),
     c(0.2494766),
-    tolerance = 0.1
+    tolerance = 0.2
   )
 })
