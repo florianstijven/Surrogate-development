@@ -141,15 +141,15 @@ data_scr = data.frame(
 # Save data in semi-competing risks format.
 saveRDS(data_scr, file = "tests/testthat/fixtures/ovarian-data-scr.rds")
 # Fit and save the D-vine copula model with Clayton copula
-fitted_model = fit_model_SurvSurv(data = data_scr,
-                                  copula_family = "clayton",
-                                  n_knots = 1)
-saveRDS(fitted_model, file = "tests/testthat/fixtures/ovarian-dvine-clayton-scr.rds")
+# fitted_model = fit_model_SurvSurv(data = data_scr,
+#                                   copula_family = "clayton",
+#                                   n_knots = 1)
+# saveRDS(fitted_model, file = "tests/testthat/fixtures/ovarian-dvine-clayton-scr.rds")
 
-fitted_model = fit_model_SurvSurv(data = data_scr,
-                                  copula_family = "frank",
-                                  n_knots = 1)
-saveRDS(fitted_model, file = "tests/testthat/fixtures/ovarian-dvine-frank-scr.rds")
+# fitted_model = fit_model_SurvSurv(data = data_scr,
+#                                   copula_family = "frank",
+#                                   n_knots = 1)
+# saveRDS(fitted_model, file = "tests/testthat/fixtures/ovarian-dvine-frank-scr.rds")
 
 fitted_model = fit_model_SurvSurv(data = data_scr,
                                   copula_family = "gaussian",

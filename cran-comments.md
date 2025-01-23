@@ -1,6 +1,10 @@
-## Resubmission
-Imports includes 22 non-default packages.
+── R CMD check results ─────────────────────────────────────────────────────────────────── Surrogate 3.3.0.9000 ────
+Duration: 7m 46.2s
 
-* This packages combines many different methods for evaluating surrogate
-  endpoints. Hence, it inevitably relies on a substantial number of external
-  packages that implement these methods.
+❯ checking for future file timestamps ... NOTE
+  unable to verify current time
+
+0 errors ✔ | 0 warnings ✔ | 1 note ✖
+
+* The note is related to the local machine in which R CMD CHECK was run and should
+not be produced on other machines. 
