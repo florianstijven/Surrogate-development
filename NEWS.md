@@ -1,5 +1,3 @@
-# Surrogate (development version)
-
 # Surrogate 3.3
 
 ## Surrogate 3.3.0
