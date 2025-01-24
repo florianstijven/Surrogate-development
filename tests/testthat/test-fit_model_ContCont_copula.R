@@ -140,9 +140,10 @@ test_that("fit_copula_submodel_OrdCont() works for the full estimator", {
 })
 
 test_that("fit_copula_ContCont() works", {
+  testthat::skip_on_cran()
   S0 = c(1, 6, 2, 5, 3, 6, 4)
   S0 = rep(S0, 10)
-  S1 = c(1, 2, 2, 5, 3, 2, 4)
+  S1 = c(1, 6, 2, 5, 3, 2, 4)
   S1 = rep(S1, 10)
 
   T0 = c(2.2, 3.1, 0, -3, 0, 1, 4)
@@ -180,7 +181,8 @@ test_that("fit_copula_ContCont() works", {
     marginal_S1 = marginal,
     marginal_T0 = marginal,
     marginal_T1 = marginal,
-    start_copula = 2
+    start_copula = 2,
+    method = "NM"
   )
   expect_equal(
     fitted_model$fit_0$ml_fit$maximum,
@@ -190,6 +192,7 @@ test_that("fit_copula_ContCont() works", {
 )
 
 test_that("fit_copula_ContCont() works with the non-central ", {
+  testthat::skip_on_cran()
   data("Schizo")
   Schizo = Schizo[1:100, ]
   na = is.na(Schizo$BPRS) | is.na(Schizo$PANSS)
@@ -340,9 +343,10 @@ test_that("fit_copula_ContCont() works with the non-central ", {
 # )
 
 test_that("GoF functions work", {
+  testthat::skip_on_cran()
   S0 = c(1, 6, 2, 5, 3, 6, 4)
   S0 = rep(S0, 10)
-  S1 = c(1, 2, 2, 5, 3, 2, 4)
+  S1 = c(1, 6, 2, 5, 3, 2, 4)
   S1 = rep(S1, 10)
 
   T0 = c(2.2, 3.1, 0, -3, 0, 1, 4)
@@ -380,7 +384,8 @@ test_that("GoF functions work", {
     marginal_S1 = marginal,
     marginal_T0 = marginal,
     marginal_T1 = marginal,
-    start_copula = 2
+    start_copula = 2,
+    method = "NM"
   )
   # Conditional mean function
   expect_equal(
