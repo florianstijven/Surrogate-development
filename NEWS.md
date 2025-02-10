@@ -1,5 +1,3 @@
-# Surrogate (development version)
-
 # Surrogate 3.3
 
 ## Surrogate 3.3.0
@@ -14,7 +12,7 @@ survival-continuous settings in the meta-analytic framework.
 based on D-vine copula models for the ordinal-ordinal, ordinal-continuous, and
 continuous-continuous settings.
 
-## Surrogate 3.3.2
+## Surrogate 3.3.3
 
 * Fix tests that fail on CRAN. 
 
