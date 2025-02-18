@@ -29,15 +29,19 @@
 #'
 
 
-ICA_alpha_ContCont <- function(alpha, T0S0, T1S1, T0T0=1, T1T1=1, S0S0=1, S1S1=1,
-                         T0T1=seq(-1, 1, by=.1), T0S1=seq(-1, 1, by=.1), T1S0=seq(-1, 1, by=.1),
-                         S0S1=seq(-1, 1, by=.1)) {
+ICA_alpha_ContCont <- function(alpha=numeric(), T0S0, T1S1, T0T0=1, T1T1=1, S0S0=1, S1S1=1,
+                               T0T1=seq(-1, 1, by=.1), T0S1=seq(-1, 1, by=.1), T1S0=seq(-1, 1, by=.1),
+                               S0S1=seq(-1, 1, by=.1)) {
 
   T0S0_hier <- T0S0[1]
   T1S1_hier <- T1S1[1]
+  alpha <- as.numeric(alpha)
+  length_alpha<- length(alpha)
+  Results <- na.exclude(matrix(NA, 1, (10+length_alpha)))
+  colnames_result <- c("T0T1", "T0S0", "T0S1", "T1S0", "T1S1", "S0S1", "sigma.delta.T", "sigma.delta.S", "rho", "ICA")
+  ica_alpha_cols <- paste0("ICA_", as.character(alpha))
+  colnames(Results) <- c(colnames_result, ica_alpha_cols)
 
-  Results <- na.exclude(matrix(NA, 1, 11))
-  colnames(Results) <- c("T0T1", "T0S0", "T0S1", "T1S0", "T1S1", "S0S1", "rho", "ICA", "ICA_alpha", "sigma.delta.T", "sigma.delta.S")
   combins <- expand.grid(T0T1, T0S0_hier, T0S1, T1S0, T1S1_hier, S0S1)
   lengte <- dim(combins)[1]
 
@@ -80,12 +84,38 @@ ICA_alpha_ContCont <- function(alpha, T0S0, T1S1, T0T0=1, T1T1=1, S0S0=1, S1S1=1
       if ((is.finite(ICA))==TRUE){
         sigma.delta.T <- T0T0 + T1T1 - (2 * sqrt(T0T0*T1T1) * Cor_c[2,1])
         sigma.delta.S <- S0S0 + S1S1 - (2 * sqrt(S0S0*S1S1) * Cor_c[3,4])
-        if( (alpha=1)==TRUE)  { ICA_alpha<- ICA  }
-        ICA_alpha<- 1-(1-rho^2)*(1-(1-alpha)^2*rho^2)^(-1/(1-alpha))
-        results.part <- as.vector(cbind(T0T1, T0S0, T0S1, T1S0, T1S1, S0S1, rho, ICA, ICA_alpha, sigma.delta.T, sigma.delta.S))
+
+        ICA_alpha_fun<- function(a) {1-(1-rho^2)*(1-(1-a)^2*rho^2)^(-1/(1-a)) }
+        ICA_alphas <- data.frame()  # Initialize an empty data frame
+        for (j in alpha) {
+          if (j > 1 + (1 / abs(rho))) {
+            stop("one of the alpha values does not meet the specific condition")
+            rownames(Results) <- NULL # Warning message
+            next  # Skip the current iteration
+          }
+          else if (j == 1) {
+            ICA_alpha <- ICA  # Assign ICA directly if alpha is 1
+          } else {
+            ICA_alpha <- ICA_alpha_fun(j)  # Otherwise, call the function
+          }
+          ICA_alphas <- rbind(ICA_alphas, data.frame(ICA_alpha = ICA_alpha))
+        }
+
+        ICA_alphas<- ICA_alphas[1:nrow(ICA_alphas),]
+        ICA_alphas<- as.numeric(ICA_alphas)
+        results.part_1 <- as.vector(cbind(T0T1, T0S0, T0S1, T1S0, T1S1, S0S1,  sigma.delta.T, sigma.delta.S, rho, ICA))
+        results.part_2<- as.vector(ICA_alphas)
+        results.part<- c(results.part_1,results.part_2)
+
+        if (!exists("Results")) {
+          Results <- data.frame(matrix(ncol = length(results.part), nrow = 0))
+        }
+
         Results <- rbind(Results, results.part)
-      if( (alpha > 1+(1/abs(rho)))==TRUE)  { print(" alpha does not meet specific condition ")  }
-        rownames(Results) <- NULL}
+      }
+
+      # Results <- rbind(Results, results.part)
+      # rownames(Results) <- NULL}
     }
   }
   Results <- data.frame(Results)
@@ -93,7 +123,7 @@ ICA_alpha_ContCont <- function(alpha, T0S0, T1S1, T0T0=1, T1T1=1, S0S0=1, S1S1=1
   Total.Num.Matrices <- nrow(combins)
 
   fit <-
-    list(Total.Num.Matrices=Total.Num.Matrices, Pos.Def=Results[,1:6], rho=Results$rho, ICA=Results$ICA, ICA_alpha=Results$ICA_alpha, Sigmas=Results[,10:11], Call=match.call())
+    list(Total.Num.Matrices=Total.Num.Matrices, Pos.Def=Results[,1:6], rho=Results$rho, Sigmas=Results[,7:8], ICA=Results$ICA, ICA_alpha=Results[,11:length(results.part)], Call=match.call())
 
   class(fit) <- "ICA_alpha_ContCont"
   fit
@@ -120,5 +150,15 @@ ICA_alpha_ContCont <- function(alpha, T0S0, T1S1, T0T0=1, T1T1=1, S0S0=1, S1S1=1
 #'
 #' when \eqn{\alpha=1} then \eqn{ICA_{\alpha}=ICA}
 #' \eqn{ICA_{1}=1-e^{-2D_1[f(\Delta T,\Delta S),f(\Delta T)f(\Delta S)]}=1-e^{-2I(\Delta T, \Delta S)}=\rho_{\Delta}^2=ICA}
+#'
+#'
+#'@examples
+#'# example code
+#'
+#'ICA_alpha_ContCont(alpha=0.5, T0S0 = 0.9597334, T1S1=0.9644139, T0T0=544.3285, T1T1=550.6597, S0S0=180.6831, S1S1=180.9433, T0T1=-0.9,
+#' T0S1=-0.9 , T1S0=-0.9 , S0S1=-0.9)
+#'More than one \eqn{\alpha} value can be calculated simultaneously:
+#'ICA_alpha_ContCont(alpha=c(1.25,1.5,2), T0S0 = 0.9597334, T1S1=0.9644139, T0T0=544.3285, T1T1=550.6597, S0S0=180.6831, S1S1=180.9433, T0T1=-0.9,
+#'T0S1=-0.9 , T1S0=-0.9 , S0S1=-0.9)
 #'
 
