@@ -12,6 +12,7 @@ sensitivity_intervals_Dvine(
   alpha = 0.05,
   n_prec = 5000,
   mutinfo_estimator = NULL,
+  ICA_estimator = NULL,
   restr_time = +Inf,
   ncores = 1
 )
@@ -37,8 +38,13 @@ of the ICA in each replication of the sensitivity analysis.}
 
 \item{mutinfo_estimator}{Function that estimates the mutual information
 between the first two arguments which are numeric vectors. Defaults to
-\code{FNN::mutinfo()} with default arguments.
-@param plot_deltas (logical) Plot the sampled individual treatment effects?}
+\code{FNN::mutinfo()} with default arguments.}
+
+\item{ICA_estimator}{Function that estimates the ICA between the first two
+arguments which are numeric vectors. Defaults to \code{NULL} which corresponds
+to using \code{\link[=estimate_ICA_ContCont]{estimate_ICA_ContCont()}}, \code{\link[=estimate_ICA_OrdCont]{estimate_ICA_OrdCont()}}, or
+\code{\link[=estimate_ICA_OrdOrd]{estimate_ICA_OrdOrd()}} (depending on the endpoint types). This argument is
+not used in the survival-survival setting.}
 
 \item{restr_time}{Restriction time for the potential outcomes. Defaults to
 \code{+Inf} which means no restriction. Otherwise, the sampled potential outcomes

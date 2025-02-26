@@ -363,7 +363,7 @@ model_fit_measures = function(fitted_model){
 #' * `1L` if true endpoint event ocurred.
 #' * `0L` if censored.
 #' @param method Optimization algorithm for maximizing the objective function.
-#'   For all options, see `?maxLik::maxLik`. Defaults to `"BFGRS"`.
+#'   For all options, see `?maxLik::maxLik`. Defaults to `"BFGS"`.
 #'
 #' @inheritParams loglik_copula_scale
 #' @inheritParams fit_model_SurvSurv
@@ -512,6 +512,7 @@ SurvSurv_starting_values = function(X, delta_X, Y, delta_Y, copula_family, n_kno
   return(starting_values)
 }
 
+#' @export
 print.vine_copula_SurvSurv_fit = function(x, ...) {
   cat("Maximum Likelihood Estimate for Vine Copula Model (Survival-Survival)\n")
   cat("Copula Family: "); cat(x$copula_family); cat("\n")
@@ -523,6 +524,7 @@ print.vine_copula_SurvSurv_fit = function(x, ...) {
   print(summary(x$fit_1))
 }
 
+#' @export
 plot.vine_copula_SurvSurv_fit = function(x, composite = TRUE, grid = NULL, time_unit = "years", ...) {
   if (is.null(grid)) {
     # If the user did not provide a grid, compute the default grid.

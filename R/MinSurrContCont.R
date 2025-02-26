@@ -13,7 +13,7 @@ class(fit) <- "MinSurrContCont"
 fit
 }
 
-
+#' @export
 plot.MinSurrContCont <- function(x, main, col, Type="Percent", Labels=FALSE, Par=par(oma=c(0, 0, 0, 0), mar=c(5.1, 4.1, 4.1, 2.1)), ...) {
 
 
@@ -62,7 +62,7 @@ plot.MinSurrContCont <- function(x, main, col, Type="Percent", Labels=FALSE, Par
 
 }
 
-
+#' @export
 summary.MinSurrContCont <- function(object, ..., Object){
 
   if (missing(Object)){Object <- object}

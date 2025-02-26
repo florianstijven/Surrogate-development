@@ -12,14 +12,16 @@ ICA_given_model_constructor(
   rotation_par_unid,
   n_prec,
   measure = "ICA",
-  mutinfo_estimator,
-  composite,
+  mutinfo_estimator = NULL,
+  ICA_estimator = NULL,
   seed,
+  composite = NULL,
   restr_time = +Inf
 )
 }
 \arguments{
-\item{fitted_model}{Returned value from \code{\link[=fit_model_SurvSurv]{fit_model_SurvSurv()}}. This object
+\item{fitted_model}{Returned value from \code{\link[=fit_copula_OrdOrd]{fit_copula_OrdOrd()}},
+\code{\link[=fit_copula_OrdCont]{fit_copula_OrdCont()}}, or \code{\link[=fit_copula_ContCont]{fit_copula_ContCont()}}. This object
 contains the estimated identifiable part of the joint distribution for the
 potential outcomes.}
 
@@ -44,16 +46,22 @@ information.}
 
 \item{mutinfo_estimator}{Function that estimates the mutual information
 between the first two arguments which are numeric vectors. Defaults to
-\code{FNN::mutinfo()} with default arguments.
-@param plot_deltas (logical) Plot the sampled individual treatment effects?}
+\code{FNN::mutinfo()} with default arguments in the survival-survival setting. This
+argument is not used for non-survival-survival settings.}
+
+\item{ICA_estimator}{Function that estimates the ICA between the first two
+arguments which are numeric vectors. Defaults to \code{NULL} which corresponds
+to using \code{\link[=estimate_ICA_ContCont]{estimate_ICA_ContCont()}}, \code{\link[=estimate_ICA_OrdCont]{estimate_ICA_OrdCont()}}, or
+\code{\link[=estimate_ICA_OrdOrd]{estimate_ICA_OrdOrd()}} (depending on the endpoint types). This argument is
+not used in the survival-survival setting.}
+
+\item{seed}{Seed for Monte Carlo sampling. This seed does not affect the global
+environment.}
 
 \item{composite}{(boolean)  If \code{composite} is \code{TRUE}, then the surrogate
 endpoint is a composite of both a "pure" surrogate endpoint and the true
 endpoint, e.g., progression-free survival is the minimum of time-to-progression
 and time-to-death.}
-
-\item{seed}{Seed for Monte Carlo sampling. This seed does not affect the global
-environment.}
 
 \item{restr_time}{Restriction time for the potential outcomes. Defaults to
 \code{+Inf} which means no restriction. Otherwise, the sampled potential outcomes
@@ -63,7 +71,8 @@ outcomes).}
 \value{
 A function that computes the ICA as a function of the identifiable
 parameters. In this computation, the unidentifiable parameters are fixed at
-the values supplied as arguments to \code{\link[=ICA_given_model_constructor]{ICA_given_model_constructor()}}
+the values supplied as arguments to \code{\link[=ICA_given_model_constructor_SurvSurv]{ICA_given_model_constructor_SurvSurv()}} or
+\code{\link[=ICA_given_model_constructor]{ICA_given_model_constructor()}}.
 }
 \description{
 \code{\link[=ICA_given_model_constructor]{ICA_given_model_constructor()}} returns a function fixes the unidentifiable

@@ -127,3 +127,31 @@ test_that(
     expect_equal(loglik, -6.814739, tolerance = 1e-5)
   }
 )
+
+test_that(
+  "loglikelihood function for bivariate copula model works for frank copula and weibull margins, with left-censoring and return_sum = FALSE",
+  {
+    copula = "frank"
+    marginal = "weibull"
+    x = abs(c(-0.6264538, 0.1836433, -0.8356286, 1.595280, 0.3295078))
+    y = abs(c(-0.8204684, 0.4874291, 0.7383247, 0.5757814, -0.3053884))
+    d1 = c(0, 1, 0, 1, 0)
+    d2 = c(0, 0, 1, -1, 0)
+    theta = 0.5
+    loglik = log_likelihood_copula_model(
+      theta = theta,
+      X = x,
+      Y = y,
+      d1 = d1,
+      d2 = d2,
+      copula = copula,
+      cdf_X = cdf_fun(c(1, 1), marginal),
+      cdf_Y = cdf_fun(c(1, 1), marginal),
+      pdf_X = pdf_fun(c(1, 1), marginal),
+      pdf_Y = pdf_fun(c(1, 1), marginal),
+      return_sum = FALSE
+    )
+    expect_equal(sum(loglik), -6.814739, tolerance = 1e-5)
+    expect_equal(loglik[1:3], c(-1.3840139, -0.7374556, -1.5684927), tolerance = 1e-5)
+  }
+)

@@ -18,9 +18,19 @@
 #'  * `d2[i] = 1` if `v[i]` corresponds to non-censored value
 #'  * `d2[i] = 0` if `v[i]` corresponds to right-censored value
 #'  * `d2[i] = -1` if `v[i]` corresponds to left-censored value
+#' @param return_sum Return the sum of the individual loglikelihoods? If `FALSE`,
+#' a vector with the individual loglikelihood contributions is returned.
 #'
 #' @return Value of the copula loglikelihood evaluated in `theta`.
-clayton_loglik_copula_scale <- function(theta, u, v, d1, d2) {
+clayton_loglik_copula_scale <- function(theta, u, v, d1, d2, return_sum = TRUE) {
+  # Replace entries that correspond to zero or one probabilities with NAs. This
+  # avoids NaN warnings.
+  zero_indicator = detect_zero_probs(u, v, d1, d2)
+  one_indicator = detect_one_probs(u, v, d1, d2)
+  zero_or_one = zero_indicator | one_indicator
+  u[zero_or_one] = NA; v[zero_or_one] = NA
+  d1[zero_or_one] = NA; d2[zero_or_one] = NA
+
   # Natural logarithm of copula evaluated in u and v.
   log_C = -(1 / theta) * log(u ** (-theta) + v ** (-theta) - 1)
   # Log likelihood contribution for uncensored observations.
@@ -69,7 +79,11 @@ clayton_loglik_copula_scale <- function(theta, u, v, d1, d2) {
                   0)
 
   loglik_copula <-
-    sum(part1 + part2 + part3 + part4 + part5 + part6 + part7 + part8 + part9)
+    part1 + part2 + part3 + part4 + part5 + part6 + part7 + part8 + part9
+  loglik_copula[zero_indicator] = -Inf
+  loglik_copula[one_indicator] = 0
+  if (return_sum)
+    loglik_copula = sum(loglik_copula)
 
   return(loglik_copula)
 }
@@ -83,7 +97,14 @@ clayton_loglik_copula_scale <- function(theta, u, v, d1, d2) {
 #' @inheritParams clayton_loglik_copula_scale
 #'
 #' @return Value of the copula loglikelihood evaluated in `theta`.
-frank_loglik_copula_scale <- function(theta, u, v, d1, d2){
+frank_loglik_copula_scale <- function(theta, u, v, d1, d2, return_sum = TRUE){
+  # Replace entries that correspond to zero or one probabilities with NAs. This
+  # avoids NaN warnings.
+  zero_indicator = detect_zero_probs(u, v, d1, d2)
+  one_indicator = detect_one_probs(u, v, d1, d2)
+  zero_or_one = zero_indicator | one_indicator
+  u[zero_or_one] = NA; v[zero_or_one] = NA
+  d1[zero_or_one] = NA; d2[zero_or_one] = NA
 
   # For efficiency purposes, some quantities that are needed multiple times are
   # first precomputed. In this way, we do not waste resources on computing the
@@ -139,7 +160,11 @@ frank_loglik_copula_scale <- function(theta, u, v, d1, d2){
                   0)
 
   loglik_copula <-
-    sum(part1 + part2 + part3 + part4 + part5 + part6 + part7 + part8 + part9)
+    part1 + part2 + part3 + part4 + part5 + part6 + part7 + part8 + part9
+  loglik_copula[zero_indicator] = -Inf
+  loglik_copula[one_indicator] = 0
+  if (return_sum)
+    loglik_copula = sum(loglik_copula)
 
   return(loglik_copula)
 }
@@ -152,7 +177,15 @@ frank_loglik_copula_scale <- function(theta, u, v, d1, d2){
 #'
 #' @inheritParams clayton_loglik_copula_scale
 #' @return Value of the copula loglikelihood evaluated in `theta`.
-gumbel_loglik_copula_scale <- function(theta, u, v, d1, d2){
+gumbel_loglik_copula_scale <- function(theta, u, v, d1, d2, return_sum = TRUE){
+  # Replace entries that correspond to zero or one probabilities with NAs. This
+  # avoids NaN warnings.
+  zero_indicator = detect_zero_probs(u, v, d1, d2)
+  one_indicator = detect_one_probs(u, v, d1, d2)
+  zero_or_one = zero_indicator | one_indicator
+  u[zero_or_one] = NA; v[zero_or_one] = NA
+  d1[zero_or_one] = NA; d2[zero_or_one] = NA
+
   # For efficiency purposes, some quantities that are needed multiple times are
   # first precomputed. In this way, we do not waste resources on computing the
   # same quantity multiple times.
@@ -184,11 +217,11 @@ gumbel_loglik_copula_scale <- function(theta, u, v, d1, d2){
   part4 <- ifelse((d1 == -1) & (d2 == -1), log_C, 0)
   # Log likelihood contribution for second observation right-censored.
   part5 <- ifelse((d1 == 1) & (d2 == 0),
-                  log(1 - (exp(log_C) / u) * (log(u - exp(log_C)) ** (theta - 1))),
+                  log(1 - (exp(log_C) / u) * (-1 * min_log_u / log_C) ** (theta - 1)),
                   0)
   # Log likelihood contribution for first observation right-censored.
   part6 <- ifelse((d1 == 0) & (d2 == 1),
-                  log(1 - (exp(log_C) / v) * (log(v - exp(log_C)) ** (theta - 1))),
+                  log(1 - (exp(log_C) / v) * (-1 * min_log_v / log_C) ** (theta - 1)),
                   0)
   # Log likelihood contribution for both observations right-censored.
   part7 <- ifelse((d1 == 0) & (d2 == 0),
@@ -206,7 +239,11 @@ gumbel_loglik_copula_scale <- function(theta, u, v, d1, d2){
                   0)
 
   loglik_copula <-
-    sum(part1 + part2 + part3 + part4 + part5 + part6 + part7 + part8 + part9)
+    part1 + part2 + part3 + part4 + part5 + part6 + part7 + part8 + part9
+  loglik_copula[zero_indicator] = -Inf
+  loglik_copula[one_indicator] = 0
+  if (return_sum)
+    loglik_copula = sum(loglik_copula)
 
   return(loglik_copula)
 }
@@ -221,7 +258,16 @@ gumbel_loglik_copula_scale <- function(theta, u, v, d1, d2){
 #' @inheritParams clayton_loglik_copula_scale
 #'
 #' @return Value of the copula loglikelihood evaluated in `theta`.
-gaussian_loglik_copula_scale <- function(theta, u, v, d1, d2){
+gaussian_loglik_copula_scale <- function(theta, u, v, d1, d2, return_sum = TRUE){
+  # Replace entries that correspond to zero or one probabilities with defaults.
+  # This avoids NaN warnings. We don't use NAs here because the functions from
+  # mvtnorm cannot handle NAs.
+  zero_indicator = detect_zero_probs(u, v, d1, d2)
+  one_indicator = detect_one_probs(u, v, d1, d2)
+  zero_or_one = zero_indicator | one_indicator
+  u[zero_or_one] = 0.5; v[zero_or_one] = 0.5
+  d1[zero_or_one] = 0; d2[zero_or_one] = 0
+
   requireNamespace("mvtnorm")
   # For efficiency purposes, some quantities that are needed multiple times are
   # first precomputed. In this way, we do not waste resources on computing the
@@ -326,7 +372,11 @@ gaussian_loglik_copula_scale <- function(theta, u, v, d1, d2){
                   0)
 
   loglik_copula <-
-    sum(part1 + part2 + part3 + part4 + part5 + part6 + part7 + part8 + part9)
+    part1 + part2 + part3 + part4 + part5 + part6 + part7 + part8 + part9
+  loglik_copula[zero_indicator] = -Inf
+  loglik_copula[one_indicator] = 0
+  if (return_sum)
+    loglik_copula = sum(loglik_copula)
 
   return(loglik_copula)
 }
@@ -349,7 +399,7 @@ gaussian_loglik_copula_scale <- function(theta, u, v, d1, d2){
 #'   help files of the dedicated functions named `copula_loglik_copula_scale()`.
 #'
 #' @return Value of the copula loglikelihood evaluated in `theta`.
-loglik_copula_scale <- function(theta, u, v, d1, d2, copula_family, r = 0L){
+loglik_copula_scale <- function(theta, u, v, d1, d2, copula_family, r = 0L, return_sum = TRUE){
   # The specific copula loglikelihood functions have been implemented for the
   # non-rotated case. By changing u, v, d1, and d2, we can compute the
   # corresponding loglikelihoods for the rotated copulas.
@@ -372,12 +422,234 @@ loglik_copula_scale <- function(theta, u, v, d1, d2, copula_family, r = 0L){
   )
   loglik_copula = switch(
     copula_family,
-    "clayton" = clayton_loglik_copula_scale(theta, u, v, d1, d2),
-    "frank" = frank_loglik_copula_scale(theta, u, v, d1, d2),
-    "gumbel" = gumbel_loglik_copula_scale(theta, u, v, d1, d2),
-    "gaussian" = gaussian_loglik_copula_scale(theta, u, v, d1, d2)
+    "clayton" = clayton_loglik_copula_scale(theta, u, v, d1, d2, return_sum = return_sum),
+    "frank" = frank_loglik_copula_scale(theta, u, v, d1, d2, return_sum = return_sum),
+    "gumbel" = gumbel_loglik_copula_scale(theta, u, v, d1, d2, return_sum = return_sum),
+    "gaussian" = gaussian_loglik_copula_scale(theta, u, v, d1, d2, return_sum = return_sum)
   )
 
   return(loglik_copula)
 }
+
+
+detect_zero_probs = function(u, v, d1, d2) {
+  # If U = 1 and there is right-censoring, the probability is zero.
+  zero_probs_indicator = ifelse(((u == 1) &
+                                   (d1 == 0)) | ((v == 1) & (d2 == 0)), TRUE, FALSE)
+  # If U = 0 and there is left-censoring, the probability is zero.
+  zero_probs_indicator = zero_probs_indicator |
+    ifelse(((u == 0) &
+              (d1 == -1)) | ((v == 0) & (d2 == -1)), TRUE, FALSE)
+  return(zero_probs_indicator)
+}
+
+detect_one_probs = function(u, v, d1, d2) {
+  # If U = 0 and V = 0 and there is right-censoring, the probability is one.
+  zero_probs_indicator = ifelse(((u == 0) &
+                                   (d1 == 0)) & ((v == 0) & (d2 == 0)), TRUE, FALSE)
+  # If U = 1 and V = 1 and there is left-censoring, the probability is one.
+  zero_probs_indicator = zero_probs_indicator |
+    ifelse(((u == 1) &
+              (d1 == -1)) & ((v == 1) & (d2 == -1)), TRUE, FALSE)
+  return(zero_probs_indicator)
+}
+
+marginal_ord_constructor = function(param) {
+  cum_probs = c(pnorm(param), 1)
+  probs = cum_probs - c(0, cum_probs[-length(cum_probs)])
+  K = length(param) + 1
+  cdf = function(x) {
+    cum_probs[x]
+  }
+  pmf = function(x) {
+    probs[x]
+  }
+  inv_cdf = function(p) {
+    sapply(p, function(p) {
+      max((1:K)[c(0, cum_probs) < p])
+    })
+  }
+  list(
+    pmf = pmf,
+    cdf = cdf,
+    inv_cdf = inv_cdf,
+    n_param = length(param)
+  )
+}
+
+marginal_cont_constructor = function(marginal_Y, param) {
+  force(marginal_Y)
+  pdf = function(x) {
+    marginal_Y[[1]](x, param)
+  }
+  cdf = function(x) {
+    marginal_Y[[2]](x, param)
+  }
+  inv_cdf = function(p) {
+    marginal_Y[[3]](p, param)
+  }
+  marginal_list = list(
+    pdf = pdf,
+    cdf = cdf,
+    inv_cdf = inv_cdf,
+    n_param = length(param)
+  )
+  attr(marginal_list, "constructor") = marginal_Y
+  return(marginal_list)
+}
+
+#' Estimate marginal distribution using ML
+#'
+#' [estimate_marginal()] estimates the marginal distribution specified by
+#' `marginal_Y` using maximum likelihood. The optimizer is Newton-Raphson.
+#'
+#' @param Y Observations (continuous)
+#' @param starting_values Starting values for `marginal_Y`
+#' @inheritParams fit_copula_submodel_OrdCont
+#'
+#' @return Estimated parameters
+estimate_marginal = function(Y, marginal_Y, starting_values) {
+  # Define log-likelihood function (as a function of the parameters).
+  log_lik_function = function(para) {
+    sum(log(marginal_Y[[1]](Y, para)))
+  }
+  suppressWarnings({
+    estimates = coef(maxLik::maxLik(
+      logLik = log_lik_function,
+      start = starting_values,
+      method = "NR"
+    ))
+  })
+  return(estimates)
+}
+
+#' Convert Ordinal Observations to Latent Cutpoints
+#'
+#' [ordinal_to_cutpoints()] converts the ordinal endpoints to the corresponding
+#' cutpoints of the underlying latent continuous variable. Let
+#' \eqn{P(x \le k) = G(c_k)} where \eqn{G} is the distribution function of the
+#' latent variable. [ordinal_to_cutpoints()] converts \eqn{x} to \eqn{c_k} (or to
+#' \eqn{c_{k - 1}}) if `strict = TRUE`.
+#'
+#' @param x Integer vector with values in `1:(length(cutpoints) + 1)`.
+#' @param cutpoints The cutpoints on the latent scale corresponding to
+#' \eqn{\boldsymbol{c} = c(c_1, \cdots, c_{K - 1})}.
+#' @param strict (boolean) See function description.
+#'
+#' @return Numeric vector with cutpoints corresponding to the values in `x`.
+ordinal_to_cutpoints = function(x, cutpoints, strict) {
+  if (strict) {
+    # Add c_0 to the cutpoints
+    cutpoints = c(-Inf, cutpoints)
+  }
+  else {
+    # Add c_K to the cutpoints
+    cutpoints = c(cutpoints, +Inf)
+  }
+  return(cutpoints[x])
+}
+
+
+#' Constructor for vine copula model
+#'
+#' @param fit_0 list returned by [fit_copula_submodel_OrdCont()],
+#' [fit_copula_submodel_ContCont()], or [fit_copula_submodel_OrdOrd()].
+#' @param fit_1 list returned by [fit_copula_submodel_OrdCont()],
+#' [fit_copula_submodel_ContCont()], or [fit_copula_submodel_OrdOrd()].
+#' @param endpoint_types Character vector with 2 elements indicating the type of
+#'   endpoints. Each element is either `"ordinal"` or `"continuous"`.
+#'
+#' @return S3 object of the class `vine_copula_fit`.
+#' @seealso [print.vine_copula_fit()], [plot.vine_copula_fit()]
+#' #should not be used be the user
+new_vine_copula_fit = function(fit_0, fit_1, endpoint_types) {
+  structure(.Data = list(fit_0 = fit_0, fit_1 = fit_1, endpoint_types = endpoint_types),
+            class = "vine_copula_fit")
+}
+
+#' Print summary of fitted copula model
+#'
+#' @param x Fitted-model object returned by [fit_copula_ContCont()],
+#' [fit_copula_OrdCont()], or [fit_copula_OrdOrd()].
+#' @param ... not used
+#'
+#' @export
+print.vine_copula_fit = function(x, ...) {
+  cat("Maximum Likelihood Estimate for Vine Copula Model ("); cat(x$endpoint_types[1]); cat("-"); cat(x$endpoints_types[2]); cat("\n")
+  cat("Copula Family: "); cat(x$fit_0$copula_family); cat(" and "); cat(x$fit_1$copula_family); cat("\n")
+  cat("Summary of Maximum Likelihood fit for Treat = 0:\n")
+  print(summary(x$fit_0$ml_fit))
+  cat("Summary of Maximum Likelihood fit for Treat = 1:\n")
+  print(summary(x$fit_1$ml_fit))
+}
+
+
+#' Goodness-of-fit plots for the fitted copula models
+#'
+#' [plot.vine_copula_fit()] plots simple goodness-of-fit plots for the vine
+#' copula model fitted with [fit_copula_ContCont()], [fit_copula_OrdCont()], and
+#' [fit_copula_OrdOrd()].
+#'
+#' @details
+#' # Marginal Goodness-of-Fit
+#'
+#' ## Continuous Endpoints
+#'
+#' The estimated model-based marginal density for each continuous endpoint is plotted
+#' alongside a histogram based on the observed data.
+#'
+#' ## Ordinal Endpoints
+#'
+#' The estimated model-based marginal probabilities for each ordinal endpoint is plotted
+#' alongside the empirical proportions (red). Red whiskers represent the
+#' 95% confidence intervals for the empirical proportions. These are based on
+#' the delta method with the logit transformation for the proportion.
+#'
+#' # Goodness-of-Fit of Association Structure
+#'
+#' ## Ordinal-Ordinal
+#'
+#' For each possible value for the surrogate, a plot is produced with (i) the
+#' model-based estimated conditional probabilities, \eqn{P(T = t | S)}, and (ii)
+#' the corresponding empirical conditional probabilities (red). Red whiskers
+#' represent the 95% confidence intervals for these empirical proportions. These
+#' are based on the delta method with the logit transformation for the
+#' proportion.
+#'
+#' ## Ordinal-Continuous
+#'
+#' The model-based estimated regression function \eqn{E(T | S = s)} is plotted
+#' alongside a semiparametric estimate using ` mgcv::gam(y~s(x), family =
+#' stats::quasi())` (red). Dashed lines represent pointwise 95% confidence
+#' intervals based on the semiparametric estimate. These confidence intervals
+#' are not trustworthy as they are based on a constant variance assumption.
+#'
+#'
+#' ## Continuous-Continuous
+#'
+#' The model-based estimated regression function \eqn{E(T | S = s)} is plotted
+#' alongside a semiparametric estimate using ` mgcv::gam(y~s(x), family =
+#' stats::quasi())` (red). Dashed lines represent pointwise 95% confidence
+#' intervals based on the semiparametric estimate.
+#'
+#'
+#'
+#' @param x S3 object returned by [fit_copula_ContCont()],
+#'   [fit_copula_OrdCont()], or [fit_copula_OrdOrd()].
+#' @param ... Additional parameters. Currently not implemented.
+#'
+#' @return NULL
+#' @export
+plot.vine_copula_fit = function(x, ...) {
+  # Marginal GoF plots.
+  marginal_gof_copula(x$fit_0$marginal_X, x$fit_0$data$X, x$fit_0$names_XY[1], x$endpoint_types[1], 0)
+  marginal_gof_copula(x$fit_0$marginal_Y, x$fit_0$data$Y, x$fit_0$names_XY[2], x$endpoint_types[2], 0)
+
+  marginal_gof_copula(x$fit_1$marginal_X, x$fit_1$data$X, x$fit_1$names_XY[1], x$endpoint_types[1], 1)
+  marginal_gof_copula(x$fit_1$marginal_Y, x$fit_1$data$Y, x$fit_1$names_XY[2], x$endpoint_types[2], 1)
+  # GoF for the copula itself.
+  association_gof_copula(x$fit_0, treat = 0, x$endpoint_types)
+  association_gof_copula(x$fit_1, treat = 1, x$endpoint_types)
+}
+
 
