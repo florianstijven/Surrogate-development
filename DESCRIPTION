@@ -47,7 +47,8 @@ Imports:
     tidyr,
     dplyr,
     tibble,
-    lifecycle
+    lifecycle,
+    pracma
 Depends: R (>= 3.5.0)
 License: GPL (>= 2)
 Repository: CRAN
