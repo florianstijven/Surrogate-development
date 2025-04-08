@@ -7,6 +7,7 @@ Authors@R: c(
   person("Florian", "Stijven", email = "florian.stijven@kuleuven.be", role = "aut"),
   person("Fenny", "Ong", role = "aut"),
   person("Dries", "De Witte", role = "aut"),
+  person("Gokce", "Deliorman", role = "aut"),
   person("Paul", "Meyvisch", role = "aut"),
   person("Alvaro", "Poveda", role = "aut"),
   person("Ariel", "Alonso", role = "aut"),
@@ -47,7 +48,8 @@ Imports:
     tidyr,
     dplyr,
     tibble,
-    lifecycle
+    lifecycle,
+    pracma
 Depends: R (>= 3.5.0)
 License: GPL (>= 2)
 Repository: CRAN
