@@ -1,7 +1,7 @@
 Package: Surrogate
 Type: Package
 Title: Evaluation of Surrogate Endpoints in Clinical Trials
-Version: 3.3.3
+Version: 3.3.3.9000
 Authors@R: c(
   person("Wim", "Van Der Elst", email = "wim.vanderelst@gmail.com", role = c("cre", "aut")),
   person("Florian", "Stijven", email = "florian.stijven@kuleuven.be", role = "aut"),
