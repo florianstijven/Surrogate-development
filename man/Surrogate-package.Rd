@@ -24,6 +24,7 @@ Authors:
   \item Florian Stijven \email{florian.stijven@kuleuven.be}
   \item Fenny Ong
   \item Dries De Witte
+  \item Gokce Deliorman
   \item Paul Meyvisch
   \item Alvaro Poveda
   \item Ariel Alonso

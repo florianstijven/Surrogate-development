@@ -1,4 +1,14 @@
-# Surrogate (development version)
+# Surrogate 3.4
+
+## Surrogate 3.4.0
+
+* Added ICA_alpha_ContCont() to assess surrogacy using a Rényi divergence based 
+  family of metrics in the information-theoretic causal-inference framework.
+* Added ICA_t() to assess surrogacy in the information-theoretic causal-inference
+  framework assuming a multivariate t-distribution for the vector of potential
+  outcomes.
+
+
 
 # Surrogate 3.3
 

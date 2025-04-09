@@ -48,8 +48,7 @@ Imports:
     tidyr,
     dplyr,
     tibble,
-    lifecycle,
-    pracma
+    lifecycle
 Depends: R (>= 3.5.0)
 License: GPL (>= 2)
 Repository: CRAN
@@ -70,7 +69,8 @@ Suggests:
     withr,
     stringr,
     ggplot2,
-    sn
+    sn,
+    pracma
 Config/testthat/edition: 3
 Roxygen: list(markdown = TRUE)
 URL: https://github.com/florianstijven/Surrogate-development
