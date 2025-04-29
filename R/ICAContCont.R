@@ -190,5 +190,8 @@ summary.ICA.ContCont <- function(object, ..., Object){
   cat("\n\nQuantiles of the ICA distribution: \n\n")
   quant <- quantile(Object$ICA, probs = c(.05, .10, .20, .50, .80, .90, .95))
   print(quant)
+  cat("\n\n95% SDI: \n\n")
+  quant <- quantile(Object$ICA, probs = c(.025, .975))
+  print(quant)
 }
 
