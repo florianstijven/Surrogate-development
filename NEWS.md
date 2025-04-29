@@ -2,6 +2,12 @@
 
 # Surrogate 3.4
 
+## Surrogate 3.4.1
+
+* Add the `ICA.Sample.ControlTreat()` function to quantify surrogacy in the 
+  single-trial causal-inference framework when data is only available for the 
+  control treatment.
+
 ## Surrogate 3.4.0
 
 * Added ICA_alpha_ContCont() to assess surrogacy using a Rényi divergence based 
