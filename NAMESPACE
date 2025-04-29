@@ -128,6 +128,8 @@ export(FederatedApproachStage2)
 export(ICA_t)
 export(ICA_alpha_ContCont)
 
+export(ICA.Sample.ControlTreat)
+
 
 
 
