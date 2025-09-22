@@ -1,6 +1,6 @@
 #' Assess surrogacy using a Rényi divergence based family of metrics in the causal-inference single-trial setting in normal case
 #'
-#' The function [ICA_alpha_ContCont()] is a set of metrics to evaluate surrogacy. ICA_alpha have the similar
+#' The function [ICA_alpha_ContCont()] is a set of metrics to evaluate surrogacy. \eqn{ICA_{\alpha}} have the similar
 #' mathematical properties with [ICA.ContCont()].
 #'
 #' @param alpha (numeric) is order `alpha in [0, infinity]`
@@ -27,8 +27,36 @@
 #' * ICA_alpha: A scalar or vector that contains the individual causal association \eqn{ICA_{\alpha}}
 #' * Sigmas: A data.frame that contains the \eqn{\sigma_{\Delta T}} and \eqn{\sigma_{\Delta S}}
 #'
+#'
+#' @details
+#' # New family of surrogacy metrics:
+#' ICA was extended as \eqn{ICA_{\alpha}} by proposing a new family of surrogacy metrics derived from Rényi divergence.
+#' Based on this family of divergences, one can propose a more general set of surrogacy metrics defined as:
+#'
+#' \deqn{ ICA_{\alpha} = 1 - e^{-2 D_{\alpha}[f(\Delta T,\Delta S), f(\Delta T)f(\Delta S)]} }
+#'
+#' when \eqn{\alpha=1} then
+#'
+#' \eqn{ICA_{1}=1-e^{-2D_1[f(\Delta T,\Delta S),f(\Delta T)f(\Delta S)]}=1-e^{-2I(\Delta T, \Delta S)}=\rho_{\Delta}^2=ICA}
+#'
+#' @references
+#' Deliorman, G., Alonso, A., & Pardo, M. C. (2025).
+#' A Rényi-Divergence-Based Family of Metrics for the Evaluation of Surrogate Endpoints
+#' in a Causal Inference Framework. *Statistics in Biopharmaceutical Research*.
+#' \url{https://doi.org/10.1080/19466315.2025.2484009}
+#'
+#' @examples
+#'
+#'ICA_alpha_ContCont(alpha=0.5, T0S0 = 0.9597334, T1S1=0.9644139, T0T0=544.3285, T1T1=550.6597, S0S0=180.6831, S1S1=180.9433, T0T1=-0.9,
+#' T0S1=-0.9 , T1S0=-0.9 , S0S1=-0.9)
+#'
+#'More than one alpha value can be calculated simultaneously:
+#'
+#'ICA_alpha_ContCont(alpha=c(1.25,1.5,2), T0S0 = 0.9597334, T1S1=0.9644139, T0T0=544.3285, T1T1=550.6597, S0S0=180.6831, S1S1=180.9433, T0T1=-0.9,
+#'T0S1=-0.9 , T1S0=-0.9 , S0S1=-0.9)
+#'
 
-
+#' @export
 ICA_alpha_ContCont <- function(alpha=numeric(), T0S0, T1S1, T0T0=1, T1T1=1, S0S0=1, S1S1=1,
                                T0T1=seq(-1, 1, by=.1), T0S1=seq(-1, 1, by=.1), T1S0=seq(-1, 1, by=.1),
                                S0S1=seq(-1, 1, by=.1)) {
@@ -130,35 +158,4 @@ ICA_alpha_ContCont <- function(alpha=numeric(), T0S0, T1S1, T0T0=1, T1T1=1, S0S0
 
 }
 
-
-
-
-#' @details
-#' # New family of surrogacy metrics \eqn{ICA_{\alpha}}
-#'
-#'ICA was extended as ICA_alpha by proposing a new family of surrogacy metrics derived from Rényi divergence.
-#' The Rényi divergence is defined as:
-#' \eqn{ D_{\alpha}[f(\Delta T,\Delta S),f(\Delta T)f(\Delta S)]= {\displaystyle\dfrac{1}{\alpha-1} \ln{ \int f(\Delta T,\Delta S )^{\alpha}  (f(\Delta T)f(\Delta S))^{1-\alpha}} \, d\Delta T d\Delta S}
-#'
-#' Based on this family of divergences, one can propose a more general set of surrogacy metrics defined as:
-#' \eqn{ ICA_{\alpha}=1-e^{-2D_{\alpha}[f(\Delta T,\Delta S),f(\Delta T)f(\Delta S)]}}
-#'
-#' However, under the normal causal inference model, i.e. when \eqn{\mathbf{Y} \sim \mathcal{N}(\boldsymbol{\mu}, \boldsymbol{\Sigma})}, the following lemma provides a closed-form expressions for both under specific conditions (\eqn{0 < \alpha < 1 + \dfrac{1}{|\rho_{\Delta}|}}):
-#'
-#' \eqn{D_\alpha=& -\frac{\ln(1 - \rho_{\Delta}^2)}{2} + \frac{\ln\left(1 - (1-\alpha)^2\rho_{\Delta}^2 \right ) }{ 2(1 - \alpha) }}
-#' \eqn{ICA_{\alpha} =& 1 - (1 - \rho_{\Delta}^2)\left( 1 - (1 - \alpha)^2 \rho_{\Delta}^2 \right)^{-\dfrac{1}{1 - \alpha}} }
-#'
-#' when \eqn{\alpha=1} then \eqn{ICA_{\alpha}=ICA}
-#' \eqn{ICA_{1}=1-e^{-2D_1[f(\Delta T,\Delta S),f(\Delta T)f(\Delta S)]}=1-e^{-2I(\Delta T, \Delta S)}=\rho_{\Delta}^2=ICA}
-#'
-#'
-#'@examples
-#'# example code
-#'
-#'ICA_alpha_ContCont(alpha=0.5, T0S0 = 0.9597334, T1S1=0.9644139, T0T0=544.3285, T1T1=550.6597, S0S0=180.6831, S1S1=180.9433, T0T1=-0.9,
-#' T0S1=-0.9 , T1S0=-0.9 , S0S1=-0.9)
-#'More than one \eqn{\alpha} value can be calculated simultaneously:
-#'ICA_alpha_ContCont(alpha=c(1.25,1.5,2), T0S0 = 0.9597334, T1S1=0.9644139, T0T0=544.3285, T1T1=550.6597, S0S0=180.6831, S1S1=180.9433, T0T1=-0.9,
-#'T0S1=-0.9 , T1S0=-0.9 , S0S1=-0.9)
-#'
 
