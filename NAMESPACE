@@ -1,11 +1,11 @@
 # Imported functions
+importFrom(lifecycle, deprecated)
 importFrom(stats, glm)
 importFrom(nlme, gls)
 importFrom(nlme, intervals)
 importFrom(nlme, corCompSymm)
 importFrom(nlme, glsControl)
 importFrom(nlme, varIdent)
-importFrom(numDeriv, grad)
 importFrom(tidyr, pivot_longer)
 importFrom(dplyr, mutate)
 importFrom(dplyr, arrange)
@@ -17,7 +17,6 @@ importFrom("stats", "as.formula")
 importFrom(MASS, polr)
 importFrom(MASS, studres)
 importFrom(MASS, mvrnorm)
-importFrom(msm, deltamethod)
 importFrom(survival, Surv)
 importFrom(survival, survreg)
 importFrom(survival, coxph)
@@ -114,6 +113,8 @@ export(MICA.ContCont)
 export(sensitivity_analysis_SurvSurv_copula, model_fit_measures,
        fit_model_SurvSurv)
 export(sensitivity_analysis_BinCont_copula, fit_copula_model_BinCont)
+export(fit_copula_OrdCont, fit_copula_OrdOrd, fit_copula_ContCont,
+       sensitivity_analysis_copula, constructor_ICA_estimator)
 export(marginal_gof_scr_S_plot, marginal_gof_scr_T_plot,
        prob_dying_without_progression_plot, mean_S_before_T_plot_scr)
 export(sensitivity_intervals_Dvine)
@@ -123,6 +124,11 @@ export(MetaAnalyticSurvSurv)
 export(MetaAnalyticSurvCont)
 export(FederatedApproachStage1)
 export(FederatedApproachStage2)
+
+export(ICA_t)
+export(ICA_alpha_ContCont)
+
+export(ICA.Sample.ControlTreat)
 
 
 
@@ -159,6 +165,7 @@ S3method(plot, PPE.BinBin)
 S3method(plot, comb27.BinBin)
 S3method(plot, ISTE.ContCont)
 S3method(plot, vine_copula_SurvSurv_fit)
+S3method(plot, vine_copula_fit)
 
 S3method(summary, Fano.BinBin)
 S3method(summary, UnifixedContCont)
@@ -201,6 +208,7 @@ S3method(summary, MumixedContCont.MultS)
 
 
 S3method(print, vine_copula_SurvSurv_fit)
+S3method(print, vine_copula_fit)
 S3method(print, sensitivity_intervals_Dvine)
 
 S3method(plot,MetaAnalyticSurvBin)

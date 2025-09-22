@@ -13,7 +13,14 @@
 #' @inheritParams binary_continuous_loglik
 #' @inheritParams twostep_BinCont
 #'
-#' @return WIP
+#' @description
+#' `r lifecycle::badge("superseded")`
+#'
+#' Development on [fit_copula_model_BinCont()] is complete. For new code, we
+#' recommend switching to [fit_copula_OrdCont()], which is a more general
+#' function (it allows for ordinal endpoints, not just binary) and is still
+#' under active development.
+#'
 #' @export
 #' @examplesIf identical(Sys.getenv("NOT_CRAN"), "true")
 #' # Load Schizophrenia data set.

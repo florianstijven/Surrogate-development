@@ -124,7 +124,7 @@ fit
 
 
 # Summary
-
+#' @export
 summary.ICA.ContCont.MultS <- function(object, ..., Object){
   if (missing(Object)){Object <- object}
 
@@ -162,7 +162,7 @@ summary.ICA.ContCont.MultS <- function(object, ..., Object){
 
 
 # Plot
-
+#' @export
 plot.ICA.ContCont.MultS <- function(x, R2_H=FALSE, Corr.R2_H=TRUE, Type="Percent", Labels=FALSE,
                                     Par=par(oma=c(0, 0, 0, 0), mar=c(5.1, 4.1, 4.1, 2.1)), col,
                                     Prediction.Error.Reduction=FALSE, ...){

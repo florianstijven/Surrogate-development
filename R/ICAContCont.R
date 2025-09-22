@@ -65,7 +65,7 @@ ICA.ContCont <- function(T0S0, T1S1, T0T0=1, T1T1=1, S0S0=1, S1S1=1,
 
 }
 
-
+#' @export
 plot.ICA.ContCont <- function(x, Xlab.ICA, Main.ICA, Type="Percent", Labels=FALSE, ICA=TRUE, Good.Surr=FALSE, Main.Good.Surr,
                               Par=par(oma=c(0, 0, 0, 0), mar=c(5.1, 4.1, 4.1, 2.1)), col, ...){
 
@@ -160,7 +160,7 @@ plot.ICA.ContCont <- function(x, Xlab.ICA, Main.ICA, Type="Percent", Labels=FALS
     }
 
 }
-
+#' @export
 summary.ICA.ContCont <- function(object, ..., Object){
 
 
@@ -189,6 +189,9 @@ summary.ICA.ContCont <- function(object, ..., Object){
   cat("\nMode ICA: ", format(round(mode(Object$ICA)$mode_val, 4), nsmall = 4))
   cat("\n\nQuantiles of the ICA distribution: \n\n")
   quant <- quantile(Object$ICA, probs = c(.05, .10, .20, .50, .80, .90, .95))
+  print(quant)
+  cat("\n\n95% SDI: \n\n")
+  quant <- quantile(Object$ICA, probs = c(.025, .975))
   print(quant)
 }
 

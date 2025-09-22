@@ -1,3 +1,4 @@
+#' @export
 plot.UnifixedContCont <- plot.BifixedContCont <- plot.UnimixedContCont <-
   function(x, Trial.Level=TRUE, Weighted=TRUE, Indiv.Level=TRUE, ICA=TRUE, Entropy.By.ICA=FALSE,
   Xlab.Indiv, Ylab.Indiv, Xlab.Trial, Ylab.Trial, Main.Trial, Main.Indiv,
@@ -44,7 +45,7 @@ plot.UnifixedContCont <- plot.BifixedContCont <- plot.UnimixedContCont <-
 
 
 
-
+#' @export
 plot.BimixedContCont <- function(x, Trial.Level=TRUE, Weighted=TRUE, Indiv.Level=TRUE, ICA=TRUE, Entropy.By.ICA=FALSE,
                                  Xlab.Indiv, Ylab.Indiv, Xlab.Trial, Ylab.Trial, Main.Trial, Main.Indiv,
                                  Par=par(oma=c(0, 0, 0, 0), mar=c(5.1, 4.1, 4.1, 2.1)), ...){

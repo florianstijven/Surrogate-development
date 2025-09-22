@@ -1,3 +1,4 @@
+#' @export
 plot.MaxEntContCont <- function(x, Type="Freq", Xlab, col, Main, Entropy.By.ICA=FALSE, ...){
   Object <- x
 

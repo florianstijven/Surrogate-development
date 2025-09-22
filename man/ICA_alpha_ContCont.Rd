@@ -52,6 +52,7 @@ ICA_alpha_ContCont(
 }
 }
 \description{
+ICA_alpha_ContCont
 The function \code{\link[=ICA_alpha_ContCont]{ICA_alpha_ContCont()}} is a set of metrics to evaluate surrogacy. \eqn{ICA_{\alpha}} have the similar
 mathematical properties with \code{\link[=ICA.ContCont]{ICA.ContCont()}}.
 }
@@ -83,3 +84,8 @@ A Rényi-Divergence-Based Family of Metrics for the Evaluation of Surrogate Endp
 in a Causal Inference Framework. \emph{Statistics in Biopharmaceutical Research}.
 \url{https://doi.org/10.1080/19466315.2025.2484009}
 }
+
+The function \code{\link[=ICA_alpha_ContCont]{ICA_alpha_ContCont()}} is a set of metrics to evaluate surrogacy. ICA_alpha have the similar
+mathematical properties with \code{\link[=ICA.ContCont]{ICA.ContCont()}}.
+}
+

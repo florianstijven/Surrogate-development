@@ -1,3 +1,4 @@
+#' @export
 plot.ICA.BinCont <- function(x, Histogram.ICA=TRUE, Mixmean=TRUE, Mixvar=TRUE, Deviance=TRUE,
                              Type="Percent", Labels=FALSE, ...){
 

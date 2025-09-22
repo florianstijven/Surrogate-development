@@ -85,8 +85,7 @@ which the sampled individual treatment effects are plotted. Defaults to
 
 \item{mutinfo_estimator}{Function that estimates the mutual information
 between the first two arguments which are numeric vectors. Defaults to
-\code{FNN::mutinfo()} with default arguments.
-@param plot_deltas (logical) Plot the sampled individual treatment effects?}
+\code{FNN::mutinfo()} with default arguments.}
 
 \item{restr_time}{Restriction time for the potential outcomes. Defaults to
 \code{+Inf} which means no restriction. Otherwise, the sampled potential outcomes
@@ -162,7 +161,7 @@ are well-known, simple and rank-based measures of association.
 
 Stijven et al. (2024) proposed to quantify the ICA through the squared
 informational coefficient of correlation (SICC or \eqn{R^2_H}), which is a
-transformation of the mutaul information to the unit interval: \deqn{R^2_H =
+transformation of the mutual information to the unit interval: \deqn{R^2_H =
 1 - e^{-2 \cdot I(\Delta S; \Delta T)}} where 0 indicates independence, and 1
 a functional relationship between \eqn{\Delta S} and \eqn{\Delta T}. The ICA
 (or a modified version, see next) is returned by

@@ -13,14 +13,16 @@ summary_level_bootstrap_ICA(
   B,
   measure = "ICA",
   mutinfo_estimator = NULL,
-  composite,
+  ICA_estimator = NULL,
+  composite = FALSE,
   seed,
   restr_time = +Inf,
   ncores = 1
 )
 }
 \arguments{
-\item{fitted_model}{Returned value from \code{\link[=fit_model_SurvSurv]{fit_model_SurvSurv()}}. This object
+\item{fitted_model}{Returned value from \code{\link[=fit_copula_OrdOrd]{fit_copula_OrdOrd()}},
+\code{\link[=fit_copula_OrdCont]{fit_copula_OrdCont()}}, or \code{\link[=fit_copula_ContCont]{fit_copula_ContCont()}}. This object
 contains the estimated identifiable part of the joint distribution for the
 potential outcomes.}
 
@@ -47,8 +49,14 @@ information.}
 
 \item{mutinfo_estimator}{Function that estimates the mutual information
 between the first two arguments which are numeric vectors. Defaults to
-\code{FNN::mutinfo()} with default arguments.
-@param plot_deltas (logical) Plot the sampled individual treatment effects?}
+\code{FNN::mutinfo()} with default arguments in the survival-survival setting. This
+argument is not used for non-survival-survival settings.}
+
+\item{ICA_estimator}{Function that estimates the ICA between the first two
+arguments which are numeric vectors. Defaults to \code{NULL} which corresponds
+to using \code{\link[=estimate_ICA_ContCont]{estimate_ICA_ContCont()}}, \code{\link[=estimate_ICA_OrdCont]{estimate_ICA_OrdCont()}}, or
+\code{\link[=estimate_ICA_OrdOrd]{estimate_ICA_OrdOrd()}} (depending on the endpoint types). This argument is
+not used in the survival-survival setting.}
 
 \item{composite}{(boolean)  If \code{composite} is \code{TRUE}, then the surrogate
 endpoint is a composite of both a "pure" surrogate endpoint and the true
