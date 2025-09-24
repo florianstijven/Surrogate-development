@@ -47,15 +47,23 @@
 #'
 #' @examples
 #'
-#'ICA_alpha_ContCont(alpha=0.5, T0S0 = 0.9597334, T1S1=0.9644139, T0T0=544.3285, T1T1=550.6597, S0S0=180.6831, S1S1=180.9433, T0T1=-0.9,
-#' T0S1=-0.9 , T1S0=-0.9 , S0S1=-0.9)
+#'ICA_alpha_ContCont(alpha=0.5, 
+#'                   T0S0 = 0.9597334, T1S1=0.9644139, 
+#'                   T0T0=544.3285, T1T1=550.6597, 
+#'                   S0S0=180.6831, S1S1=180.9433, 
+#'                   T0T1=-0.9,  T0S1=-0.9,
+#'                   T1S0=-0.9 , S0S1=-0.9)
 #'
-#'More than one alpha value can be calculated simultaneously:
+#'#More than one alpha value can be calculated simultaneously:
 #'
-#'ICA_alpha_ContCont(alpha=c(1.25,1.5,2), T0S0 = 0.9597334, T1S1=0.9644139, T0T0=544.3285, T1T1=550.6597, S0S0=180.6831, S1S1=180.9433, T0T1=-0.9,
-#'T0S1=-0.9 , T1S0=-0.9 , S0S1=-0.9)
+#'ICA_alpha_ContCont(alpha=c(1.25,1.5,2), 
+#'                   T0S0 = 0.9597334, T1S1=0.9644139, 
+#'                   T0T0=544.3285, T1T1=550.6597, 
+#'                   S0S0=180.6831, S1S1=180.9433, 
+#'                   T0T1=-0.9, T0S1=-0.9,
+#'                   T1S0=-0.9, S0S1=-0.9)
 #'
-
+#'
 #' @export
 ICA_alpha_ContCont <- function(alpha=numeric(), T0S0, T1S1, T0T0=1, T1T1=1, S0S0=1, S1S1=1,
                                T0T1=seq(-1, 1, by=.1), T0S1=seq(-1, 1, by=.1), T1S0=seq(-1, 1, by=.1),
