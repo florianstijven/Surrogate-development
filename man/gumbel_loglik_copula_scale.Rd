@@ -4,7 +4,7 @@
 \alias{gumbel_loglik_copula_scale}
 \title{Loglikelihood on the Copula Scale for the Gumbel Copula}
 \usage{
-gumbel_loglik_copula_scale(theta, u, v, d1, d2)
+gumbel_loglik_copula_scale(theta, u, v, d1, d2, return_sum = TRUE)
 }
 \arguments{
 \item{theta}{Copula parameter}
@@ -29,6 +29,9 @@ right-censored,
 \item \code{d2[i] = 0} if \code{v[i]} corresponds to right-censored value
 \item \code{d2[i] = -1} if \code{v[i]} corresponds to left-censored value
 }}
+
+\item{return_sum}{Return the sum of the individual loglikelihoods? If \code{FALSE},
+a vector with the individual loglikelihood contributions is returned.}
 }
 \value{
 Value of the copula loglikelihood evaluated in \code{theta}.

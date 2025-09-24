@@ -10,7 +10,7 @@
 #' @param mutinfo_estimator Function that estimates the mutual information
 #'  between the first two arguments which are numeric vectors. Defaults to
 #'  `FNN::mutinfo()` with default arguments.
-#'  @param plot_deltas (logical) Plot the sampled individual treatment effects?
+#' @param plot_deltas (logical) Plot the sampled individual treatment effects?
 #'
 #' @inheritParams compute_ICA_BinCont
 #' @inheritParams estimate_mutual_information_SurvSurv

@@ -1,3 +1,4 @@
+#' @export
 plot.PPE.BinBin<-function(x,Type="Density",Param="PPE",Xlab.PE,main.PE,ylab="density",
                            Cex.Legend=1,Cex.Position="bottomright",lwd=3,linety=1,color=1,Breaks=0.05,xlimits=c(0,1), ...){
 

@@ -5,7 +5,7 @@
 #' supplied values.
 #'
 #' @param alpha (numeric) `1 - alpha` is the level of the confidence interval
-#' @inheritParams ICA_given_model_constructor
+#' @inheritParams ICA_given_model_constructor_SurvSurv
 #' @inheritParams summary_level_bootstrap_ICA
 #'
 #' @return (numeric) Vector with the limits of the two-sided `1 - alpha`
@@ -44,7 +44,7 @@ Dvine_ICA_confint = function(fitted_model,
 #'
 #' @param eps (numeric) Step size for finite difference in numeric
 #'   differentiation
-#' @inheritParams ICA_given_model_constructor
+#' @inheritParams ICA_given_model_constructor_SurvSurv
 #'
 #' @details
 #'  This function should not be used. The ICA is computed through numerical
@@ -66,7 +66,7 @@ delta_method_log_mutinfo = function(fitted_model,
   # Number of knots
   k = length(fitted_model$knots1)
 
-  ICA_given_model = ICA_given_model_constructor(
+  ICA_given_model = ICA_given_model_constructor_SurvSurv(
     fitted_model = fitted_model,
     copula_par_unid = copula_par_unid,
     copula_family2 = copula_family2,
@@ -119,6 +119,7 @@ delta_method_log_mutinfo = function(fitted_model,
 #'
 #' @param B Number of bootstrap replications
 #' @inheritParams ICA_given_model_constructor
+#' @inheritParams ICA_given_model_constructor_SurvSurv
 #' @inheritParams sensitivity_analysis_SurvSurv_copula
 #'
 #' @return (numeric) Vector of bootstrap replications for the estimated ICA.
@@ -130,19 +131,41 @@ summary_level_bootstrap_ICA = function(fitted_model,
                                        B,
                                        measure = "ICA",
                                        mutinfo_estimator = NULL,
-                                       composite,
+                                       ICA_estimator = NULL,
+                                       composite = FALSE,
                                        seed,
                                        restr_time = +Inf,
                                        ncores = 1) {
   withr::local_seed(seed)
-  # Parameter estimates
-  theta_hat = c(coef(fitted_model$fit_0), coef(fitted_model$fit_1))
+  # The structure of the fitted model objects is different (for now) between the
+  # survival-survival setting and the other settings.
+  if (!is.null(fitted_model$endpoint_types)) {
+    # Not the survival-survival setting
+    # Parameter estimates
+    theta_hat = c(coef(fitted_model$fit_0$ml_fit), coef(fitted_model$fit_1$ml_fit))
 
-  # Compute covariance matrix of the sampling distribution.
-  zeros_matrix = matrix(rep(0, length(coef(fitted_model$fit_0)) * length(coef(fitted_model$fit_1))),
-                        ncol = length(coef(fitted_model$fit_1)))
-  vcov_matrix = rbind(cbind(vcov(fitted_model$fit_0), zeros_matrix),
-                      cbind(t(zeros_matrix), vcov(fitted_model$fit_1)))
+    # Compute covariance matrix of the sampling distribution.
+    zeros_matrix = matrix(
+      rep(0, length(coef(fitted_model$fit_0$ml_fit)) * length(coef(fitted_model$fit_1$ml_fit))),
+      ncol = length(coef(fitted_model$fit_1$ml_fit))
+    )
+    vcov_matrix = rbind(
+      cbind(vcov(fitted_model$fit_0$ml_fit), zeros_matrix),
+      cbind(t(zeros_matrix), vcov(fitted_model$fit_1$ml_fit))
+      )
+  }
+  else {
+    # Survival-survival setting
+    # Parameter estimates
+    theta_hat = c(coef(fitted_model$fit_0), coef(fitted_model$fit_1))
+
+    # Compute covariance matrix of the sampling distribution.
+    zeros_matrix = matrix(rep(0, length(coef(fitted_model$fit_0)) * length(coef(fitted_model$fit_1))),
+                          ncol = length(coef(fitted_model$fit_1)))
+    vcov_matrix = rbind(cbind(vcov(fitted_model$fit_0), zeros_matrix),
+                        cbind(t(zeros_matrix), vcov(fitted_model$fit_1)))
+  }
+
 
   ICA_given_model_original = ICA_given_model_constructor(
     fitted_model = force(fitted_model),
@@ -152,6 +175,7 @@ summary_level_bootstrap_ICA = function(fitted_model,
     n_prec = force(n_prec),
     measure = force(measure),
     mutinfo_estimator = force(mutinfo_estimator),
+    ICA_estimator = force(ICA_estimator),
     composite = force(composite),
     seed = force(seed),
     restr_time = force(restr_time)
@@ -176,14 +200,31 @@ summary_level_bootstrap_ICA = function(fitted_model,
 
   # For the Gaussian copula, fisher's Z transformation was applied. We have to
   # backtransform to the correlation scale in that case.
-  a = length(coef(fitted_model$fit_0))
-  b = length(coef(fitted_model$fit_1))
-  if (fitted_model$copula_family[1] == "gaussian") {
-    theta_resampled[, a] = (exp(2 * theta_resampled[, a]) - 1) / (exp(2 * theta_resampled[, a]) + 1)
+  if (!is.null(fitted_model$endpoint_types)) {
+    # Not the survival-survival setting
+    a = length(coef(fitted_model$fit_0$ml_fit))
+    b = length(coef(fitted_model$fit_1$ml_fit))
+
+    if (fitted_model$fit_0$copula_family == "gaussian") {
+      theta_resampled[, a] = (exp(2 * theta_resampled[, a]) - 1) / (exp(2 * theta_resampled[, a]) + 1)
+    }
+    if (fitted_model$fit_1$copula_family == "gaussian") {
+      theta_resampled[, a + b] = (exp(2 * theta_resampled[, a + b]) - 1) / (exp(2 * theta_resampled[, a + b]) + 1)
+    }
   }
-  if (fitted_model$copula_family[1] == "gaussian") {
-    theta_resampled[, a + b] = (exp(2 * theta_resampled[, a + b]) - 1) / (exp(2 * theta_resampled[, a + b]) + 1)
+  else {
+    # Survival-survival setting
+    a = length(coef(fitted_model$fit_0))
+    b = length(coef(fitted_model$fit_1))
+
+    if (fitted_model$copula_family[1] == "gaussian") {
+      theta_resampled[, a] = (exp(2 * theta_resampled[, a]) - 1) / (exp(2 * theta_resampled[, a]) + 1)
+    }
+    if (fitted_model$copula_family[1] == "gaussian") {
+      theta_resampled[, a + b] = (exp(2 * theta_resampled[, a + b]) - 1) / (exp(2 * theta_resampled[, a + b]) + 1)
+    }
   }
+
 
   if (ncores > 1 & requireNamespace("parallel")) {
     cl  <- parallel::makeCluster(ncores)
@@ -227,9 +268,9 @@ summary_level_bootstrap_ICA = function(fitted_model,
 }
 
 #' Constructor for the function that returns that ICA as a function of the
-#' identifiable parameters
+#' identifiable parameters for survival-survival
 #'
-#' [ICA_given_model_constructor()] returns a function fixes the unidentifiable
+#' [ICA_given_model_constructor_SurvSurv()] returns a function fixes the unidentifiable
 #' parameters at user-specified values and takes the identifiable parameters as
 #' argument.
 #'
@@ -246,8 +287,9 @@ summary_level_bootstrap_ICA = function(fitted_model,
 #'
 #' @return A function that computes the ICA as a function of the identifiable
 #'   parameters. In this computation, the unidentifiable parameters are fixed at
-#'   the values supplied as arguments to [ICA_given_model_constructor()]
-ICA_given_model_constructor = function(fitted_model,
+#'   the values supplied as arguments to [ICA_given_model_constructor_SurvSurv()] or
+#'   [ICA_given_model_constructor()].
+ICA_given_model_constructor_SurvSurv = function(fitted_model,
                                        copula_par_unid,
                                        copula_family2,
                                        rotation_par_unid,
@@ -344,5 +386,171 @@ ICA_given_model_constructor = function(fitted_model,
     )[measure]
     return(ICA)
   }
+  return(ICA_given_model)
+}
+
+
+#' Constructor for the function that returns that ICA as a function of the
+#' identifiable parameters
+#'
+#' [ICA_given_model_constructor()] returns a function fixes the unidentifiable
+#' parameters at user-specified values and takes the identifiable parameters as
+#' argument.
+#'
+#' @param mutinfo_estimator Function that estimates the mutual information
+#'  between the first two arguments which are numeric vectors. Defaults to
+#'  `FNN::mutinfo()` with default arguments in the survival-survival setting. This
+#'  argument is not used for non-survival-survival settings.
+#' @param ICA_estimator Function that estimates the ICA between the first two
+#'   arguments which are numeric vectors. Defaults to `NULL` which corresponds
+#'   to using [estimate_ICA_ContCont()], [estimate_ICA_OrdCont()], or
+#'   [estimate_ICA_OrdOrd()] (depending on the endpoint types). This argument is
+#'   not used in the survival-survival setting.
+#' @inheritParams ICA_given_model_constructor_SurvSurv
+#' @inheritParams sensitivity_intervals_Dvine
+#' @inheritParams compute_ICA_SurvSurv
+#' @inheritParams sensitivity_analysis_copula
+#'
+#' @inherit ICA_given_model_constructor_SurvSurv return
+ICA_given_model_constructor = function(fitted_model,
+                                       copula_par_unid,
+                                       copula_family2,
+                                       rotation_par_unid,
+                                       n_prec,
+                                       measure = "ICA",
+                                       mutinfo_estimator = NULL,
+                                       ICA_estimator = NULL,
+                                       seed,
+                                       composite = NULL,
+                                       restr_time = +Inf) {
+  if (is.null(fitted_model$endpoint_types)) {
+    return(
+      ICA_given_model_constructor_SurvSurv(fitted_model,
+                                           copula_par_unid,
+                                           copula_family2,
+                                           rotation_par_unid,
+                                           n_prec,
+                                           measure,
+                                           mutinfo_estimator,
+                                           seed,
+                                           composite,
+                                           restr_time)
+    )
+  }
+  else {
+    # Number of parameters corresponding to the first and second submodel.
+    n_par0 = fitted_model$fit_0$marginal_X$n_param + fitted_model$fit_0$marginal_Y$n_param + 1
+    n_par1 = fitted_model$fit_1$marginal_X$n_param + fitted_model$fit_1$marginal_Y$n_param + 1
+
+    # Number of parameters corresponding to the distribution of X in the first
+    # and second submodel.
+    n_parX0 = fitted_model$fit_0$marginal_X$n_param
+    n_parX1 = fitted_model$fit_1$marginal_X$n_param
+
+    # Number of parameters corresponding to the distribution of Y in the first
+    # and second submodel.
+    n_parY0 = fitted_model$fit_0$marginal_Y$n_param
+    n_parY1 = fitted_model$fit_1$marginal_Y$n_param
+
+    # Marginal models
+    marginal_X0 = attr(fitted_model$fit_0$marginal_X, "constructor")
+    marginal_Y0 = attr(fitted_model$fit_0$marginal_Y, "constructor")
+    marginal_X1 = attr(fitted_model$fit_1$marginal_X, "constructor")
+    marginal_Y1 = attr(fitted_model$fit_1$marginal_Y, "constructor")
+
+    copula_family1 = c(fitted_model$fit_0$copula_family,
+                       fitted_model$fit_1$copula_family)
+    # Copula rotations for the identifiable copulas
+    r_12 = 0
+    r_34 = 0
+    marginal_sp_rho = TRUE
+    if (measure %in% c("ICA", "sp_rho")) marginal_sp_rho = FALSE
+
+    force(n_prec); force(ICA_estimator); force(copula_par_unid)
+    force(copula_family2); force(rotation_par_unid); force(composite)
+    force(seed); force(restr_time)
+
+    # Determine which endoints X and Y correspond in fitted_model. We
+    # start from X = S and Y = T as default. Otherwise, everything is switched.
+    switch_XY = fitted_model$fit_0$names_XY[1] == "True"
+    force(switch_XY)
+    ICA_given_model = function(theta) {
+      # Extract parameters for each submodel.
+      theta0 = theta[1:n_par0]
+      theta1 = theta[(n_par0 + 1):(n_par0 + n_par1)]
+
+      # The last elements of theta_0 and theta_1 contain the copula parameters.
+      c_12 = theta0[n_par0]
+      c_34 = theta1[n_par1]
+
+      # Quantile functions for the marginal distributions
+      if (fitted_model$endpoint_types[1] == "continuous") {
+        q_S0 = marginal_cont_constructor(marginal_X0, theta0[1:n_parX0])$inv_cdf
+        q_S1 = marginal_cont_constructor(marginal_X1, theta1[1:n_parX1])$inv_cdf
+      }
+      else {
+        q_S0 = marginal_ord_constructor(theta0[1:n_parX0])$inv_cdf
+        q_S1 = marginal_ord_constructor(theta1[1:n_parX1])$inv_cdf
+      }
+
+      if (fitted_model$endpoint_types[2] == "continuous") {
+        q_T0 = marginal_cont_constructor(marginal_Y0,
+                                         theta0[(n_parX0 + 1):(n_parX0 + n_parY0)])$inv_cdf
+        q_T1 = marginal_cont_constructor(marginal_Y1,
+                                         theta1[(n_parX1 + 1):(n_parX1 + n_parY1)])$inv_cdf
+      }
+      else {
+        q_T0 = marginal_ord_constructor(theta0[(n_parX0 + 1):(n_parX0 + n_parY0)])$inv_cdf
+        q_T1 = marginal_ord_constructor(theta1[(n_parX0 + 1):(n_parX0 + n_parY0)])$inv_cdf
+      }
+
+      if (switch_XY) {
+        # Switch S and T if necessary
+        q_S0_old = q_S0
+        q_S1_old = q_S1
+
+        q_S0 = q_T0
+        q_S1 = q_T1
+        q_T0 = q_S0_old
+        q_T1 = q_S1_old
+      }
+
+      if (all(fitted_model$endpoint_types == c("continuous", "continuous"))) {
+        compute_ICA = compute_ICA_ContCont
+      }
+      else if (all(fitted_model$endpoint_types == c("ordinal", "continuous")) |
+               all(fitted_model$endpoint_types == c("continuous", "ordinal"))) {
+        compute_ICA = compute_ICA_OrdCont
+      }
+      else if (all(fitted_model$endpoint_types == c("ordinal", "ordinal"))) {
+        compute_ICA = compute_ICA_OrdOrd
+      }
+
+      ICA = compute_ICA(
+        copula_par = c(c_12,
+                       copula_par_unid[1],
+                       c_34,
+                       copula_par_unid[2:4]),
+        rotation_par = c(r_12,
+                         rotation_par_unid[1],
+                         r_34,
+                         rotation_par_unid[2:4]),
+        copula_family1 = copula_family1,
+        copula_family2 = copula_family2,
+        n_prec = n_prec,
+        q_S0 = q_S0,
+        q_T0 = q_T0,
+        q_S1 = q_S1,
+        q_T1 = q_T1,
+        ICA_estimator = ICA_estimator,
+        seed = seed,
+        marginal_sp_rho = marginal_sp_rho
+      )[measure]
+
+      return(ICA)
+    }
+  }
+
+
   return(ICA_given_model)
 }

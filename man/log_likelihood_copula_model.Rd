@@ -14,7 +14,8 @@ log_likelihood_copula_model(
   cdf_X,
   cdf_Y,
   pdf_X,
-  pdf_Y
+  pdf_Y,
+  return_sum = TRUE
 )
 }
 \arguments{
@@ -55,6 +56,9 @@ right-censored,
 \item{pdf_X}{Density function for the first outcome variable.}
 
 \item{pdf_Y}{Density function for the second outcome variable.}
+
+\item{return_sum}{Return the sum of the individual loglikelihoods? If \code{FALSE},
+a vector with the individual loglikelihood contributions is returned.}
 }
 \value{
 Loglikelihood of the bivariate copula model evaluated in the observed

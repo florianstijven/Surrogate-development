@@ -65,11 +65,9 @@ environment.}
 
 \item{mutinfo_estimator}{Function that estimates the mutual information
 between the first two arguments which are numeric vectors. Defaults to
-\code{FNN::mutinfo()} with default arguments.
-@param plot_deltas (logical) Plot the sampled individual treatment effects?}
+\code{FNN::mutinfo()} with default arguments.}
 
-\item{plot_deltas}{Plot the sampled individual causal effects? Defaults to
-\code{FALSE}.}
+\item{plot_deltas}{(logical) Plot the sampled individual treatment effects?}
 
 \item{restr_time}{Restriction time for the potential outcomes. Defaults to
 \code{+Inf} which means no restriction. Otherwise, the sampled potential outcomes

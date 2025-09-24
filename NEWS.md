@@ -1,5 +1,23 @@
 # Surrogate (development version)
 
+# Surrogate 3.4
+
+## Surrogate 3.4.1
+
+* Add the `ICA.Sample.ControlTreat()` function to quantify surrogacy in the 
+  single-trial causal-inference framework when data is only available for the 
+  control treatment.
+
+## Surrogate 3.4.0
+
+* Added ICA_alpha_ContCont() to assess surrogacy using a Rényi divergence based 
+  family of metrics in the information-theoretic causal-inference framework.
+* Added ICA_t() to assess surrogacy in the information-theoretic causal-inference
+  framework assuming a multivariate t-distribution for the vector of potential
+  outcomes.
+
+
+
 # Surrogate 3.3
 
 ## Surrogate 3.3.0
@@ -7,6 +25,16 @@
 * Added and updated functions for the survival-categorical, survival-binary, and
 survival-continuous settings in the meta-analytic framework.
 * Added functions to perform the two-stage federated surrogacy evaluation.
+
+## Surrogate 3.3.1
+
+* General implementation of the information-theoretic causal inference framework
+based on D-vine copula models for the ordinal-ordinal, ordinal-continuous, and
+continuous-continuous settings.
+
+## Surrogate 3.3.3
+
+* Fix tests that fail on CRAN. 
 
 # Surrogate 3.2
 

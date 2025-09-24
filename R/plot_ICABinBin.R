@@ -1,3 +1,4 @@
+#' @export
 plot.ICA.BinBin <- function(x, R2_H=TRUE, R_H=FALSE, Theta_T=FALSE, Theta_S=FALSE,
                             Type="Density", Labels=FALSE, Xlab.R2_H, Main.R2_H, Xlab.R_H, Main.R_H,
                             Xlab.Theta_S, Main.Theta_S, Xlab.Theta_T, Main.Theta_T, Cex.Legend=1,

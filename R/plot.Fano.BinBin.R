@@ -1,3 +1,4 @@
+#' @export
 plot.Fano.BinBin<-function(x,Type="Density",Xlab.R2_HL,main.R2_HL,ylab="density",Par=par(mfrow=c(1,1),oma=c(0,0,0,0),mar=c(5.1,4.1,4.1,2.1)),
                            Cex.Legend=1,Cex.Position="top", lwd=3,linety=c(5,6,7),color=c(8,9,3), ...){
 
