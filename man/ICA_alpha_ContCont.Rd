@@ -52,6 +52,43 @@ ICA_alpha_ContCont(
 }
 }
 \description{
-The function \code{\link[=ICA_alpha_ContCont]{ICA_alpha_ContCont()}} is a set of metrics to evaluate surrogacy. ICA_alpha have the similar
+This function is a set of metrics to evaluate surrogacy. \eqn{ICA_{\alpha}} have the similar
 mathematical properties with \code{\link[=ICA.ContCont]{ICA.ContCont()}}.
+}
+\section{New family of surrogacy metrics:}{
+ICA was extended as \eqn{ICA_{\alpha}} by proposing a new family of surrogacy metrics derived from Rényi divergence.
+Based on this family of divergences, one can propose a more general set of surrogacy metrics defined as:
+
+\deqn{ ICA_{\alpha} = 1 - e^{-2 D_{\alpha}[f(\Delta T,\Delta S), f(\Delta T)f(\Delta S)]} }
+
+when \eqn{\alpha=1} then
+
+\eqn{ICA_{1}=1-e^{-2D_1[f(\Delta T,\Delta S),f(\Delta T)f(\Delta S)]}=1-e^{-2I(\Delta T, \Delta S)}=\rho_{\Delta}^2=ICA}
+}
+
+\examples{
+
+ICA_alpha_ContCont(alpha=0.5,
+                  T0S0 = 0.9597334, T1S1=0.9644139,
+                  T0T0=544.3285, T1T1=550.6597,
+                  S0S0=180.6831, S1S1=180.9433,
+                  T0T1=-0.9,  T0S1=-0.9,
+                  T1S0=-0.9 , S0S1=-0.9)
+
+#More than one alpha value can be calculated simultaneously:
+
+ICA_alpha_ContCont(alpha=c(1.25,1.5,2),
+                  T0S0 = 0.9597334, T1S1=0.9644139,
+                  T0T0=544.3285, T1T1=550.6597,
+                  S0S0=180.6831, S1S1=180.9433,
+                  T0T1=-0.9, T0S1=-0.9,
+                  T1S0=-0.9, S0S1=-0.9)
+
+
+}
+\references{
+Deliorman, G., Alonso, A., & Pardo, M. C. (2025).
+A Rényi-Divergence-Based Family of Metrics for the Evaluation of Surrogate Endpoints
+in a Causal Inference Framework. \emph{Statistics in Biopharmaceutical Research}.
+\url{https://doi.org/10.1080/19466315.2025.2484009}
 }
