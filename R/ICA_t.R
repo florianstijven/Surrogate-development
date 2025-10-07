@@ -1,6 +1,8 @@
-#' The function [ICA_t()] is to evaluate surrogacy in the single-trial causal-inference framework.
+#' ICA under the t-causal model
+#' 
+#' This function evaluates surrogacy in the single-trial causal-inference framework under the t-causal model.
 #'
-#' @param df (numeric) is degree of freedom \eqn{\nu}. The maximum value for \eqn{df} is 342. When \eqn{df} exceeds this threshold, the model behavior aligns with the Individual Causal Association (ICA) under the normal causal model.
+#' @param df (numeric) is degree of freedom \eqn{\nu}. The maximum value for df is 342. When df exceeds this threshold, the model behavior aligns with the Individual Causal Association (ICA) under the normal causal model.
 #' @param T0S0 A scalar or vector that specifies the correlation(s) between the surrogate and the true endpoint in the control treatment condition
 #' @param T1S1 A scalar or vector that specifies the correlation(s) between the surrogate and the true endpoint in the control treatment condition
 #' @param T0T0 A scalar that specifies the variance of the true endpoint in the control treatment condition
@@ -13,17 +15,45 @@
 #' @param S0S1 A scalar or vector that contains the correlation(s) between the counterfactuals S0 and S1
 
 
+
 #' @return
 #'
 #' * Total.Num.Matrices: An object of class numeric that contains the total number of matrices that can be formed as based on the user-specified correlations in the function call.
 #' * Pos.Def: A data.frame that contains the positive definite matrices that can be formed based on the user-specified correlations. These matrices are used to compute the vector of the \eqn{\rho_{\Delta}} values.
 #' * rho: A scalar or vector that contains the individual causal association \eqn{\rho_{\Delta}}
-#' * ICA: A scalar or vector that contains the individual causal association \eqn{\rho_{\Delta}^2=ICA}
-#' * ICA_t: A scalar or vector that contains the individual causal association \eqn{ICA_{t}}
+#' * ICA: A scalar or vector that contains the individual causal association under the normal causal model \eqn{\rho_{\Delta}^2=ICA_N}
+#' * ICA_t: A scalar or vector that contains the individual causal association under the t-causal model
 #' * Sigmas: A data.frame that contains the \eqn{\sigma_{\Delta T}} and \eqn{\sigma_{\Delta S}}
 #'
+#'
+#' @details
+#' The multivariate t-distribution has parameters \eqn{\boldsymbol{\Sigma}, \boldsymbol{\mu}, \nu} and is denoted as \eqn{\mathbf{x} \sim t_p(\boldsymbol{\mu}, \boldsymbol{\Sigma}, \nu)}.
+#'
+#' Mutual information between t-distributed random vectors \eqn{\mathbf{x}_1} and \eqn{\mathbf{x}_2} is given by \cite{Arellano-Valle et al. (2013)}:
+#' 
+#' \eqn{I_t(\mathbf{x}_1,\mathbf{x}_2) = I_N(\mathbf{x}_1,\mathbf{x}_2) + \zeta(\nu)}
+#'
+#' The individual causal association under the t-causal model can be computed as:
+#' 
+#' \eqn{ICA_t = 1 - e^{-2 I_t(\Delta T, \Delta S)}=1 - e^{-2 I_N(\Delta T, \Delta S)-2\zeta(\nu)}}
+#' 
+#' \eqn{ICA_t = 1 - (1-ICA_N) e^{-2 \zeta(\nu)}}
+#' 
+#' 
+#' Note that when \eqn{\nu} approaches infinity, \eqn{\zeta(\nu)} converges to zero and \eqn{ICA_t=ICA_N}.
+#' 
+#' @references
+#' Arellano-Valle RB, Conreras-Reyes JE, and Genton MG. (2013).
+#' Shannon Entropy and Mutual Information for Multivariate Skew-Elliptical Distributions.
+#' *Scandinavian Journal of Statistics*.
+#' \url{https://doi.org/10.1111/sjos.12718}
 
 
+
+
+
+
+#' @export
 ICA_t <- function(df,
                   T0S0,
                   T1S1,
@@ -131,8 +161,8 @@ ICA_t <- function(df,
         )
         Results <- rbind(Results, results.part)
         if ((df > 343) == TRUE)  {
-          print(
-            " The maximum value of df is 342. When it is greater than 342, it is the same as ICA in the normal causal model. "
+          stop(
+            "Maximum df is 342. For larger df, use normal ICA"
           )
         }
         rownames(Results) <- NULL
@@ -158,34 +188,3 @@ ICA_t <- function(df,
   fit
 
 }
-
-
-#' @details
-#' # t-causal model \eqn{ICA_{t}}
-#'The definition of a p-dimensional multivariate t-distribution is based on the fact that if \eqn{\y \sim \Norm(\0, \bSigma)} and \eqn{u \sim \chi_{\nu}^2} with \eqn{\y \perp u$ then $\x= \bmu+\y/\sqrt{u+\nu}}
-#'follows a multivariate t-distribution with density function:
-
-#' \eqn{  f(\x|\bmu, \bSigma, \nu)=\frac{\Gamma[(\nu+p)/2]}{\Gamma(\nu/2)(\nu \pi)^{p/2} |\bSigma|^{1/2} } \Big [ 1+ \frac{1}{\nu}(\x-\bmu)^T \bSigma^{-1}(\x-\bmu) \Big ]^{-(\nu+p)/2}}
-#'
-#'The multivariate t-distribution has parameters \eqn{\bSigma, \bmu, \nu} and it is denoted as \eqn{\x \sim t_p(\bmu, \bSigma, \nu)}.
-
-#' \cite{Arellano 2013} provided an expression for the mutual information between \eqn{\x_1$ and $\x_2}:
-#' \eqn{I_t(\x_1,\x_2)=&I_N(\x_1,\x_2)+\zeta(\nu)\quad\mbox{with}\\[5mm]
-#' \zeta(\nu)=&\log\left[\dfrac{\Gamma(\nu/2)\Gamma[(\nu+p_1+p_2)/2]}{\Gamma[(\nu+p_1)/2]\Gamma[(\nu+p_2)/2]}\right]+\dfrac{\nu+p_2}{2}\psi\left(\dfrac{\nu+p_2}{2}\right)+
-#'  \dfrac{\nu+p_1}{2}\psi\left(\dfrac{\nu+p_1}{2}\right)-\nonumber\\[8mm]
-#' &\dfrac{\nu+p_1+p_2}{2}\psi\left(\dfrac{\nu+p_1+p_2}{2}\right)-\dfrac{\nu}{2}\psi\left(\dfrac{\nu}{2}\right)\nonumber
-#' \end{align}}
-
-#'where \eqn{\psi(x)=d/dx[\Gamma(x)]} is the so-called digamma function and
-#' \eqn{I_N(\x_1,\x_2)=-\dfrac{1}{2}\log\left(\dfrac{\left|\bSigma\right|}{\left|\bSigma_{11}\right|\left|\bSigma_{22}\right|}\right)}
-
-#' \eqn{ICA_t} can be defined as using the Squared Information Correlation Coefficient (SICC):
-#'\eqn{ R_{Ht}^2=1-e^{-2I_t(\Delta T, \Delta S)}=1-e^{-2I_N(\Delta T, \Delta S)-2\zeta(\nu)}=1-(1-\rho_{\Delta}^2)e^{-2\zeta(\nu)}=ICA_t}
-#' where
-#' \eqn{\zeta(\nu)=2\log\left[\dfrac{\Gamma(\nu/2)}{\Gamma[(1+\nu)/2]}\sqrt{\dfrac{\nu}{2}}\,\right]+\left(1+\nu\right)\psi\left(\dfrac{1+\nu}{2}\right)-\left(1+\nu\right)\psi\left(\dfrac{\nu}{2}\right)-\dfrac{2+\nu}{\nu}}
-#'
-#' Note that when \eqn{\nu} approaches infinity, \eqn{\zeta(\nu)} converges to zero and \eqn{ICA_N=\rho_{\Delta}^2=ICA_t}.
-#'
-
-
-

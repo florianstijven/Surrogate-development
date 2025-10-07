@@ -2,7 +2,7 @@
 % Please edit documentation in R/ICA_t.R
 \name{ICA_t}
 \alias{ICA_t}
-\title{The function \code{\link[=ICA_t]{ICA_t()}} is to evaluate surrogacy in the single-trial causal-inference framework.}
+\title{ICA under the t-causal model}
 \usage{
 ICA_t(
   df,
@@ -19,7 +19,7 @@ ICA_t(
 )
 }
 \arguments{
-\item{df}{(numeric) is degree of freedom \eqn{\nu}. The maximum value for \eqn{df} is 342. When \eqn{df} exceeds this threshold, the model behavior aligns with the Individual Causal Association (ICA) under the normal causal model.}
+\item{df}{(numeric) is degree of freedom \eqn{\nu}. The maximum value for df is 342. When df exceeds this threshold, the model behavior aligns with the Individual Causal Association (ICA) under the normal causal model.}
 
 \item{T0S0}{A scalar or vector that specifies the correlation(s) between the surrogate and the true endpoint in the control treatment condition}
 
@@ -46,11 +46,32 @@ ICA_t(
 \item Total.Num.Matrices: An object of class numeric that contains the total number of matrices that can be formed as based on the user-specified correlations in the function call.
 \item Pos.Def: A data.frame that contains the positive definite matrices that can be formed based on the user-specified correlations. These matrices are used to compute the vector of the \eqn{\rho_{\Delta}} values.
 \item rho: A scalar or vector that contains the individual causal association \eqn{\rho_{\Delta}}
-\item ICA: A scalar or vector that contains the individual causal association \eqn{\rho_{\Delta}^2=ICA}
-\item ICA_t: A scalar or vector that contains the individual causal association \eqn{ICA_{t}}
+\item ICA: A scalar or vector that contains the individual causal association under the normal causal model \eqn{\rho_{\Delta}^2=ICA_N}
+\item ICA_t: A scalar or vector that contains the individual causal association under the t-causal model
 \item Sigmas: A data.frame that contains the \eqn{\sigma_{\Delta T}} and \eqn{\sigma_{\Delta S}}
 }
 }
 \description{
-The function \code{\link[=ICA_t]{ICA_t()}} is to evaluate surrogacy in the single-trial causal-inference framework.
+This function evaluates surrogacy in the single-trial causal-inference framework under the t-causal model.
+}
+\details{
+The multivariate t-distribution has parameters \eqn{\boldsymbol{\Sigma}, \boldsymbol{\mu}, \nu} and is denoted as \eqn{\mathbf{x} \sim t_p(\boldsymbol{\mu}, \boldsymbol{\Sigma}, \nu)}.
+
+Mutual information between t-distributed random vectors \eqn{\mathbf{x}_1} and \eqn{\mathbf{x}_2} is given by \cite{Arellano-Valle et al. (2013)}:
+
+\eqn{I_t(\mathbf{x}_1,\mathbf{x}_2) = I_N(\mathbf{x}_1,\mathbf{x}_2) + \zeta(\nu)}
+
+The individual causal association under the t-causal model can be computed as:
+
+\eqn{ICA_t = 1 - e^{-2 I_t(\Delta T, \Delta S)}=1 - e^{-2 I_N(\Delta T, \Delta S)-2\zeta(\nu)}}
+
+\eqn{ICA_t = 1 - (1-ICA_N) e^{-2 \zeta(\nu)}}
+
+Note that when \eqn{\nu} approaches infinity, \eqn{\zeta(\nu)} converges to zero and \eqn{ICA_t=ICA_N}.
+}
+\references{
+Arellano-Valle RB, Conreras-Reyes JE, and Genton MG. (2013).
+Shannon Entropy and Mutual Information for Multivariate Skew-Elliptical Distributions.
+\emph{Scandinavian Journal of Statistics}.
+\url{https://doi.org/10.1111/sjos.12718}
 }
