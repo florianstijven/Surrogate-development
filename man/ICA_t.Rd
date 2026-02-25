@@ -21,17 +21,17 @@ ICA_t(
 \arguments{
 \item{df}{(numeric) is degree of freedom \eqn{\nu}. The maximum value for df is 342. When df exceeds this threshold, the model behavior aligns with the Individual Causal Association (ICA) under the normal causal model.}
 
-\item{T0S0}{A scalar or vector that specifies the correlation(s) between the surrogate and the true endpoint in the control treatment condition}
+\item{T0S0}{A scalar or vector that specifies the correlation(s) between the surrogate and the true endpoint in the control treatment condition (\eqn{\rho_{T0S0}})}
 
-\item{T1S1}{A scalar or vector that specifies the correlation(s) between the surrogate and the true endpoint in the control treatment condition}
+\item{T1S1}{A scalar or vector that specifies the correlation(s) between the surrogate and the true endpoint in the experimental treatment condition (\eqn{\rho_{T1S1}})}
 
 \item{T0T0}{A scalar that specifies the variance of the true endpoint in the control treatment condition}
 
-\item{T1T1}{A scalar that specifies the variance of the true endpoint in the control treatment condition}
+\item{T1T1}{A scalar that specifies the variance of the true endpoint in the experimental treatment condition}
 
-\item{S0S0}{A scalar that specifies the variance of the true endpoint in the control treatment condition}
+\item{S0S0}{A scalar that specifies the variance of the surrogate endpoint in the control treatment condition}
 
-\item{S1S1}{A scalar that specifies the variance of the true endpoint in the control treatment condition}
+\item{S1S1}{A scalar that specifies the variance of the surrogate endpoint in the experimental treatment condition}
 
 \item{T0T1}{A scalar or vector that contains the correlation(s) between the counterfactuals T0 and T1}
 
@@ -47,7 +47,7 @@ ICA_t(
 \item Pos.Def: A data.frame that contains the positive definite matrices that can be formed based on the user-specified correlations. These matrices are used to compute the vector of the \eqn{\rho_{\Delta}} values.
 \item rho: A scalar or vector that contains the individual causal association \eqn{\rho_{\Delta}}
 \item ICA: A scalar or vector that contains the individual causal association under the normal causal model \eqn{\rho_{\Delta}^2=ICA_N}
-\item ICA_t: A scalar or vector that contains the individual causal association under the t-causal model
+\item ICA_t: A scalar or vector that contains the individual causal association under the t-causal model \eqn{ICA_t}
 \item Sigmas: A data.frame that contains the \eqn{\sigma_{\Delta T}} and \eqn{\sigma_{\Delta S}}
 }
 }
@@ -74,4 +74,7 @@ Arellano-Valle RB, Conreras-Reyes JE, and Genton MG. (2013).
 Shannon Entropy and Mutual Information for Multivariate Skew-Elliptical Distributions.
 \emph{Scandinavian Journal of Statistics}.
 \url{https://doi.org/10.1111/sjos.12718}
+
+Deliorman, G., Stijven, F., Van der Elst W., Pardo, M. C., & Alonso, A. (submitted in 2025, under review).
+The Effects of Causal Model Misspecification on Surrogate Evaluation.
 }

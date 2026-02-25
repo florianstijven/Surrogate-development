@@ -4,12 +4,12 @@
 #' mathematical properties with [ICA.ContCont()].
 #'
 #' @param alpha (numeric) is order `alpha in [0, infinity]`
-#' @param T0S0 A scalar or vector that specifies the correlation(s) between the surrogate and the true endpoint in the control treatment condition
-#' @param T1S1 A scalar or vector that specifies the correlation(s) between the surrogate and the true endpoint in the control treatment condition
+#' @param T0S0 A scalar or vector that specifies the correlation(s) between the surrogate and the true endpoint in the control treatment condition (\eqn{\rho_{T0S0}})
+#' @param T1S1 A scalar or vector that specifies the correlation(s) between the surrogate and the true endpoint in the experimental treatment condition (\eqn{\rho_{T1S1}})
 #' @param T0T0 A scalar that specifies the variance of the true endpoint in the control treatment condition
-#' @param T1T1 A scalar that specifies the variance of the true endpoint in the control treatment condition
-#' @param S0S0 A scalar that specifies the variance of the true endpoint in the control treatment condition
-#' @param S1S1 A scalar that specifies the variance of the true endpoint in the control treatment condition
+#' @param T1T1 A scalar that specifies the variance of the true endpoint in the experimental treatment condition
+#' @param S0S0 A scalar that specifies the variance of the surrogate endpoint in the control treatment condition
+#' @param S1S1 A scalar that specifies the variance of the surrogate endpoint in the experimental treatment condition
 #' @param T0T1 A scalar or vector that contains the correlation(s) between the counterfactuals T0 and T1
 #' @param T0S1 A scalar or vector that contains the correlation(s) between the counterfactuals T0 and S1
 #' @param T1S0 A scalar or vector that contains the correlation(s) between the counterfactuals T1 and S0
@@ -47,12 +47,12 @@
 #'
 #' @examples
 #'
-#'ICA_alpha_ContCont(alpha=0.5,
+#' ICA_alpha_ContCont(alpha=0.5,
 #'                   T0S0 = 0.9597334, T1S1=0.9644139,
 #'                   T0T0=544.3285, T1T1=550.6597,
 #'                   S0S0=180.6831, S1S1=180.9433,
-#'                   T0T1=-0.9,  T0S1=-0.9,
-#'                   T1S0=-0.9 , S0S1=-0.9)
+#'                   T0T1=seq(-1, 1, by = 0.2),  T0S1=seq(-1, 1, by = 0.2),
+#'                   T1S0=seq(-1, 1, by = 0.2), S0S1=seq(-1, 1, by = 0.2))
 #'
 #'#More than one alpha value can be calculated simultaneously:
 #'
