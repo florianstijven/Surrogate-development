@@ -12,7 +12,7 @@ ICA_t <- function(df, T0S0, T1S1, T0T0=1, T1T1=1, S0S0=1, S1S1=1,
   colnames(Results) <- c("T0T1", "T0S0", "T0S1", "T1S0", "T1S1", "S0S1", "rho", "ICA", "ICA_t", "sigma.delta.T", "sigma.delta.S")
   combins <- expand.grid(T0T1, T0S0_hier, T0S1, T1S0, T1S1_hier, S0S1)
   lengte <- dim(combins)[1]
-  zeta_fun <- function(nu) 2*log( (gamma(nu/2)*gamma(1/2))/(sqrt(pi)*gamma( (1+nu)/2 ))*sqrt(nu/2))- (nu/2)*psi(nu/2)+(nu+1)*psi((1+nu)/2)- ((nu+2)/2)*psi((nu+2)/2)
+  zeta_fun <- function(nu) 2*log( (gamma(nu/2)*gamma(1/2))/(sqrt(pi)*gamma( (1+nu)/2 ))*sqrt(nu/2))- (nu/2)*pracma::psi(nu/2)+(nu+1)*pracma::psi((1+nu)/2)- ((nu+2)/2)*pracma::psi((nu+2)/2)
 
   if (length(T0S0)>1){
     if (length(T0S0)<lengte){stop("The specified vector for T0S0 should be larger than ", lengte) }
@@ -56,7 +56,7 @@ ICA_t <- function(df, T0S0, T1S1, T0T0=1, T1T1=1, S0S0=1, S1S1=1,
         ICA_t<- 1-(1-rho^2)*exp(-2*zeta_fun(df))
         results.part <- as.vector(cbind(T0T1, T0S0, T0S1, T1S0, T1S1, S0S1, rho, ICA, ICA_t, sigma.delta.T, sigma.delta.S))
         Results <- rbind(Results, results.part)
-        if( (df > 343)==TRUE)  { print(" The maximum value of df is 342. When it is greater than 342, it is the same as ICA in the normal causal model. ")  }
+        if( (df > 343)==TRUE)  { stop("Maximum df is 342. For larger df, use normal ICA")  }
         rownames(Results) <- NULL}
     }
   }
@@ -94,20 +94,12 @@ test_that("ICA_t", {
 
 
 ##test2
-test_that("ICA_t", {
-  df = 500
-  T0S0 = 0.9597334
-  T1S1=0.9644139
-  T0T0=544.3285
-  T1T1=550.6597
-  S0S0=180.6831
-  S1S1=180.9433
-  T0T1=-0.9
-  T0S1=-0.9
-  T1S0=-0.9
-  S0S1=-0.9
-  log_lik = ICA_t(df=500, T0S0 = 0.9597334, T1S1=0.9644139, T0T0=544.3285, T1T1=550.6597, S0S0=180.6831, S1S1=180.9433, T0T1=-0.9,
-                  T0S1=-0.9 , T1S0=-0.9 , S0S1=-0.9)
-  expect_equal(log_lik$ICA_t, NaN)
+test_that("ICA_t df>342 throws error", {
+  expect_error(
+    ICA_t(df=399, T0S0 = 0.9597334, T1S1=0.9644139, T0T0=544.3285,
+          T1T1=550.6597, S0S0=180.6831, S1S1=180.9433, T0T1=-0.9,
+          T0S1=-0.9 , T1S0=-0.9 , S0S1=-0.9),
+    "Maximum df is 342. For larger df, use normal ICA"
+  )
 })
 
