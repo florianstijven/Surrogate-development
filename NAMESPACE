@@ -128,7 +128,7 @@ export(FederatedApproachStage2)
 export(ICA_t)
 export(ICA_alpha_ContCont)
 export(ICA_contcont_long_galecki)
-
+export(ICA_contcont_long_ri)
 export(ICA.Sample.ControlTreat)
 
 
