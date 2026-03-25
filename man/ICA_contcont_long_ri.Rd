@@ -58,16 +58,16 @@ the control treatment condition for the \code{V} matrix.}
 \item{VS1S1}{A scalar that specifies the variance of the surrogate endpoint in
 the experimental treatment condition for the \code{V} matrix.}
 
-\item{VT0T1}{A scalar or vector that contains the covariance(s) between the
+\item{VT0T1}{A scalar or vector that contains the correlation(s) between the
 counterfactuals \code{T0} and \code{T1} for the \code{V} matrix.}
 
-\item{VT0S1}{A scalar or vector that contains the covariance(s) between the
+\item{VT0S1}{A scalar or vector that contains the correlation(s) between the
 counterfactuals \code{T0} and \code{S1} for the \code{V} matrix.}
 
-\item{VT1S0}{A scalar or vector that contains the covariance(s) between the
+\item{VT1S0}{A scalar or vector that contains the correlation(s) between the
 counterfactuals \code{T1} and \code{S0} for the \code{V} matrix.}
 
-\item{VS0S1}{A scalar or vector that contains the covariance(s) between the
+\item{VS0S1}{A scalar or vector that contains the correlation(s) between the
 counterfactuals \code{S0} and \code{S1} for the \code{V} matrix.}
 
 \item{DT0S0}{A scalar that specifies the covariance between the surrogate and
@@ -88,16 +88,16 @@ the control treatment condition for the \code{D} matrix.}
 \item{DS1S1}{A scalar that specifies the variance of the surrogate endpoint in
 the experimental treatment condition for the \code{D} matrix.}
 
-\item{DT0T1}{A scalar or vector that contains the covariance(s) between the
+\item{DT0T1}{A scalar or vector that contains the correlation(s) between the
 counterfactuals \code{T0} and \code{T1} for the \code{D} matrix.}
 
-\item{DT0S1}{A scalar or vector that contains the covariance(s) between the
+\item{DT0S1}{A scalar or vector that contains the correlation(s) between the
 counterfactuals \code{T0} and \code{S1} for the \code{D} matrix.}
 
-\item{DT1S0}{A scalar or vector that contains the covariance(s) between the
+\item{DT1S0}{A scalar or vector that contains the correlation(s) between the
 counterfactuals \code{T1} and \code{S0} for the \code{D} matrix.}
 
-\item{DS0S1}{A scalar or vector that contains the covariance(s) between the
+\item{DS0S1}{A scalar or vector that contains the correlation(s) between the
 counterfactuals \code{S0} and \code{S1} for the \code{D} matrix.}
 }
 \value{

@@ -21,13 +21,13 @@
 #'   the control treatment condition for the `V` matrix.
 #' @param VS1S1 A scalar that specifies the variance of the surrogate endpoint in
 #'   the experimental treatment condition for the `V` matrix.
-#' @param VT0T1 A scalar or vector that contains the covariance(s) between the
+#' @param VT0T1 A scalar or vector that contains the correlation(s) between the
 #'   counterfactuals `T0` and `T1` for the `V` matrix.
-#' @param VT0S1 A scalar or vector that contains the covariance(s) between the
+#' @param VT0S1 A scalar or vector that contains the correlation(s) between the
 #'   counterfactuals `T0` and `S1` for the `V` matrix.
-#' @param VT1S0 A scalar or vector that contains the covariance(s) between the
+#' @param VT1S0 A scalar or vector that contains the correlation(s) between the
 #'   counterfactuals `T1` and `S0` for the `V` matrix.
-#' @param VS0S1 A scalar or vector that contains the covariance(s) between the
+#' @param VS0S1 A scalar or vector that contains the correlation(s) between the
 #'   counterfactuals `S0` and `S1` for the `V` matrix.
 #' @param DT0S0 A scalar that specifies the covariance between the surrogate and
 #'   the true endpoint in the control treatment condition for the `D` matrix.
@@ -41,13 +41,13 @@
 #'   the control treatment condition for the `D` matrix.
 #' @param DS1S1 A scalar that specifies the variance of the surrogate endpoint in
 #'   the experimental treatment condition for the `D` matrix.
-#' @param DT0T1 A scalar or vector that contains the covariance(s) between the
+#' @param DT0T1 A scalar or vector that contains the correlation(s) between the
 #'   counterfactuals `T0` and `T1` for the `D` matrix.
-#' @param DT0S1 A scalar or vector that contains the covariance(s) between the
+#' @param DT0S1 A scalar or vector that contains the correlation(s) between the
 #'   counterfactuals `T0` and `S1` for the `D` matrix.
-#' @param DT1S0 A scalar or vector that contains the covariance(s) between the
+#' @param DT1S0 A scalar or vector that contains the correlation(s) between the
 #'   counterfactuals `T1` and `S0` for the `D` matrix.
-#' @param DS0S1 A scalar or vector that contains the covariance(s) between the
+#' @param DS0S1 A scalar or vector that contains the correlation(s) between the
 #'   counterfactuals `S0` and `S1` for the `D` matrix.
 #'
 #' @return
@@ -178,9 +178,21 @@ ICA_contcont_long_ri <- function(p = numeric(),
     }
   }
 
-  validate_covariance_vector <- function(x, name) {
+  validate_correlation_vector <- function(x, name) {
     if (length(x) < 1 || any(!is.finite(x))) {
       stop("`", name, "` must contain at least one finite value.")
+    }
+
+    if (any(x < -1 | x > 1)) {
+      stop("`", name, "` must contain values between -1 and 1.")
+    }
+  }
+
+  validate_covariance_scalar <- function(cov_xy, var_x, var_y, name) {
+    upper_bound <- sqrt(var_x * var_y)
+
+    if (!is.finite(cov_xy) || abs(cov_xy) > upper_bound) {
+      stop("`", name, "` must satisfy |cov| <= sqrt(var_x * var_y).")
     }
   }
 
@@ -188,27 +200,60 @@ ICA_contcont_long_ri <- function(p = numeric(),
                                       T0T0, T1T1, S0S0, S1S1) {
     Sigma_c <- diag(c(T0T0, T1T1, S0S0, S1S1))
 
-    Sigma_c[2, 1] <- Sigma_c[1, 2] <- T0T1
+    Sigma_c[2, 1] <- Sigma_c[1, 2] <- T0T1 * sqrt(T0T0 * T1T1)
     Sigma_c[3, 1] <- Sigma_c[1, 3] <- T0S0
-    Sigma_c[4, 1] <- Sigma_c[1, 4] <- T0S1
-    Sigma_c[3, 2] <- Sigma_c[2, 3] <- T1S0
+    Sigma_c[4, 1] <- Sigma_c[1, 4] <- T0S1 * sqrt(T0T0 * S1S1)
+    Sigma_c[3, 2] <- Sigma_c[2, 3] <- T1S0 * sqrt(T1T1 * S0S0)
     Sigma_c[4, 2] <- Sigma_c[2, 4] <- T1S1
-    Sigma_c[4, 3] <- Sigma_c[3, 4] <- S0S1
+    Sigma_c[4, 3] <- Sigma_c[3, 4] <- S0S1 * sqrt(S0S0 * S1S1)
 
     Sigma_c
   }
 
-  min_eigenvalue <- function(mat) {
-    min_eval <- try(
-      min(eigen(mat, symmetric = TRUE, only.values = TRUE)$values),
-      silent = TRUE
-    )
+  is_positive_definite <- function(mat) {
+    chol_result <- try(chol(mat), silent = TRUE)
+    !inherits(chol_result, "try-error")
+  }
 
-    if (inherits(min_eval, "try-error")) {
-      return(NA_real_)
+  summarize_delta_components <- function(valid_candidates, T0T0, T1T1, S0S0, S1S1,
+                                         T0S0_cov, T1S1_cov) {
+    if (nrow(valid_candidates) == 0) {
+      return(data.frame(
+        c11 = numeric(0),
+        c12 = numeric(0),
+        c22 = numeric(0),
+        rho2 = numeric(0)
+      ))
     }
 
-    as.numeric(min_eval)
+    cov_t0t1 <- valid_candidates$T0T1 * sqrt(T0T0 * T1T1)
+    cov_t0s1 <- valid_candidates$T0S1 * sqrt(T0T0 * S1S1)
+    cov_t1s0 <- valid_candidates$T1S0 * sqrt(T1T1 * S0S0)
+    cov_s0s1 <- valid_candidates$S0S1 * sqrt(S0S0 * S1S1)
+
+    c11 <- T0T0 + T1T1 - (2 * cov_t0t1)
+    c12 <- T0S0_cov + T1S1_cov - cov_t0s1 - cov_t1s0
+    c22 <- S0S0 + S1S1 - (2 * cov_s0s1)
+    det_2x2 <- (c11 * c22) - (c12^2)
+
+    keep <- is.finite(c11) & is.finite(c12) & is.finite(c22) &
+      c11 > 0 & c22 > 0 & det_2x2 > 0
+
+    if (!any(keep)) {
+      return(data.frame(
+        c11 = numeric(0),
+        c12 = numeric(0),
+        c22 = numeric(0),
+        rho2 = numeric(0)
+      ))
+    }
+
+    data.frame(
+      c11 = c11[keep],
+      c12 = c12[keep],
+      c22 = c22[keep],
+      rho2 = (c12[keep]^2) / (c11[keep] * c22[keep])
+    )
   }
 
   enumerate_valid_matrices <- function(T0S0_cov, T1S1_cov, T0T0, T1T1, S0S0, S1S1,
@@ -244,9 +289,7 @@ ICA_contcont_long_ri <- function(p = numeric(),
         S1S1 = S1S1
       )
 
-      min_eval <- min_eigenvalue(Sigma_c)
-
-      if (is.finite(min_eval) && min_eval > 0) {
+      if (is_positive_definite(Sigma_c)) {
         keep[i] <- TRUE
       }
     }
@@ -290,7 +333,12 @@ ICA_contcont_long_ri <- function(p = numeric(),
     validate_scalar(scalar_values[[name]], name, positive = name %in% variance_names)
   }
 
-  covariance_vectors <- list(
+  validate_covariance_scalar(VT0S0, VT0T0, VS0S0, "VT0S0")
+  validate_covariance_scalar(VT1S1, VT1T1, VS1S1, "VT1S1")
+  validate_covariance_scalar(DT0S0, DT0T0, DS0S0, "DT0S0")
+  validate_covariance_scalar(DT1S1, DT1T1, DS1S1, "DT1S1")
+
+  correlation_vectors <- list(
     VT0T1 = VT0T1,
     VT0S1 = VT0S1,
     VT1S0 = VT1S0,
@@ -301,12 +349,11 @@ ICA_contcont_long_ri <- function(p = numeric(),
     DS0S1 = DS0S1
   )
 
-  for (name in names(covariance_vectors)) {
-    validate_covariance_vector(covariance_vectors[[name]], name)
+  for (name in names(correlation_vectors)) {
+    validate_correlation_vector(correlation_vectors[[name]], name)
   }
 
   alpha <- (p - (p * AR1_rho) + (2 * AR1_rho)) / (1 + AR1_rho)
-  Q <- rbind(c(-1, 1, 0, 0), c(0, 0, -1, 1))
 
   v_candidates <- enumerate_valid_matrices(
     T0S0_cov = VT0S0,
@@ -334,77 +381,68 @@ ICA_contcont_long_ri <- function(p = numeric(),
     S0S1 = DS0S1
   )
 
-  r2_lambda <- numeric(0)
   num_pos_def_v <- nrow(v_candidates$valid)
   num_pos_def_d <- nrow(d_candidates$valid)
+  v_components <- summarize_delta_components(
+    valid_candidates = v_candidates$valid,
+    T0T0 = VT0T0,
+    T1T1 = VT1T1,
+    S0S0 = VS0S0,
+    S1S1 = VS1S1,
+    T0S0_cov = VT0S0,
+    T1S1_cov = VT1S1
+  )
 
-  if (nrow(v_candidates$valid) > 0 && nrow(d_candidates$valid) > 0) {
-    for (i in seq_len(nrow(v_candidates$valid))) {
-      V_c <- build_covariance_matrix(
-        T0T1 = v_candidates$valid$T0T1[i],
-        T0S0 = v_candidates$valid$T0S0[i],
-        T0S1 = v_candidates$valid$T0S1[i],
-        T1S0 = v_candidates$valid$T1S0[i],
-        T1S1 = v_candidates$valid$T1S1[i],
-        S0S1 = v_candidates$valid$S0S1[i],
-        T0T0 = VT0T0,
-        T1T1 = VT1T1,
-        S0S0 = VS0S0,
-        S1S1 = VS1S1
-      )
+  d_components <- summarize_delta_components(
+    valid_candidates = d_candidates$valid,
+    T0T0 = DT0T0,
+    T1T1 = DT1T1,
+    S0S0 = DS0S0,
+    S1S1 = DS1S1,
+    T0S0_cov = DT0S0,
+    T1S1_cov = DT1S1
+  )
 
-      sigma_u <- Q %*% V_c %*% t(Q)
-      min_eval_u <- min_eigenvalue(sigma_u)
+  max_pairs <- nrow(v_components) * nrow(d_components)
+  r2_lambda <- numeric(max_pairs)
+  out_index <- 0
 
-      if (!is.finite(min_eval_u) || min_eval_u <= 0) {
+  if (max_pairs > 0) {
+    d11_all <- d_components$c11
+    d12_all <- d_components$c12
+    d22_all <- d_components$c22
+
+    for (i in seq_len(nrow(v_components))) {
+      u11 <- v_components$c11[i]
+      u12 <- v_components$c12[i]
+      u22 <- v_components$c22[i]
+      rho_u2 <- v_components$rho2[i]
+
+      denom_ud <- (u11 + (alpha * d11_all)) * (u22 + (alpha * d22_all))
+      keep_pairs <- is.finite(denom_ud) & denom_ud > 0
+
+      if (!any(keep_pairs)) {
         next
       }
 
-      for (j in seq_len(nrow(d_candidates$valid))) {
-        D_c <- build_covariance_matrix(
-          T0T1 = d_candidates$valid$T0T1[j],
-          T0S0 = d_candidates$valid$T0S0[j],
-          T0S1 = d_candidates$valid$T0S1[j],
-          T1S0 = d_candidates$valid$T1S0[j],
-          T1S1 = d_candidates$valid$T1S1[j],
-          S0S1 = d_candidates$valid$S0S1[j],
-          T0T0 = DT0T0,
-          T1T1 = DT1T1,
-          S0S0 = DS0S0,
-          S1S1 = DS1S1
-        )
+      rho_ud2 <- ((u12 + (alpha * d12_all[keep_pairs]))^2) / denom_ud[keep_pairs]
+      pair_values <- 1 - ((1 - rho_u2)^(p - 1) * (1 - rho_ud2))
+      pair_values <- pair_values[is.finite(pair_values)]
 
-        sigma_d <- Q %*% D_c %*% t(Q)
-        min_eval_d <- min_eigenvalue(sigma_d)
-
-        if (!is.finite(min_eval_d) || min_eval_d <= 0) {
-          next
-        }
-
-        u11 <- sigma_u[1, 1]
-        u12 <- sigma_u[1, 2]
-        u22 <- sigma_u[2, 2]
-        d11 <- sigma_d[1, 1]
-        d12 <- sigma_d[1, 2]
-        d22 <- sigma_d[2, 2]
-
-        rho_u <- u12 / sqrt(u11 * u22)
-        rho_u2 <- rho_u^2
-
-        denom_ud <- (u11 + alpha * d11) * (u22 + alpha * d22)
-        if (!is.finite(denom_ud) || denom_ud <= 0) {
-          next
-        }
-
-        rho_ud <- (u12 + alpha * d12) / sqrt(denom_ud)
-        rho_ud2 <- rho_ud^2
-        R2_Lambda <- 1 - (1 - rho_u2)^(p - 1) * (1 - rho_ud2)
-
-        if (all(is.finite(c(rho_u, rho_u2, rho_ud, rho_ud2, R2_Lambda)))) {
-          r2_lambda <- c(r2_lambda, R2_Lambda)
-        }
+      if (length(pair_values) == 0) {
+        next
       }
+
+      insert_at <- out_index + seq_along(pair_values)
+      r2_lambda[insert_at] <- pair_values
+      out_index <- out_index + length(pair_values)
     }
+  }
+
+  if (out_index == 0) {
+    r2_lambda <- numeric(0)
+  } else {
+    r2_lambda <- r2_lambda[seq_len(out_index)]
   }
 
   num_pos_def_pairs <- length(r2_lambda)
