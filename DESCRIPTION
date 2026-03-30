@@ -48,7 +48,8 @@ Imports:
     tidyr,
     dplyr,
     tibble,
-    lifecycle
+    lifecycle,
+    fastmatrix
 Depends: R (>= 3.5.0)
 License: GPL (>= 2)
 Repository: CRAN

@@ -66,7 +66,10 @@ importFrom("graphics", "arrows")
 importFrom("stats", "weighted.mean")
 importFrom("stats", "approxfun")
 importFrom("stats", "resid")
+importFrom("stats", "complete.cases")
 importFrom("grDevices", "rgb")
+importFrom("fastmatrix", corAR1)
+importFrom("fastmatrix", corCS)
 import(maxLik)
 import(purrr)
 
@@ -129,6 +132,7 @@ export(ICA_t)
 export(ICA_alpha_ContCont)
 export(ICA_contcont_long_galecki)
 export(ICA_contcont_long_ri)
+export(ICA_contcont_long_cre)
 export(ICA.Sample.ControlTreat)
 
 
