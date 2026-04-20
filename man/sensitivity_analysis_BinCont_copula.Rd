@@ -200,7 +200,7 @@ Stijven et al. (2024).
 }
 
 \examples{
-\dontshow{if (identical(Sys.getenv("NOT_CRAN"), "true")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (identical(Sys.getenv("NOT_CRAN"), "true")) withAutoprint(\{ # examplesIf}
 # Load Schizophrenia data set.
 data("Schizo_BinCont")
 # Perform listwise deletion.

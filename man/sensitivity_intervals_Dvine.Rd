@@ -106,7 +106,7 @@ and similarly for \eqn{\boldsymbol{\nu}_u}.
 }
 
 \examples{
-\dontshow{if (identical(Sys.getenv("NOT_CRAN"), "true")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (identical(Sys.getenv("NOT_CRAN"), "true")) withAutoprint(\{ # examplesIf}
 # Load Ovarian data
 data("Ovarian")
 # Recode the Ovarian data in the semi-competing risks format.
