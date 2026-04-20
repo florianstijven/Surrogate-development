@@ -98,10 +98,10 @@ In this model \eqn{\rho_u=\rho_{\Delta}=corr(\Delta T, \Delta S)}, which is the 
 
 \examples{
 # Example output for Galecki's model (symbolic 4x4 V matrix)
-# V = | σT0T0  σT0T1  σT0S0  σT0S1 | = | 544.32  σT0T1  266.56  σT0S1 |
-#     | σT0T1  σT1T1  σT1S0  σT1S1 |   | σT0T1  550.65  σT1S0  205.17 |
-#     | σT0S0  σT1S0  σS0S0  σS0S1 |   | 266.56  σT1S0  180.68  σS0S1 |
-#     | σT0S1  σT1S1  σS0S1  σS1S1 |   | σT0S1  205.17  σS0S1  180.94 |
+# V = | 544.32  T0T1    266.56  T0S1   |
+#     | T0T1    550.65  T1S0    205.17 |
+#     | 266.56  T1S0    180.68  S0S1   |
+#     | T0S1    205.17  S0S1    180.94 |
 
 ICA_contcont_long_galecki(p=4,  T0S0 = 266.56, T1S1=205.17,
                   T0T0=544.3285, T1T1=550.6597,

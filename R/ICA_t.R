@@ -46,7 +46,7 @@
 #' Arellano-Valle RB, Conreras-Reyes JE, and Genton MG. (2013).
 #' Shannon Entropy and Mutual Information for Multivariate Skew-Elliptical Distributions.
 #' *Scandinavian Journal of Statistics*.
-#' \url{https://doi.org/10.1111/sjos.12718}
+#' \url{doi.org/10.1111/sjos.12718}
 #'
 #'
 #' Deliorman, G., Stijven, F., Van der Elst W., Pardo, M. C., & Alonso, A. (submitted in 2025, under review).

@@ -43,7 +43,7 @@
 #' Deliorman, G., Alonso, A., & Pardo, M. C. (2025).
 #' A Rényi-Divergence-Based Family of Metrics for the Evaluation of Surrogate Endpoints
 #' in a Causal Inference Framework. *Statistics in Biopharmaceutical Research*.
-#' \url{https://doi.org/10.1080/19466315.2025.2484009}
+#' \url{doi.org/10.1080/19466315.2025.2484009}
 #'
 #' @examples
 #'
