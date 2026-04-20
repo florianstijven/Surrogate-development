@@ -1,7 +1,7 @@
 BimixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model=c("Full"), 
                     Min.Trial.Size=2, Alpha=.05, 
                     T0T1=seq(-1, 1, by=.2), T0S1=seq(-1, 1, by=.2), T1S0=seq(-1, 1, by=.2), 
-                    S0S1=seq(-1, 1, by=.2), ...){ 
+                    S0S1=seq(-1, 1, by=.2), ICA=FALSE, ...){ 
   
   if ((Model==c("Full") | Model==c("Reduced"))==FALSE){stop ("The specification of the Model=c(\"...\") argument of the call is incorrect. Use either Model=c(\"Full\") or Model=c(\"Reduced\").")}     
   Surr <- Dataset[,paste(substitute(Surr))]
@@ -27,9 +27,11 @@ BimixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model=
   T0 <- dataT$outcome[dataS$Treat!=1]
   r_T0S0 <- cor(T0,S0)
   r_T1S1 <- cor(T1,S1)
+  
+  if (ICA==TRUE){
   set.seed(123); ICA <- ICA.ContCont(T0S0 = r_T0S0, T1S1 = r_T1S1, 
                                             T0T0 = var(T0), T1T1 = var(T1), S0S0 = var(S0), S1S1 = var(S1), 
-                                     T0T1=T0T1, T0S1=T0S1, T1S0=T1S0, S0S1=S0S1)
+                                     T0T1=T0T1, T0S1=T0S1, T1S0=T1S0, S0S1=S0S1)}
   
   if (Model==c("Full")){
     

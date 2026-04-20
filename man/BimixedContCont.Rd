@@ -9,7 +9,7 @@ The function \code{BimixedContCont} uses the bivariate mixed-effects approach to
 \usage{
 BimixedContCont(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model=c("Full"), 
 Min.Trial.Size=2, Alpha=.05, T0T1=seq(-1, 1, by=.2), T0S1=seq(-1, 1, by=.2), 
-T1S0=seq(-1, 1, by=.2), S0S1=seq(-1, 1, by=.2), \dots)
+T1S0=seq(-1, 1, by=.2), S0S1=seq(-1, 1, by=.2), ICA=FALSE, \dots)
 }
 \arguments{
   \item{Dataset}{A \code{data.frame} that should consist of one line per patient. Each line contains (at least) a surrogate value, a true endpoint value, a treatment indicator, a patient ID, and a trial ID.}
@@ -26,6 +26,7 @@ T1S0=seq(-1, 1, by=.2), S0S1=seq(-1, 1, by=.2), \dots)
   \item{T0S1}{A scalar or vector that contains the correlation(s) between the counterfactuals T0 and S1 that should be considered in the computation of \eqn{\rho_{\Delta}}. Default \code{seq(-1, 1, by=.2)}.}
   \item{T1S0}{A scalar or vector that contains the correlation(s) between the counterfactuals T1 and S0 that should be considered in the computation of \eqn{\rho_{\Delta}}. Default \code{seq(-1, 1, by=.2)}.}
   \item{S0S1}{A scalar or vector that contains the correlation(s) between the counterfactuals S0 and S1 that should be considered in the computation of \eqn{\rho_{\Delta}}. Default \code{seq(-1, 1, by=.2)}.}
+  \item{ICA}{Should ICA be estimated? Default \code{ICA=FALSE}.}
   \item{\dots}{Other arguments to be passed to the function \code{lmer} (of the R package \code{lme4}) that is used to fit the geralized linear mixed-effect models in the function \code{BimixedContCont}.}
 }
 \details{

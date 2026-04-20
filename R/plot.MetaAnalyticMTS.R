@@ -1,10 +1,11 @@
 #' @export
 plot.UnifixedContCont <- plot.BifixedContCont <- plot.UnimixedContCont <-
-  function(x, Trial.Level=TRUE, Weighted=TRUE, Indiv.Level=TRUE, ICA=TRUE, Entropy.By.ICA=FALSE,
+  function(x, Trial.Level=TRUE, Weighted=TRUE, Indiv.Level=TRUE, ICA, Entropy.By.ICA=FALSE,
   Xlab.Indiv, Ylab.Indiv, Xlab.Trial, Ylab.Trial, Main.Trial, Main.Indiv,
   Par=par(oma=c(0, 0, 0, 0), mar=c(5.1, 4.1, 4.1, 2.1)),...) {
 
   Object <- x
+  ICA <- Object$ICA[[1]] != FALSE
   if (Trial.Level==TRUE){
     if (missing(Xlab.Trial)) {Xlab.Trial <- expression(paste("Treatment effect on the surrogate endpoint ", (alpha[i])))}
     if (missing(Ylab.Trial)) {Ylab.Trial <- expression(paste("Treatment effect on the true endpoint  ",(beta[i])))}
@@ -46,13 +47,13 @@ plot.UnifixedContCont <- plot.BifixedContCont <- plot.UnimixedContCont <-
 
 
 #' @export
-plot.BimixedContCont <- function(x, Trial.Level=TRUE, Weighted=TRUE, Indiv.Level=TRUE, ICA=TRUE, Entropy.By.ICA=FALSE,
+plot.BimixedContCont <- function(x, Trial.Level=TRUE, Weighted=TRUE, Indiv.Level=TRUE, ICA, Entropy.By.ICA=FALSE,
                                  Xlab.Indiv, Ylab.Indiv, Xlab.Trial, Ylab.Trial, Main.Trial, Main.Indiv,
                                  Par=par(oma=c(0, 0, 0, 0), mar=c(5.1, 4.1, 4.1, 2.1)), ...){
 
 
   Object <- x
-
+  ICA <- Object$ICA[[1]] != FALSE
   if (Trial.Level==TRUE){
     if (missing(Xlab.Trial)) {Xlab.Trial <- expression(paste("Treatment effect on the surrogate endpoint ", (alpha[i])))}
     if (missing(Ylab.Trial)) {Ylab.Trial <- expression(paste("Treatment effect on the true endpoint  ",(beta[i])))}

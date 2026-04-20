@@ -39,6 +39,7 @@ summary.UnifixedContCont <- summary.UnimixedContCont <- function(object, ..., Ob
   print(format(round(Object$Indiv.R, 4), nsmall = 4))
 
   #ICA
+  if (Object$ICA[[1]] != FALSE){
   mode <- function(data) {
     x <- data
     z <- density(x)
@@ -61,6 +62,7 @@ summary.UnifixedContCont <- summary.UnimixedContCont <- function(object, ..., Ob
   cat("\n\nObtained under correlation structure:\n")
   print(Fit$Table.ICA.Entropy[1,3:8], row.names = "")
   cat("\n")
+  }
 }
 
 summary.BifixedContCont <- function(object, ..., Object){
@@ -103,6 +105,7 @@ summary.BifixedContCont <- function(object, ..., Object){
   print(format(round(Object$Indiv.R, 4), nsmall = 4))
 
   #ICA
+  if (Object$ICA[[1]] != FALSE){
   mode <- function(data) {
     x <- data
     z <- density(x)
@@ -125,6 +128,7 @@ summary.BifixedContCont <- function(object, ..., Object){
   cat("\n\nObtained under correlation structure:\n")
   print(Fit$Table.ICA.Entropy[1,3:8], row.names = "")
   cat("\n")
+  }
 }
 
 #' @export
@@ -168,6 +172,7 @@ summary.BimixedContCont <- function(object, ..., Object){
   print(format(round(Object$Indiv.R, 4), nsmall = 4))
 
   #ICA
+  if (Object$ICA[[1]] != FALSE){
   mode <- function(data) {
     x <- data
     z <- density(x)
@@ -190,4 +195,5 @@ summary.BimixedContCont <- function(object, ..., Object){
   cat("\n\nObtained under correlation structure:\n")
   print(Fit$Table.ICA.Entropy[1,3:8], row.names = "")
   cat("\n")
+  }
 }
