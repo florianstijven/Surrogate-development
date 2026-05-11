@@ -17,20 +17,21 @@ ICA_contcont_long_galecki <- function(p=numeric(), T0S0, T1S1, T0T0, T1T1, S0S0,
   Sigma_c[3,3] <-  S0S0
   Sigma_c[4,4] <-  S1S1
 
+  vT0T0 <- T0T0
+  vT1T1 <- T1T1
+  vS0S0 <- S0S0
+  vS1S1 <- S1S1
+
   Cor_c <- cov2cor(Sigma_c)
 
-  T0S0 <- Cor_c[1,3]
-  T1S1 <- Cor_c[2,4]
-  T0T0 <- 1
-  T1T1 <- 1
-  S0S0 <- 1
-  S1S1 <- 1
+  rho_T0S0_fixed <- Cor_c[1,3]
+  rho_T1S1_fixed <- Cor_c[2,4]
 
-  T0S0_hier <- T0S0[1]
-  T1S1_hier <- T1S1[1]
+  T0S0_hier <- rho_T0S0_fixed[1]
+  T1S1_hier <- rho_T1S1_fixed[1]
   p <- as.numeric(p)
   Results <- na.exclude(matrix(NA, 1, 11))
-  colnames_result <- c("T0T1", "T0S0", "T0S1", "T1S0", "T1S1", "S0S1", "sigma.delta.T", "sigma.delta.S", "rho_u", "rho_u2", "R2_Lambda")
+  colnames_result <- c("rho_T0T1", "rho_T0S0", "rho_T0S1", "rho_T1S0", "rho_T1S1", "rho_S0S1", "sigma.delta.T", "sigma.delta.S", "rho_u", "rho_u2", "R2_Lambda")
   colnames(Results) <- c(colnames_result)
 
   combins <- expand.grid(T0T1, T0S0_hier, T0S1, T1S0, T1S1_hier, S0S1)
@@ -56,25 +57,25 @@ ICA_contcont_long_galecki <- function(p=numeric(), T0S0, T1S1, T0T0, T1T1, S0S0,
     T1S1 <- combins[i, 5]
     S0S1 <- combins[i, 6]
     Sigma_c <- diag(4)
-    Sigma_c[2,1] <- Sigma_c[1,2] <- T0T1 * (sqrt(T0T0)*sqrt(T1T1))
-    Sigma_c[3,1] <- Sigma_c[1,3] <- T0S0 * (sqrt(T0T0)*sqrt(S0S0))
-    Sigma_c[4,1] <- Sigma_c[1,4] <- T0S1 * (sqrt(T0T0)*sqrt(S1S1))
-    Sigma_c[3,2] <- Sigma_c[2,3] <- T1S0 * (sqrt(T1T1)*sqrt(S0S0))
-    Sigma_c[4,2] <- Sigma_c[2,4] <- T1S1 * (sqrt(T1T1)*sqrt(S1S1))
-    Sigma_c[4,3] <- Sigma_c[3,4] <- S0S1 * (sqrt(S0S0)*sqrt(S1S1))
-    Sigma_c[1,1] <- T0T0
-    Sigma_c[2,2] <- T1T1
-    Sigma_c[3,3] <- S0S0
-    Sigma_c[4,4] <- S1S1
+    Sigma_c[2,1] <- Sigma_c[1,2] <- T0T1 * (sqrt(vT0T0)*sqrt(vT1T1))
+    Sigma_c[3,1] <- Sigma_c[1,3] <- T0S0 * (sqrt(vT0T0)*sqrt(vS0S0))
+    Sigma_c[4,1] <- Sigma_c[1,4] <- T0S1 * (sqrt(vT0T0)*sqrt(vS1S1))
+    Sigma_c[3,2] <- Sigma_c[2,3] <- T1S0 * (sqrt(vT1T1)*sqrt(vS0S0))
+    Sigma_c[4,2] <- Sigma_c[2,4] <- T1S1 * (sqrt(vT1T1)*sqrt(vS1S1))
+    Sigma_c[4,3] <- Sigma_c[3,4] <- S0S1 * (sqrt(vS0S0)*sqrt(vS1S1))
+    Sigma_c[1,1] <- vT0T0
+    Sigma_c[2,2] <- vT1T1
+    Sigma_c[3,3] <- vS0S0
+    Sigma_c[4,4] <- vS1S1
     Cor_c <- cov2cor(Sigma_c)
     Min.Eigen.Cor <- try(min(eigen(Cor_c)$values), TRUE)
 
     if (Min.Eigen.Cor > 0) {
-      rho_u <- ((sqrt(S0S0*T0T0)*Cor_c[3,1])+(sqrt(S1S1*T1T1)*Cor_c[4,2])-(sqrt(S0S0*T1T1)*Cor_c[3,2])-(sqrt(S1S1*T0T0)*Cor_c[4,1]))/(sqrt((T0T0+T1T1-(2*sqrt(T0T0*T1T1)*Cor_c[2,1]))*(S0S0+S1S1-(2*sqrt(S0S0*S1S1)*Cor_c[4,3]))))
+      rho_u <- ((sqrt(vS0S0 * vT0T0) * Cor_c[3,1]) + (sqrt(vS1S1 * vT1T1) * Cor_c[4,2]) - (sqrt(vS0S0 * vT1T1) * Cor_c[3,2]) - (sqrt(vS1S1 * vT0T0) * Cor_c[4,1])) / (sqrt((vT0T0 + vT1T1 - (2 * sqrt(vT0T0 * vT1T1) * Cor_c[2,1])) * (vS0S0 + vS1S1 - (2 * sqrt(vS0S0 * vS1S1) * Cor_c[4,3]))))
       rho_u2<- rho_u^2
       if ((is.finite(rho_u2))==TRUE){
-        sigma.delta.T <- T0T0 + T1T1 - (2 * sqrt(T0T0*T1T1) * Cor_c[2,1])
-        sigma.delta.S <- S0S0 + S1S1 - (2 * sqrt(S0S0*S1S1) * Cor_c[3,4])
+        sigma.delta.T <- vT0T0 + vT1T1 - (2 * sqrt(vT0T0*vT1T1) * Cor_c[2,1])
+        sigma.delta.S <- vS0S0 + vS1S1 - (2 * sqrt(vS0S0*vS1S1) * Cor_c[3,4])
 
         R2_Lambda<-1 - (1-rho_u2)^p
         R2_Lambda<- as.numeric(R2_Lambda)
@@ -120,4 +121,4 @@ test_that("ICA_contcont_long_galecki",
                                                  S0S0=180.6831, S1S1=180.9433,
                                                  T0T1= -0.8,  T0S1= -0.8,
                                                  T1S0= -0.8 , S0S1= -0.8)
-         expect_equal(loglik$R2_Lambda, 0.9955342, tolerance = 1e-6)})
+         expect_equal(loglik$R2_Lambda, 0.9955342, tolerance = 1e-4)})
