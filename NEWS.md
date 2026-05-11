@@ -10,7 +10,7 @@
   `ICA_contcont_long_ri()`, and `ICA_contcont_long_galecki()`.
 * Updates and fixed to functions for evaluating surrogacy in the 
   information-theoretic causal-inference framework.
-* Updates to functions for evaluating surrgoacy in the meta-analytic framework.
+* Updates to functions for evaluating surrogacy in the meta-analytic framework.
 
 ## Surrogate 3.4.1
 
