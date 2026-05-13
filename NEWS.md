@@ -1,5 +1,3 @@
-# Surrogate 3.4.2
-
 # Surrogate 3.4
 
 ## Surrogate 3.4.2

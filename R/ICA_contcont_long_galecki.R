@@ -73,7 +73,7 @@
 #' Causal Inference Approach.
 #'
 #'
-#' @examples
+#' @examplesIf identical(Sys.getenv("NOT_CRAN"), "true")
 #' # Example output for Galecki's model (symbolic 4x4 V matrix)
 #' # V = | 544.32  T0T1    266.56  T0S1   |
 #' #     | T0T1    550.65  T1S0    205.17 |

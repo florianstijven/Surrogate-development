@@ -45,7 +45,7 @@
 #' in a Causal Inference Framework. *Statistics in Biopharmaceutical Research*.
 #' \url{doi.org/10.1080/19466315.2025.2484009}
 #'
-#' @examples
+#' @examplesIf identical(Sys.getenv("NOT_CRAN"), "true")
 #'
 #' ICA_alpha_ContCont(alpha=0.5,
 #'                   T0S0 = 0.9597334, T1S1=0.9644139,
