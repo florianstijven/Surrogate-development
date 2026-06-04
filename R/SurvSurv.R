@@ -13,9 +13,8 @@ Trial.ID, Weighted=TRUE, Alpha=.05){ #, Number.Bootstraps=500, Seed=sample(1:100
   All_data$Surr <- as.numeric(as.character(All_data$Surr))
   All_data$True <- as.numeric(as.character(All_data$True))
   
-  if (length(unique(All_data$Treat))!=2) stop("Please make sure that the treatment variable has only 2 levels.")
- if ((sort(unique(All_data$Treat))[1]==c(-0.5)) & (sort(unique(All_data$Treat))[2]==c(0.5))){
-   All_data$Treat <- All_data$Treat+.5}
+if (length(unique(All_data$Treat))!=2) stop("Please make sure that the treatment variable has only 2 levels.")
+ if ((sort(unique(All_data$Treat))[1]==c(-0.5)) & (sort(unique(All_data$Treat))[2]==c(0.5))){All_data$Treat <- All_data$Treat+.5}
   
   if (((sort(unique(All_data$Treat))[1]==c(0) & sort(unique(All_data$Treat))[2]==c(1))==FALSE) & 
       ((sort(unique(All_data$Treat))[1]==c(-1) & sort(unique(All_data$Treat))[2]==c(1))==FALSE))
@@ -186,7 +185,7 @@ Trial.ID, Weighted=TRUE, Alpha=.05){ #, Number.Bootstraps=500, Seed=sample(1:100
     Data_hier$Treat[Data_hier$Treat==-1] <- 0 
     
     if ((dim(Data_hier[Data_hier$Treat==0,])[1]<3) & ((dim(Data_hier[Data_hier$Treat==1,])[1])<3)){
-     cat("\nNote. The trial with ID ", unique(Trial.ID)[i], " did not have >=3 observations in each treatment arm and \nwas excluded from the trial-level analyses (estimation of R2_ht) due to estimability constraints. \n", sep="")}    
+    cat("\nNote. The trial with ID ", unique(Trial.ID)[i], " did not have >=3 observations in each treatment arm and \nwas excluded from the trial-level analyses (estimation of R2_ht) due to estimability constraints. \n", sep="")}    
     
     if ((dim(Data_hier[Data_hier$Treat==0,])[1]>=3) & ((dim(Data_hier[Data_hier$Treat==1,])[1])>=3)){
       surv_data_Surr <- Surv(time=Data_hier$Surr, time2=Data_hier$SurrCens)

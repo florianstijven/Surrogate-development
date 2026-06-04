@@ -10,7 +10,7 @@ This function provides a plot that displays the frequencies, percentages, or cum
 \usage{
 \method{plot}{ICA.ContCont}(x, Xlab.ICA, Main.ICA, Type="Percent", 
 Labels=FALSE, ICA=TRUE, Good.Surr=FALSE, Main.Good.Surr, 
-Par=par(oma=c(0, 0, 0, 0), mar=c(5.1, 4.1, 4.1, 2.1)), col, \dots)
+Par=par(oma=c(0, 0, 0, 0), mar=c(5.1, 4.1, 4.1, 2.1)), col, xlim=c(-1,1), \dots)
 
 \method{plot}{MICA.ContCont}(x, ICA=TRUE, MICA=TRUE, Type="Percent", 
 Labels=FALSE, Xlab.ICA, Main.ICA, Xlab.MICA, Main.MICA,
@@ -30,6 +30,7 @@ Par=par(oma=c(0, 0, 0, 0), mar=c(5.1, 4.1, 4.1, 2.1)), col, \dots)
 \item{Main.Good.Surr}{The title of the plot of \eqn{\delta}. Only applies when an object of class \code{ICA.ContCont} is considered. For details, see Alonso et al. (submitted).}
   \item{Par}{Graphical parameters for the plot. Default \code{par(oma=c(0, 0, 0, 0), mar=c(5.1, 4.1, 4.1, 2.1))}.}
   \item{col}{The color of the bins. Default \code{col <- c(8)}.}
+  \item{xlim}{The range of the X-axis. Default \code{xlim=c(-1,1)}.}
   \item{\dots}{Extra graphical parameters to be passed to \code{hist()}.}
 }
 \references{

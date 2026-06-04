@@ -10,6 +10,7 @@
 \alias{summary.MinSurrContCont}
 \alias{summary.MixedContContIT}
 \alias{summary.Single.Trial.RE.AA}
+\alias{summary.Single.Trial.ContCont}
 \alias{summary.SPF.BinBin}
 \alias{summary.ICA.BinBin}
 \alias{summary.TrialLevelMA}
@@ -52,6 +53,7 @@
 \method{summary}{MinSurrContCont}(object, ..., Object)
 \method{summary}{MixedContContIT}(object, ..., Object)
 \method{summary}{Single.Trial.RE.AA}(object, ..., Object)
+\method{summary}{Single.Trial.ContCont}(object, ..., Object)
 \method{summary}{SPF.BinBin}(object, ..., Object)
 \method{summary}{ICA.BinBin}(object, ..., Object)
 \method{summary}{TrialLevelMA}(object, ..., Object)

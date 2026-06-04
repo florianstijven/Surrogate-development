@@ -11,7 +11,8 @@ This function provides a plot that displays the frequencies, percentages, cumula
 Theta_S=FALSE, Type="Density", Labels=FALSE, Xlab.R2_H, 
 Main.R2_H, Xlab.R_H, Main.R_H, Xlab.Theta_S, Main.Theta_S, Xlab.Theta_T, 
 Main.Theta_T, Cex.Legend=1, Cex.Position="topright",  
-col, Par=par(oma=c(0, 0, 0, 0), mar=c(5.1, 4.1, 4.1, 2.1)), ylim, \dots)
+col, Par=par(oma=c(0, 0, 0, 0), mar=c(5.1, 4.1, 4.1, 2.1)), ylim, 
+xlim = c(0, 1), \dots)
 }
 \arguments{
 \item{x}{An object of class \code{ICA.BinBin}. See \code{\link{ICA.BinBin}}.}
@@ -35,6 +36,7 @@ When the fitted object of class \code{ICA.BinBin} was obtained using a general a
   \item{col}{The color of the bins. Default \code{col <- c(8)}.}
   \item{Par}{Graphical parameters for the plot. Default \code{par(oma=c(0, 0, 0, 0), mar=c(5.1, 4.1, 4.1, 2.1))}.}
   \item{ylim}{The (min, max) values for the Y-axis}. 
+    \item{xlim}{The range of the X-axis. Default \code{xlim=c(-1,1)}.}
  \item{\dots}{Extra graphical parameters to be passed to \code{hist()}.}
 
 

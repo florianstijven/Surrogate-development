@@ -1,4 +1,6 @@
 # Imported functions
+importFrom(mratios,gsci.ratio)
+importFrom("stats", "model.matrix")
 importFrom(lifecycle, deprecated)
 importFrom(stats, glm)
 importFrom(nlme, gls)
@@ -82,7 +84,7 @@ summary.UnimixedContCont, summary.BifixedContCont, summary.BimixedContCont,
 summary.FixedContContIT, summary.FixedContContIT, summary.ICA.BinBin, summary.ICA.ContCont,
 summary.MICA.ContCont, summary.MinSurrContCont, summary.SPF.BinBin, summary.Single.Trial.RE.AA,
 summary.TrialLevelMA, summary.TwoStageSurvSurv, summary.Prentice, summary.PredTrialTContCont, plot.FixedBinBinIT,
-summary.FixedBinContIT, summary.FixedContBinIT, plot.FixedBinContIT, plot.FixedContBinIT, summary.SurvSurv, summary.SPF.BinCont,
+summary.FixedBinContIT, summary.FixedContBinIT, plot.Single.Trial.ContCont, plot.FixedBinContIT, plot.FixedContBinIT, summary.SurvSurv, summary.SPF.BinCont,
 plot.SurvSurv, summary.TrialLevelIT, plot.TrialLevelIT, summary.MaxEntICA.BinBin, plot.MaxEntICA.BinBin, plot.SPF.BinCont,
 plot.MaxEntSPF.BinBin, summary.MaxEntSPF.BinBin, plot.FixedDiscrDiscrIT,
 plot.ICA.BinCont, summary.ICA.BinCont, summary.FixedDiscrDiscrIT,
@@ -91,7 +93,7 @@ plot.MaxEntContCont, summary.MaxEntContCont,
 plot.ICA.ContCont.MultS, summary.ICA.ContCont.MultS, summary.AA.MultS,
 plot.PPE.BinBin, plot.comb27.BinBin, summary.PPE.BinBin, summary.ECT,
 summary.Bootstrap.MEP.BinBin, plot.ISTE.ContCont, summary.ISTE.ContCont,
-summary.BimixedCbCContCont)
+summary.BimixedCbCContCont, summary.Single.Trial.ContCont)
 export(AA.MultS, BifixedContCont, BimixedCbCContCont,
        BimixedContCont, Bootstrap.MEP.BinBin, ICA.BinBin, ICA.BinBin.Grid.Sample,
        ICA.BinBin.CounterAssum, MaxEntContCont,
@@ -108,7 +110,7 @@ export(AA.MultS, BifixedContCont, BimixedCbCContCont,
        PPE.BinBin, Pred.TrialT.ContCont, Prentice, PROC.BinBin, RandVec,
        Restrictions.BinBin,
        Sim.Data.Counterfactuals, Sim.Data.CounterfactualsBinBin, Sim.Data.MTS,
-       Sim.Data.STS, Sim.Data.STSBinBin, Single.Trial.RE.AA,
+       Sim.Data.STS, Sim.Data.STSBinBin, Single.Trial.RE.AA, Single.Trial.ContCont,
        SurvSurv, Test.Mono, TrialLevelIT,
        TrialLevelMA, TwoStageSurvSurv, UnifixedContCont, UnimixedContCont,
        SPF.BinBin, SPF.BinCont, MufixedContCont.MultS, MumixedContCont.MultS)
@@ -149,6 +151,8 @@ S3method(plot, MICA.ContCont)
 S3method(plot, MinSurrContCont)
 S3method(plot, SPF.BinBin)
 S3method(plot, SPF.BinCont)
+S3method(plot, Single.Trial.RE.AA)
+S3method(plot, Single.Trial.ContCont)
 S3method(plot, Single.Trial.RE.AA)
 S3method(plot, MixedContContIT)
 S3method(plot, ICA.BinBin)
@@ -203,6 +207,7 @@ S3method(summary, MaxEntContCont)
 S3method(summary, ICA.ContCont.MultS)
 S3method(summary, AA.MultS)
 S3method(summary, PPE.BinBin)
+S3method(summary, Single.Trial.ContCont)
 S3method(summary, ECT)
 S3method(summary, Bootstrap.MEP.BinBin)
 S3method(summary, ISTE.ContCont)

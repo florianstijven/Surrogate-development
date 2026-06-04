@@ -1,3 +1,7 @@
+# Seed = 123; Dataset = ARMD_S; attach(ARMD_S); Surr = Diff24; True = Diff52 
+#                          Treat = Treat; Trial.ID = Center; Pat.ID = Id; Weighted = TRUE; Model = "Full"
+#                          T0T1=seq(-1, 1, by=.2); T0S1=seq(-1, 1, by=.2); T1S0=seq(-1, 1, by=.2); S0S1=seq(-1, 1, by=.2); ICA=FALSE
+
 UnimixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model=c("Full"), 
                      Weighted=TRUE, Min.Trial.Size=2, Alpha=.05, Number.Bootstraps=500, 
                      Seed=sample(1:1000, size=1), T0T1=seq(-1, 1, by=.2), T0S1=seq(-1, 1, by=.2), T1S0=seq(-1, 1, by=.2), S0S1=seq(-1, 1, by=.2), ICA=FALSE, ...){
@@ -20,12 +24,13 @@ UnimixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model
   Obs.per.trial <- Data.Proc$Obs.per.trial
   
   # ICA
-  S1 <- dataS$outcome[dataS$Treat==1]
-  S0 <- dataS$outcome[dataS$Treat!=1]
-  T1 <- dataT$outcome[dataS$Treat==1]
-  T0 <- dataT$outcome[dataS$Treat!=1]
+  S1 <- as.numeric(as.character(dataS$outcome[dataS$Treat==1]))
+  S0 <- as.numeric(as.character(dataS$outcome[dataS$Treat!=1]))
+  T1 <- as.numeric(as.character(dataT$outcome[dataS$Treat==1]))
+  T0 <- as.numeric(as.character(dataT$outcome[dataS$Treat!=1]))
   r_T0S0 <- cor(T0,S0)
   r_T1S1 <- cor(T1,S1)
+  
   if (ICA==TRUE){
   set.seed(123); ICA <- ICA.ContCont(T0S0 = r_T0S0, T1S1 = r_T1S1, 
                                             T0T0 = var(T0), T1T1 = var(T1), S0S0 = var(S0), S1S1 = var(S1), 
@@ -107,11 +112,11 @@ UnimixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model
   
   if (Model==c("Full")){
     if (Weighted==FALSE) {Results.Stage.2 <- lm(Results.Stage.1$Treatment.T ~ Results.Stage.1$Intercept.S + Results.Stage.1$Treatment.S)}
-    if (Weighted==TRUE) {Results.Stage.2 <- lm(Results.Stage.1$Treatment.T ~ Results.Stage.1$Intercept.S + Results.Stage.1$Treatment.S, weights=Results.Stage.1$Obs.per.trial)}
+    if (Weighted==TRUE) {Results.Stage.2 <- lm(Results.Stage.1$Treatment.T ~ Results.Stage.1$Intercept.S + Results.Stage.1$Treatment.S, weights=as.numeric(as.character(Results.Stage.1$Obs.per.trial)))}
   }
   if (Model==c("Reduced") | Model==c("SemiReduced")){
     if (Weighted==FALSE) {Results.Stage.2 <- lm(Results.Stage.1$Treatment.T ~ Results.Stage.1$Treatment.S)}
-    if (Weighted==TRUE) {Results.Stage.2 <- lm(Results.Stage.1$Treatment.T ~ Results.Stage.1$Treatment.S, weights=Results.Stage.1$Obs.per.trial)}
+    if (Weighted==TRUE) {Results.Stage.2 <- lm(Results.Stage.1$Treatment.T ~ Results.Stage.1$Treatment.S, weights=as.numeric(as.character(Results.Stage.1$Obs.per.trial)))}
   }
   
   
@@ -180,8 +185,8 @@ UnimixedContCont <- function(Dataset, Surr, True, Treat, Trial.ID, Pat.ID, Model
   
   NoTreat <- wide[wide$Treat!=1,]
   Treat <- wide[wide$Treat==1,]
-  T0S0 <- cor(NoTreat$Surr, NoTreat$True)
-  T1S1 <- cor(Treat$Surr, Treat$True)  
+  T0S0 <- cor(as.numeric(as.character(NoTreat$Surr)), as.numeric(as.character(NoTreat$True)))
+  T1S1 <- cor(as.numeric(as.character(Treat$Surr)), as.numeric(as.character(Treat$True)))  
   Z_T0S0 <- .5*log((1+T0S0)/(1-T0S0)) 
   rho_lb <- max(0, (exp(2*(Z_T0S0-(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))-1)/(exp(2*(Z_T0S0-(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))+1))
   rho_ub <- min(1, (exp(2*(Z_T0S0+(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))-1)/(exp(2*(Z_T0S0+(qnorm(1-Alpha/2)*sqrt(1/(N.total-3)))))+1))

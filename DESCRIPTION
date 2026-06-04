@@ -49,7 +49,7 @@ Imports:
     dplyr,
     tibble,
     lifecycle,
-    fastmatrix
+    fastmatrix, mratios, Matrix
 Depends: R (>= 3.5.0)
 License: GPL (>= 2)
 Repository: CRAN

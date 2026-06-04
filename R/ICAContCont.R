@@ -56,9 +56,10 @@ ICA.ContCont <- function(T0S0, T1S1, T0T0=1, T1T1=1, S0S0=1, S1S1=1,
   Results <- data.frame(Results)
   rownames(Results) <- NULL
   Total.Num.Matrices <- nrow(combins)
+  Variances <- c(T0T0, T1T1, S0S0, S1S1)
 
   fit <-
-    list(Total.Num.Matrices=Total.Num.Matrices, Pos.Def=Results[,1:6], ICA=Results$ICA, GoodSurr=Results[,7:9], Call=match.call())
+    list(Total.Num.Matrices=Total.Num.Matrices, Pos.Def=Results[,1:6], ICA=Results$ICA, GoodSurr=Results[,7:9], Variances=Variances, Call=match.call())
 
   class(fit) <- "ICA.ContCont"
   fit
@@ -67,7 +68,7 @@ ICA.ContCont <- function(T0S0, T1S1, T0T0=1, T1T1=1, S0S0=1, S1S1=1,
 
 #' @export
 plot.ICA.ContCont <- function(x, Xlab.ICA, Main.ICA, Type="Percent", Labels=FALSE, ICA=TRUE, Good.Surr=FALSE, Main.Good.Surr,
-                              Par=par(oma=c(0, 0, 0, 0), mar=c(5.1, 4.1, 4.1, 2.1)), col, ...){
+                              Par=par(oma=c(0, 0, 0, 0), mar=c(5.1, 4.1, 4.1, 2.1)), col, xlim=c(-1,1), ...){
 
 
     Object <- x
@@ -85,10 +86,10 @@ plot.ICA.ContCont <- function(x, Xlab.ICA, Main.ICA, Type="Percent", Labels=FALS
         labs <- paste(round((1-cumulMidPoint), digits=4)*100, "%", sep="")
 
         if (Labels==FALSE){
-          plot(h,freq=T, xlab=Xlab.ICA, ylab="Frequency", col=col, main=Main.ICA)
+          plot(h,freq=T, xlab=Xlab.ICA, ylab="Frequency", col=col, main=Main.ICA, xlim=xlim)
            }
         if (Labels==TRUE){
-          plot(h,freq=T, xlab=Xlab.ICA, ylab="Frequency", col=col, main=Main.ICA, labels=labs)
+          plot(h,freq=T, xlab=Xlab.ICA, ylab="Frequency", col=col, main=Main.ICA, labels=labs, xlim=xlim)
            }
         }
 
@@ -99,10 +100,10 @@ plot.ICA.ContCont <- function(x, Xlab.ICA, Main.ICA, Type="Percent", Labels=FALS
         labs <- paste(round((1-cumulMidPoint), digits=4)*100, "%", sep="")
 
         if (Labels==FALSE){
-          plot(h,freq=F, xlab=Xlab.ICA, ylab="Percentage", col=col, main=Main.ICA)
+          plot(h,freq=F, xlab=Xlab.ICA, ylab="Percentage", col=col, main=Main.ICA, xlim=xlim)
             }
         if (Labels==TRUE){
-          plot(h,freq=F, xlab=Xlab.ICA, ylab="Percentage", col=col, main=Main.ICA, labels=labs)
+          plot(h,freq=F, xlab=Xlab.ICA, ylab="Percentage", col=col, main=Main.ICA, labels=labs, xlim=xlim)
             }
         }
 
@@ -110,7 +111,7 @@ plot.ICA.ContCont <- function(x, Xlab.ICA, Main.ICA, Type="Percent", Labels=FALS
       h <- hist(Object$ICA, breaks=length(Object$ICA), ...)
       h$density <- h$counts/sum(h$counts)
       cumulative <- cumsum(h$density)
-      plot(x=h$mids, y=cumulative, xlab=Xlab.ICA, ylab="Cumulative percentage", col=0, main=Main.ICA)
+      plot(x=h$mids, y=cumulative, xlab=Xlab.ICA, ylab="Cumulative percentage", col=0, main=Main.ICA, xlim=xlim)
       lines(x=h$mids, y=cumulative)
          }
     }
@@ -127,10 +128,10 @@ plot.ICA.ContCont <- function(x, Xlab.ICA, Main.ICA, Type="Percent", Labels=FALS
       labs <- paste(round((1-cumulMidPoint), digits=4)*100, "%", sep="")
 
       if (Labels==FALSE){
-        plot(h,freq=T, xlab=expression(delta), ylab="Frequency", main=Main.Good.Surr, col=col)
+        plot(h,freq=T, xlab=expression(delta), ylab="Frequency", main=Main.Good.Surr, col=col, xlim=xlim)
       }
       if (Labels==TRUE){
-        plot(h,freq=T, xlab=expression(delta), ylab="Frequency", col=col, labels=labs, main=Main.Good.Surr)
+        plot(h,freq=T, xlab=expression(delta), ylab="Frequency", col=col, labels=labs, main=Main.Good.Surr, xlim=xlim)
       }
     }
 
@@ -141,10 +142,10 @@ plot.ICA.ContCont <- function(x, Xlab.ICA, Main.ICA, Type="Percent", Labels=FALS
       labs <- paste(round((1-cumulMidPoint), digits=4)*100, "%", sep="")
 
       if (Labels==FALSE){
-        plot(h,freq=F, xlab=expression(delta), ylab="Percentage", col=col, main=Main.Good.Surr)
+        plot(h,freq=F, xlab=expression(delta), ylab="Percentage", col=col, main=Main.Good.Surr, xlim=xlim)
       }
       if (Labels==TRUE){
-        plot(h,freq=F, xlab=expression(delta), ylab="Percentage", col=col, labels=labs, main=Main.Good.Surr)
+        plot(h,freq=F, xlab=expression(delta), ylab="Percentage", col=col, labels=labs, main=Main.Good.Surr, xlim=xlim)
       }
     }
 
@@ -152,7 +153,7 @@ plot.ICA.ContCont <- function(x, Xlab.ICA, Main.ICA, Type="Percent", Labels=FALS
       h <- hist(Object$GoodSurr$delta, breaks=length(Object$GoodSurr$delta), ...)
       h$density <- h$counts/sum(h$counts)
       cumulative <- cumsum(h$density)
-      plot(x=h$mids, y=cumulative, xlab=expression(delta), ylab="Cumulative percentage", col=0, main=Main.Good.Surr)
+      plot(x=h$mids, y=cumulative, xlab=expression(delta), ylab="Cumulative percentage", col=0, main=Main.Good.Surr, xlim=xlim)
       lines(x=h$mids, y=cumulative)
     }
 

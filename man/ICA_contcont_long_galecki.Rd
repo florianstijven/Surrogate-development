@@ -102,13 +102,13 @@ In this model \eqn{\rho_u=\rho_{\Delta}=corr(\Delta T, \Delta S)}, which is the 
 #     | T0T1    550.65  T1S0    205.17 |
 #     | 266.56  T1S0    180.68  S0S1   |
 #     | T0S1    205.17  S0S1    180.94 |
-
+\dontrun{ # time consuming code part
 ICA_contcont_long_galecki(p=4,  T0S0 = 266.56, T1S1=205.17,
                   T0T0=544.3285, T1T1=550.6597,
                   S0S0=180.6831, S1S1=180.9433,
                   T0T1=seq(-1, 1, by=.2),  T0S1=seq(-1, 1, by=.2),
                   T1S0=seq(-1, 1, by=.2) , S0S1=seq(-1, 1, by=.2))
-
+}
 
 
 }

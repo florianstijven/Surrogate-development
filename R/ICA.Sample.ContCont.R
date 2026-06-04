@@ -8,6 +8,11 @@ ICA.Sample.ContCont <- function(T0S0, T1S1, T0T0=1, T1T1=1, S0S0=1, S1S1=1,
   T0S1_val <- T0S1
   T1S0_val <- T1S0
   S0S1_val <- S0S1
+  
+  T0T0_val <- T0T0 
+  T1T1_val <- T1T1
+  S0S0_val <- S0S0
+  S1S1_val <- S1S1
 
   Results <- na.exclude(matrix(NA, 1, 9))
   colnames(Results) <- c("T0T1", "T0S0", "T0S1", "T1S0", "T1S1", "S0S1", "ICA", "Sigma.Delta.T", "delta")
@@ -19,6 +24,12 @@ ICA.Sample.ContCont <- function(T0S0, T1S1, T0T0=1, T1T1=1, S0S0=1, S1S1=1,
     T1S0 <- runif(n = 1, min = min(T1S0_val), max = max(T1S0_val))
     T1S1 <- runif(n = 1, min = min(T1S1_val), max = max(T1S1_val))
     S0S1 <- runif(n = 1, min = min(S0S1_val), max = max(S0S1_val))
+    # For variances
+    T0T0 <- runif(n = 1, min = min(T0T0_val), max = max(T0T0_val))
+    T1T1 <- runif(n = 1, min = min(T1T1_val), max = max(T1T1_val))
+    S0S0 <- runif(n = 1, min = min(S0S0_val), max = max(S0S0_val))
+    S1S1 <- runif(n = 1, min = min(S1S1_val), max = max(S1S1_val))
+    
     Sigma_c <- diag(4)
     Sigma_c[2,1] <- Sigma_c[1,2] <- T0T1 * (sqrt(T0T0)*sqrt(T1T1))
     Sigma_c[3,1] <- Sigma_c[1,3] <- T0S0 * (sqrt(T0T0)*sqrt(S0S0))
@@ -46,9 +57,16 @@ ICA.Sample.ContCont <- function(T0S0, T1S1, T0T0=1, T1T1=1, S0S0=1, S1S1=1,
   Results <- data.frame(Results, stringsAsFactors = TRUE)
   rownames(Results) <- NULL
   Total.Num.Matrices <- dim(Results)[1]
-
+  
+  # If uncertainty for variances, vector of values is used. Variances here are used for MEP, has to be one value
+  if (length(T0T0_val)==1 & length(T1T1_val)==1 & length(S0S0_val)==1 & length(S1S1_val)==1){
+  Variances <- c(T0T0, T1T1, S0S0, S1S1)} else {
+    Variances <- c(NA, NA, NA, NA)
+  }
+  
+  
   fit <-
-    list(Total.Num.Matrices=Total.Num.Matrices, Pos.Def=Results[,1:6], ICA=Results$ICA, GoodSurr=Results[,7:9], Call=match.call())
+    list(Total.Num.Matrices=Total.Num.Matrices, Pos.Def=Results[,1:6], ICA=Results$ICA, GoodSurr=Results[,7:9], Variances=Variances, Call=match.call())
 
   class(fit) <- "ICA.ContCont"
   fit
@@ -175,6 +193,9 @@ summary.ICA.ContCont <- function(object, ..., Object){
   cat("\nMode ICA: ", format(round(mode(Object$ICA)$mode_val, 4), nsmall = 4))
   cat("\n\nQuantiles of the ICA distribution: \n\n")
   quant <- quantile(Object$ICA, probs = c(.05, .10, .20, .50, .80, .90, .95))
+  print(quant)
+  cat("\n95% SDI: \n\n")
+  quant <- quantile(Object$ICA, probs = c(.025, .975))
   print(quant)
 }
 

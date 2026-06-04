@@ -1,6 +1,11 @@
 MaxEntContCont <- function(x, T0T0, T1T1, S0S0, S1S1){
 entropy <- NULL
 
+if (missing(T0T0)){T0T0 <- x$Variances[1]} # (T0T0, T1T1, S0S0, S1S1)
+if (missing(T1T1)){T1T1 <- x$Variances[2]}
+if (missing(S0S0)){S0S0 <- x$Variances[3]}
+if (missing(S1S1)){S1S1 <- x$Variances[4]}
+
 for (i in 1: dim(x$Pos.Def)[1]){
 
 T0T1 <- x$Pos.Def$T0T1[i]  

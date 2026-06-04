@@ -34,7 +34,10 @@ summary.ICA.BinBin <- function(object, ..., Object){
   cat("\n\nQuantiles of the R2_H distribution: \n\n")
   quant <- quantile(Object$R2_H, probs = c(.05, .10, .20, .50, .80, .90, .95))
   print(quant)
-
+  cat("\n95% SDI: \n\n")
+  quant <- quantile(Object$R2_H, probs = c(.025, .975))
+  print(quant)
+  
   cat("\n\n\n# R_H results summary")
   cat("\n#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n")
   cat("Mean (SD) R_H: ", format(round(mean(sqrt(Object$R2_H)), 4), nsmall = 4), " (", format(round(sd(sqrt(Object$R2_H)), 4), nsmall = 4), ")",
@@ -44,16 +47,10 @@ summary.ICA.BinBin <- function(object, ..., Object){
   cat("\n\nQuantiles of the R_H distribution: \n\n")
   quant <- quantile(sqrt(Object$R2_H), probs = c(.05, .10, .20, .50, .80, .90, .95))
   print(quant)
+  cat("\n95% SDI: \n\n")
+  quant <- quantile(sqrt(Object$R2_H), probs = c(.025, .975))
+  print(quant)
 
-
-#  cat("\n\n# C3 results summary")
-#  cat("\n#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n")
-#  cat("Mean (SD) C3: ", format(round(mean(Object$C3), 4), nsmall = 4), " (", format(round(sd(Object$C3), 4), nsmall = 4), ")",
-#      "  [min: ", format(round(min(Object$C3), 4), nsmall = 4), "; max: ",  format(round(max(Object$C3), 4), nsmall = 4), "]", sep="")
-#  cat("\nMode C3: ", format(round(mode(Object$C3)$mode_val, 4), nsmall = 4))
-#  cat("\n\nQuantiles of the C3 distribution: \n\n")
-#  quant <- quantile(Object$C3, probs = c(.05, .10, .20, .50, .80, .90, .95))
-#  print(quant)
 
   cat("\n\n# Theta_T results summary")
   cat("\n#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n")
@@ -64,6 +61,9 @@ summary.ICA.BinBin <- function(object, ..., Object){
   cat("\n\nQuantiles of the Theta_T distribution: \n\n")
   quant <- quantile(Object$Theta_T, probs = c(.05, .10, .20, .50, .80, .90, .95))
   print(quant)
+  cat("\n95% SDI: \n\n")
+  quant <- quantile(Object$Theta_T, probs = c(.025, .975))
+  print(quant)
 
   cat("\n\n# Theta_S results summary")
   cat("\n#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n")
@@ -73,6 +73,9 @@ summary.ICA.BinBin <- function(object, ..., Object){
     cat("\nMode Theta_S: ", format(round(mode(Object$Theta_S)$mode_val, 4), nsmall = 4))}
   cat("\n\nQuantiles of the Theta_S distribution: \n\n")
   quant <- quantile(Object$Theta_S, probs = c(.05, .10, .20, .50, .80, .90, .95))
+  print(quant)
+  cat("\n95% SDI: \n\n")
+  quant <- quantile(Object$Theta_S, probs = c(.025, .975))
   print(quant)
   }
 
@@ -103,7 +106,7 @@ if (Object$Monotonicity=="General"){
     quantile(x = x, probs = .5, na.rm = T)}
   cat("\nMedian:\n")
   print(tapply(results[,2], list(results[,1]), pc50))
-
+  
   mode <- function(data) {
     x <- data
     z <- density(x)
@@ -120,6 +123,18 @@ if (Object$Monotonicity=="General"){
   print(tapply(results[,2], list(results[,1]), min))
   cat("\nMax:\n")
   print(tapply(results[,2], list(results[,1]), max))
+  
+  pc.025 <- function(x=x){
+    quantile(x = x, probs = .025, na.rm = T)}
+  cat("\n2.5% SDI:\n")
+  print(tapply(results[,2], list(results[,1]), pc.025))
+  
+  pc.975 <- function(x=x){
+    quantile(x = x, probs = .975, na.rm = T)}
+  cat("\n97.5% SDI:\n")
+  print(tapply(results[,2], list(results[,1]), pc.975))
+  
+  
 
 
   results <- cbind.data.frame(Object$Pi.Vectors$Monotonicity, Object$Theta_T)
@@ -139,7 +154,12 @@ if (Object$Monotonicity=="General"){
   cat("\nMax:\n")
   print(tapply(results[,2], list(results[,1]), max))
 
-
+  cat("\n2.5% SDI:\n")
+  print(tapply(results[,2], list(results[,1]), pc.025))
+  
+  cat("\n97.5% SDI:\n")
+  print(tapply(results[,2], list(results[,1]), pc.975))
+  
   results <- cbind.data.frame(Object$Pi.Vectors$Monotonicity, Object$Theta_S)
 
   cat("\n\n# Theta_S results summary")
@@ -157,6 +177,12 @@ if (Object$Monotonicity=="General"){
   cat("\nMax:\n")
   print(tapply(results[,2], list(results[,1]), max))
 
+  cat("\n2.5% SDI:\n")
+  print(tapply(results[,2], list(results[,1]), pc.025))
+  
+  cat("\n97.5% SDI:\n")
+  print(tapply(results[,2], list(results[,1]), pc.975))
+  
 
 }
 }

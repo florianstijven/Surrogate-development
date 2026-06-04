@@ -44,55 +44,55 @@ summary.SPF.BinBin <- function(object, ..., Object){
   try(cat("\nr_min1_min1 \t   ", "Mean: ", mean(Object$r_min1_min1), ";  Median: ", median(Object$r_min1_min1),
           ";  Mode: ", mode(Object$r_min1_min1)$mode_val,
           ";  SD: ", sd(Object$r_min1_min1), "\n                       Min: ", min(Object$r_min1_min1), "; Max: ", max(Object$r_min1_min1),
-          "; 95% CI = [", quantile(Object$r_min1_min1, probs = c(.025)), "; ",  quantile(Object$r_min1_min1, probs = c(.975)), "]\n",
+          "; 95% SDI = [", quantile(Object$r_min1_min1, probs = c(.025)), "; ",  quantile(Object$r_min1_min1, probs = c(.975)), "]\n",
           sep=""), silent=TRUE)
 
   try(cat("\nr_0_min1    \t   ", "Mean: ", mean(Object$r_0_min1), ";  Median: ", median(Object$r_0_min1),
           ";  Mode: ", mode(Object$r_0_min1)$mode_val,
           ";  SD: ", sd(Object$r_0_min1), "\n                       Min: ", min(Object$r_0_min1), "; Max: ", max(Object$r_0_min1),
-          "; 95% CI = [", quantile(Object$r_0_min1, probs = c(.025)), "; ",  quantile(Object$r_0_min1, probs = c(.975)), "]\n",
+          "; 95% SDI = [", quantile(Object$r_0_min1, probs = c(.025)), "; ",  quantile(Object$r_0_min1, probs = c(.975)), "]\n",
           sep=""), silent=TRUE)
 
   try(cat("\nr_1_min1    \t   ", "Mean: ", mean(Object$r_1_min1), ";  Median: ", median(Object$r_1_min1),
           ";  Mode: ", mode(Object$r_1_min1)$mode_val,
           ";  SD: ", sd(Object$r_1_min1), "\n                       Min: ", min(Object$r_1_min1), "; Max: ", max(Object$r_1_min1),
-          "; 95% CI = [", quantile(Object$r_1_min1, probs = c(.025)), "; ",  quantile(Object$r_1_min1, probs = c(.975)), "]\n",
+          "; 95% SDI = [", quantile(Object$r_1_min1, probs = c(.025)), "; ",  quantile(Object$r_1_min1, probs = c(.975)), "]\n",
           sep=""), silent=TRUE)
 
   try(cat("\nr_min1_0    \t   ", "Mean: ", mean(Object$r_min1_0), ";  Median: ", median(Object$r_min1_0),
           ";  Mode: ", mode(Object$r_min1_0)$mode_val,
           ";  SD: ", sd(Object$r_min1_0), "\n                       Min: ", min(Object$r_min1_0), "; Max: ", max(Object$r_min1_0),
-          "; 95% CI = [", quantile(Object$r_min1_0, probs = c(.025)), "; ",  quantile(Object$r_min1_0, probs = c(.975)), "]\n",
+          "; 95% SDI = [", quantile(Object$r_min1_0, probs = c(.025)), "; ",  quantile(Object$r_min1_0, probs = c(.975)), "]\n",
           sep=""), silent=TRUE)
 
   try(cat("\nr_0_0       \t   ", "Mean: ", mean(Object$r_0_0), ";  Median: ", median(Object$r_0_0),
           ";  Mode: ", mode(Object$r_0_0)$mode_val,
           ";  SD: ", sd(Object$r_0_0), "\n                       Min: ", min(Object$r_0_0), "; Max: ", max(Object$r_0_0),
-          "; 95% CI = [", quantile(Object$r_0_0, probs = c(.025)), "; ",  quantile(Object$r_0_0, probs = c(.975)), "]\n",
+          "; 95% SDI = [", quantile(Object$r_0_0, probs = c(.025)), "; ",  quantile(Object$r_0_0, probs = c(.975)), "]\n",
           sep=""), silent=TRUE)
 
   try(cat("\nr_1_0       \t   ", "Mean: ", mean(Object$r_1_0), ";  Median: ", median(Object$r_1_0),
           ";  Mode: ", mode(Object$r_1_0)$mode_val,
           ";  SD: ", sd(Object$r_1_0), "\n                       Min: ", min(Object$r_1_0), "; Max: ", max(Object$r_1_0),
-          "; 95% CI = [", quantile(Object$r_1_0, probs = c(.025)), "; ",  quantile(Object$r_1_0, probs = c(.975)), "]\n",
+          "; 95% SDI = [", quantile(Object$r_1_0, probs = c(.025)), "; ",  quantile(Object$r_1_0, probs = c(.975)), "]\n",
           sep=""), silent=TRUE)
 
   try(cat("\nr_min1_1    \t   ", "Mean: ", mean(Object$r_min1_1), ";  Median: ", median(Object$r_min1_1),
           ";  Mode: ", mode(Object$r_min1_1)$mode_val,
           ";  SD: ", sd(Object$r_min1_1), "\n                       Min: ", min(Object$r_min1_1), "; Max: ", max(Object$r_min1_1),
-          "; 95% CI = [", quantile(Object$r_min1_1, probs = c(.025)), "; ",  quantile(Object$r_min1_1, probs = c(.975)), "]\n",
+          "; 95% SDI = [", quantile(Object$r_min1_1, probs = c(.025)), "; ",  quantile(Object$r_min1_1, probs = c(.975)), "]\n",
           sep=""), silent=TRUE)
 
   try(cat("\nr_0_1       \t   ", "Mean: ", mean(Object$r_0_1), ";  Median: ", median(Object$r_0_1),
           ";  Mode: ", mode(Object$r_0_1)$mode_val,
           ";  SD: ", sd(Object$r_0_1), "\n                       Min: ", min(Object$r_0_1), "; Max: ", max(Object$r_0_1),
-          "; 95% CI = [", quantile(Object$r_0_1, probs = c(.025)), "; ",  quantile(Object$r_0_1, probs = c(.975)), "]\n",
+          "; 95% SDI = [", quantile(Object$r_0_1, probs = c(.025)), "; ",  quantile(Object$r_0_1, probs = c(.975)), "]\n",
           sep=""), silent=TRUE)
 
   try(cat("\nr_1_1       \t   ", "Mean: ", mean(Object$r_1_1), ";  Median: ", median(Object$r_1_1), ";  Mode: ", mode(Object$r_1_1)$mode_val,
           ";  SD: ", sd(Object$r_1_1),
           "\n                       Min: ", min(Object$r_1_1), "; Max: ", max(Object$r_1_1),
-          "; 95% CI = [", quantile(Object$r_1_1, probs = c(.025)), "; ",  quantile(Object$r_1_1, probs = c(.975)), "] \n",
+          "; 95% SDI = [", quantile(Object$r_1_1, probs = c(.025)), "; ",  quantile(Object$r_1_1, probs = c(.975)), "] \n",
           sep=""), silent=TRUE)
 
 }

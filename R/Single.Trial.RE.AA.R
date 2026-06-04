@@ -22,7 +22,7 @@ deltamethod = function (g, mean, cov, ses = TRUE)
   else new.covar
 }
 
-Single.Trial.RE.AA <- function(Dataset, Surr, True, Treat, Pat.ID, Alpha=.05, Number.Bootstraps=500, Seed=sample(1:1000, size=1)){
+Single.Trial.RE.AA <- function(Dataset, Surr, True, Treat, Pat.ID, Alpha=.05, Number.Bootstraps=500, Seed=sample(1:1000, size=1), Exclude.Outliers.Bootstrap=TRUE){
 
   Surr <- Dataset[,paste(substitute(Surr))]
   True <- Dataset[,paste(substitute(True))]
@@ -37,7 +37,7 @@ Single.Trial.RE.AA <- function(Dataset, Surr, True, Treat, Pat.ID, Alpha=.05, Nu
   Data.analyze <- Data.Proc$Data.analyze
   N.total <- Data.Proc$N.total
 
-  model12 <- lm(cbind(wide$Surr, wide$True)~ wide$Treat, data=wide)
+  model12 <- lm(cbind(wide$Surr, wide$True) ~ wide$Treat, data=wide)
   Residuals <- data.frame(model12$residuals, stringsAsFactors = TRUE)
   colnames(Residuals) <- c("Surr", "True")
   alpha <- model12$coefficients[2,1]
@@ -120,6 +120,7 @@ Single.Trial.RE.AA <- function(Dataset, Surr, True, Treat, Pat.ID, Alpha=.05, Nu
     RE_boot[i] <- beta_boot[i] / alpha_boot[i]
   }
 
+  if (Exclude.Outliers.Bootstrap == FALSE){
   res_RE <- MASS::studres(lm(RE_boot ~ 1))
   if ((max(abs(res_RE)) > qt(c(1-(Alpha/(2*Number.Bootstraps))), df=(Number.Bootstraps-1-1), lower.tail=TRUE))==TRUE){
   cat("\nWarning: There were outliers in the bootstrapped RE sample.")
@@ -128,13 +129,21 @@ Single.Trial.RE.AA <- function(Dataset, Surr, True, Treat, Pat.ID, Alpha=.05, Nu
   cat("\nare outliers (using abs(", qt(c(1-(Alpha/(2*Number.Bootstraps))), df=(Number.Bootstraps-1-1), lower.tail=TRUE), ") as the critical value):\n", sep="")
   print(res_RE[abs(res_RE) > qt(c(1-(Alpha/(2*Number.Bootstraps))), df=(Number.Bootstraps-1-1), lower.tail=TRUE)])
   }
+  }
 
-  RE_CIs <- quantile(RE_boot, probs=c(Alpha/2, 1-Alpha/2))
+  if (Exclude.Outliers.Bootstrap == TRUE){
+    res_RE <- MASS::studres(lm(RE_boot ~ 1))
+    # Exclude bootstrapped vals above threshold
+    RE_boot <- RE_boot[abs(res_RE) < qt(c(1-(Alpha/(2*Number.Bootstraps))), df=(Number.Bootstraps-1-1), lower.tail=TRUE)]
+  }
+  
+  
+  RE_CIs <- quantile(RE_boot, probs=c(Alpha/2, 1-Alpha/2), na.rm = TRUE)
   RE_results_Boot <- data.frame(cbind(RE, sd(RE_boot), RE_CIs[1], RE_CIs[2]), stringsAsFactors = TRUE)
   colnames(RE_results_Boot) <- c("RE", "Standard Error", "CI lower limit", "CI upper limit")
   rownames(RE_results_Boot) <- c(" ")
 
-  rho_CIs <- quantile(rho_z_boot, probs=c(Alpha/2, 1-Alpha/2))
+  rho_CIs <- quantile(rho_z_boot, probs=c(Alpha/2, 1-Alpha/2), na.rm = TRUE)
   rho_results_Boot <- data.frame(cbind(rho_z, sd(rho_z_boot), rho_CIs[1], rho_CIs[2]), stringsAsFactors = TRUE)
   colnames(rho_results_Boot) <- c("AA (gamma)", "Standard Error", "CI lower limit", "CI upper limit")
   rownames(rho_results_Boot) <- c(" ")

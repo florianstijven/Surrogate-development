@@ -80,10 +80,13 @@ Restrictions.BinBin <- function(pi1_1_, pi1_0_, pi_1_1, pi_1_0, pi0_1_, pi_0_1) 
   min_pi_0111 <- min(pi0_1_, pi_1_1)
   min_pi_1100 <- min(pi1_0_, pi_1_0)
   
+  # also: pi_0111 should be <= pi_1_1 - pi1_1_
+  min_pi_0111_2 <- pi_1_1 - pi1_1_
+  
   cat("\n\n\nAssuming monotonicity for S and T, the following restrictions on the freely varying parameters")
   cat("\nare imposed by the data:")
   cat("\n#---------------------------------------------------------------------------------------------")
-  min_pi_0111 <- min(pi0_1_, pi_1_1)
+  min_pi_0111 <- min(min(pi0_1_, pi_1_1), min_pi_0111_2)
   min_pi_1100 <- min(pi1_0_, pi_1_0)
 
   cat("\npi_0111 <=", min_pi_0111)
