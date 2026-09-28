@@ -3,12 +3,13 @@
 \alias{plot.Single.Trial.RE.AA}
 \title{Conducts a surrogacy analysis based on the single-trial meta-analytic framework}
 \description{
-The function \code{Single.Trial.RE.AA} conducts a surrogacy analysis based on the single-trial meta-analytic framework of Buyse & Molenberghs (1998). See \bold{Details} below. 
+The function \code{Single.Trial.RE.AA} conducts a surrogacy analysis based on the single-trial meta-analytic framework of Buyse & Molenberghs (1998). See \bold{Details} below.
 }
 
 \usage{
-Single.Trial.RE.AA(Dataset, Surr, True, Treat, Pat.ID, Alpha=.05, 
-Number.Bootstraps=500, Seed=sample(1:1000, size=1))
+Single.Trial.RE.AA(Dataset, Surr, True, Treat, Pat.ID, Alpha=.05,
+Number.Bootstraps=500, Seed=sample(1:1000, size=1),
+Exclude.Outliers.Bootstrap=TRUE)
 }
 \arguments{
   \item{Dataset}{A \code{data.frame} that should consist of one line per patient. Each line contains (at least) a surrogate value, a true endpoint value, a treatment indicator, and a patient ID.}
@@ -16,15 +17,16 @@ Number.Bootstraps=500, Seed=sample(1:1000, size=1))
   \item{True}{The name of the variable in \code{Dataset} that contains the true endpoint values.}
   \item{Treat}{The name of the variable in \code{Dataset} that contains the treatment indicators. The treatment indicator should either be coded as \eqn{1} for the experimental group and \eqn{-1} for the control group, or as \eqn{1} for the experimental group and \eqn{0} for the control group. The \eqn{-1/1} coding is recommended. }
   \item{Pat.ID}{The name of the variable in \code{Dataset} that contains the patient's ID.}
-  \item{Alpha}{The \eqn{\alpha}-level that is used to determine the confidence intervals around Alpha (which is a parameter estimate of a model where the surrogate is regressed on the treatment indicator, see \bold{Details} below), Beta, RE, and \eqn{\gamma}. Default \eqn{0.05}.}  
+  \item{Alpha}{The \eqn{\alpha}-level that is used to determine the confidence intervals around Alpha (which is a parameter estimate of a model where the surrogate is regressed on the treatment indicator, see \bold{Details} below), Beta, RE, and \eqn{\gamma}. Default \eqn{0.05}.}
 \item{Number.Bootstraps}{The number of bootstrap samples that are used to obtain the bootstrapp-based confidence intervals for RE and the adjusted association (\eqn{\gamma}). Default \eqn{500}.}
   \item{Seed}{The seed that is used to generate the bootstrap samples. Default \code{sample(x=1:1000, size=1)}, i.e., a random number between 1 and 1000.}
+    \item{Exclude.Outliers.Bootstrap}{Logical. If \code{TRUE}, outlying bootstrap RE values are excluded before computing the bootstrap-based standard error and confidence interval. If \code{FALSE}, outliers are reported but not excluded. Default \code{TRUE}.}
 }
 \details{
 
 The Relative Effect (RE) and the adjusted association (\eqn{\gamma}) are based on the following bivariate regression model (when the surrogate and the true endpoints are continuous variables):
-\deqn{S_{j}=\mu_{S}+\alpha Z_{j}+\varepsilon_{Sj},} 
-\deqn{T_{j}=\mu_{T}+\beta Z_{j}+\varepsilon_{Tj},} 
+\deqn{S_{j}=\mu_{S}+\alpha Z_{j}+\varepsilon_{Sj},}
+\deqn{T_{j}=\mu_{T}+\beta Z_{j}+\varepsilon_{Tj},}
 
 where the error terms have a joint zero-mean normal distribution with variance-covariance matrix:
 
@@ -33,7 +35,7 @@ where the error terms have a joint zero-mean normal distribution with variance-c
 \sigma_{ST} & \sigma_{TT}
 \end{array}\right),}
 
-and where \eqn{j} is the subject indicator, \eqn{S_{j}} and \eqn{T_{j}} are the surrogate and true endpoint values of patient \eqn{j}, and \eqn{Z_{j}} is the treatment indicator for patient \eqn{j}. 
+and where \eqn{j} is the subject indicator, \eqn{S_{j}} and \eqn{T_{j}} are the surrogate and true endpoint values of patient \eqn{j}, and \eqn{Z_{j}} is the treatment indicator for patient \eqn{j}.
 
 The parameter estimates of the fitted regression model and the variance-covariance matrix of the residuals are used to compute RE and the adjusted association (\eqn{\gamma}), respectively:
 
@@ -43,7 +45,7 @@ The parameter estimates of the fitted regression model and the variance-covarian
 
 \bold{Note}
 
-The single-trial meta-analytic framework is hampered by a number of issues (Burzykowski et al., 2005). For example, a key motivation to validate a surrogate endpoint is to be able to predict the effect of Z on T as based on the effect of Z on S in a new clinical trial where T is not (yet) observed. The RE allows for such a prediction, but this requires the assumption that the relation between \eqn{\alpha} and \eqn{\beta} can be described by a linear regression model that goes through the origin. In other words, it has to be assumed that the RE remains constant across clinical trials. The constant RE assumption is unverifiable in a single-trial setting, but a way out of this problem is to combine the information of multiple clinical trials and generalize the RE concept to a multiple-trial setting (as is done in the multiple-trial meta-analytic approach, see \code{\link{UnifixedContCont}}, \code{\link{BifixedContCont}}, \code{\link{UnimixedContCont}}, and \code{\link{BimixedContCont}}).  
+The single-trial meta-analytic framework is hampered by a number of issues (Burzykowski et al., 2005). For example, a key motivation to validate a surrogate endpoint is to be able to predict the effect of Z on T as based on the effect of Z on S in a new clinical trial where T is not (yet) observed. The RE allows for such a prediction, but this requires the assumption that the relation between \eqn{\alpha} and \eqn{\beta} can be described by a linear regression model that goes through the origin. In other words, it has to be assumed that the RE remains constant across clinical trials. The constant RE assumption is unverifiable in a single-trial setting, but a way out of this problem is to combine the information of multiple clinical trials and generalize the RE concept to a multiple-trial setting (as is done in the multiple-trial meta-analytic approach, see \code{\link{UnifixedContCont}}, \code{\link{BifixedContCont}}, \code{\link{UnimixedContCont}}, and \code{\link{BimixedContCont}}).
 }
 
 \value{An object of class \code{Single.Trial.RE.AA} with components,
@@ -75,7 +77,7 @@ Kutner, M. H., Nachtsheim, C. J., Neter, J., & Li, W. (2005). \emph{Applied line
 Wim Van der Elst, Ariel Alonso, & Geert Molenberghs
 }
 \seealso{
-\code{\link{UnifixedContCont}}, \code{\link{BifixedContCont}}, \code{\link{UnimixedContCont}}, \code{\link{BimixedContCont}}, \code{\link{ICA.ContCont}} 
+\code{\link{UnifixedContCont}}, \code{\link{BifixedContCont}}, \code{\link{UnimixedContCont}}, \code{\link{BimixedContCont}}, \code{\link{ICA.ContCont}}
 }
 \examples{
 \dontrun{ # time consuming code part
@@ -91,13 +93,13 @@ plot(Sur)
 
 
 # Example 2
-# Conduct an analysis based on a simulated dataset with 2000 patients 
+# Conduct an analysis based on a simulated dataset with 2000 patients
 # and Rindiv=.8
 # Simulate the data:
 Sim.Data.STS(N.Total=2000, R.Indiv.Target=.8, Seed=123)
 
 # Assess surrogacy:
-Sur2 <- Single.Trial.RE.AA(Dataset=Data.Observed.STS, Surr=Surr, True=True, Treat=Treat, 
+Sur2 <- Single.Trial.RE.AA(Dataset=Data.Observed.STS, Surr=Surr, True=True, Treat=Treat,
 Pat.ID=Pat.ID)
 
 # Show a summary and plots of results
