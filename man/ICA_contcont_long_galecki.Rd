@@ -6,50 +6,33 @@
 for a continuous surrogate and true endpoint measured repeatedly over time in a single-trial setting}
 \usage{
 ICA_contcont_long_galecki(
-  p = numeric(),
-  T0S0,
-  T1S1,
-  T0T0,
-  T1T1,
-  S0S0,
-  S1S1,
-  T0T1 = seq(-1, 1, by = 0.1),
-  T0S1 = seq(-1, 1, by = 0.1),
-  T1S0 = seq(-1, 1, by = 0.1),
-  S0S1 = seq(-1, 1, by = 0.1)
+  V0,
+  V1,
+  p,
+  grid_V = seq(-1, 1, by = 0.1),
+  return_candidates = FALSE,
+  tol = 1e-12
 )
 }
 \arguments{
-\item{p}{(numeric) number of time points}
+\item{V0, V1}{Treatment-specific residual 2 x 2 covariance matrices for T,S.}
 
-\item{T0S0}{A scalar that specifies the variance of the between the surrogate and the true endpoint in the control treatment condition}
+\item{p}{(numeric) number of time points.}
 
-\item{T1S1}{A scalar that specifies the variance of the between the surrogate and the true endpoint in the experimental treatment condition}
+\item{grid_V}{Sensitivity grid for unidentified residual correlations.}
 
-\item{T0T0}{A scalar that specifies the variance of the true endpoint in the control treatment condition}
+\item{return_candidates}{Logical. If \code{TRUE}, the retained admissible residual covariance
+completion candidates are returned.}
 
-\item{T1T1}{A scalar that specifies the variance of the true endpoint in the experimental treatment condition}
-
-\item{S0S0}{A scalar that specifies the variance of the surrogate endpoint in the control treatment condition}
-
-\item{S1S1}{A scalar that specifies the variance of the surroagte endpoint in the experimental treatment condition}
-
-\item{T0T1}{A scalar or vector that contains the correlation(s) between the counterfactuals T0 and T1}
-
-\item{T0S1}{A scalar or vector that contains the correlation(s) between the counterfactuals T0 and S1}
-
-\item{T1S0}{A scalar or vector that contains the correlation(s) between the counterfactuals T1 and S0}
-
-\item{S0S1}{A scalar or vector that contains the correlation(s) between the counterfactuals S0 and S1}
+\item{tol}{Numerical tolerance used when checking positive definiteness and validating ICA values.}
 }
 \value{
 \itemize{
 \item Total.Num.Matrices: An object of class numeric that contains the total number of matrices that can be formed as based on the user-specified correlations in the function call.
-\item Pos.Def: A data.frame that contains the positive definite matrices that can be formed based on the user-specified correlations. These matrices are used to compute the vector of the \eqn{\rho_{\Delta}} values.
-\item rho_u: A scalar or vector that contains the individual causal association \eqn{\rho_u}
-\item rho_u2: A scalar or vector that contains the individual causal association \eqn{\rho_u^2}
-\item R2_Lambda: A scalar or vector that contains the individual causal association \eqn{R_{\Lambda}^2}
-\item Sigmas: A data.frame that contains the \eqn{\sigma_{\Delta T}} and \eqn{\sigma_{\Delta S}}
+\item Num.Pos.Def.V: An object of class numeric that contains the number of
+positive definite \code{V} matrices.
+\item R2_Lambda: A scalar or vector that contains the individual causal association \eqn{R_{\Lambda}^2}.
+\item V_candidates: retained residual covariance candidates, if requested.
 }
 }
 \description{
@@ -63,20 +46,20 @@ The evolution of \eqn{y_j} over time is defined using a marginal model without s
 \deqn{S_{0j} = x_{S0j} \gamma_{S0} + \varepsilon_{S0j}}
 \deqn{S_{1j} = x_{S1j} \gamma_{S1} + \varepsilon_{S1j}}
 
-It can be written as \eqn{y=x \gamma + \varepsilon}. It is assummed that \eqn{\varepsilon \sim N(0, \Sigma)},
+It can be written as \eqn{y=x \gamma + \varepsilon}. It is assumed that \eqn{\varepsilon \sim N(0, \Sigma)},
 or, equivalently, \eqn{y \sim N(x \gamma, \Sigma_y)}. Essentially,
 Galecki (1994) assumed that the covariance matrix is
 separable, i.e. it can be written as \eqn{\Sigma_y = \Sigma = R \otimes V} , where \eqn{V} is assumed to be unstructured and
 invariant across time, and \eqn{R} reflects a general correlation matrix.
 
-Under Galecki’s model,
+Under Galecki's model,
 the vector of individual causal treatment effects \eqn{\Delta} is:
 \deqn{ \Delta = \mu_{\Delta}+ \varepsilon_{\Delta} }
 and the marginal covariance matrix of the individual causal treatment effects is
 \eqn{\Sigma_{\Delta} = \Sigma_u \otimes R}.
 
-Under Galecki’s model, the ICA is given by:
-\deqn{ ICA_{\Lambda}^2 = 1 - (1-\rho_{u}^2)^p }
+Under Galecki's model, the ICA is given by:
+\deqn{ R_{\Lambda}^2 = 1 - (1-\rho_{u}^2)^p }
 
 In this model \eqn{\rho_u=\rho_{\Delta}=corr(\Delta T, \Delta S)}, which is the metric used in the cross-sectional setting.
 
@@ -97,18 +80,24 @@ In this model \eqn{\rho_u=\rho_{\Delta}=corr(\Delta T, \Delta S)}, which is the 
 }
 
 \examples{
-# Example output for Galecki's model (symbolic 4x4 V matrix)
-# V = | 544.32  T0T1    266.56  T0S1   |
-#     | T0T1    550.65  T1S0    205.17 |
-#     | 266.56  T1S0    180.68  S0S1   |
-#     | T0S1    205.17  S0S1    180.94 |
-\dontrun{ # time consuming code part
-ICA_contcont_long_galecki(p=4,  T0S0 = 266.56, T1S1=205.17,
-                  T0T0=544.3285, T1T1=550.6597,
-                  S0S0=180.6831, S1S1=180.9433,
-                  T0T1=seq(-1, 1, by=.2),  T0S1=seq(-1, 1, by=.2),
-                  T1S0=seq(-1, 1, by=.2) , S0S1=seq(-1, 1, by=.2))
-}
+V0 <- matrix(c(0.04513345, 0.04375355,
+               0.04375355, 0.04866820),
+              nrow = 2, byrow = TRUE,
+              dimnames = list(c("T", "S"), c("T", "S")))
+
+
+V1 <- matrix(c(0.05231045, 0.05177398,
+               0.05177398, 0.05702684),
+               nrow = 2, byrow = TRUE,
+               dimnames = list(c("T", "S"), c("T", "S")))
+
+ica_galecki<- ICA_contcont_long_galecki(V0 = V0,  V1 = V1,  p=5,
+                          grid_V = seq(-1, 1, by = 0.5),
+                          return_candidates = FALSE,
+                          tol = 1e-12)
+
+summary_longitudinal_ica(ica_galecki)
+
 
 
 }

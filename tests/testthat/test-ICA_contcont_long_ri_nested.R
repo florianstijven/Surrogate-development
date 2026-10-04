@@ -1,6 +1,6 @@
 library(testthat)
 
-test_that("ICA_contcont_long_ri() works with exponential correlation", {
+test_that("ICA_contcont_long_ri_nested() works with exponential correlation", {
   V0 <- matrix(c(0.02579325, 0.02514841,
                  0.02514841, 0.02872256),
                nrow = 2, byrow = TRUE,
@@ -21,12 +21,19 @@ test_that("ICA_contcont_long_ri() works with exponential correlation", {
                nrow = 2, byrow = TRUE,
                dimnames = list(c("T", "S"), c("T", "S")))
 
-  result <- ICA_contcont_long_ri(
+  times_S <- list(
+    week1 = c(1),
+    week1_2 = c(1, 2),
+    week1_2_4 = c(1, 2, 4)
+  )
+
+  result <- ICA_contcont_long_ri_nested(
     V0 = V0,
     V1 = V1,
     D0 = D0,
     D1 = D1,
-    times = c(1, 2, 4, 6, 8),
+    times_T = c(1, 2, 4, 6, 8),
+    times_S = times_S,
     correlation = "exponential",
     temporal_rho = 0.7117544,
     grid_V = seq(-1, 1, by = 0.5),
@@ -35,22 +42,30 @@ test_that("ICA_contcont_long_ri() works with exponential correlation", {
     tol = 1e-12
   )
 
-  expect_s3_class(result, "ICA_contcont_long_ri")
+  expect_s3_class(result, "ICA_contcont_long_ri_nested")
   expect_equal(result$correlation, "exponential")
   expect_equal(result$temporal_rho, 0.7117544)
+
+  expect_true(is.matrix(result$R2_Lambda))
+  expect_equal(dim(result$R2_Lambda), c(9, 3))
+  expect_equal(colnames(result$R2_Lambda), names(times_S))
+
   expect_equal(result$Num.Pos.Def.V, 3)
   expect_equal(result$Num.Pos.Def.D, 3)
   expect_equal(result$Num.Pos.Def.Pairs, 9)
-  expect_equal(length(result$R2_Lambda), 9)
+
   expect_true(all(result$R2_Lambda >= 0))
   expect_true(all(result$R2_Lambda <= 1))
 
-  result_summary <- summary_longitudinal_ica(result)
+  result_summary <- summary_longitudinal_ica(
+    list(R2_Lambda = result$R2_Lambda[, "week1_2_4"])
+  )
+
   expect_s3_class(result_summary, "data.frame")
   expect_equal(nrow(result_summary), 1)
 })
 
-test_that("ICA_contcont_long_ri() works with compound symmetry correlation", {
+test_that("ICA_contcont_long_ri_nested() works with compound symmetry correlation", {
   V0 <- matrix(c(0.02579325, 0.02514841,
                  0.02514841, 0.02872256),
                nrow = 2, byrow = TRUE,
@@ -71,27 +86,38 @@ test_that("ICA_contcont_long_ri() works with compound symmetry correlation", {
                nrow = 2, byrow = TRUE,
                dimnames = list(c("T", "S"), c("T", "S")))
 
-  result <- ICA_contcont_long_ri(
+  times_S <- list(
+    week1 = c(1),
+    week1_2 = c(1, 2),
+    week1_2_4 = c(1, 2, 4)
+  )
+
+  result <- ICA_contcont_long_ri_nested(
     V0 = V0,
     V1 = V1,
     D0 = D0,
     D1 = D1,
-    times = c(1, 2, 4, 6, 8),
+    times_T = c(1, 2, 4, 6, 8),
+    times_S = times_S,
     correlation = "compound_symmetry",
     temporal_rho = 0.2,
     grid_V = seq(-1, 1, by = 0.5),
     grid_D = seq(-1, 1, by = 0.5)
   )
 
-  expect_s3_class(result, "ICA_contcont_long_ri")
+  expect_s3_class(result, "ICA_contcont_long_ri_nested")
   expect_equal(result$correlation, "compound_symmetry")
   expect_equal(result$temporal_rho, 0.2)
-  expect_equal(length(result$R2_Lambda), result$Num.Pos.Def.Pairs)
+
+  expect_true(is.matrix(result$R2_Lambda))
+  expect_equal(dim(result$R2_Lambda), c(result$Num.Pos.Def.Pairs, length(times_S)))
+  expect_equal(colnames(result$R2_Lambda), names(times_S))
+
   expect_true(all(result$R2_Lambda >= 0))
   expect_true(all(result$R2_Lambda <= 1))
 })
 
-test_that("ICA_contcont_long_ri() works with independence correlation", {
+test_that("ICA_contcont_long_ri_nested() works with independence correlation", {
   V0 <- matrix(c(0.02579325, 0.02514841,
                  0.02514841, 0.02872256),
                nrow = 2, byrow = TRUE,
@@ -112,26 +138,37 @@ test_that("ICA_contcont_long_ri() works with independence correlation", {
                nrow = 2, byrow = TRUE,
                dimnames = list(c("T", "S"), c("T", "S")))
 
-  result <- ICA_contcont_long_ri(
+  times_S <- list(
+    week1 = c(1),
+    week1_2 = c(1, 2),
+    week1_2_4 = c(1, 2, 4)
+  )
+
+  result <- ICA_contcont_long_ri_nested(
     V0 = V0,
     V1 = V1,
     D0 = D0,
     D1 = D1,
-    times = c(1, 2, 4, 6, 8),
+    times_T = c(1, 2, 4, 6, 8),
+    times_S = times_S,
     correlation = "independence",
     grid_V = seq(-1, 1, by = 0.5),
     grid_D = seq(-1, 1, by = 0.5)
   )
 
-  expect_s3_class(result, "ICA_contcont_long_ri")
+  expect_s3_class(result, "ICA_contcont_long_ri_nested")
   expect_equal(result$correlation, "independence")
   expect_true(is.na(result$temporal_rho))
-  expect_equal(length(result$R2_Lambda), result$Num.Pos.Def.Pairs)
+
+  expect_true(is.matrix(result$R2_Lambda))
+  expect_equal(dim(result$R2_Lambda), c(result$Num.Pos.Def.Pairs, length(times_S)))
+  expect_equal(colnames(result$R2_Lambda), names(times_S))
+
   expect_true(all(result$R2_Lambda >= 0))
   expect_true(all(result$R2_Lambda <= 1))
 })
 
-test_that("ICA_contcont_long_ri() returns candidate grids when requested", {
+test_that("ICA_contcont_long_ri_nested() returns candidate grids when requested", {
   V0 <- matrix(c(0.02579325, 0.02514841,
                  0.02514841, 0.02872256),
                nrow = 2, byrow = TRUE,
@@ -152,12 +189,19 @@ test_that("ICA_contcont_long_ri() returns candidate grids when requested", {
                nrow = 2, byrow = TRUE,
                dimnames = list(c("T", "S"), c("T", "S")))
 
-  result <- ICA_contcont_long_ri(
+  times_S <- list(
+    week1 = c(1),
+    week1_2 = c(1, 2),
+    week1_2_4 = c(1, 2, 4)
+  )
+
+  result <- ICA_contcont_long_ri_nested(
     V0 = V0,
     V1 = V1,
     D0 = D0,
     D1 = D1,
-    times = c(1, 2, 4, 6, 8),
+    times_T = c(1, 2, 4, 6, 8),
+    times_S = times_S,
     correlation = "exponential",
     temporal_rho = 0.7117544,
     grid_V = seq(-1, 1, by = 0.5),
@@ -165,10 +209,10 @@ test_that("ICA_contcont_long_ri() returns candidate grids when requested", {
     return_candidates = TRUE
   )
 
-  expect_s3_class(result, "ICA_contcont_long_ri")
+  expect_s3_class(result, "ICA_contcont_long_ri_nested")
   expect_equal(result$Num.Pos.Def.V, nrow(result$V_candidates))
   expect_equal(result$Num.Pos.Def.D, nrow(result$D_candidates))
-  expect_equal(result$Num.Pos.Def.Pairs, length(result$R2_Lambda))
+  expect_equal(result$Num.Pos.Def.Pairs, nrow(result$R2_Lambda))
 
   expect_s3_class(result$V_candidates, "data.frame")
   expect_s3_class(result$D_candidates, "data.frame")

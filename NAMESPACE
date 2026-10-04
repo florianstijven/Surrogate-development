@@ -55,6 +55,7 @@ importFrom("stats", ecdf)
 importFrom("stats", quantile)
 importFrom("stats", "binomial")
 importFrom("stats", "optim")
+importFrom("stats", "nlminb", "plogis", "qlogis")
 importFrom("utils", capture.output)
 importFrom("stats", "coefficients", "na.omit", "pchisq")
 importFrom("stats", "dnorm", "rnorm")
@@ -132,11 +133,22 @@ export(FederatedApproachStage2)
 
 export(ICA_t)
 export(ICA_alpha_ContCont)
-export(ICA_contcont_long_galecki)
-export(ICA_contcont_long_ri)
 export(ICA_contcont_long_cre)
 export(ICA.Sample.ControlTreat)
-
+export(prepare_longitudinal_surrogate_data,
+       fit_longitudinal_surrogate_model,
+       make_longitudinal_re_none,
+       make_longitudinal_re_endpoint_specific,
+       make_longitudinal_re_shared_by_arm,
+       extract_longitudinal_parameters,
+       longitudinal_fit_stats,
+       longitudinal_matrix_diagnostics,
+       ICA_contcont_long_galecki,
+       ICA_contcont_long_ri,
+       ICA_contcont_long_shared_ri,
+       ICA_contcont_long_ri_nested,
+       R2Lambda_from_covariance,
+       summary_longitudinal_ica)
 
 
 
