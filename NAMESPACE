@@ -79,13 +79,13 @@ import(purrr)
 
 export(plot.UnifixedContCont, plot.UnimixedContCont, plot.BifixedContCont, plot.BimixedContCont,
 plot.FixedContContIT, plot.ICA.ContCont, plot.MICA.ContCont, plot.MinSurrContCont, plot.SPF.BinBin,
-plot.Single.Trial.RE.AA, plot.MixedContContIT, plot.ICA.BinBin, plot.TrialLevelMA, plot.FixedBinBinIT,
+plot.MixedContContIT, plot.ICA.BinBin, plot.TrialLevelMA, plot.FixedBinBinIT,
 plot.TwoStageSurvSurv, summary.UnifixedContCont,
 summary.UnimixedContCont, summary.BifixedContCont, summary.BimixedContCont,
 summary.FixedContContIT, summary.FixedContContIT, summary.ICA.BinBin, summary.ICA.ContCont,
 summary.MICA.ContCont, summary.MinSurrContCont, summary.SPF.BinBin, summary.Single.Trial.RE.AA,
 summary.TrialLevelMA, summary.TwoStageSurvSurv, summary.Prentice, summary.PredTrialTContCont, plot.FixedBinBinIT,
-summary.FixedBinContIT, summary.FixedContBinIT, plot.Single.Trial.ContCont, plot.FixedBinContIT, plot.FixedContBinIT, summary.SurvSurv, summary.SPF.BinCont,
+summary.FixedBinContIT, summary.FixedContBinIT, plot.FixedBinContIT, plot.FixedContBinIT, summary.SurvSurv, summary.SPF.BinCont,
 plot.SurvSurv, summary.TrialLevelIT, plot.TrialLevelIT, summary.MaxEntICA.BinBin, plot.MaxEntICA.BinBin, plot.SPF.BinCont,
 plot.MaxEntSPF.BinBin, summary.MaxEntSPF.BinBin, plot.FixedDiscrDiscrIT,
 plot.ICA.BinCont, summary.ICA.BinCont, summary.FixedDiscrDiscrIT,
@@ -148,7 +148,14 @@ export(prepare_longitudinal_surrogate_data,
        ICA_contcont_long_shared_ri,
        ICA_contcont_long_ri_nested,
        R2Lambda_from_covariance,
-       summary_longitudinal_ica)
+       summary_longitudinal_ica,
+       longitudinal_model_spec,
+       fit_longitudinal_surrogate,
+       validate_longitudinal_evaluation_times,
+       construct_longitudinal_ica_covariance,
+       longitudinal_ica,
+       ICA_contcont_long,
+       longitudinal_ica_evaluation_sets)
 
 
 
@@ -165,7 +172,6 @@ S3method(plot, SPF.BinBin)
 S3method(plot, SPF.BinCont)
 S3method(plot, Single.Trial.RE.AA)
 S3method(plot, Single.Trial.ContCont)
-S3method(plot, Single.Trial.RE.AA)
 S3method(plot, MixedContContIT)
 S3method(plot, ICA.BinBin)
 S3method(plot, TrialLevelMA)
@@ -250,6 +256,12 @@ S3method(print,MetaAnalyticSurvCont)
 S3method(summary,MetaAnalyticSurvCont)
 
 S3method(summary,FederatedApproachStage2)
+
+S3method(print, surrogate_longitudinal_fit)
+S3method(print, surrogate_longitudinal_ica)
+S3method(summary, surrogate_longitudinal_ica)
+S3method(print, summary.surrogate_longitudinal_ica)
+S3method(plot, surrogate_longitudinal_ica)
 
 
 

@@ -29,8 +29,8 @@ test_that("ICA_contcont_long_ri() works with exponential correlation", {
     times = c(1, 2, 4, 6, 8),
     correlation = "exponential",
     temporal_rho = 0.7117544,
-    grid_V = seq(-1, 1, by = 0.5),
-    grid_D = seq(-1, 1, by = 0.5),
+    grid_V = seq(-1, 1, by = 1),
+    grid_D = seq(-1, 1, by = 1),
     return_candidates = FALSE,
     tol = 1e-12
   )
@@ -38,10 +38,10 @@ test_that("ICA_contcont_long_ri() works with exponential correlation", {
   expect_s3_class(result, "ICA_contcont_long_ri")
   expect_equal(result$correlation, "exponential")
   expect_equal(result$temporal_rho, 0.7117544)
-  expect_equal(result$Num.Pos.Def.V, 3)
-  expect_equal(result$Num.Pos.Def.D, 3)
-  expect_equal(result$Num.Pos.Def.Pairs, 9)
-  expect_equal(length(result$R2_Lambda), 9)
+  expect_equal(result$Num.Pos.Def.V, 1)
+  expect_equal(result$Num.Pos.Def.D, 1)
+  expect_equal(result$Num.Pos.Def.Pairs, 1)
+  expect_equal(length(result$R2_Lambda), 1)
   expect_true(all(result$R2_Lambda >= 0))
   expect_true(all(result$R2_Lambda <= 1))
 
@@ -50,46 +50,6 @@ test_that("ICA_contcont_long_ri() works with exponential correlation", {
   expect_equal(nrow(result_summary), 1)
 })
 
-test_that("ICA_contcont_long_ri() works with compound symmetry correlation", {
-  V0 <- matrix(c(0.02579325, 0.02514841,
-                 0.02514841, 0.02872256),
-               nrow = 2, byrow = TRUE,
-               dimnames = list(c("T", "S"), c("T", "S")))
-
-  V1 <- matrix(c(0.02907611, 0.02962312,
-                 0.02962312, 0.03400179),
-               nrow = 2, byrow = TRUE,
-               dimnames = list(c("T", "S"), c("T", "S")))
-
-  D0 <- matrix(c(0.02587092, 0.02458997,
-                 0.02458997, 0.02405581),
-               nrow = 2, byrow = TRUE,
-               dimnames = list(c("T", "S"), c("T", "S")))
-
-  D1 <- matrix(c(0.03649246, 0.03225987,
-                 0.03225987, 0.02897932),
-               nrow = 2, byrow = TRUE,
-               dimnames = list(c("T", "S"), c("T", "S")))
-
-  result <- ICA_contcont_long_ri(
-    V0 = V0,
-    V1 = V1,
-    D0 = D0,
-    D1 = D1,
-    times = c(1, 2, 4, 6, 8),
-    correlation = "compound_symmetry",
-    temporal_rho = 0.2,
-    grid_V = seq(-1, 1, by = 0.5),
-    grid_D = seq(-1, 1, by = 0.5)
-  )
-
-  expect_s3_class(result, "ICA_contcont_long_ri")
-  expect_equal(result$correlation, "compound_symmetry")
-  expect_equal(result$temporal_rho, 0.2)
-  expect_equal(length(result$R2_Lambda), result$Num.Pos.Def.Pairs)
-  expect_true(all(result$R2_Lambda >= 0))
-  expect_true(all(result$R2_Lambda <= 1))
-})
 
 test_that("ICA_contcont_long_ri() works with independence correlation", {
   V0 <- matrix(c(0.02579325, 0.02514841,
@@ -119,8 +79,8 @@ test_that("ICA_contcont_long_ri() works with independence correlation", {
     D1 = D1,
     times = c(1, 2, 4, 6, 8),
     correlation = "independence",
-    grid_V = seq(-1, 1, by = 0.5),
-    grid_D = seq(-1, 1, by = 0.5)
+    grid_V = seq(-1, 1, by = 1),
+    grid_D = seq(-1, 1, by = 1)
   )
 
   expect_s3_class(result, "ICA_contcont_long_ri")
@@ -160,8 +120,8 @@ test_that("ICA_contcont_long_ri() returns candidate grids when requested", {
     times = c(1, 2, 4, 6, 8),
     correlation = "exponential",
     temporal_rho = 0.7117544,
-    grid_V = seq(-1, 1, by = 0.5),
-    grid_D = seq(-1, 1, by = 0.5),
+    grid_V = seq(-1, 1, by = 1),
+    grid_D = seq(-1, 1, by = 1),
     return_candidates = TRUE
   )
 

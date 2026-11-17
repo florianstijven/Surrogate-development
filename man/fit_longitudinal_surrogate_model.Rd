@@ -18,8 +18,10 @@ fit_longitudinal_surrogate_model(
 
 \item{formula}{Fixed-effects formula using the standardized response \code{Y}.}
 
-\item{model_spec}{Random-effects specification.  \code{\link{make_longitudinal_re_none}},
-\code{\link{make_longitudinal_re_endpoint_specific}}, or \code{\link{make_longitudinal_re_shared_by_arm}}.}
+\item{model_spec}{Random-effects specification.\cr
+\code{\link{make_longitudinal_re_none}},\cr
+\code{\link{make_longitudinal_re_endpoint_specific}}, \cr
+\code{\link{make_longitudinal_re_shared_by_arm}}.}
 
 \item{residual_type}{One of "exponential", "independence", or "cs".}
 
@@ -73,14 +75,14 @@ dat <- prepare_longitudinal_surrogate_data(
        time = "Time_cont",
        endpoint = "Endpoint",
        outcome = "Response_log",
-       baseline = "Baseline_log",
        surrogate_label = "BPRS",
        true_label = "PANSS",
        treatment_levels = c(0, 1))
 
-# endpoint- and treatment-specific baseline adjustment.
+# Endpoint- and treatment-specific visit means, including baseline at time 0.
+# Baseline is included as an outcome, not as a separate covariate.
 
-mean_formula <- Y ~ 0 + endpoint:visitF:treatF + endpoint:treatF:Ybase
+mean_formula <- Y ~ 0 + endpoint:visitF:treatF
 
 spec_galecki <- make_longitudinal_re_none(name = "Galecki's marginal model")
 

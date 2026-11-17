@@ -103,8 +103,8 @@ ica_shared_ri<- ICA_contcont_long_shared_ri(V0 = V0,  V1 = V1,
                             times = c(1,2,4,6,8),
                             correlation  = "exponential",
                             temporal_rho = 0.7629443,
-                            grid_V = seq(-1, 1, by = 0.5),
-                            grid_D = seq(-1, 1, by = 0.5),
+                            grid_V = seq(-1, 1, by = 1),
+                            grid_D = seq(-1, 1, by = 1),
                             return_candidates = FALSE,
                             tol = 1e-12)
 
