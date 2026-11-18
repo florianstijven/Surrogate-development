@@ -14,7 +14,6 @@ prepare_longitudinal_surrogate_data(
   surrogate_label,
   true_label,
   treatment_levels = c(0, 1),
-  baseline = NULL,
   covariates = character(0)
 )
 }
@@ -37,8 +36,6 @@ prepare_longitudinal_surrogate_data(
 
 \item{treatment_levels}{Two treatment values, ordered as control then active.}
 
-\item{baseline}{Optional character name of an endpoint-specific baseline value.}
-
 \item{covariates}{Optional character vector of additional baseline covariates.}
 }
 \value{
@@ -47,6 +44,13 @@ A standardized data.frame.
 \description{
 This function standardizes a long-format data set to the internal variables used by the
 longitudinal model-fitting functions.
+}
+\details{
+Baseline responses must be supplied as ordinary outcome rows with
+\code{time = 0}. Post-randomization observations must have strictly
+positive times. This single convention allows baseline outcomes to
+contribute to estimation of the augmented treatment-arm marginal models,
+while the longitudinal ICA is evaluated only at positive times.
 }
 \examples{
 data(Schizo_PANSS_BPRS)
@@ -57,7 +61,6 @@ dat <- prepare_longitudinal_surrogate_data(
        time = "Time_cont",
        endpoint = "Endpoint",
        outcome = "Response_log",
-       baseline = "Baseline_log",
        surrogate_label = "BPRS",
        true_label = "PANSS",
        treatment_levels = c(0, 1))

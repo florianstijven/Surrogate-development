@@ -5,7 +5,7 @@ test_that("Schizo_PANSS_BPRS has the expected structure", {
 
   expect_s3_class(Schizo_PANSS_BPRS, "data.frame")
   expect_equal(ncol(Schizo_PANSS_BPRS), 9)
-  expect_equal(nrow(Schizo_PANSS_BPRS), 3962)
+  expect_equal(nrow(Schizo_PANSS_BPRS), 4868)
 
   expect_named(
     Schizo_PANSS_BPRS,
@@ -13,7 +13,7 @@ test_that("Schizo_PANSS_BPRS has the expected structure", {
       "Response_log", "Time_cont", "Baseline", "Baseline_log")
   )
 
-  expect_equal(length(unique(Schizo_PANSS_BPRS$Id)), 450)
+  expect_equal(length(unique(Schizo_PANSS_BPRS$Id)), 453)
   expect_setequal(as.character(unique(Schizo_PANSS_BPRS$Endpoint)), c("BPRS", "PANSS"))
   expect_true(all(Schizo_PANSS_BPRS$Treat %in% c(0, 1)))
 })

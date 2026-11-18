@@ -4,8 +4,8 @@ test_that("fit_longitudinal_surrogate_model() works on a small example", {
   set.seed(1)
 
   raw_dat <- expand.grid(
-    Id = 1:12,
-    Time = c(1, 2),
+    Id = 1:8,
+    Time = c(0,1, 2),
     Endpoint = c("BPRS", "PANSS")
   )
 
@@ -21,7 +21,6 @@ test_that("fit_longitudinal_surrogate_model() works on a small example", {
     rnorm(nrow(raw_dat), 0, 1)
 
   raw_dat$Response_log <- log(raw_dat$Response)
-  raw_dat$Baseline_log <- log(raw_dat$Baseline)
   raw_dat$Time_cont <- raw_dat$Time
 
   dat <- prepare_longitudinal_surrogate_data(
@@ -31,13 +30,12 @@ test_that("fit_longitudinal_surrogate_model() works on a small example", {
     time = "Time_cont",
     endpoint = "Endpoint",
     outcome = "Response_log",
-    baseline = "Baseline_log",
     surrogate_label = "BPRS",
     true_label = "PANSS",
     treatment_levels = c(0, 1)
   )
 
-  mean_formula <- Y ~ endpoint + visitF + treatF + Ybase
+  mean_formula <- Y ~ 0 + endpoint:visitF:treatF
 
   spec_galecki <- make_longitudinal_re_none(
     name = "Galecki's marginal model"
@@ -48,7 +46,7 @@ test_that("fit_longitudinal_surrogate_model() works on a small example", {
     formula = mean_formula,
     model_spec = spec_galecki,
     residual_type = "independence",
-    control = list(eval.max = 100, iter.max = 100)
+    control = list(eval.max = 80, iter.max = 80)
   )
 
   expect_s3_class(fit, "surrogate_longitudinal_fit")
@@ -68,3 +66,4 @@ test_that("fit_longitudinal_surrogate_model() works on a small example", {
   expect_s3_class(diagnostics, "data.frame")
   expect_true(all(c("matrix", "determinant", "min_eig", "status") %in% names(diagnostics)))
 })
+

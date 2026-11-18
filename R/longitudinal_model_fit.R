@@ -9,8 +9,10 @@
 #'
 #' @param data Standardized data returned by prepare_longitudinal_surrogate_data().
 #' @param formula Fixed-effects formula using the standardized response `Y`.
-#' @param model_spec Random-effects specification.  \code{\link{make_longitudinal_re_none}},
-#' \code{\link{make_longitudinal_re_endpoint_specific}}, or \code{\link{make_longitudinal_re_shared_by_arm}}.
+#' @param model_spec Random-effects specification.\cr
+#' \code{\link{make_longitudinal_re_none}},\cr
+#' \code{\link{make_longitudinal_re_endpoint_specific}}, \cr
+#' \code{\link{make_longitudinal_re_shared_by_arm}}.
 #' @param residual_type One of "exponential", "independence", or "cs".
 #' @param start_fit Optional previously fitted surrogate_longitudinal_fit used to
 #'        initialize common parameters.
@@ -62,14 +64,14 @@
 #'        time = "Time_cont",
 #'        endpoint = "Endpoint",
 #'        outcome = "Response_log",
-#'        baseline = "Baseline_log",
 #'        surrogate_label = "BPRS",
 #'        true_label = "PANSS",
 #'        treatment_levels = c(0, 1))
 #'
-#' # endpoint- and treatment-specific baseline adjustment.
+#' # Endpoint- and treatment-specific visit means, including baseline at time 0.
+#' # Baseline is included as an outcome, not as a separate covariate.
 #'
-#' mean_formula <- Y ~ 0 + endpoint:visitF:treatF + endpoint:treatF:Ybase
+#' mean_formula <- Y ~ 0 + endpoint:visitF:treatF
 #'
 #' spec_galecki <- make_longitudinal_re_none(name = "Galecki's marginal model")
 #'
@@ -103,23 +105,44 @@ fit_longitudinal_surrogate_model <- function(data,
     stop("The standardized endpoint factor must contain levels 'S' and 'T'.")
   }
 
-  Xfull <- model.matrix(formula, data = data)
+  if (!is.numeric(data$Y)) stop("The standardized outcome `Y` must be numeric.")
+  if (any(is.infinite(data$Y))) stop("The standardized outcome `Y` must not contain infinite values.")
+  observed_data <- data[!is.na(data$Y), , drop = FALSE]
+  if (nrow(observed_data) == 0L) stop("No observed outcome values are available for fitting.")
+
+  Xfull <- model.matrix(formula, data = observed_data)
+  if (nrow(Xfull) != nrow(observed_data) || any(!is.finite(Xfull))) {
+    stop("The fixed-effects variables must be observed and finite for every observed outcome.")
+  }
   n_beta <- ncol(Xfull)
   if (qr(Xfull)$rank < n_beta) warning("The fixed-effects design matrix is rank deficient.")
 
-  ols <- lm(formula, data = data, y = TRUE)
+  ols <- lm(formula, data = observed_data, y = TRUE)
   beta0 <- coef(ols)
   beta0[is.na(beta0)] <- 0
-  subjects <- split(data, data$id)
-  visit_times <- sort(unique(data$time_cont))
+  subjects <- split(observed_data, observed_data$id)
+  visit_times <- sort(unique(observed_data$time_cont))
   n_visits <- length(visit_times)
+  time_center <- 0
+  observed_times <- lapply(endpoint_order, function(ep) {
+    sort(unique(observed_data$time_cont[
+      as.character(observed_data$endpoint) == ep & observed_data$time_cont > 0
+    ]))
+  })
+  names(observed_times) <- endpoint_order
+  if (any(lengths(observed_times) == 0L)) {
+    stop("Each endpoint must have at least one observed post-randomization response.")
+  }
+  observed_time_ranges <- lapply(observed_times, range)
+  fit_times <- sort(unique(observed_data$time_cont))
+  baseline_present <- any(observed_data$time_cont == 0)
 
   make_D_start <- function(arm, previous = NULL) {
     nm <- .surr_random_effect_names(model_spec, arm, endpoint_order)
     q <- length(nm)
     if (q == 0L) return(numeric(0))
 
-    s0 <- sd(data$Y, na.rm = TRUE)
+    s0 <- sd(observed_data$Y, na.rm = TRUE)
     diag_vals <- ifelse(grepl("^rs_", nm) | grepl("shared_rs", nm),
                         0.01 * s0^2,
                         0.20 * s0^2)
@@ -141,7 +164,7 @@ fit_longitudinal_surrogate_model <- function(data,
   }
 
   make_start <- function(previous = NULL) {
-    s0 <- sd(data$Y, na.rm = TRUE)
+    s0 <- sd(observed_data$Y, na.rm = TRUE)
     if (is.null(previous)) {
       beta_start <- beta0
       rho_start <- if (residual_type == "independence") numeric(0) else
@@ -213,13 +236,23 @@ fit_longitudinal_surrogate_model <- function(data,
     residual_type = residual_type,
     endpoint_order = endpoint_order,
     visit_times = visit_times,
+    fit_times = fit_times,
+    postbaseline_times = sort(unique(unlist(observed_times, use.names = FALSE))),
+    time_center = time_center,
+    observed_times = observed_times,
+    observed_time_ranges = observed_time_ranges,
+    baseline_present = baseline_present,
+    n_baseline_observations = sum(observed_data$time_cont == 0),
+    n_postbaseline_observations = sum(observed_data$time_cont > 0),
     n_subjects = length(subjects),
-    n_observations = nrow(data),
+    n_observations = nrow(observed_data),
     call = match.call()
   )
   class(out) <- "surrogate_longitudinal_fit"
   out
 }
+
+
 ## ---- Model specification helpers -------------------------------------------
 
 #' No random effects

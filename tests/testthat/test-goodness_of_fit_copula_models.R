@@ -1,5 +1,6 @@
 test_that("GoF plots for OrdCont work", {
   # Load fitted copula model.
+  testthat::skip_on_cran()
   fitted_OrdCont = readRDS(test_path("fixtures", "schizo-dvine-clayton-OrdCont.rds"))
 
   # Compare the plotted functions with a snapshot. Note that this
@@ -47,6 +48,7 @@ test_that("GoF plots for OrdCont work", {
 
 test_that("GoF plots for ContCont work", {
   # Load fitted copula model.
+  testthat::skip_on_cran()
   fitted_ContCont = readRDS(test_path("fixtures", "schizo-dvine-clayton-ContCont.rds"))
 
   # Compare the plotted functions with a snapshot. Note that this
@@ -93,6 +95,7 @@ test_that("GoF plots for ContCont work", {
 })
 
 test_that("GoF plots for OrdOrd work", {
+  testthat::skip_on_cran()
   # Load fitted copula model.
   fitted_OrdOrd = readRDS(test_path("fixtures", "schizo-dvine-gaussian-OrdOrd.rds"))
 

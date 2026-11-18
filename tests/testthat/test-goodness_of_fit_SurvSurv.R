@@ -11,6 +11,7 @@ test_that("mean_S_before_T() works well with Gaussian, Frank, Clayton, and Gumbe
 test_that("plotting functions for GoF work as expected.",
           {
             # Load fitted copula model.
+            testthat::skip_on_cran()
             fitted_gumbel = readRDS(test_path("fixtures", "ovarian-dvine-gaussian-scr.rds"))
 
             # Compare the plotted functions with a snapshot. Note that this

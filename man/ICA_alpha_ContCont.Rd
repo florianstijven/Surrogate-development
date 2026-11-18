@@ -72,8 +72,8 @@ ICA_alpha_ContCont(alpha=0.5,
                   T0S0 = 0.9597334, T1S1=0.9644139,
                   T0T0=544.3285, T1T1=550.6597,
                   S0S0=180.6831, S1S1=180.9433,
-                  T0T1=seq(-1, 1, by = 0.2),  T0S1=seq(-1, 1, by = 0.2),
-                  T1S0=seq(-1, 1, by = 0.2), S0S1=seq(-1, 1, by = 0.2))
+                  T0T1=seq(-1, 1, by = 0.5),  T0S1=seq(-1, 1, by = 1),
+                  T1S0=seq(-1, 1, by = 0.5), S0S1=seq(-1, 1, by = 1))
 
 #More than one alpha value can be calculated simultaneously:
 
@@ -90,5 +90,4 @@ ICA_alpha_ContCont(alpha=c(1.25,1.5,2),
 Deliorman, G., Alonso, A., & Pardo, M. C. (2025).
 A Rényi-Divergence-Based Family of Metrics for the Evaluation of Surrogate Endpoints
 in a Causal Inference Framework. \emph{Statistics in Biopharmaceutical Research}.
-\url{https://doi.org/10.1080/19466315.2025.2484009}
 }

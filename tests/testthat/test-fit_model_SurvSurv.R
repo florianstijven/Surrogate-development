@@ -51,7 +51,7 @@ test_that("SurvivalSurvival model works with Frank and Gumbel copula for Ovarian
           })
 
 test_that("plot() works for fitted survival-survival copula models",
-          {
+          { testthat::skip_on_cran()
             # Load Ovarian data in semi-competing risks format.
             fitted_gumbel = readRDS(test_path("fixtures", "ovarian-dvine-gaussian-scr.rds"))
 

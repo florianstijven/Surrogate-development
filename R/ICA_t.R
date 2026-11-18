@@ -46,13 +46,12 @@
 #' Arellano-Valle RB, Conreras-Reyes JE, and Genton MG. (2013).
 #' Shannon Entropy and Mutual Information for Multivariate Skew-Elliptical Distributions.
 #' *Scandinavian Journal of Statistics*.
-#' \url{https://doi.org/10.1111/sjos.12718}
 #'
 #'
 #' Deliorman, G., Stijven, F., Van der Elst W., Pardo, M. C., & Alonso, A. (2026).
 #' The Impact of Model Misspecification on the Individual Causal Association in Surrogate Endpoint Evaluation.
 #' *Pharmaceutical Statistics*
-#' \url{https://doi.org/10.1002/pst.70110}
+#'
 #' @export
 ICA_t <- function(df,
                   T0S0,
